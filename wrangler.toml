@@ -1,0 +1,32 @@
+name = "afrireads"
+main = "src/index.ts"
+compatibility_date = "2024-12-02"
+
+# R2 bucket binding for book storage
+[[r2_buckets]]
+binding = "BOOKS_BUCKET"
+bucket_name = "kalenjin-books"
+
+# D1 database binding
+[[d1_databases]]
+binding = "DB"
+database_name = "kalenjin-books-db"
+database_id = "" # Will be filled after creating the database
+
+# KV namespace for caching (optional)
+[[kv_namespaces]]
+binding = "CACHE"
+id = "" # Will be filled after creating KV namespace
+
+# Environment variables
+[vars]
+NEXTAUTH_URL = "http://localhost:3000"
+STRIPE_PUBLISHABLE_KEY = ""
+
+# Secrets (set via wrangler secret put)
+# NEXTAUTH_SECRET
+# STRIPE_SECRET_KEY
+# STRIPE_WEBHOOK_SECRET
+# DATABASE_URL
+# R2_ACCESS_KEY_ID
+# R2_SECRET_ACCESS_KEY
