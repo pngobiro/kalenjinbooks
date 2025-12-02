@@ -50,7 +50,7 @@ const mockupImages = [
 
 export default function AuthorDashboardPage() {
     return (
-        <div className="p-8">
+        <div className="p-8 max-w-7xl mx-auto">
             {/* UI Mockup Reference */}
             <details className="mb-6 bg-white rounded-xl p-4 shadow-sm border-l-4 border-accent-gold">
                 <summary className="cursor-pointer font-semibold text-neutral-brown-900 flex items-center gap-2">

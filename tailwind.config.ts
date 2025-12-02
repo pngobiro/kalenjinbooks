@@ -10,28 +10,34 @@ const config: Config = {
         extend: {
             colors: {
                 primary: {
-                    DEFAULT: '#E07856',
-                    dark: '#C85D3A',
-                    light: '#F09B7D',
+                    DEFAULT: '#C66B4C',
+                    dark: '#A8563B',
+                    light: '#D88A6F',
                 },
                 neutral: {
-                    cream: '#F5F1E8',
+                    cream: '#F7F5F0',
                     brown: {
-                        900: '#4A3728',
-                        700: '#6B5D52',
+                        900: '#2D241E',
+                        700: '#4A4A4A',
                         500: '#9B8D82',
                     }
                 },
                 accent: {
-                    green: '#8B9D83',
+                    green: '#4E6E50',
                     gold: '#D4AF37',
                 },
                 error: '#D64545',
                 success: '#4CAF50',
             },
             fontFamily: {
-                heading: ['Playfair Display', 'Georgia', 'serif'],
-                body: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+                heading: ['Merriweather', 'Playfair Display', 'Georgia', 'serif'],
+                body: ['Roboto', 'Helvetica Neue', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+            },
+            borderRadius: {
+                'button': '24px',
+                'card': '12px',
+                'nav': '4px',
+                'icon': '8px',
             },
         },
     },
