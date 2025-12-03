@@ -49,26 +49,26 @@ export function FeaturedBooks({ books }: FeaturedBooksProps) {
     const visibleBooks = books.slice(currentIndex, currentIndex + booksPerPage);
 
     return (
-        <div className="bg-white py-16">
-            <div className="max-w-7xl mx-auto px-12">
+        <div className="bg-white py-20">
+            <div className="container mx-auto px-6 lg:px-12">
                 {/* Centered Header */}
                 <div className="text-center mb-12">
-                    <h2 className="text-4xl font-bold text-neutral-brown-900 font-heading mb-2">Featured Books</h2>
-                    <p className="text-neutral-brown-700 font-body">Discover our curated collection of Kalenjin literature</p>
+                    <h2 className="text-4xl md:text-5xl font-bold text-neutral-brown-900 font-heading mb-3">Featured Books</h2>
+                    <p className="text-lg text-neutral-brown-700 font-body">Discover our curated collection of Kalenjin literature</p>
                 </div>
 
                 {/* Centered Navigation buttons */}
-                <div className="flex items-center justify-center gap-3 mb-8">
+                <div className="flex items-center justify-center gap-3 mb-10">
                     <button
                         onClick={prevSlide}
-                        className="bg-accent-green hover:bg-accent-green/90 text-white rounded-lg p-3 transition-all shadow-md hover:shadow-lg"
+                        className="bg-accent-green hover:bg-[#7A8C74] text-white rounded-xl p-3.5 transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5"
                         aria-label="Previous books"
                     >
                         <ChevronLeft size={24} />
                     </button>
                     <button
                         onClick={nextSlide}
-                        className="bg-accent-green hover:bg-accent-green/90 text-white rounded-lg p-3 transition-all shadow-md hover:shadow-lg"
+                        className="bg-accent-green hover:bg-[#7A8C74] text-white rounded-xl p-3.5 transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5"
                         aria-label="Next books"
                     >
                         <ChevronRight size={24} />
@@ -76,7 +76,7 @@ export function FeaturedBooks({ books }: FeaturedBooksProps) {
                 </div>
 
                 {/* Book Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
                     {visibleBooks.map((book, index) => {
                         const colorScheme = colorSchemes[index % colorSchemes.length];
                         return (

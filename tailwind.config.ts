@@ -10,34 +10,48 @@ const config: Config = {
         extend: {
             colors: {
                 primary: {
-                    DEFAULT: '#C66B4C',
-                    dark: '#A8563B',
-                    light: '#D88A6F',
+                    DEFAULT: '#E07856',
+                    dark: '#C85D3A',
+                    light: '#F09B7D',
                 },
                 neutral: {
-                    cream: '#F7F5F0',
+                    cream: '#F5F1E8',
                     brown: {
-                        900: '#2D241E',
-                        700: '#4A4A4A',
+                        900: '#4A3728',
+                        700: '#6B5D52',
                         500: '#9B8D82',
                     }
                 },
                 accent: {
-                    green: '#4E6E50',
+                    green: '#8B9D83',
                     gold: '#D4AF37',
                 },
                 error: '#D64545',
                 success: '#4CAF50',
             },
             fontFamily: {
-                heading: ['Merriweather', 'Playfair Display', 'Georgia', 'serif'],
-                body: ['Roboto', 'Helvetica Neue', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+                heading: ['Playfair Display', 'Georgia', 'serif'],
+                body: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
             },
             borderRadius: {
                 'button': '24px',
                 'card': '12px',
                 'nav': '4px',
                 'icon': '8px',
+            },
+            animation: {
+                'fade-in': 'fadeIn 0.5s ease-out',
+                'slide-up': 'slideUp 0.5s ease-out',
+            },
+            keyframes: {
+                fadeIn: {
+                    '0%': { opacity: '0', transform: 'translateY(20px)' },
+                    '100%': { opacity: '1', transform: 'translateY(0)' },
+                },
+                slideUp: {
+                    '0%': { transform: 'translateY(10px)', opacity: '0' },
+                    '100%': { transform: 'translateY(0)', opacity: '1' },
+                },
             },
         },
     },

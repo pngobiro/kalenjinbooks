@@ -1,41 +1,49 @@
 @import "tailwindcss";
 
+/* Container utility */
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 /* AfriReads - African Modern Minimal Design System */
 :root {
   /* Background Colors */
-  --bg-primary: #F7F5F0;
+  --bg-primary: #F5F1E8;
   --bg-secondary: #FFFFFF;
   
   /* Text Colors */
-  --text-primary: #2D241E;
-  --text-secondary: #4A4A4A;
+  --text-primary: #4A3728;
+  --text-secondary: #6B5D52;
   --text-inverse: #FFFFFF;
   
   /* Brand Colors */
-  --brand-primary: #C66B4C;
-  --brand-primary-hover: #A8563B;
-  --brand-accent-green: #4E6E50;
+  --brand-primary: #E07856;
+  --brand-primary-hover: #C85D3A;
+  --brand-accent-green: #8B9D83;
   
   /* UI Elements */
-  --card-overlay: rgba(45, 36, 30, 0.75);
-  --icon-color: #2D241E;
-  --button-nav: #8EA392;
+  --card-overlay: rgba(74, 55, 40, 0.75);
+  --icon-color: #4A3728;
+  --button-nav: #8B9D83;
   
   /* Legacy support (keeping for compatibility) */
-  --primary: #C66B4C;
-  --primary-dark: #A8563B;
-  --primary-light: #D88A6F;
-  --neutral-cream: #F7F5F0;
+  --primary: #E07856;
+  --primary-dark: #C85D3A;
+  --primary-light: #F09B7D;
+  --neutral-cream: #F5F1E8;
   --neutral-white: #FFFFFF;
-  --neutral-brown-900: #2D241E;
-  --neutral-brown-700: #4A4A4A;
+  --neutral-brown-900: #4A3728;
+  --neutral-brown-700: #6B5D52;
   --neutral-brown-500: #9B8D82;
-  --accent-green: #4E6E50;
+  --accent-green: #8B9D83;
   --accent-gold: #D4AF37;
   --error: #D64545;
   --success: #4CAF50;
   --border: #E0D5C7;
-  --shadow: rgba(45, 36, 30, 0.1);
+  --shadow: rgba(74, 55, 40, 0.1);
 }
 
 /* Base Styles */
@@ -54,20 +62,7 @@ body {
   color: var(--text-primary);
 }
 
-/* Center all content */
-body {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-body > * {
-  width: 100%;
-  max-width: 1920px;
-  padding-left: 15rem;
-  padding-right: 15rem;
-
-}
+/* Typography */
 
 h1,
 h2,
