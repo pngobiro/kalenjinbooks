@@ -7,6 +7,13 @@ const config: Config = {
         "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
     ],
     theme: {
+        container: {
+            center: true,
+            padding: {
+                DEFAULT: '1.5rem',
+                lg: '3rem',
+            },
+        },
         extend: {
             colors: {
                 primary: {

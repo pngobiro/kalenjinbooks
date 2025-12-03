@@ -1,11 +1,15 @@
 @import "tailwindcss";
 
-/* Container utility */
-.container {
-  width: 100%;
-  max-width: 1280px;
-  margin-left: auto;
-  margin-right: auto;
+@theme {
+  --color-primary: #E07856;
+  --color-primary-dark: #C85D3A;
+  --color-primary-light: #F09B7D;
+  --color-neutral-cream: #F5F1E8;
+  --color-neutral-brown-900: #4A3728;
+  --color-neutral-brown-700: #6B5D52;
+  --color-neutral-brown-500: #9B8D82;
+  --color-accent-green: #8B9D83;
+  --color-accent-gold: #D4AF37;
 }
 
 /* AfriReads - African Modern Minimal Design System */
@@ -47,16 +51,17 @@
 }
 
 /* Base Styles */
-* {
+*, *::before, *::after {
   box-sizing: border-box;
-  padding: 0;
   margin: 0;
+  padding: 0;
 }
 
-html,
-body {
-  width: 100%;
+html, body {
+  width: 100vw;
+  max-width: 100%;
   min-height: 100vh;
+  overflow-x: hidden;
   font-family: 'Roboto', 'Helvetica Neue', -apple-system, BlinkMacSystemFont, sans-serif;
   background-color: var(--bg-primary);
   color: var(--text-primary);

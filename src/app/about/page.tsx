@@ -1,125 +1,132 @@
 'use client';
 
-import { Users, BookOpen, Heart, Globe, Award, Sparkles, ArrowLeft } from 'lucide-react';
-import Image from 'next/image';
+import { Users, Heart, Sparkles, ArrowLeft, Book } from 'lucide-react';
 import Link from 'next/link';
 
 export default function AboutPage() {
-    return (
-        <div className="min-h-screen bg-neutral-cream">
-            {/* Navigation */}
-            <div className="absolute top-8 left-6 z-20">
-                <Link
-                    href="/"
-                    className="flex items-center gap-2 text-neutral-brown-900 hover:text-primary transition-colors font-medium group bg-white/95 backdrop-blur-sm px-4 py-2 rounded-full hover:bg-white shadow-lg border border-neutral-brown-200"
-                >
-                    <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
-                    <span>Back to Home</span>
-                </Link>
+  return (
+    <div className="min-h-screen bg-neutral-cream">
+      {/* Navigation */}
+      <nav className="bg-white/90 backdrop-blur-sm sticky top-0 z-50 border-b border-neutral-brown-500/10">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="flex items-center justify-between h-20">
+            <Link href="/" className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-primary/10">
+                <Book className="text-primary" size={24} />
+              </div>
+              <span className="text-2xl font-bold text-neutral-brown-900 font-heading">AfriReads</span>
+            </Link>
+
+            <div className="hidden md:flex items-center gap-8">
+              <Link href="/books" className="text-neutral-brown-700 hover:text-primary font-medium transition-colors">Books</Link>
+              <Link href="/authors" className="text-neutral-brown-700 hover:text-primary font-medium transition-colors">Authors</Link>
+              <Link href="/about" className="text-primary font-medium">About</Link>
             </div>
 
-            {/* Hero Section */}
-            <div className="relative bg-gradient-to-br from-neutral-cream via-white to-neutral-cream py-24 px-6 overflow-hidden border-b-2 border-neutral-brown-200">
-                <div className="absolute top-0 left-0 w-full h-full opacity-5 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
-                <div className="absolute top-0 right-0 w-96 h-96 bg-primary rounded-full blur-3xl opacity-10 translate-x-1/2 -translate-y-1/2"></div>
-                <div className="absolute bottom-0 left-0 w-96 h-96 bg-accent-green rounded-full blur-3xl opacity-10 -translate-x-1/2 translate-y-1/2"></div>
-
-                <div className="max-w-7xl mx-auto relative z-10 text-center">
-                    <h1 className="text-5xl md:text-6xl font-bold font-heading mb-6 text-neutral-brown-900">Our Story</h1>
-                    <p className="text-xl md:text-2xl text-neutral-brown-700 max-w-3xl mx-auto font-body leading-relaxed">
-                        Preserving culture, empowering authors, and connecting the world to the richness of Kalenjin literature.
-                    </p>
-                </div>
-            </div>
-
-            {/* Mission & Vision */}
-            <div className="py-20 px-6">
-                <div className="max-w-7xl mx-auto">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-                        <div>
-                            <div className="inline-block px-4 py-2 bg-primary/10 text-primary font-bold rounded-full mb-4 text-sm uppercase tracking-wider">Our Mission</div>
-                            <h2 className="text-4xl font-bold text-neutral-brown-900 font-heading mb-6">Bridging the Gap Between Tradition and Technology</h2>
-                            <p className="text-lg text-neutral-brown-700 mb-6 leading-relaxed">
-                                AfriReads was born from a simple yet powerful idea: that African stories, particularly those from the Kalenjin community, deserve a global stage. We are building a digital home for our heritage, ensuring that our folktales, history, and modern narratives are preserved for future generations.
-                            </p>
-                            <p className="text-lg text-neutral-brown-700 leading-relaxed">
-                                We believe in the power of storytelling to educate, inspire, and unite. By providing a platform for local authors, we are not just selling books; we are nurturing a cultural renaissance.
-                            </p>
-                        </div>
-                        <div className="relative">
-                            <div className="aspect-square rounded-2xl overflow-hidden shadow-2xl">
-                                <Image
-                                    src="/images/kalenjin-spirit.png"
-                                    alt="Kalenjin storytelling tradition"
-                                    width={600}
-                                    height={600}
-                                    className="w-full h-full object-cover"
-                                />
-                            </div>
-                            <div className="absolute -bottom-10 -left-10 w-48 h-48 bg-accent-green rounded-full blur-3xl opacity-20"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {/* Values */}
-            <div className="bg-white py-20 px-6">
-                <div className="max-w-7xl mx-auto">
-                    <div className="text-center mb-16">
-                        <h2 className="text-4xl font-bold text-neutral-brown-900 font-heading mb-4">Core Values</h2>
-                        <p className="text-lg text-neutral-brown-600">The principles that guide everything we do.</p>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        {[
-                            {
-                                icon: <Heart className="w-8 h-8 text-primary" />,
-                                title: "Cultural Pride",
-                                description: "We celebrate and honor the depth, beauty, and wisdom of Kalenjin traditions and language."
-                            },
-                            {
-                                icon: <Users className="w-8 h-8 text-accent-green" />,
-                                title: "Community First",
-                                description: "We exist to serve our community, supporting authors and readers alike in a shared journey of discovery."
-                            },
-                            {
-                                icon: <Sparkles className="w-8 h-8 text-accent-gold" />,
-                                title: "Excellence",
-                                description: "We are committed to high-quality publishing standards, ensuring our stories are presented beautifully."
-                            }
-                        ].map((value, index) => (
-                            <div key={index} className="bg-neutral-cream p-8 rounded-2xl hover:-translate-y-2 transition-transform duration-300 border border-neutral-brown-500/5">
-                                <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-sm mb-6">
-                                    {value.icon}
-                                </div>
-                                <h3 className="text-xl font-bold text-neutral-brown-900 font-heading mb-3">{value.title}</h3>
-                                <p className="text-neutral-brown-700 leading-relaxed">
-                                    {value.description}
-                                </p>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </div>
-
-            {/* Stats */}
-            <div className="py-20 px-6 bg-neutral-brown-900 text-white relative overflow-hidden">
-                <div className="max-w-7xl mx-auto relative z-10">
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-                        {[
-                            { number: "500+", label: "Books Published" },
-                            { number: "10k+", label: "Happy Readers" },
-                            { number: "150+", label: "Local Authors" },
-                            { number: "50+", label: "Schools Partnered" }
-                        ].map((stat, index) => (
-                            <div key={index}>
-                                <div className="text-4xl md:text-5xl font-bold text-primary mb-2 font-heading">{stat.number}</div>
-                                <div className="text-neutral-brown-300 font-medium">{stat.label}</div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </div>
+            <Link href="/" className="flex items-center gap-2 text-neutral-brown-700 hover:text-primary">
+              <div className="w-10 h-10 rounded-lg bg-white border border-neutral-brown-200 flex items-center justify-center shadow-sm">
+                <ArrowLeft size={20} />
+              </div>
+            </Link>
+          </div>
         </div>
-    );
+      </nav>
+
+      {/* Hero */}
+      <section className="bg-white py-16">
+        <div className="max-w-6xl mx-auto px-6 text-center">
+          <h1 className="text-5xl font-bold text-neutral-brown-900 font-heading mb-4">Our Story</h1>
+          <p className="text-xl text-neutral-brown-600 max-w-2xl mx-auto">
+            Preserving culture, empowering authors, and connecting the world to the richness of Kalenjin literature.
+          </p>
+        </div>
+      </section>
+
+      {/* Mission */}
+      <section className="py-16">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <span className="inline-block px-4 py-1.5 bg-primary/10 text-primary text-sm font-bold rounded-full mb-4">Our Mission</span>
+              <h2 className="text-3xl font-bold text-neutral-brown-900 font-heading mb-6">
+                Bridging Tradition and Technology
+              </h2>
+              <p className="text-neutral-brown-700 mb-4 leading-relaxed">
+                AfriReads was born from a simple yet powerful idea: that African stories, particularly those from the Kalenjin community, deserve a global stage.
+              </p>
+              <p className="text-neutral-brown-700 leading-relaxed">
+                We believe in the power of storytelling to educate, inspire, and unite. By providing a platform for local authors, we are nurturing a cultural renaissance.
+              </p>
+            </div>
+            <div className="bg-gradient-to-br from-primary/10 to-accent-green/10 rounded-2xl aspect-square flex items-center justify-center">
+              <Book size={120} className="text-primary/30" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Values */}
+      <section className="bg-white py-16">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-neutral-brown-900 font-heading mb-2">Core Values</h2>
+            <p className="text-neutral-brown-600">The principles that guide everything we do</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[
+              { icon: Heart, title: "Cultural Pride", description: "We celebrate the depth and beauty of Kalenjin traditions.", color: "text-primary" },
+              { icon: Users, title: "Community First", description: "We exist to serve our community of authors and readers.", color: "text-accent-green" },
+              { icon: Sparkles, title: "Excellence", description: "We are committed to high-quality publishing standards.", color: "text-accent-gold" },
+            ].map((value, index) => (
+              <div key={index} className="bg-neutral-cream rounded-2xl p-6 hover:-translate-y-1 transition-transform">
+                <div className="w-14 h-14 bg-white rounded-xl flex items-center justify-center shadow-sm mb-4">
+                  <value.icon size={28} className={value.color} />
+                </div>
+                <h3 className="font-bold text-neutral-brown-900 mb-2">{value.title}</h3>
+                <p className="text-sm text-neutral-brown-600">{value.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Stats */}
+      <section className="bg-neutral-brown-900 py-16">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            {[
+              { number: "500+", label: "Books Published" },
+              { number: "10k+", label: "Happy Readers" },
+              { number: "150+", label: "Local Authors" },
+              { number: "50+", label: "Schools Partnered" },
+            ].map((stat, index) => (
+              <div key={index}>
+                <div className="text-4xl font-bold text-primary mb-1">{stat.number}</div>
+                <div className="text-neutral-brown-400 text-sm">{stat.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="py-16 w-full">
+        <div className="w-full max-w-6xl mx-auto px-6 text-center">
+          <h2 className="text-3xl font-bold text-neutral-brown-900 font-heading mb-4">Join Our Journey</h2>
+          <p className="text-neutral-brown-600 mb-8 max-w-xl mx-auto">
+            Whether you're a reader or an aspiring author, there's a place for you in our community.
+          </p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Link href="/books" className="bg-primary hover:bg-primary-dark text-white font-semibold px-8 py-4 rounded-full transition-all">
+              Browse Books
+            </Link>
+            <Link href="/dashboard/author" className="bg-white border-2 border-primary text-primary hover:bg-primary hover:text-white font-semibold px-8 py-4 rounded-full transition-all">
+              Become an Author
+            </Link>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
 }
