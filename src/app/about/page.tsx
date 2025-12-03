@@ -11,7 +11,7 @@ export default function AboutPage() {
             <div className="absolute top-8 left-6 z-20">
                 <Link
                     href="/"
-                    className="flex items-center gap-2 text-white/90 hover:text-white transition-colors font-medium group bg-black/20 backdrop-blur-sm px-4 py-2 rounded-full hover:bg-black/30"
+                    className="flex items-center gap-2 text-neutral-brown-900 hover:text-primary transition-colors font-medium group bg-white/95 backdrop-blur-sm px-4 py-2 rounded-full hover:bg-white shadow-lg border border-neutral-brown-200"
                 >
                     <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
                     <span>Back to Home</span>
@@ -19,13 +19,14 @@ export default function AboutPage() {
             </div>
 
             {/* Hero Section */}
-            <div className="relative bg-neutral-brown-900 text-white py-24 px-6 overflow-hidden">
-                <div className="absolute top-0 left-0 w-full h-full opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
-                <div className="absolute top-0 right-0 w-96 h-96 bg-primary rounded-full blur-3xl opacity-20 translate-x-1/2 -translate-y-1/2"></div>
+            <div className="relative bg-gradient-to-br from-neutral-cream via-white to-neutral-cream py-24 px-6 overflow-hidden border-b-2 border-neutral-brown-200">
+                <div className="absolute top-0 left-0 w-full h-full opacity-5 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
+                <div className="absolute top-0 right-0 w-96 h-96 bg-primary rounded-full blur-3xl opacity-10 translate-x-1/2 -translate-y-1/2"></div>
+                <div className="absolute bottom-0 left-0 w-96 h-96 bg-accent-green rounded-full blur-3xl opacity-10 -translate-x-1/2 translate-y-1/2"></div>
 
                 <div className="max-w-7xl mx-auto relative z-10 text-center">
-                    <h1 className="text-5xl md:text-6xl font-bold font-heading mb-6">Our Story</h1>
-                    <p className="text-xl md:text-2xl text-neutral-brown-200 max-w-3xl mx-auto font-body leading-relaxed">
+                    <h1 className="text-5xl md:text-6xl font-bold font-heading mb-6 text-neutral-brown-900">Our Story</h1>
+                    <p className="text-xl md:text-2xl text-neutral-brown-700 max-w-3xl mx-auto font-body leading-relaxed">
                         Preserving culture, empowering authors, and connecting the world to the richness of Kalenjin literature.
                     </p>
                 </div>
@@ -46,14 +47,14 @@ export default function AboutPage() {
                             </p>
                         </div>
                         <div className="relative">
-                            <div className="aspect-square rounded-2xl overflow-hidden shadow-2xl bg-gradient-to-br from-primary to-orange-600 p-1">
-                                <div className="w-full h-full bg-neutral-brown-900 rounded-xl flex items-center justify-center relative overflow-hidden">
-                                    <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.1),transparent)]"></div>
-                                    <BookOpen size={120} className="text-white/20" />
-                                    <div className="absolute inset-0 flex items-center justify-center">
-                                        <span className="text-white font-heading text-4xl font-bold">AfriReads</span>
-                                    </div>
-                                </div>
+                            <div className="aspect-square rounded-2xl overflow-hidden shadow-2xl">
+                                <Image
+                                    src="/images/kalenjin-spirit.png"
+                                    alt="Kalenjin storytelling tradition"
+                                    width={600}
+                                    height={600}
+                                    className="w-full h-full object-cover"
+                                />
                             </div>
                             <div className="absolute -bottom-10 -left-10 w-48 h-48 bg-accent-green rounded-full blur-3xl opacity-20"></div>
                         </div>

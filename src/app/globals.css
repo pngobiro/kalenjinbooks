@@ -5,22 +5,22 @@
   /* Background Colors */
   --bg-primary: #F7F5F0;
   --bg-secondary: #FFFFFF;
-
+  
   /* Text Colors */
   --text-primary: #2D241E;
   --text-secondary: #4A4A4A;
   --text-inverse: #FFFFFF;
-
+  
   /* Brand Colors */
   --brand-primary: #C66B4C;
   --brand-primary-hover: #A8563B;
   --brand-accent-green: #4E6E50;
-
+  
   /* UI Elements */
   --card-overlay: rgba(45, 36, 30, 0.75);
   --icon-color: #2D241E;
   --button-nav: #8EA392;
-
+  
   /* Legacy support (keeping for compatibility) */
   --primary: #C66B4C;
   --primary-dark: #A8563B;
@@ -47,11 +47,26 @@
 
 html,
 body {
-  max-width: 100vw;
-  overflow-x: hidden;
+  width: 100%;
+  min-height: 100vh;
   font-family: 'Roboto', 'Helvetica Neue', -apple-system, BlinkMacSystemFont, sans-serif;
   background-color: var(--bg-primary);
   color: var(--text-primary);
+}
+
+/* Center all content */
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+body > * {
+  width: 100%;
+  max-width: 1920px;
+  padding-left: 15rem;
+  padding-right: 15rem;
+
 }
 
 h1,

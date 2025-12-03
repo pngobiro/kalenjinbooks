@@ -1,6 +1,6 @@
 'use client';
 
-import { Star, ShoppingCart, Heart, Share2, BookOpen, Clock, Calendar, ChevronRight, User, ArrowLeft, Check } from 'lucide-react';
+import { Star, ShoppingCart, Share2, BookOpen, Clock, Calendar, ChevronRight, User, ArrowLeft, Check, Package } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
@@ -66,7 +66,6 @@ const relatedBooks = [
 ];
 
 export default function BookDetailPage({ params }: { params: { id: string } }) {
-    const [quantity, setQuantity] = useState(1);
     const [purchaseType, setPurchaseType] = useState<'permanent' | 'temporary'>('permanent');
     const router = useRouter();
 
@@ -149,8 +148,8 @@ export default function BookDetailPage({ params }: { params: { id: string } }) {
                                 <div
                                     onClick={() => setPurchaseType('permanent')}
                                     className={`cursor-pointer rounded-xl p-4 border-2 transition-all relative overflow-hidden group ${purchaseType === 'permanent'
-                                            ? 'border-primary shadow-lg scale-[1.02]'
-                                            : 'border-neutral-brown-200 hover:border-primary/50 hover:shadow-md'
+                                        ? 'border-primary shadow-lg scale-[1.02]'
+                                        : 'border-neutral-brown-200 hover:border-primary/50 hover:shadow-md'
                                         }`}
                                 >
                                     {/* Background Gradient */}
@@ -178,8 +177,8 @@ export default function BookDetailPage({ params }: { params: { id: string } }) {
                                 <div
                                     onClick={() => setPurchaseType('temporary')}
                                     className={`cursor-pointer rounded-xl p-4 border-2 transition-all relative overflow-hidden group ${purchaseType === 'temporary'
-                                            ? 'border-accent-green shadow-lg scale-[1.02]'
-                                            : 'border-neutral-brown-200 hover:border-accent-green/50 hover:shadow-md'
+                                        ? 'border-accent-green shadow-lg scale-[1.02]'
+                                        : 'border-neutral-brown-200 hover:border-accent-green/50 hover:shadow-md'
                                         }`}
                                 >
                                     {/* Background Gradient */}
@@ -205,26 +204,11 @@ export default function BookDetailPage({ params }: { params: { id: string } }) {
                             </div>
 
                             {/* Price Summary & Actions */}
-                            <div className="flex flex-col sm:flex-row gap-4 items-center">
-                                <div className="flex items-center border-2 border-neutral-brown-200 rounded-full px-4 py-3 w-fit">
-                                    <button
-                                        onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                                        className="w-8 h-8 flex items-center justify-center text-neutral-brown-500 hover:text-primary transition-colors font-bold text-xl"
-                                    >
-                                        -
-                                    </button>
-                                    <span className="w-12 text-center font-bold text-neutral-brown-900">{quantity}</span>
-                                    <button
-                                        onClick={() => setQuantity(quantity + 1)}
-                                        className="w-8 h-8 flex items-center justify-center text-neutral-brown-500 hover:text-primary transition-colors font-bold text-xl"
-                                    >
-                                        +
-                                    </button>
-                                </div>
-                                <button className={`flex-1 font-bold px-8 py-4 rounded-full shadow-lg hover:shadow-xl transition-all hover:-translate-y-1 flex items-center justify-center gap-2 text-white ${purchaseType === 'permanent' ? 'bg-primary hover:bg-primary-dark' : 'bg-accent-green hover:bg-accent-green/90'
+                            <div className="flex flex-col gap-4">
+                                <button className={`w-full font-bold px-8 py-4 rounded-full shadow-lg hover:shadow-xl transition-all hover:-translate-y-1 flex items-center justify-center gap-2 text-white ${purchaseType === 'permanent' ? 'bg-primary hover:bg-primary-dark' : 'bg-accent-green hover:bg-accent-green/90'
                                     }`}>
                                     <ShoppingCart size={20} />
-                                    {purchaseType === 'permanent' ? 'Buy Now' : 'Rent Now'} - KES {currentPrice * quantity}
+                                    {purchaseType === 'permanent' ? 'Buy Now' : 'Rent Now'} - KES {currentPrice}
                                 </button>
                             </div>
                         </div>
@@ -267,9 +251,12 @@ export default function BookDetailPage({ params }: { params: { id: string } }) {
 
                         {/* Secondary Actions */}
                         <div className="flex gap-4">
-                            <button className="flex-1 py-3 border-2 border-neutral-brown-200 rounded-full text-neutral-brown-500 hover:text-red-500 hover:border-red-500 transition-all flex items-center justify-center gap-2 font-medium">
-                                <Heart size={20} /> Add to Wishlist
-                            </button>
+                            <Link
+                                href={`/request-hard-copy?book=${encodeURIComponent(bookData.title)}&id=${bookData.id}`}
+                                className="flex-1 py-3 border-2 border-primary/30 bg-primary/5 rounded-full text-primary hover:bg-primary hover:text-white hover:border-primary transition-all flex items-center justify-center gap-2 font-medium"
+                            >
+                                <Package size={20} /> Request Hard Copy
+                            </Link>
                             <button className="flex-1 py-3 border-2 border-neutral-brown-200 rounded-full text-neutral-brown-500 hover:text-blue-500 hover:border-blue-500 transition-all flex items-center justify-center gap-2 font-medium">
                                 <Share2 size={20} /> Share Book
                             </button>

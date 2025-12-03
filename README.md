@@ -10,7 +10,8 @@ A modern, full-stack platform for showcasing, selling, and reading Kalenjin book
 ## 🌟 Features
 
 - **📚 Book Marketplace**: Browse, search, and purchase Kalenjin books
-- **👤 Author Profiles**: Dedicated pages for authors with their book collections
+- **👤 Author Profiles**: Dedicated pages for authors with their book collections and social media links
+- **📦 Hard Copy Requests**: Request physical copies of books with custom shipping options
 - **💳 Secure Payments**: Stripe integration with M-Pesa support for Kenya
 - **📖 Online Reading**: In-browser book viewer without downloads (PDF.js)
 - **🔗 Time-Limited Access**: Generate special links for temporary book access
@@ -161,6 +162,8 @@ kalenjinbooks/
 │   │   ├── api/              # API routes
 │   │   ├── books/            # Book pages
 │   │   ├── authors/          # Author pages
+│   │   │   └── [id]/         # Individual author profile
+│   │   ├── request-hard-copy/# Hard copy request form
 │   │   ├── dashboard/        # Author dashboard
 │   │   ├── read/             # Book reader
 │   │   ├── layout.tsx        # Root layout

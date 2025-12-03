@@ -1,6 +1,6 @@
 'use client';
 
-import { ArrowLeft, BookOpen, Star, User } from 'lucide-react';
+import { ArrowLeft, BookOpen, Star, User, Twitter, Facebook, Instagram, Linkedin } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -12,7 +12,12 @@ const authors = [
         bio: "Dr. Lagat has spent over 20 years documenting the oral traditions of the Kalenjin people. His work focuses on preserving the wisdom of elders for future generations.",
         booksCount: 5,
         rating: 4.9,
-        image: "https://ui-avatars.com/api/?name=Kiprop+Lagat&background=random"
+        image: "/images/author-kiprop.png",
+        social: {
+            twitter: "https://twitter.com/kiproplagat",
+            facebook: "https://facebook.com/kiproplagat",
+            linkedin: "https://linkedin.com/in/kiproplagat"
+        }
     },
     {
         id: 2,
@@ -21,7 +26,12 @@ const authors = [
         bio: "Chebet weaves magical tales that introduce young readers to African folklore. Her stories are known for their vibrant characters and moral lessons.",
         booksCount: 8,
         rating: 4.8,
-        image: "https://ui-avatars.com/api/?name=Chebet+Rotich&background=random"
+        image: "/images/author-chebet.png",
+        social: {
+            twitter: "https://twitter.com/chebetrotich",
+            instagram: "https://instagram.com/chebetrotich",
+            facebook: "https://facebook.com/chebetrotich"
+        }
     },
     {
         id: 3,
@@ -30,7 +40,11 @@ const authors = [
         bio: "A legendary athlete turned writer, Kipchoge shares inspiring stories of resilience and triumph from the Rift Valley.",
         booksCount: 3,
         rating: 4.7,
-        image: "https://ui-avatars.com/api/?name=Kipchoge+Keino&background=random"
+        image: "https://ui-avatars.com/api/?name=Kipchoge+Keino&background=D97706&color=fff&size=200",
+        social: {
+            twitter: "https://twitter.com/kipchogewriter",
+            linkedin: "https://linkedin.com/in/kipchogewriter"
+        }
     },
     {
         id: 4,
@@ -39,7 +53,12 @@ const authors = [
         bio: "Jepkorir's poetry captures the beauty of the Nandi Hills and the spirit of its people. Her verses are a celebration of identity and belonging.",
         booksCount: 4,
         rating: 4.9,
-        image: "https://ui-avatars.com/api/?name=Jepkorir+Tanui&background=random"
+        image: "https://ui-avatars.com/api/?name=Jepkorir+Tanui&background=059669&color=fff&size=200",
+        social: {
+            twitter: "https://twitter.com/jepkorirpoet",
+            instagram: "https://instagram.com/jepkorirpoet",
+            facebook: "https://facebook.com/jepkorirpoet"
+        }
     }
 ];
 
@@ -69,7 +88,7 @@ export default function AuthorsPage() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {authors.map((author) => (
-                        <div key={author.id} className="bg-white rounded-2xl overflow-hidden shadow-sm border border-neutral-brown-500/10 hover:shadow-lg hover:border-primary/30 transition-all group">
+                        <Link key={author.id} href={`/authors/${author.id}`} className="bg-white rounded-2xl overflow-hidden shadow-sm border border-neutral-brown-500/10 hover:shadow-lg hover:border-primary/30 transition-all group">
                             <div className="p-8 text-center">
                                 <div className="w-24 h-24 mx-auto rounded-full overflow-hidden mb-4 border-4 border-neutral-cream group-hover:border-primary transition-colors">
                                     <img
@@ -84,7 +103,7 @@ export default function AuthorsPage() {
                                     {author.bio}
                                 </p>
 
-                                <div className="flex items-center justify-center gap-6 border-t border-neutral-brown-100 pt-6">
+                                <div className="flex items-center justify-center gap-6 border-t border-neutral-brown-100 pt-6 mb-4">
                                     <div className="text-center">
                                         <div className="flex items-center gap-1 text-neutral-brown-900 font-bold">
                                             <BookOpen size={16} className="text-accent-green" />
@@ -100,13 +119,61 @@ export default function AuthorsPage() {
                                         <div className="text-xs text-neutral-brown-500">Rating</div>
                                     </div>
                                 </div>
+
+                                {/* Social Links */}
+                                <div className="flex items-center justify-center gap-3">
+                                    {author.social.twitter && (
+                                        <a
+                                            href={author.social.twitter}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            onClick={(e) => e.stopPropagation()}
+                                            className="w-8 h-8 rounded-full bg-neutral-cream hover:bg-primary/10 flex items-center justify-center text-neutral-brown-500 hover:text-primary transition-all"
+                                        >
+                                            <Twitter size={16} />
+                                        </a>
+                                    )}
+                                    {author.social.facebook && (
+                                        <a
+                                            href={author.social.facebook}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            onClick={(e) => e.stopPropagation()}
+                                            className="w-8 h-8 rounded-full bg-neutral-cream hover:bg-primary/10 flex items-center justify-center text-neutral-brown-500 hover:text-primary transition-all"
+                                        >
+                                            <Facebook size={16} />
+                                        </a>
+                                    )}
+                                    {author.social.instagram && (
+                                        <a
+                                            href={author.social.instagram}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            onClick={(e) => e.stopPropagation()}
+                                            className="w-8 h-8 rounded-full bg-neutral-cream hover:bg-primary/10 flex items-center justify-center text-neutral-brown-500 hover:text-primary transition-all"
+                                        >
+                                            <Instagram size={16} />
+                                        </a>
+                                    )}
+                                    {author.social.linkedin && (
+                                        <a
+                                            href={author.social.linkedin}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            onClick={(e) => e.stopPropagation()}
+                                            className="w-8 h-8 rounded-full bg-neutral-cream hover:bg-primary/10 flex items-center justify-center text-neutral-brown-500 hover:text-primary transition-all"
+                                        >
+                                            <Linkedin size={16} />
+                                        </a>
+                                    )}
+                                </div>
                             </div>
                             <div className="bg-neutral-cream p-4 text-center">
-                                <button className="text-neutral-brown-900 font-bold text-sm hover:text-primary transition-colors flex items-center justify-center gap-2 w-full">
+                                <div className="text-neutral-brown-900 font-bold text-sm group-hover:text-primary transition-colors flex items-center justify-center gap-2 w-full">
                                     View Profile <ArrowLeft size={16} className="rotate-180" />
-                                </button>
+                                </div>
                             </div>
-                        </div>
+                        </Link>
                     ))}
 
                     {/* Join Us Card */}

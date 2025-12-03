@@ -332,6 +332,48 @@ Based on 4px base unit:
 ├──────────────────────────────────────┤
 │     Related Books Carousel           │
 └──────────────────────────────────────┘
+
+### Hard Copy Request Page
+
+**Layout:**
+```
+┌─────────────┬──────────────────────┐
+│             │  Header & Intro      │
+│  Back Nav   │  "Request Hard Copy" │
+│             │                      │
+├─────────────┼──────────────────────┤
+│             │  Personal Info Form  │
+│             │  (Name, Email, Phone)│
+│             ├──────────────────────┤
+│   Form      │  Shipping Address    │
+│   Container │  (Street, City...)   │
+│             ├──────────────────────┤
+│             │  Order Details       │
+│             │  (Qty, Notes)        │
+│             ├──────────────────────┤
+│             │  Submit Button       │
+└─────────────┴──────────────────────┘
+```
+
+### Author Profile Page
+
+**Layout:**
+```
+┌─────────────┬──────────────────────┐
+│             │  Name & Role         │
+│   Profile   │  Location & Stats    │
+│   Picture   │  Bio Summary         │
+│             │  [Contact Author]    │
+├─────────────┴──────────────────────┤
+│         About the Author           │
+│         (Full Biography)           │
+├────────────────────────────────────┤
+│         Published Books            │
+│  ┌────┐ ┌────┐ ┌────┐ ┌────┐       │
+│  │Book│ │Book│ │Book│ │Book│       │
+│  └────┘ └────┘ └────┘ └────┘       │
+└────────────────────────────────────┘
+```
 ```
 
 ### Author Dashboard
@@ -568,6 +610,19 @@ import { Book, ShoppingCart, Heart } from 'lucide-react';
 <Book size={24} className="text-primary" />
 <ShoppingCart size={20} strokeWidth={2} />
 <Heart size={18} fill="currentColor" />
+```
+
+### Social Media Icons
+
+Used in author profiles and contact sections:
+
+```tsx
+<div className="flex gap-3">
+  <a href="#" className="w-8 h-8 rounded-full bg-neutral-cream hover:bg-primary/10 flex items-center justify-center text-neutral-brown-500 hover:text-primary transition-all">
+    <Twitter size={16} />
+  </a>
+  {/* Repeat for Facebook, Instagram, LinkedIn */}
+</div>
 ```
 
 ---

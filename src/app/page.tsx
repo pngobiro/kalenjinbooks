@@ -76,13 +76,13 @@ const featuredBooks = [
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-neutral-cream">
+    <div className="min-h-screen bg-neutral-cream w-full">
       {/* Navigation */}
-      <nav className="bg-transparent">
-        <div className="max-w-7xl mx-auto px-12">
+      <nav className="bg-transparent w-full">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-center h-20 relative">
             {/* Logo - Absolute positioned to left */}
-            <Link href="/" className="absolute left-0 flex items-center gap-2">
+            <Link href="/" className="absolute left-4 sm:left-6 lg:left-8 flex items-center gap-2">
               <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-transparent">
                 <Book className="text-accent-green" size={24} />
               </div>
@@ -90,7 +90,7 @@ export default function Home() {
             </Link>
 
             {/* Centered Navigation Links */}
-            <div className="flex items-center gap-8">
+            <div className="hidden md:flex items-center gap-8">
               <Link
                 href="/books"
                 className="text-neutral-brown-700 hover:text-neutral-brown-900 font-medium transition-colors"
@@ -118,7 +118,7 @@ export default function Home() {
             </div>
 
             {/* Search - Absolute positioned to right */}
-            <button className="absolute right-0 p-2 hover:bg-neutral-cream rounded-nav transition-colors cursor-pointer" aria-label="Search">
+            <button className="absolute right-4 sm:right-6 lg:right-8 p-2 hover:bg-neutral-cream rounded-nav transition-colors cursor-pointer" aria-label="Search">
               <Search size={24} className="text-neutral-brown-900 w-6 h-6" />
             </button>
           </div>
@@ -126,29 +126,29 @@ export default function Home() {
       </nav>
 
       {/* Hero Section */}
-      <div className="w-full bg-gradient-to-b from-white via-neutral-cream/50 to-neutral-cream py-24 px-5 relative overflow-hidden">
+      <div className="w-full bg-gradient-to-b from-white via-neutral-cream/50 to-neutral-cream py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
         {/* Decorative elements */}
         <div className="absolute top-0 left-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
         <div className="absolute bottom-0 right-0 w-96 h-96 bg-accent-green/5 rounded-full blur-3xl translate-x-1/2 translate-y-1/2"></div>
 
-        <div className="max-w-5xl mx-auto relative z-10">
-          <h1 className="text-6xl md:text-7xl font-bold text-neutral-brown-900 mb-6 font-heading leading-tight text-center">
+        <div className="max-w-5xl mx-auto relative z-10 text-center">
+          <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold text-neutral-brown-900 mb-6 font-heading leading-tight">
             Discover Kalenjin<br />
             <span className="text-primary">Literature</span>
           </h1>
-          <p className="text-xl text-neutral-brown-700 max-w-3xl mx-auto mb-10 leading-relaxed font-body text-center">
+          <p className="text-lg sm:text-xl text-neutral-brown-700 max-w-3xl mx-auto mb-10 leading-relaxed font-body">
             Explore a curated collection of vibrant stories, history, and voices from the Kalenjin community and across Africa.
           </p>
-          <div className="flex items-center justify-center gap-5">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-5">
             <Link
               href="/books"
-              className="bg-primary hover:bg-primary-dark text-white font-bold px-10 py-5 rounded-full shadow-xl hover:shadow-2xl transition-all hover:-translate-y-1 text-lg"
+              className="w-full sm:w-auto bg-primary hover:bg-primary-dark text-white font-bold px-8 sm:px-10 py-4 sm:py-5 rounded-full shadow-xl hover:shadow-2xl transition-all hover:-translate-y-1 text-base sm:text-lg text-center"
             >
               Shop Kalenjin Books
             </Link>
             <Link
               href="/books"
-              className="bg-accent-green hover:bg-accent-green/90 text-white font-bold px-10 py-5 rounded-full shadow-xl hover:shadow-2xl transition-all hover:-translate-y-1 text-lg"
+              className="w-full sm:w-auto bg-accent-green hover:bg-accent-green/90 text-white font-bold px-8 sm:px-10 py-4 sm:py-5 rounded-full shadow-xl hover:shadow-2xl transition-all hover:-translate-y-1 text-base sm:text-lg text-center"
             >
               Explore Collection
             </Link>
@@ -157,10 +157,14 @@ export default function Home() {
       </div>
 
       {/* Featured Books */}
-      <FeaturedBooks books={featuredBooks} />
+      <div className="w-full">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <FeaturedBooks books={featuredBooks} />
+        </div>
+      </div>
 
       {/* CTA Section */}
-      <div className="bg-gradient-to-r from-primary to-primary-dark py-16">
+      <div className="w-full bg-gradient-to-r from-primary to-primary-dark py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
             Ready to Share Your Story?
@@ -178,7 +182,7 @@ export default function Home() {
       </div>
 
       {/* Footer */}
-      <footer className="bg-white border-t border-neutral-brown-500/10">
+      <footer className="w-full bg-white border-t border-neutral-brown-500/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
             <div>
