@@ -5,14 +5,15 @@ import Link from 'next/link';
 import { Search, Book, SlidersHorizontal, X, Star, ArrowLeft } from 'lucide-react';
 
 const books = [
-  { id: '1', title: 'Kalenjin Folklore Tales', author: 'John Kamau', price: 500, rating: 4.5, category: 'Folklore', language: 'Kalenjin', image: '/books/folklore-tales.png' },
-  { id: '2', title: 'Traditional Wisdom', author: 'Jane Kiplagat', price: 750, rating: 4.8, category: 'Non-Fiction', language: 'Bilingual', image: '/books/traditional-wisdom.png' },
-  { id: '3', title: 'Cultural Heritage', author: 'Mike Korir', price: 600, rating: 4.3, category: 'History', language: 'English', image: '/books/cultural-heritage.png' },
-  { id: '4', title: 'Children Stories', author: 'Sarah Chebet', price: 400, rating: 4.7, category: 'Children', language: 'Kalenjin', image: '/books/children-stories.png' },
-  { id: '5', title: 'Modern Kalenjin Poetry', author: 'David Ruto', price: 550, rating: 4.6, category: 'Poetry', language: 'Kalenjin' },
-  { id: '6', title: 'Educational Guide', author: 'Mary Jepkoech', price: 800, rating: 4.9, category: 'Education', language: 'Bilingual' },
-  { id: '7', title: 'Historical Narratives', author: 'Peter Kibet', price: 650, rating: 4.4, category: 'History', language: 'English' },
-  { id: '8', title: 'Fiction Adventures', author: 'Grace Chepkemoi', price: 700, rating: 4.5, category: 'Fiction', language: 'Kalenjin' },
+  { id: '1', title: 'Immortal Knowledge', author: 'Dr. Kibet Kitur', price: 1200, rating: 4.9, category: 'Non-Fiction', language: 'English', image: '/books/immortalknowledge.jpg' },
+  { id: '2', title: 'Kalenjin Folklore Tales', author: 'John Kamau', price: 500, rating: 4.5, category: 'Folklore', language: 'Kalenjin', image: '/books/folklore-tales.png' },
+  { id: '3', title: 'Traditional Wisdom', author: 'Jane Kiplagat', price: 750, rating: 4.8, category: 'Non-Fiction', language: 'Bilingual', image: '/books/traditional-wisdom.png' },
+  { id: '4', title: 'Cultural Heritage', author: 'Mike Korir', price: 600, rating: 4.3, category: 'History', language: 'English', image: '/books/cultural-heritage.png' },
+  { id: '5', title: 'Children Stories', author: 'Sarah Chebet', price: 400, rating: 4.7, category: 'Children', language: 'Kalenjin', image: '/books/children-stories.png' },
+  { id: '6', title: 'Modern Kalenjin Poetry', author: 'David Ruto', price: 550, rating: 4.6, category: 'Poetry', language: 'Kalenjin' },
+  { id: '7', title: 'Educational Guide', author: 'Mary Jepkoech', price: 800, rating: 4.9, category: 'Education', language: 'Bilingual' },
+  { id: '8', title: 'Historical Narratives', author: 'Peter Kibet', price: 650, rating: 4.4, category: 'History', language: 'English' },
+  { id: '9', title: 'Fiction Adventures', author: 'Grace Chepkemoi', price: 700, rating: 4.5, category: 'Fiction', language: 'Kalenjin' },
 ];
 
 const categories = ['All', 'Fiction', 'Non-Fiction', 'Folklore', 'History', 'Poetry', 'Children', 'Education'];

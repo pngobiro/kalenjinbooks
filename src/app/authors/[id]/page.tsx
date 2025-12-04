@@ -8,6 +8,22 @@ import { useParams } from 'next/navigation';
 const authorsData = [
     {
         id: 1,
+        name: "Dr. Kibet Kitur",
+        role: "Author & Thought Leader",
+        bio: "Dr. Kibet Kitur delivers powerful messages to the African grassroots, calling for unity, economic freedom, and a mental revolution.",
+        fullBio: "Dr. Kibet Kitur is a visionary author and thought leader whose work speaks directly to the African grassroots. His writing blows the trumpet and plays the African drum loud enough for all to hear, calling on Africans to end the dirge and understand their past, present, and future. Dr. Kitur's message emphasizes the need for a new peaceful and harmonious African unity, a treaty canonized for economic freedom, and a mental revolution to change the African world. His work shines light on things known and unknown, providing succinct historical and scientific-based messages to revolutionize thinking and ways of living. He calls on the African grassroots to heed the calling, step forward, and pick up the challenge of essential practice for survival.",
+        booksCount: 1,
+        rating: 4.9,
+        image: "/images/author-kibet-kitur.png",
+        location: "Kenya",
+        joinedYear: 2024,
+        email: "kibet.kitur@afrireads.com",
+        books: [
+            { id: 1, title: "Immortal Knowledge", price: 1200, cover: "/books/immortalknowledge.jpg" }
+        ]
+    },
+    {
+        id: 2,
         name: "Dr. Kiprop Lagat",
         role: "Cultural Historian",
         bio: "Dr. Lagat has spent over 20 years documenting the oral traditions of the Kalenjin people. His work focuses on preserving the wisdom of elders for future generations.",
@@ -19,13 +35,13 @@ const authorsData = [
         joinedYear: 2018,
         email: "kiprop.lagat@afrireads.com",
         books: [
-            { id: 1, title: "Kalenjin Folklore Tales", price: 400, cover: "/books/folklore-tales.png" },
-            { id: 2, title: "Traditional Wisdom", price: 350, cover: "/books/traditional-wisdom.png" },
-            { id: 3, title: "Elders' Stories", price: 450, cover: "https://via.placeholder.com/200x300/D97706/fff?text=Elders+Stories" }
+            { id: 2, title: "Kalenjin Folklore Tales", price: 400, cover: "/books/folklore-tales.png" },
+            { id: 3, title: "Traditional Wisdom", price: 350, cover: "/books/traditional-wisdom.png" },
+            { id: 4, title: "Elders' Stories", price: 450, cover: "https://via.placeholder.com/200x300/D97706/fff?text=Elders+Stories" }
         ]
     },
     {
-        id: 2,
+        id: 3,
         name: "Chebet Rotich",
         role: "Children's Author",
         bio: "Chebet weaves magical tales that introduce young readers to African folklore. Her stories are known for their vibrant characters and moral lessons.",
@@ -43,7 +59,7 @@ const authorsData = [
         ]
     },
     {
-        id: 3,
+        id: 4,
         name: "Kipchoge Keino",
         role: "Biographer",
         bio: "A legendary athlete turned writer, Kipchoge shares inspiring stories of resilience and triumph from the Rift Valley.",
@@ -60,7 +76,7 @@ const authorsData = [
         ]
     },
     {
-        id: 4,
+        id: 5,
         name: "Jepkorir Tanui",
         role: "Poet",
         bio: "Jepkorir's poetry captures the beauty of the Nandi Hills and the spirit of its people. Her verses are a celebration of identity and belonging.",

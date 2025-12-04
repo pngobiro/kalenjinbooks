@@ -6,6 +6,15 @@ import Link from 'next/link';
 const authors = [
   {
     id: 1,
+    name: "Dr. Kibet Kitur",
+    role: "Author & Thought Leader",
+    bio: "Dr. Kibet Kitur delivers powerful messages to the African grassroots, calling for unity, economic freedom, and a mental revolution.",
+    booksCount: 1,
+    rating: 4.9,
+    image: "/images/author-kibet-kitur.png",
+  },
+  {
+    id: 2,
     name: "Dr. Kiprop Lagat",
     role: "Cultural Historian",
     bio: "Dr. Lagat has spent over 20 years documenting the oral traditions of the Kalenjin people.",
@@ -14,7 +23,7 @@ const authors = [
     image: "/images/author-kiprop.png",
   },
   {
-    id: 2,
+    id: 3,
     name: "Chebet Rotich",
     role: "Children's Author",
     bio: "Chebet weaves magical tales that introduce young readers to African folklore.",
@@ -23,7 +32,7 @@ const authors = [
     image: "/images/author-chebet.png",
   },
   {
-    id: 3,
+    id: 4,
     name: "Kipchoge Keino",
     role: "Biographer",
     bio: "A legendary athlete turned writer, sharing inspiring stories from the Rift Valley.",
@@ -31,7 +40,7 @@ const authors = [
     rating: 4.7,
   },
   {
-    id: 4,
+    id: 5,
     name: "Jepkorir Tanui",
     role: "Poet",
     bio: "Jepkorir's poetry captures the beauty of the Nandi Hills and the spirit of its people.",

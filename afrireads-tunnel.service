@@ -1,0 +1,15 @@
+[Unit]
+Description=AfriReads Cloudflare Tunnel
+Requires=docker.service
+After=docker.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+WorkingDirectory=/home/ngobiro/projects/kalenjinbooks
+ExecStart=/usr/bin/docker-compose -f docker-compose.tunnel.yml up -d
+ExecStop=/usr/bin/docker-compose -f docker-compose.tunnel.yml down
+EnvironmentFile=/home/ngobiro/projects/kalenjinbooks/.env.tunnel
+
+[Install]
+WantedBy=multi-user.target

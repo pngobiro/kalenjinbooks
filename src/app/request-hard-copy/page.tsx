@@ -3,9 +3,9 @@
 import { ArrowLeft, Package, MapPin, User, BookOpen, CheckCircle, Book } from 'lucide-react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 
-export default function RequestHardCopyPage() {
+function RequestHardCopyContent() {
   const searchParams = useSearchParams();
   const bookTitle = searchParams.get('book') || 'Selected Book';
   const bookId = searchParams.get('id') || '';
@@ -165,5 +165,20 @@ export default function RequestHardCopyPage() {
         </div>
       </section>
     </main>
+  );
+}
+
+export default function RequestHardCopyPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-neutral-cream flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-neutral-brown-600">Loading form...</p>
+        </div>
+      </div>
+    }>
+      <RequestHardCopyContent />
+    </Suspense>
   );
 }

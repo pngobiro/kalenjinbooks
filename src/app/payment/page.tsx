@@ -2,8 +2,9 @@
 
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeft, CreditCard, Smartphone, Building2, Check, Clock, BookOpen, Book } from 'lucide-react';
-import { useState } from 'react';
+import { ArrowLeft, CreditCard, Building2, Check, Clock, BookOpen, Book } from 'lucide-react';
+import { useState, Suspense } from 'react';
+import Image from 'next/image';
 
 const authorPaymentMethods: Record<string, string[]> = {
   'Sarah Chebet': ['mpesa', 'stripe', 'paypal'],
@@ -12,14 +13,14 @@ const authorPaymentMethods: Record<string, string[]> = {
   default: ['mpesa', 'stripe'],
 };
 
-const paymentMethodsInfo: Record<string, { name: string; icon: typeof Smartphone; description: string; color: string }> = {
-  mpesa: { name: 'M-Pesa', icon: Smartphone, description: 'Pay with mobile money', color: 'green' },
+const paymentMethodsInfo: Record<string, { name: string; icon: typeof CreditCard | null; logo?: string; description: string; color: string }> = {
+  mpesa: { name: 'M-Pesa', icon: null, logo: '/images/mpesa-logo.png', description: 'Pay with mobile money', color: 'green' },
   stripe: { name: 'Credit/Debit Card', icon: CreditCard, description: 'Visa, Mastercard, Amex', color: 'blue' },
   paypal: { name: 'PayPal', icon: CreditCard, description: 'Pay with PayPal', color: 'indigo' },
   bank: { name: 'Bank Transfer', icon: Building2, description: 'Direct bank transfer', color: 'gray' },
 };
 
-export default function PaymentPage() {
+function PaymentContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   
@@ -122,7 +123,11 @@ export default function PaymentPage() {
                   <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${
                     isSelected ? 'bg-white' : 'bg-neutral-brown-100'
                   }`}>
-                    <Icon size={24} className={isSelected ? 'text-primary' : 'text-neutral-brown-400'} />
+                    {method.logo ? (
+                      <Image src={method.logo} alt={method.name} width={32} height={32} className="object-contain" />
+                    ) : Icon ? (
+                      <Icon size={24} className={isSelected ? 'text-primary' : 'text-neutral-brown-400'} />
+                    ) : null}
                   </div>
                   
                   <div className="flex-1">
@@ -161,5 +166,20 @@ export default function PaymentPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function PaymentPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-neutral-cream flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-neutral-brown-600">Loading payment options...</p>
+        </div>
+      </div>
+    }>
+      <PaymentContent />
+    </Suspense>
   );
 }

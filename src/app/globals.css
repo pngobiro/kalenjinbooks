@@ -1,15 +1,50 @@
 @import "tailwindcss";
 
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+  
+  body {
+    margin: 0;
+    line-height: inherit;
+  }
+}
+
 @theme {
+  /* Primary Colors */
   --color-primary: #E07856;
   --color-primary-dark: #C85D3A;
   --color-primary-light: #F09B7D;
+
+  /* Neutral Colors */
   --color-neutral-cream: #F5F1E8;
-  --color-neutral-brown-900: #4A3728;
-  --color-neutral-brown-700: #6B5D52;
+  --color-neutral-brown-50: #FAF8F5;
+  --color-neutral-brown-100: #F0EBE4;
+  --color-neutral-brown-200: #E0D5C7;
+  --color-neutral-brown-300: #C5B8A8;
+  --color-neutral-brown-400: #A89888;
   --color-neutral-brown-500: #9B8D82;
+  --color-neutral-brown-600: #7D7068;
+  --color-neutral-brown-700: #6B5D52;
+  --color-neutral-brown-800: #574A3F;
+  --color-neutral-brown-900: #4A3728;
+
+  /* Accent Colors */
   --color-accent-green: #8B9D83;
   --color-accent-gold: #D4AF37;
+
+  /* Font Families */
+  --font-heading: 'Merriweather', 'Playfair Display', Georgia, serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 /* AfriReads - African Modern Minimal Design System */
@@ -17,22 +52,22 @@
   /* Background Colors */
   --bg-primary: #F5F1E8;
   --bg-secondary: #FFFFFF;
-  
+
   /* Text Colors */
   --text-primary: #4A3728;
   --text-secondary: #6B5D52;
   --text-inverse: #FFFFFF;
-  
+
   /* Brand Colors */
   --brand-primary: #E07856;
   --brand-primary-hover: #C85D3A;
   --brand-accent-green: #8B9D83;
-  
+
   /* UI Elements */
   --card-overlay: rgba(74, 55, 40, 0.75);
   --icon-color: #4A3728;
   --button-nav: #8B9D83;
-  
+
   /* Legacy support (keeping for compatibility) */
   --primary: #E07856;
   --primary-dark: #C85D3A;
@@ -51,20 +86,28 @@
 }
 
 /* Base Styles */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
-  margin: 0;
-  padding: 0;
 }
 
-html, body {
-  width: 100vw;
-  max-width: 100%;
+html {
+  width: 100%;
+  min-height: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  width: 100%;
   min-height: 100vh;
-  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
   font-family: 'Roboto', 'Helvetica Neue', -apple-system, BlinkMacSystemFont, sans-serif;
   background-color: var(--bg-primary);
   color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* Typography */
@@ -83,10 +126,7 @@ a {
   text-decoration: none;
 }
 
-/* Smooth Scrolling */
-html {
-  scroll-behavior: smooth;
-}
+
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {

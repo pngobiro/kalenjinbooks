@@ -1,40 +1,32 @@
 'use client';
 
-import { Star, ShoppingCart, Share2, BookOpen, Clock, Calendar, ChevronRight, User, ArrowLeft, Check, Package, Book } from 'lucide-react';
+import { Star, ShoppingCart, Share2, BookOpen, Clock, ChevronRight, User, ArrowLeft, Package, Book } from 'lucide-react';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, use } from 'react';
 import { useRouter } from 'next/navigation';
+import { getBookById, getAllBooks } from '@/lib/data';
 
-// Mock data for the specific book
-const bookData = {
-  id: '4',
-  title: 'Children Stories',
-  author: 'Sarah Chebet',
-  price: 400,
-  rentalPrice: 50,
-  rating: 4.7,
-  reviewCount: 128,
-  category: 'Children',
-  description: `Immerse your child in the magical world of African storytelling with this delightful collection of fables and adventures. "Children Stories" brings together age-old wisdom and modern narratives, featuring beloved characters like the clever hare, the mighty lion, and the wise tortoise.
-
-Each story is crafted to entertain while imparting valuable life lessons about friendship, courage, and honesty. Perfect for bedtime reading or classroom sessions, this book is beautifully illustrated to capture young imaginations.`,
-  image: '/books/children-stories.png',
-  pages: 120,
-  language: 'English & Kalenjin',
-  published: '2023',
-  tags: ['Folklore', 'Animals', 'Education', 'Bilingual'],
-};
-
-// Mock related books
-const relatedBooks = [
-  { id: '1', title: 'Kalenjin Folklore Tales', author: 'John Kamau', price: 500, rating: 4.5, image: '/books/folklore-tales.png' },
-  { id: '2', title: 'Traditional Wisdom', author: 'Jane Kiplagat', price: 750, rating: 4.8, image: '/books/traditional-wisdom.png' },
-  { id: '3', title: 'Cultural Heritage', author: 'Mike Korir', price: 600, rating: 4.3, image: '/books/cultural-heritage.png' },
-];
-
-export default function BookDetailPage({ params }: { params: { id: string } }) {
+export default function BookDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params);
   const [purchaseType, setPurchaseType] = useState<'permanent' | 'temporary'>('permanent');
   const router = useRouter();
+  
+  const bookData = getBookById(id);
+  const allBooks = getAllBooks();
+  const relatedBooks = allBooks.filter(b => b.id !== id).slice(0, 3);
+  
+  if (!bookData) {
+    return (
+      <div className="min-h-screen bg-neutral-cream flex items-center justify-center">
+        <div className="text-center">
+          <Book size={64} className="text-neutral-brown-300 mx-auto mb-4" />
+          <h1 className="text-2xl font-bold text-neutral-brown-900 mb-2">Book Not Found</h1>
+          <Link href="/books" className="text-primary hover:underline">Browse all books</Link>
+        </div>
+      </div>
+    );
+  }
+  
   const currentPrice = purchaseType === 'permanent' ? bookData.price : bookData.rentalPrice;
 
   return (

@@ -2,9 +2,9 @@ import Link from 'next/link';
 import { Book, ArrowRight, Search, Star } from 'lucide-react';
 
 const featuredBooks = [
-  { id: '1', title: 'Kalenjin Folklore Tales', author: 'John Kamau', price: 500, rating: 4.5, image: '/books/folklore-tales.png' },
-  { id: '2', title: 'Traditional Wisdom', author: 'Jane Kiplagat', price: 750, rating: 4.8, image: '/books/traditional-wisdom.png' },
-  { id: '3', title: 'Cultural Heritage', author: 'Mike Korir', price: 600, rating: 4.3, image: '/books/cultural-heritage.png' },
+  { id: '1', title: 'Immortal Knowledge', author: 'Dr. Kibet Kitur', price: 1200, rating: 4.9, image: '/books/immortalknowledge.jpg' },
+  { id: '2', title: 'Kalenjin Folklore Tales', author: 'John Kamau', price: 500, rating: 4.5, image: '/books/folklore-tales.png' },
+  { id: '3', title: 'Traditional Wisdom', author: 'Jane Kiplagat', price: 750, rating: 4.8, image: '/books/traditional-wisdom.png' },
   { id: '4', title: 'Children Stories', author: 'Sarah Chebet', price: 400, rating: 4.7, image: '/books/children-stories.png' },
 ];
 
