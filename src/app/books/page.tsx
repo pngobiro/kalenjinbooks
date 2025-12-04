@@ -2,7 +2,8 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Search, Book, SlidersHorizontal, X, Star, ArrowLeft } from 'lucide-react';
+import { Search, Book, Star, ArrowLeft } from 'lucide-react';
+import KaleeReadsLogo from '@/components/KaleeReadsLogo';
 
 const books = [
   { id: '1', title: 'Immortal Knowledge', author: 'Dr. Kibet Kitur', price: 1200, rating: 4.9, category: 'Non-Fiction', language: 'English', image: '/books/immortalknowledge.jpg' },
@@ -35,11 +36,9 @@ export default function BooksPage() {
       <nav className="bg-white/90 backdrop-blur-sm sticky top-0 z-50 border-b border-neutral-brown-500/10">
         <div className="max-w-6xl mx-auto px-6">
           <div className="flex items-center justify-between h-20">
-            <Link href="/" className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-primary/10">
-                <Book className="text-primary" size={24} />
-              </div>
-              <span className="text-2xl font-bold text-neutral-brown-900 font-heading">AfriReads</span>
+            <Link href="/" className="flex items-center gap-2">
+              <KaleeReadsLogo size={44} />
+              <span className="text-2xl font-bold text-neutral-brown-900 font-heading">KaleeReads</span>
             </Link>
 
             <div className="hidden md:flex items-center gap-8">

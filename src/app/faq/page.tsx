@@ -24,7 +24,7 @@ const faqs = [
   {
     category: "For Authors",
     questions: [
-      { q: "How can I publish on AfriReads?", a: "Create an author account and submit your manuscript. We review within 2 weeks." },
+      { q: "How can I publish on KaleeReads?", a: "Create an author account and submit your manuscript. We review within 2 weeks." },
       { q: "What royalties do authors receive?", a: "Up to 70% for e-books and 50% for print books." },
     ]
   }
@@ -43,7 +43,7 @@ export default function FAQPage() {
               <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-primary/10">
                 <Book className="text-primary" size={24} />
               </div>
-              <span className="text-2xl font-bold text-neutral-brown-900 font-heading">AfriReads</span>
+              <span className="text-2xl font-bold text-neutral-brown-900 font-heading">KaleeReads</span>
             </Link>
 
             <Link href="/" className="flex items-center gap-2 text-neutral-brown-700 hover:text-primary">
@@ -60,7 +60,7 @@ export default function FAQPage() {
         <div className="max-w-6xl mx-auto px-6 text-center">
           <h1 className="text-4xl font-bold text-neutral-brown-900 font-heading mb-4">FAQ</h1>
           <p className="text-lg text-neutral-brown-600 max-w-xl mx-auto">
-            Everything you need to know about AfriReads
+            Everything you need to know about KaleeReads
           </p>
         </div>
       </section>

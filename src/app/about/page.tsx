@@ -15,7 +15,7 @@ export default function AboutPage() {
               <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-primary/10">
                 <Book className="text-primary" size={24} />
               </div>
-              <span className="text-2xl font-bold text-neutral-brown-900 font-heading">AfriReads</span>
+              <span className="text-2xl font-bold text-neutral-brown-900 font-heading">KaleeReads</span>
             </Link>
 
             <div className="hidden md:flex items-center gap-8">
@@ -53,7 +53,7 @@ export default function AboutPage() {
                 Bridging Tradition and Technology
               </h2>
               <p className="text-neutral-brown-700 mb-4 leading-relaxed">
-                AfriReads was born from a simple yet powerful idea: that African stories, particularly those from the Kalenjin community, deserve a global stage.
+                KaleeReads was born from a simple yet powerful idea: that African stories, particularly those from the Kalenjin community, deserve a global stage.
               </p>
               <p className="text-neutral-brown-700 leading-relaxed">
                 We believe in the power of storytelling to educate, inspire, and unite. By providing a platform for local authors, we are nurturing a cultural renaissance.

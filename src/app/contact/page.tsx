@@ -14,7 +14,7 @@ export default function ContactPage() {
               <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-primary/10">
                 <Book className="text-primary" size={24} />
               </div>
-              <span className="text-2xl font-bold text-neutral-brown-900 font-heading">AfriReads</span>
+              <span className="text-2xl font-bold text-neutral-brown-900 font-heading">KaleeReads</span>
             </Link>
 
             <Link href="/" className="flex items-center gap-2 text-neutral-brown-700 hover:text-primary">

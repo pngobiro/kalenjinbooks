@@ -1,5 +1,6 @@
 import Link from 'next/link';
-import { Book, ArrowRight, Search, Star } from 'lucide-react';
+import { ArrowRight, Search, Star, Book } from 'lucide-react';
+import KaleeReadsLogo from '@/components/KaleeReadsLogo';
 
 const featuredBooks = [
   { id: '1', title: 'Immortal Knowledge', author: 'Dr. Kibet Kitur', price: 1200, rating: 4.9, image: '/books/immortalknowledge.jpg' },
@@ -15,11 +16,9 @@ export default function Home() {
       <nav className="bg-white/90 backdrop-blur-sm sticky top-0 z-50 border-b border-neutral-brown-500/10">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
-            <Link href="/" className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-primary/10">
-                <Book className="text-primary" size={24} />
-              </div>
-              <span className="text-2xl font-bold text-neutral-brown-900 font-heading">AfriReads</span>
+            <Link href="/" className="flex items-center gap-2">
+              <KaleeReadsLogo size={44} />
+              <span className="text-2xl font-bold text-neutral-brown-900 font-heading">KaleeReads</span>
             </Link>
 
             <div className="hidden md:flex items-center gap-8">
@@ -112,11 +111,9 @@ export default function Home() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
             <div>
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
-                  <Book className="text-white" size={24} />
-                </div>
-                <span className="text-2xl font-bold font-heading">AfriReads</span>
+              <div className="flex items-center gap-2 mb-4">
+                <KaleeReadsLogo size={44} />
+                <span className="text-2xl font-bold font-heading">KaleeReads</span>
               </div>
               <p className="text-neutral-brown-500 text-sm">Preserving Kalenjin culture through literature.</p>
             </div>
@@ -144,7 +141,7 @@ export default function Home() {
             </div>
           </div>
           <div className="border-t border-white/10 pt-8 text-center text-neutral-brown-500 text-sm">
-            <p>© 2024 AfriReads. All rights reserved.</p>
+            <p>© 2024 KaleeReads. All rights reserved.</p>
           </div>
         </div>
       </footer>
