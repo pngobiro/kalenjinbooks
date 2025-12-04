@@ -1,4 +1,4 @@
-# AfriReads - Kalenjin Books Marketplace
+# KaleeReads - Kalenjin Books Marketplace
 
 A modern, full-stack platform for showcasing, selling, and reading Kalenjin books online. Built with Next.js, React, Cloudflare infrastructure, and featuring author management, secure payments, and time-limited book access.
 
@@ -10,9 +10,9 @@ A modern, full-stack platform for showcasing, selling, and reading Kalenjin book
 ## 🌟 Features
 
 - **📚 Book Marketplace**: Browse, search, and purchase Kalenjin books
-- **👤 Author Profiles**: Dedicated pages for authors with their book collections and social media links
-- **📦 Hard Copy Requests**: Request physical copies of books with custom shipping options
-- **💳 Secure Payments**: Stripe integration with M-Pesa support for Kenya
+- **👤 Author Profiles**: Dedicated pages for authors with their book collections
+- **📦 Hard Copy Requests**: Request physical copies of books with custom shipping
+- **💳 Secure Payments**: M-Pesa and Stripe integration for Kenya
 - **📖 Online Reading**: In-browser book viewer without downloads (PDF.js)
 - **🔗 Time-Limited Access**: Generate special links for temporary book access
 - **💰 Author Earnings**: Per-author payment tracking and payout system
@@ -37,7 +37,7 @@ A modern, full-stack platform for showcasing, selling, and reading Kalenjin book
 
 ### Authentication & Payments
 - **Auth**: NextAuth.js
-- **Payments**: Stripe + M-Pesa integration
+- **Payments**: M-Pesa + Stripe integration
 - **Validation**: Zod
 
 ## 📋 Prerequisites
@@ -52,7 +52,7 @@ A modern, full-stack platform for showcasing, selling, and reading Kalenjin book
 ### 1. Clone the Repository
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/pngobiro/kalenjinbooks.git
 cd kalenjinbooks
 ```
 
@@ -70,85 +70,15 @@ Copy the example environment file:
 cp .env.example .env
 ```
 
-Edit `.env` and fill in your credentials:
+Edit `.env` and fill in your credentials.
 
-```env
-# Database
-DATABASE_URL="file:./dev.db"
-
-# Cloudflare
-CLOUDFLARE_ACCOUNT_ID=your_account_id
-CLOUDFLARE_API_TOKEN=your_api_token
-R2_BUCKET_NAME=kalenjin-books
-R2_ACCESS_KEY_ID=your_r2_access_key
-R2_SECRET_ACCESS_KEY=your_r2_secret_key
-
-# NextAuth
-NEXTAUTH_URL=http://localhost:3000
-NEXTAUTH_SECRET=your_nextauth_secret
-
-# Stripe
-STRIPE_PUBLISHABLE_KEY=pk_test_...
-STRIPE_SECRET_KEY=sk_test_...
-STRIPE_WEBHOOK_SECRET=whsec_...
-```
-
-### 4. Set Up Cloudflare Infrastructure
-
-#### Login to Cloudflare
-
-```bash
-npx wrangler login
-```
-
-#### Create R2 Bucket
-
-```bash
-npx wrangler r2 bucket create kalenjin-books
-```
-
-#### Create D1 Database
-
-```bash
-npx wrangler d1 create kalenjin-books-db
-```
-
-Copy the database ID from the output and update `wrangler.toml`:
-
-```toml
-[[d1_databases]]
-binding = "DB"
-database_name = "kalenjin-books-db"
-database_id = "your-database-id-here"
-```
-
-### 5. Initialize Database
-
-Generate Prisma client:
-
-```bash
-npx prisma generate
-```
-
-Push schema to local database (for development):
-
-```bash
-npx prisma db push
-```
-
-For Cloudflare D1 (production):
-
-```bash
-npx wrangler d1 execute kalenjin-books-db --file=./prisma/migrations/schema.sql
-```
-
-### 6. Run Development Server
+### 4. Run Development Server
 
 ```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+Open [http://localhost:3001](http://localhost:3001) in your browser.
 
 ## 📁 Project Structure
 
@@ -156,88 +86,48 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 kalenjinbooks/
 ├── prisma/
 │   └── schema.prisma          # Database schema
-├── public/                    # Static assets
+├── public/
+│   ├── books/                 # Book cover images
+│   └── images/                # Site images & logos
 ├── src/
 │   ├── app/                   # Next.js App Router pages
-│   │   ├── api/              # API routes
 │   │   ├── books/            # Book pages
 │   │   ├── authors/          # Author pages
-│   │   │   └── [id]/         # Individual author profile
-│   │   ├── request-hard-copy/# Hard copy request form
+│   │   ├── payment/          # Payment pages (M-Pesa, etc.)
 │   │   ├── dashboard/        # Author dashboard
-│   │   ├── read/             # Book reader
-│   │   ├── layout.tsx        # Root layout
-│   │   └── page.tsx          # Home page
+│   │   └── ...
 │   ├── components/           # React components
-│   │   ├── ui/              # Reusable UI components
-│   │   ├── books/           # Book-related components
-│   │   └── author/          # Author-related components
+│   │   └── KaleeReadsLogo.tsx # Custom logo component
 │   └── lib/                  # Utility functions
-│       ├── prisma.ts         # Prisma client
-│       ├── cloudflare-r2.ts  # R2 storage utilities
-│       ├── access-links.ts   # Time-limited access
-│       └── auth.ts           # NextAuth configuration
 ├── docs/                     # Documentation
-├── wrangler.toml            # Cloudflare configuration
-├── .env.example             # Environment variables template
-└── package.json             # Dependencies
+└── package.json
 ```
 
-## 🔧 Development
+## 🎨 Brand Identity
 
-### Database Management
+KaleeReads features a custom logo inspired by:
+- **Kalenjin Gourd (Calabash)**: Traditional vessel symbolizing knowledge preservation
+- **Decorative Beads**: Cultural heritage and craftsmanship
+- **Book Pages**: Literature emerging from tradition
 
-View database in Prisma Studio:
+## 💳 Payment Methods
+
+- **M-Pesa**: Mobile money payments for Kenya (STK Push)
+- **Stripe**: Credit/Debit cards (Visa, Mastercard, Amex)
+- **PayPal**: International payments
+- **Bank Transfer**: Direct bank transfers
+
+## 🌐 Cloudflare Tunnel
+
+Expose your local development server:
 
 ```bash
-npx prisma studio
+# Start the tunnel
+bash start-tunnel.sh
+
+# Or manually
+docker-compose -f docker-compose.tunnel.yml up -d
 ```
-
-Create a new migration:
-
-```bash
-npx prisma migrate dev --name migration_name
-```
-
-### Testing Locally
-
-Run the development server:
-
-```bash
-npm run dev
-```
-
-### Building for Production
-
-```bash
-npm run build
-```
-
-## 🚢 Deployment
-
-### Deploy to Cloudflare Pages
-
-```bash
-npx wrangler pages deploy
-```
-
-### Set Production Secrets
-
-```bash
-npx wrangler secret put NEXTAUTH_SECRET
-npx wrangler secret put STRIPE_SECRET_KEY
-npx wrangler secret put STRIPE_WEBHOOK_SECRET
-npx wrangler secret put R2_ACCESS_KEY_ID
-npx wrangler secret put R2_SECRET_ACCESS_KEY
-```
-
-### Configure Custom Domain
-
-In Cloudflare Dashboard:
-1. Go to Workers & Pages
-2. Select your project
-3. Navigate to Custom Domains
-4. Add your domain
 
 ## 📚 Documentation
 
@@ -247,87 +137,38 @@ In Cloudflare Dashboard:
 - [UI/UX Design Guide](./docs/UI.md)
 - [Payment System](./docs/PAYMENTS.md)
 - [Author Dashboard](./docs/DASHBOARD.md)
-- [UI Mockups](./public/mockups/README.md)
 
-## 🔐 Security
+## 🔧 Development Commands
 
-- All passwords are hashed using bcrypt
-- Book files are stored in private R2 buckets
-- Signed URLs for secure file access
-- CSRF protection via NextAuth
-- Input validation with Zod
+```bash
+# Start development server (port 3001)
+npm run dev
 
-## 💡 Key Features Explained
+# Build for production
+npm run build
 
-### Time-Limited Access Links
+# Start production server
+npm start
 
-Generate temporary access links for books:
-
-```typescript
-import { createAccessLink } from '@/lib/access-links';
-
-const link = await createAccessLink({
-  userId: 'user-id',
-  bookId: 'book-id',
-  expiresInHours: 168, // 7 days
-});
-
-// Share link: https://afrireads.com/read/${link.token}
+# Run linter
+npm run lint
 ```
 
-### Author Payment Tracking
+## 🚢 Deployment
 
-Platform automatically tracks earnings per author:
+### Deploy to Cloudflare Pages
 
-```typescript
-// On successful purchase
-const platformFee = amount * (PLATFORM_COMMISSION_PERCENTAGE / 100);
-const authorEarning = amount - platformFee;
-
-await prisma.author.update({
-  where: { id: authorId },
-  data: { totalEarnings: { increment: authorEarning } }
-});
+```bash
+npm run build
+npx wrangler pages deploy .next
 ```
-
-### Cloudflare R2 Storage
-
-Upload books to R2:
-
-```typescript
-import { uploadBook } from '@/lib/cloudflare-r2';
-
-const fileKey = await uploadBook({
-  file: buffer,
-  fileName: 'book.pdf',
-  contentType: 'application/pdf',
-  bookId: 'book-id',
-});
-```
-
-## 🤝 Contributing
-
-Contributions are welcome! Please follow these steps:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
 
 ## 📄 License
 
 This project is licensed under the MIT License.
 
-## 🆘 Support
-
-For issues and questions:
-- Create an issue on GitHub
-- Email: support@afrireads.com
-
 ## 🙏 Acknowledgments
 
 - Built with [Next.js](https://nextjs.org)
 - Powered by [Cloudflare](https://cloudflare.com)
-- Payments by [Stripe](https://stripe.com)
-
+- Payments by [Stripe](https://stripe.com) & M-Pesa
