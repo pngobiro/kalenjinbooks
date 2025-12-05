@@ -24,6 +24,7 @@ export default function Home() {
             <div className="hidden md:flex items-center gap-8">
               <Link href="/books" className="text-neutral-brown-700 hover:text-primary font-medium">Books</Link>
               <Link href="/authors" className="text-neutral-brown-700 hover:text-primary font-medium">Authors</Link>
+              <Link href="/blogs" className="text-neutral-brown-700 hover:text-primary font-medium">Blogs</Link>
               <Link href="/about" className="text-neutral-brown-700 hover:text-primary font-medium">About</Link>
             </div>
 
@@ -122,6 +123,7 @@ export default function Home() {
               <ul className="space-y-2 text-sm text-neutral-brown-500">
                 <li><Link href="/books" className="hover:text-primary">Browse Books</Link></li>
                 <li><Link href="/authors" className="hover:text-primary">Authors</Link></li>
+                <li><Link href="/blogs" className="hover:text-primary">Blogs</Link></li>
               </ul>
             </div>
             <div>
@@ -141,7 +143,7 @@ export default function Home() {
             </div>
           </div>
           <div className="border-t border-white/10 pt-8 text-center text-neutral-brown-500 text-sm">
-            <p>© 2024 KaleeReads. All rights reserved.</p>
+            <p>© 2025 KaleeReads. All rights reserved.</p>
           </div>
         </div>
       </footer>

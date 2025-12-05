@@ -153,7 +153,7 @@ export default function AuthorDashboardPage() {
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 {/* Recent Sales */}
                 <div className="bg-white rounded-xl p-6 shadow-sm">
                     <div className="flex items-center justify-between mb-4">
@@ -212,6 +212,26 @@ export default function AuthorDashboardPage() {
                                 </div>
                             </div>
                         ))}
+                    </div>
+                </div>
+
+                {/* View All Blogs - Quick Action */}
+                <div className="bg-gradient-to-br from-primary/10 to-accent-green/10 rounded-xl p-6 shadow-sm">
+                    <div className="flex flex-col h-full justify-between">
+                        <div>
+                            <h2 className="text-xl font-bold text-neutral-brown-900 mb-2">
+                                Community Blogs
+                            </h2>
+                            <p className="text-neutral-brown-700 text-sm mb-4">
+                                Explore blog posts from authors across the platform. Discover stories, insights, and perspectives.
+                            </p>
+                        </div>
+                        <Link
+                            href="/blogs"
+                            className="bg-primary hover:bg-primary-dark text-white font-semibold px-6 py-3 rounded-lg text-center transition-all hover:-translate-y-0.5 hover:shadow-lg"
+                        >
+                            View All Blogs →
+                        </Link>
                     </div>
                 </div>
             </div>

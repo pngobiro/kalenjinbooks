@@ -48,6 +48,7 @@ model Author {
   user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   books         Book[]
   payments      Payment[]
+  blogPosts     BlogPost[]
 }
 
 model Book {
@@ -131,4 +132,34 @@ model TimeAccessLink {
   // Relations
   user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   book          Book      @relation(fields: [bookId], references: [id], onDelete: Cascade)
+}
+
+model BlogPost {
+  id            String    @id @default(uuid())
+  title         String
+  slug          String    @unique
+  content       String    // Rich text HTML content
+  excerpt       String?   // Short summary for listings
+  coverImage    String?   // R2 key for cover image
+  authorId      String
+  isPublished   Boolean   @default(false)
+  publishedAt   DateTime?
+  viewCount     Int       @default(0)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  // Relations
+  author        Author    @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  images        BlogImage[]
+}
+
+model BlogImage {
+  id            String    @id @default(uuid())
+  blogPostId    String
+  imageKey      String    // R2 object key
+  altText       String?   // Accessibility text
+  createdAt     DateTime  @default(now())
+  
+  // Relations
+  blogPost      BlogPost  @relation(fields: [blogPostId], references: [id], onDelete: Cascade)
 }
