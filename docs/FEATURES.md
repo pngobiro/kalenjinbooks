@@ -89,3 +89,124 @@ Author Profiles provide a dedicated space for authors to showcase their biograph
       };
     }
     ```
+---
+
+## Author Blog Feature
+
+The Blog Feature allows authors to create, manage, and publish blog posts with rich text content, images, and embedded media. This feature helps authors engage with readers, share insights, and build their audience.
+
+### Workflow
+
+1. **Creating a Blog Post**:
+   - Author navigates to `/dashboard/author/blogs`
+   - Clicks "New Blog Post" button
+   - Fills in the blog post form:
+     - Title (Required)
+     - Cover Image (Optional, upload or URL)
+     - Content (Rich text editor with formatting, images, YouTube embeds, links)
+     - Excerpt (Optional, auto-generated if empty)
+     - Publish/Draft toggle
+   - Clicks "Save Blog Post"
+
+2. **Managing Blog Posts**:
+   - Dashboard shows all author's blog posts with stats (total, published, drafts, views)
+   - Filter tabs: All, Published, Drafts
+   - Search functionality for finding specific posts
+   - Each post shows: cover image, title, status, views, published date
+   - Actions: View, Edit, Delete
+
+3. **Editing a Blog Post**:
+   - Click "Edit" on any blog post
+   - Modify title, content, cover image, excerpt, or publication status
+   - Save changes or delete the post
+
+4. **Public Viewing**:
+   - Published posts appear at `/blogs`
+   - Individual posts accessible at `/blogs/[id]`
+   - Readers can search, filter by author, and sort by latest/most viewed
+   - Each post displays: cover image, title, content, author info, metadata, social sharing
+
+### Features
+
+#### Rich Text Editor (Tiptap)
+- **Text Formatting**: Bold, italic, strikethrough, code
+- **Headings**: H1, H2, H3
+- **Lists**: Bulleted and numbered lists
+- **Blockquotes**: For emphasis and quotes
+- **Images**: Upload images or insert via URL
+- **Links**: Insert hyperlinks to external sites
+- **YouTube Embeds**: Embed YouTube videos directly
+- **Undo/Redo**: Full editing history
+- **Character Count**: Track content length
+
+#### Blog Management
+- **Draft System**: Save posts as drafts before publishing
+- **View Tracking**: Automatic view count increment
+- **SEO-Friendly Slugs**: Auto-generated URL-friendly slugs
+- **Cover Images**: Support for cover images with fallback
+- **Excerpts**: Auto-generated or custom excerpts
+- **Author Attribution**: Each post linked to author profile
+
+#### Public Features
+- **Blog Listing**: Grid view of all published posts
+- **Search**: Search by title and excerpt
+- **Author Filter**: Filter posts by specific author
+- **Sorting**: Sort by latest or most viewed
+- **Social Sharing**: Share on Twitter, Facebook, or copy link
+- **Related Posts**: Show more posts from the same author
+- **Responsive Design**: Mobile-friendly layout
+
+### Technical Implementation
+
+#### Pages
+- `/dashboard/author/blogs` - Blog management dashboard
+- `/dashboard/author/blogs/new` - Create new blog post
+- `/dashboard/author/blogs/[id]/edit` - Edit existing blog post
+- `/blogs` - Public blog listing
+- `/blogs/[id]` - Individual blog post view
+
+#### Components
+- `RichTextEditor` - Tiptap-based rich text editor
+- `BlogCard` - Blog post preview card
+- `BlogPostRenderer` - Safe HTML content renderer
+- `BlogStats` - Dashboard statistics display
+
+#### API Endpoints
+- `GET /api/blog/posts` - List posts with pagination/filtering
+- `POST /api/blog/posts` - Create new post
+- `GET /api/blog/posts/[id]` - Get single post
+- `PUT /api/blog/posts/[id]` - Update post
+- `DELETE /api/blog/posts/[id]` - Delete post
+- `POST /api/blog/images` - Upload images to R2
+
+#### Utilities (`src/lib/blog-utils.ts`)
+- `generateSlug()` - Create URL-friendly slugs
+- `generateUniqueSlug()` - Ensure slug uniqueness
+- `calculateReadTime()` - Estimate reading time
+- `extractExcerpt()` - Generate excerpt from HTML
+- `sanitizeHtml()` - Prevent XSS attacks
+- `formatBlogDate()` - Format dates for display
+
+### Security
+
+- **HTML Sanitization**: All blog content is sanitized using DOMPurify to prevent XSS attacks
+- **Author-Specific Access**: Authors can only view/edit/delete their own blog posts
+- **Image Validation**: File type and size validation for uploads (max 5MB, image types only)
+- **Input Validation**: All API endpoints validate required fields
+
+### Storage
+
+- **Database**: Blog posts and metadata stored in Cloudflare D1 (SQLite)
+- **Images**: Blog images stored in Cloudflare R2 object storage
+- **Content**: HTML content stored in database with sanitization
+
+### Future Enhancements
+
+- Categories and tags for better organization
+- Comments system for reader engagement
+- RSS feed for blog subscribers
+- Draft auto-save functionality
+- Scheduled publishing
+- Analytics dashboard
+- SEO meta tags and structured data
+- Email notifications for new posts

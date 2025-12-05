@@ -357,6 +357,161 @@ Handle Stripe webhook events.
 
 ---
 
+### Blog Posts
+
+#### GET `/api/blog/posts`
+
+List blog posts with pagination, filtering, and search.
+
+**Query Parameters:**
+- `page` (number, optional): Page number (default: 1)
+- `limit` (number, optional): Items per page (default: 20)
+- `authorId` (string, optional): Filter by author ID
+- `published` (boolean, optional): Filter by publication status
+- `search` (string, optional): Search in title and excerpt
+
+**Response:**
+```json
+{
+  "posts": [
+    {
+      "id": "uuid",
+      "title": "Blog Post Title",
+      "slug": "blog-post-title",
+      "excerpt": "Short summary...",
+      "coverImage": "https://...",
+      "isPublished": true,
+      "publishedAt": "2024-12-05T10:00:00Z",
+      "viewCount": 245,
+      "author": {
+        "id": "uuid",
+        "profileImage": "https://...",
+        "user": {
+          "name": "Author Name"
+        }
+      }
+    }
+  ],
+  "pagination": {
+    "page": 1,
+    "limit": 20,
+    "total": 50,
+    "totalPages": 3
+  }
+}
+```
+
+#### POST `/api/blog/posts`
+
+Create a new blog post.
+
+**Request Body:**
+```json
+{
+  "title": "My Blog Post",
+  "content": "<h2>Introduction</h2><p>Content...</p>",
+  "excerpt": "Short summary",
+  "coverImage": "https://...",
+  "isPublished": true,
+  "authorId": "uuid"
+}
+```
+
+**Response:**
+```json
+{
+  "id": "uuid",
+  "title": "My Blog Post",
+  "slug": "my-blog-post",
+  "content": "<h2>Introduction</h2><p>Content...</p>",
+  "excerpt": "Short summary",
+  "coverImage": "https://...",
+  "isPublished": true,
+  "publishedAt": "2024-12-05T10:00:00Z",
+  "viewCount": 0,
+  "authorId": "uuid",
+  "createdAt": "2024-12-05T10:00:00Z",
+  "updatedAt": "2024-12-05T10:00:00Z"
+}
+```
+
+#### GET `/api/blog/posts/[id]`
+
+Get a single blog post by ID. Automatically increments view count.
+
+**Response:**
+```json
+{
+  "id": "uuid",
+  "title": "Blog Post Title",
+  "slug": "blog-post-title",
+  "content": "<h2>Introduction</h2><p>Full content...</p>",
+  "excerpt": "Short summary",
+  "coverImage": "https://...",
+  "isPublished": true,
+  "publishedAt": "2024-12-05T10:00:00Z",
+  "viewCount": 246,
+  "author": {
+    "id": "uuid",
+    "profileImage": "https://...",
+    "bio": "Author bio...",
+    "user": {
+      "name": "Author Name"
+    }
+  },
+  "createdAt": "2024-12-05T10:00:00Z",
+  "updatedAt": "2024-12-05T10:00:00Z"
+}
+```
+
+#### PUT `/api/blog/posts/[id]`
+
+Update an existing blog post.
+
+**Request Body:**
+```json
+{
+  "title": "Updated Title",
+  "content": "<h2>Updated content</h2>",
+  "excerpt": "Updated summary",
+  "coverImage": "https://...",
+  "isPublished": true
+}
+```
+
+**Response:** Same as GET response with updated fields.
+
+#### DELETE `/api/blog/posts/[id]`
+
+Delete a blog post.
+
+**Response:**
+```json
+{
+  "message": "Blog post deleted successfully"
+}
+```
+
+#### POST `/api/blog/images`
+
+Upload an image for blog posts to Cloudflare R2.
+
+**Request:** `multipart/form-form`
+- `file`: Image file (max 5MB, jpg/jpeg/png/gif/webp)
+
+**Response:**
+```json
+{
+  "id": "uuid",
+  "imageKey": "blog-images/uuid-filename.jpg",
+  "url": "https://pub-xxx.r2.dev/blog-images/uuid-filename.jpg",
+  "altText": null,
+  "createdAt": "2024-12-05T10:00:00Z"
+}
+```
+
+---
+
 ## Error Responses
 
 All endpoints return standard error responses:

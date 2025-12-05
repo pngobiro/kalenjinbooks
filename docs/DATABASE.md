@@ -13,8 +13,10 @@ erDiagram
     User ||--o{ TimeAccessLink : "creates"
     Author ||--o{ Book : "writes"
     Author ||--o{ Payment : "receives"
+    Author ||--o{ BlogPost : "writes"
     Book ||--o{ Purchase : "purchased in"
     Book ||--o{ TimeAccessLink : "accessed via"
+    BlogPost ||--o{ BlogImage : "contains"
 
     User {
         string id PK
@@ -354,6 +356,97 @@ const earnings = await prisma.purchase.aggregate({
     authorEarning: true
   }
 });
+```
+
+---
+
+## BlogPost
+
+Stores blog posts created by authors.
+
+### Fields
+
+- `id` (String, PK): Unique identifier
+- `title` (String, required): Blog post title
+- `slug` (String, unique, required): URL-friendly slug for SEO
+- `content` (String, required): HTML content of the blog post
+- `excerpt` (String, optional): Short summary/preview text
+- `coverImage` (String, optional): URL to cover image
+- `authorId` (String, FK, required): Reference to Author
+- `isPublished` (Boolean, default: false): Publication status
+- `publishedAt` (DateTime, optional): Publication timestamp
+- `viewCount` (Int, default: 0): Number of views
+- `createdAt` (DateTime): Creation timestamp
+- `updatedAt` (DateTime): Last update timestamp
+
+### Relations
+
+- `author`: Many-to-one with Author
+- `images`: One-to-many with BlogImage
+
+### Indexes
+
+- Unique index on `slug`
+- Index on `authorId` for efficient author queries
+- Index on `isPublished` for filtering published posts
+
+### Example
+
+```prisma
+model BlogPost {
+  id          String      @id @default(uuid())
+  title       String
+  slug        String      @unique
+  content     String
+  excerpt     String?
+  coverImage  String?
+  authorId    String
+  isPublished Boolean     @default(false)
+  publishedAt DateTime?
+  viewCount   Int         @default(0)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  
+  author      Author      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  images      BlogImage[]
+  
+  @@index([authorId])
+  @@index([isPublished])
+}
+```
+
+---
+
+## BlogImage
+
+Tracks images uploaded for blog posts, stored in Cloudflare R2.
+
+### Fields
+
+- `id` (String, PK): Unique identifier
+- `blogPostId` (String, FK, optional): Reference to BlogPost
+- `imageKey` (String, required): R2 object key
+- `altText` (String, optional): Alternative text for accessibility
+- `createdAt` (DateTime): Upload timestamp
+
+### Relations
+
+- `blogPost`: Many-to-one with BlogPost (optional)
+
+### Example
+
+```prisma
+model BlogImage {
+  id         String    @id @default(uuid())
+  blogPostId String?
+  imageKey   String
+  altText    String?
+  createdAt  DateTime  @default(now())
+  
+  blogPost   BlogPost? @relation(fields: [blogPostId], references: [id], onDelete: SetNull)
+  
+  @@index([blogPostId])
+}
 ```
 
 ---
