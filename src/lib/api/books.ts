@@ -43,6 +43,9 @@ export interface ApiResponse<T> {
     error?: string;
 }
 
+// Deployed worker URL
+const WORKER_URL = 'https://kalenjin-books-worker.pngobiro.workers.dev';
+
 /**
  * Get the API base URL
  */
@@ -52,17 +55,25 @@ function getApiBaseUrl() {
         return process.env.NEXT_PUBLIC_WORKER_URL;
     }
 
-    // In development, default to local worker
-    if (process.env.NODE_ENV === 'development') {
-        return 'http://localhost:8787';
-    }
-
-    // In production, use the current origin if client-side, or configured URL if server-side
+    // Client-side detection
     if (typeof window !== 'undefined') {
-        return ''; // Relative URL for same-origin requests (if worker serves frontend)
+        const hostname = window.location.hostname;
+        
+        // Local development - use local worker
+        if (hostname === 'localhost' || hostname === '127.0.0.1') {
+            return 'http://127.0.0.1:8787';
+        }
+        
+        // Production/demo - use deployed worker
+        return WORKER_URL;
     }
 
-    return 'https://api.kalenjinbooks.com'; // Fallback for production server-side
+    // Server-side
+    if (process.env.NODE_ENV === 'development') {
+        return 'http://127.0.0.1:8787';
+    }
+
+    return WORKER_URL;
 }
 
 /**

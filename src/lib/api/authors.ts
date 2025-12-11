@@ -29,6 +29,9 @@ export interface ApiResponse<T> {
     error?: string;
 }
 
+// Deployed worker URL
+const WORKER_URL = 'https://kalenjin-books-worker.pngobiro.workers.dev';
+
 /**
  * Get the API base URL
  */
@@ -36,13 +39,26 @@ function getApiBaseUrl() {
     if (process.env.NEXT_PUBLIC_WORKER_URL) {
         return process.env.NEXT_PUBLIC_WORKER_URL;
     }
+    
+    // Client-side detection
+    if (typeof window !== 'undefined') {
+        const hostname = window.location.hostname;
+        
+        // Local development
+        if (hostname === 'localhost' || hostname === '127.0.0.1') {
+            return 'http://127.0.0.1:8787';
+        }
+        
+        // Production/demo
+        return WORKER_URL;
+    }
+    
+    // Server-side
     if (process.env.NODE_ENV === 'development') {
         return 'http://127.0.0.1:8787';
     }
-    if (typeof window !== 'undefined') {
-        return '';
-    }
-    return 'https://api.kalenjinbooks.com';
+    
+    return WORKER_URL;
 }
 
 /**

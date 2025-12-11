@@ -146,12 +146,12 @@ export default function BooksPage() {
                       )}
                     </div>
                     <h3 className="font-bold text-neutral-brown-900 mb-1 line-clamp-1">{book.title}</h3>
-                    <p className="text-sm text-neutral-brown-600 mb-2">{book.author.user.name}</p>
+                    <p className="text-sm text-neutral-brown-600 mb-2">{book.author?.user?.name || 'Unknown Author'}</p>
                     <div className="flex items-center justify-between">
                       <span className="text-lg font-bold text-primary">KES {book.price}</span>
                       <div className="flex items-center gap-1">
                         <Star size={14} className="fill-accent-gold text-accent-gold" />
-                        <span className="text-sm">4.8</span>
+                        <span className="text-sm">{book.rating?.toFixed(1) || '0.0'}</span>
                       </div>
                     </div>
                     <div className="flex gap-2 mt-3">
