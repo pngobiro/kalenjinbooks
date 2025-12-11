@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { ArrowRight, Search, Star, Book } from 'lucide-react';
-import KaleeReadsLogo from '@/components/KaleeReadsLogo';
+import { KaleeReadsFullLogo } from '@/components/KaleeReadsLogo';
+import { AfricanBorderThick } from '@/components/AfricanBorder';
 import { fetchFeaturedBooks, Book as BookType } from '@/lib/api/books';
 
 export default async function Home() {
@@ -20,9 +21,8 @@ export default async function Home() {
       <nav className="bg-white/90 backdrop-blur-sm sticky top-0 z-50 border-b border-neutral-brown-500/10">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
-            <Link href="/" className="flex items-center gap-2">
-              <KaleeReadsLogo size={44} />
-              <span className="text-2xl font-bold text-neutral-brown-900 font-heading">KaleeReads</span>
+            <Link href="/" className="flex items-center">
+              <KaleeReadsFullLogo />
             </Link>
 
             <div className="hidden md:flex items-center gap-8">
@@ -37,6 +37,9 @@ export default async function Home() {
           </div>
         </div>
       </nav>
+
+      {/* African Border */}
+      <AfricanBorderThick />
 
       {/* Hero Section */}
       <section className="bg-white py-20 lg:py-28">
@@ -58,6 +61,9 @@ export default async function Home() {
           </div>
         </div>
       </section>
+
+      {/* African Border */}
+      <AfricanBorderThick />
 
       {/* Featured Books */}
       <section className="bg-neutral-cream py-20">
@@ -109,6 +115,9 @@ export default async function Home() {
         </div>
       </section>
 
+      {/* African Border */}
+      <AfricanBorderThick />
+
       {/* CTA Section */}
       <section className="bg-primary py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
@@ -128,9 +137,8 @@ export default async function Home() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
             <div>
-              <div className="flex items-center gap-2 mb-4">
-                <KaleeReadsLogo size={44} />
-                <span className="text-2xl font-bold font-heading">KaleeReads</span>
+              <div className="mb-4">
+                <KaleeReadsFullLogo />
               </div>
               <p className="text-neutral-brown-500 text-sm">Preserving Kalenjin culture through literature.</p>
             </div>

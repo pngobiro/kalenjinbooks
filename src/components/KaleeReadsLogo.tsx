@@ -1,40 +1,106 @@
-export default function KaleeReadsLogo({ size = 40, className = '' }: { size?: number; className?: string }) {
-  return (
+export default function KaleeReadsLogo({ 
+  size = 40, 
+  className = '',
+  showText = false,
+  textSize = 'text-2xl'
+}: { 
+  size?: number; 
+  className?: string;
+  showText?: boolean;
+  textSize?: string;
+}) {
+  // Just the flame/leaf icon
+  const icon = (
     <svg 
       xmlns="http://www.w3.org/2000/svg" 
-      viewBox="0 0 48 48" 
+      viewBox="0 0 24 24" 
       fill="none"
       width={size}
       height={size}
       className={className}
     >
-      {/* Kalenjin Gourd (Calabash) */}
-      <ellipse cx="24" cy="28" rx="14" ry="16" fill="#E07856"/>
-      <ellipse cx="24" cy="28" rx="12" ry="14" fill="#C85D3A"/>
-      <ellipse cx="24" cy="12" rx="6" ry="8" fill="#E07856"/>
-      <ellipse cx="24" cy="12" rx="4.5" ry="6" fill="#C85D3A"/>
-      
-      {/* Gourd neck connection */}
-      <rect x="20" y="16" width="8" height="6" rx="2" fill="#E07856"/>
-      
-      {/* Decorative beads pattern on gourd */}
-      <circle cx="16" cy="26" r="2" fill="#D4AF37"/>
-      <circle cx="24" cy="24" r="2" fill="#8B9D83"/>
-      <circle cx="32" cy="26" r="2" fill="#D4AF37"/>
-      <circle cx="18" cy="32" r="2" fill="#8B9D83"/>
-      <circle cx="24" cy="34" r="2" fill="#D4AF37"/>
-      <circle cx="30" cy="32" r="2" fill="#8B9D83"/>
-      
-      {/* Bead string decoration at top */}
-      <circle cx="18" cy="8" r="1.5" fill="#D4AF37"/>
-      <circle cx="21" cy="6" r="1.5" fill="#8B9D83"/>
-      <circle cx="24" cy="5" r="1.5" fill="#D4AF37"/>
-      <circle cx="27" cy="6" r="1.5" fill="#8B9D83"/>
-      <circle cx="30" cy="8" r="1.5" fill="#D4AF37"/>
-      
-      {/* Book pages emerging from gourd opening */}
-      <path d="M20 10 L24 4 L28 10" stroke="#F5F1E8" strokeWidth="2" fill="none" strokeLinecap="round"/>
-      <path d="M21 9 L24 5 L27 9" stroke="#F5F1E8" strokeWidth="1" fill="none" strokeLinecap="round"/>
+      {/* Flame/leaf icon similar to AfriReads */}
+      <path 
+        d="M12 2C12 2 8 6 8 10C8 12.5 9.5 14.5 12 15C14.5 14.5 16 12.5 16 10C16 6 12 2 12 2Z" 
+        fill="#E07856"
+      />
+      <path 
+        d="M12 5C12 5 10 7.5 10 10C10 11.5 10.8 12.8 12 13C13.2 12.8 14 11.5 14 10C14 7.5 12 5 12 5Z" 
+        fill="#D4AF37"
+      />
+      <path 
+        d="M12 8C12 8 11 9.5 11 11C11 11.8 11.4 12.4 12 12.5C12.6 12.4 13 11.8 13 11C13 9.5 12 8 12 8Z" 
+        fill="#C85D3A"
+      />
     </svg>
+  );
+
+  if (!showText) {
+    return icon;
+  }
+
+  return (
+    <div className="flex items-end">
+      <span className={`font-bold text-neutral-brown-900 font-heading ${textSize}`}>
+        Kalee
+      </span>
+      <div className="relative">
+        <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            viewBox="0 0 24 24" 
+            fill="none"
+            width={16}
+            height={16}
+          >
+            <path 
+              d="M12 2C12 2 8 6 8 10C8 12.5 9.5 14.5 12 15C14.5 14.5 16 12.5 16 10C16 6 12 2 12 2Z" 
+              fill="#E07856"
+            />
+            <path 
+              d="M12 5C12 5 10 7.5 10 10C10 11.5 10.8 12.8 12 13C13.2 12.8 14 11.5 14 10C14 7.5 12 5 12 5Z" 
+              fill="#D4AF37"
+            />
+          </svg>
+        </div>
+        <span className={`font-bold text-primary font-heading ${textSize}`}>
+          Reads
+        </span>
+      </div>
+    </div>
+  );
+}
+
+// Full logo with text for headers
+export function KaleeReadsFullLogo({ className = '' }: { className?: string }) {
+  return (
+    <div className={`flex items-end ${className}`}>
+      <span className="font-bold text-neutral-brown-900 font-heading text-2xl">
+        Kalee
+      </span>
+      <div className="relative">
+        <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            viewBox="0 0 24 24" 
+            fill="none"
+            width={16}
+            height={16}
+          >
+            <path 
+              d="M12 2C12 2 8 6 8 10C8 12.5 9.5 14.5 12 15C14.5 14.5 16 12.5 16 10C16 6 12 2 12 2Z" 
+              fill="#E07856"
+            />
+            <path 
+              d="M12 5C12 5 10 7.5 10 10C10 11.5 10.8 12.8 12 13C13.2 12.8 14 11.5 14 10C14 7.5 12 5 12 5Z" 
+              fill="#D4AF37"
+            />
+          </svg>
+        </div>
+        <span className="font-bold text-primary font-heading text-2xl">
+          Reads
+        </span>
+      </div>
+    </div>
   );
 }
