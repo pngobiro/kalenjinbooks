@@ -55,7 +55,7 @@ function getApiBaseUrl() {
         return process.env.NEXT_PUBLIC_WORKER_URL;
     }
 
-    // Client-side detection
+    // Client-side detection - MUST check window first for client components
     if (typeof window !== 'undefined') {
         const hostname = window.location.hostname;
         
@@ -64,15 +64,13 @@ function getApiBaseUrl() {
             return 'http://127.0.0.1:8787';
         }
         
-        // Production/demo - use deployed worker
+        // Any other hostname (including tunnel, production) - use deployed worker
         return WORKER_URL;
     }
 
-    // Server-side
-    if (process.env.NODE_ENV === 'development') {
-        return 'http://127.0.0.1:8787';
-    }
-
+    // Server-side rendering - check if request is from tunnel/production
+    // In development with tunnel, we still want to use deployed worker for SSR
+    // Use deployed worker by default for server-side to avoid CORS issues
     return WORKER_URL;
 }
 

@@ -14,12 +14,26 @@ interface CorsConfig {
  * Get CORS configuration based on environment
  */
 function getCorsConfig(env: Env): CorsConfig {
-    const isDevelopment = env.NEXTAUTH_URL?.includes('localhost');
+    // Always allow these origins regardless of environment
+    const allowedOrigins = [
+        'http://localhost:3000',
+        'http://localhost:3001', 
+        'http://localhost:8787',
+        'http://127.0.0.1:3000',
+        'http://127.0.0.1:3001',
+        'http://127.0.0.1:8787',
+        'https://kalenjin-books.dspop.info',
+        'https://kalenjinbooks.com',
+        'https://www.kalenjinbooks.com',
+    ];
+
+    // Add NEXTAUTH_URL if set
+    if (env.NEXTAUTH_URL) {
+        allowedOrigins.push(env.NEXTAUTH_URL);
+    }
 
     return {
-        allowedOrigins: isDevelopment
-            ? ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:8787']
-            : [env.NEXTAUTH_URL, 'https://kalenjinbooks.com', 'https://www.kalenjinbooks.com', 'https://kalenjin-books.dspop.info'],
+        allowedOrigins,
         allowedMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
         allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
         maxAge: 86400, // 24 hours

@@ -43951,13 +43951,13 @@ var require_bcrypt = __commonJS({
   }
 });
 
-// .wrangler/tmp/bundle-3wz30e/middleware-loader.entry.ts
+// .wrangler/tmp/bundle-FQ07SE/middleware-loader.entry.ts
 init_modules_watch_stub();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
 init_performance2();
 
-// .wrangler/tmp/bundle-3wz30e/middleware-insertion-facade.js
+// .wrangler/tmp/bundle-FQ07SE/middleware-insertion-facade.js
 init_modules_watch_stub();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -43975,9 +43975,22 @@ init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
 init_performance2();
 function getCorsConfig(env2) {
-  const isDevelopment = env2.NEXTAUTH_URL?.includes("localhost");
+  const allowedOrigins = [
+    "http://localhost:3000",
+    "http://localhost:3001",
+    "http://localhost:8787",
+    "http://127.0.0.1:3000",
+    "http://127.0.0.1:3001",
+    "http://127.0.0.1:8787",
+    "https://kalenjin-books.dspop.info",
+    "https://kalenjinbooks.com",
+    "https://www.kalenjinbooks.com"
+  ];
+  if (env2.NEXTAUTH_URL) {
+    allowedOrigins.push(env2.NEXTAUTH_URL);
+  }
   return {
-    allowedOrigins: isDevelopment ? ["http://localhost:3000", "http://localhost:3001", "http://localhost:8787"] : [env2.NEXTAUTH_URL, "https://kalenjinbooks.com", "https://www.kalenjinbooks.com", "https://kalenjin-books.dspop.info"],
+    allowedOrigins,
     allowedMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
     maxAge: 86400
@@ -46370,7 +46383,7 @@ var drainBody = /* @__PURE__ */ __name(async (request, env2, _ctx, middlewareCtx
 }, "drainBody");
 var middleware_ensure_req_body_drained_default = drainBody;
 
-// .wrangler/tmp/bundle-3wz30e/middleware-insertion-facade.js
+// .wrangler/tmp/bundle-FQ07SE/middleware-insertion-facade.js
 var __INTERNAL_WRANGLER_MIDDLEWARE__ = [
   middleware_ensure_req_body_drained_default
 ];
@@ -46405,7 +46418,7 @@ function __facade_invoke__(request, env2, ctx, dispatch, finalMiddleware) {
 }
 __name(__facade_invoke__, "__facade_invoke__");
 
-// .wrangler/tmp/bundle-3wz30e/middleware-loader.entry.ts
+// .wrangler/tmp/bundle-FQ07SE/middleware-loader.entry.ts
 var __Facade_ScheduledController__ = class ___Facade_ScheduledController__ {
   constructor(scheduledTime, cron, noRetry) {
     this.scheduledTime = scheduledTime;
