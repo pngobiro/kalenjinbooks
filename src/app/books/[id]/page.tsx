@@ -1,20 +1,22 @@
-'use client';
-
-import { Star, ShoppingCart, Share2, BookOpen, Clock, ChevronRight, User, ArrowLeft, Package, Book } from 'lucide-react';
+import { Star, Book, ArrowLeft, User, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
-import { useState, use } from 'react';
-import { useRouter } from 'next/navigation';
-import { getBookById, getAllBooks } from '@/lib/data';
+import { fetchBookById, fetchBooks } from '@/lib/api/books';
+import BookPurchaseOptions from '@/components/BookPurchaseOptions';
 
-export default function BookDetailPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = use(params);
-  const [purchaseType, setPurchaseType] = useState<'permanent' | 'temporary'>('permanent');
-  const router = useRouter();
-  
-  const bookData = getBookById(id);
-  const allBooks = getAllBooks();
-  const relatedBooks = allBooks.filter(b => b.id !== id).slice(0, 3);
-  
+export default async function BookDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+
+  let bookData;
+  try {
+    const response = await fetchBookById(id);
+    bookData = response.data;
+  } catch (error) {
+    console.error('Error fetching book:', error);
+  }
+
+  // Fetch related books (just fetch recent ones for now)
+  const { data: relatedBooks } = await fetchBooks({ limit: 3 });
+
   if (!bookData) {
     return (
       <div className="min-h-screen bg-neutral-cream flex items-center justify-center">
@@ -26,8 +28,6 @@ export default function BookDetailPage({ params }: { params: Promise<{ id: strin
       </div>
     );
   }
-  
-  const currentPrice = purchaseType === 'permanent' ? bookData.price : bookData.rentalPrice;
 
   return (
     <div className="min-h-screen bg-neutral-cream">
@@ -48,12 +48,12 @@ export default function BookDetailPage({ params }: { params: Promise<{ id: strin
               <Link href="/about" className="text-neutral-brown-700 hover:text-primary font-medium transition-colors">About</Link>
             </div>
 
-            <button onClick={() => router.back()} className="flex items-center gap-2 text-neutral-brown-700 hover:text-primary transition-colors">
+            <Link href="/books" className="flex items-center gap-2 text-neutral-brown-700 hover:text-primary transition-colors">
               <div className="w-10 h-10 rounded-lg bg-white border border-neutral-brown-200 flex items-center justify-center shadow-sm">
                 <ArrowLeft size={20} />
               </div>
               <span className="hidden sm:inline">Back</span>
-            </button>
+            </Link>
           </div>
         </div>
       </nav>
@@ -76,7 +76,13 @@ export default function BookDetailPage({ params }: { params: Promise<{ id: strin
           <div>
             <div className="bg-white rounded-2xl p-6 shadow-lg">
               <div className="aspect-[3/4] rounded-xl overflow-hidden bg-neutral-cream">
-                <img src={bookData.image} alt={bookData.title} className="w-full h-full object-cover" />
+                {bookData.coverImage ? (
+                  <img src={bookData.coverImage} alt={bookData.title} className="w-full h-full object-cover" />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/20 to-accent-green/20">
+                    <Book size={64} className="text-neutral-brown-300" />
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -84,7 +90,7 @@ export default function BookDetailPage({ params }: { params: Promise<{ id: strin
           {/* Book Details */}
           <div>
             <span className="inline-block px-4 py-1.5 bg-primary/10 text-primary text-xs font-bold uppercase rounded-full mb-4">
-              {bookData.category}
+              {bookData.category || 'General'}
             </span>
 
             <h1 className="text-4xl lg:text-5xl font-bold text-neutral-brown-900 font-heading mb-4">
@@ -96,100 +102,16 @@ export default function BookDetailPage({ params }: { params: Promise<{ id: strin
                 <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
                   <User size={18} className="text-primary" />
                 </div>
-                <span className="text-neutral-brown-700">by <strong>{bookData.author}</strong></span>
+                <span className="text-neutral-brown-700">by <strong>{bookData.author.user.name}</strong></span>
               </div>
               <div className="flex items-center gap-1">
                 <Star size={18} className="fill-accent-gold text-accent-gold" />
-                <span className="font-bold">{bookData.rating}</span>
-                <span className="text-neutral-brown-500 text-sm">({bookData.reviewCount})</span>
+                <span className="font-bold">4.8</span>
+                <span className="text-neutral-brown-500 text-sm">(12)</span>
               </div>
             </div>
 
-            {/* Purchase Options */}
-            <div className="bg-white rounded-2xl p-6 shadow-lg mb-6">
-              <h3 className="font-bold text-neutral-brown-900 mb-4">Select Access Type</h3>
-              
-              <div className="grid grid-cols-2 gap-4 mb-6">
-                {/* Permanent */}
-                <div
-                  onClick={() => setPurchaseType('permanent')}
-                  className={`cursor-pointer rounded-xl p-4 border-2 transition-all ${
-                    purchaseType === 'permanent'
-                      ? 'border-primary bg-primary/5'
-                      : 'border-neutral-brown-200 hover:border-primary/50'
-                  }`}
-                >
-                  <div className="flex items-center gap-2 mb-2">
-                    <BookOpen size={20} className={purchaseType === 'permanent' ? 'text-primary' : 'text-neutral-brown-400'} />
-                    <span className="font-semibold text-sm">Permanent</span>
-                  </div>
-                  <div className={`text-2xl font-bold ${purchaseType === 'permanent' ? 'text-primary' : 'text-neutral-brown-700'}`}>
-                    KES {bookData.price}
-                  </div>
-                  <p className="text-xs text-neutral-brown-500 mt-1">Own forever</p>
-                </div>
-
-                {/* 24-Hour */}
-                <div
-                  onClick={() => setPurchaseType('temporary')}
-                  className={`cursor-pointer rounded-xl p-4 border-2 transition-all ${
-                    purchaseType === 'temporary'
-                      ? 'border-accent-green bg-accent-green/5'
-                      : 'border-neutral-brown-200 hover:border-accent-green/50'
-                  }`}
-                >
-                  <div className="flex items-center gap-2 mb-2">
-                    <Clock size={20} className={purchaseType === 'temporary' ? 'text-accent-green' : 'text-neutral-brown-400'} />
-                    <span className="font-semibold text-sm">24-Hour</span>
-                  </div>
-                  <div className={`text-2xl font-bold ${purchaseType === 'temporary' ? 'text-accent-green' : 'text-neutral-brown-700'}`}>
-                    KES {bookData.rentalPrice}
-                  </div>
-                  <p className="text-xs text-neutral-brown-500 mt-1">Read online</p>
-                </div>
-              </div>
-
-              <Link
-                href={`/payment?bookId=${bookData.id}&author=${encodeURIComponent(bookData.author)}&type=${purchaseType}&price=${currentPrice}&title=${encodeURIComponent(bookData.title)}`}
-                className={`w-full font-bold py-4 rounded-full shadow-lg flex items-center justify-center gap-2 text-white ${
-                  purchaseType === 'permanent' ? 'bg-primary hover:bg-primary-dark' : 'bg-accent-green hover:bg-[#7A8C74]'
-                } transition-all`}
-              >
-                <ShoppingCart size={20} />
-                Choose Payment - KES {currentPrice}
-              </Link>
-            </div>
-
-            <p className="text-neutral-brown-700 leading-relaxed mb-6">{bookData.description}</p>
-
-            {/* Stats */}
-            <div className="grid grid-cols-3 gap-4 mb-6 py-4 border-y border-neutral-brown-200">
-              <div>
-                <div className="text-xs text-neutral-brown-500 uppercase">Pages</div>
-                <div className="font-bold text-neutral-brown-900">{bookData.pages}</div>
-              </div>
-              <div>
-                <div className="text-xs text-neutral-brown-500 uppercase">Language</div>
-                <div className="font-bold text-neutral-brown-900 text-sm">{bookData.language}</div>
-              </div>
-              <div>
-                <div className="text-xs text-neutral-brown-500 uppercase">Published</div>
-                <div className="font-bold text-neutral-brown-900">{bookData.published}</div>
-              </div>
-            </div>
-
-            {/* Actions */}
-            <div className="flex gap-4">
-              <Link
-                href={`/request-hard-copy?book=${encodeURIComponent(bookData.title)}&id=${bookData.id}`}
-                className="flex-1 py-3 border-2 border-primary text-primary hover:bg-primary hover:text-white rounded-full flex items-center justify-center gap-2 font-medium transition-all"
-              >
-                <Package size={18} /> Hard Copy
-              </Link>
-              <button className="flex-1 py-3 border-2 border-neutral-brown-200 text-neutral-brown-500 hover:border-blue-500 hover:text-blue-500 rounded-full flex items-center justify-center gap-2 font-medium transition-all">
-                <Share2 size={18} /> Share
-              </button>
-            </div>
+            <BookPurchaseOptions book={bookData} />
           </div>
         </div>
       </div>
@@ -199,19 +121,25 @@ export default function BookDetailPage({ params }: { params: Promise<{ id: strin
         <div className="max-w-6xl mx-auto px-6">
           <h2 className="text-3xl font-bold text-neutral-brown-900 font-heading mb-8">You May Also Like</h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            {relatedBooks.map((book) => (
+            {relatedBooks.filter(b => b.id !== id).map((book) => (
               <Link key={book.id} href={`/books/${book.id}`} className="group">
                 <div className="bg-neutral-cream rounded-xl p-4 hover:shadow-lg transition-all">
-                  <div className="aspect-[3/4] rounded-lg overflow-hidden mb-3">
-                    <img src={book.image} alt={book.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+                  <div className="aspect-[3/4] rounded-lg overflow-hidden mb-3 bg-white">
+                    {book.coverImage ? (
+                      <img src={book.coverImage} alt={book.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center">
+                        <Book size={32} className="text-neutral-brown-300" />
+                      </div>
+                    )}
                   </div>
-                  <h3 className="font-bold text-neutral-brown-900 mb-1">{book.title}</h3>
-                  <p className="text-sm text-neutral-brown-600 mb-2">{book.author}</p>
+                  <h3 className="font-bold text-neutral-brown-900 mb-1 truncate">{book.title}</h3>
+                  <p className="text-sm text-neutral-brown-600 mb-2">{book.author.user.name}</p>
                   <div className="flex items-center justify-between">
                     <span className="font-bold text-primary">KES {book.price}</span>
                     <div className="flex items-center gap-1">
                       <Star size={14} className="fill-accent-gold text-accent-gold" />
-                      <span className="text-sm">{book.rating}</span>
+                      <span className="text-sm">4.8</span>
                     </div>
                   </div>
                 </div>

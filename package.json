@@ -6,7 +6,14 @@
     "dev": "next dev -p 3001",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "cf:setup": "bash scripts/cloudflare/setup-d1.sh && bash scripts/cloudflare/setup-kv.sh",
+    "cf:d1:create": "bash scripts/cloudflare/setup-d1.sh",
+    "cf:d1:migrate": "bash scripts/cloudflare/migrate-d1.sh",
+    "cf:kv:create": "bash scripts/cloudflare/setup-kv.sh",
+    "cf:dev": "wrangler dev",
+    "cf:dev:remote": "wrangler dev --remote",
+    "cf:deploy": "wrangler deploy"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.716.0",
@@ -22,6 +29,7 @@
     "bcryptjs": "^2.4.3",
     "dompurify": "^3.3.0",
     "isomorphic-dompurify": "^2.30.0",
+    "jose": "^5.10.0",
     "next": "16.0.6",
     "next-auth": "^4.24.10",
     "pdfjs-dist": "^4.9.155",

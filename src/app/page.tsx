@@ -4,7 +4,7 @@ import KaleeReadsLogo from '@/components/KaleeReadsLogo';
 
 const featuredBooks = [
   { id: '1', title: 'Immortal Knowledge', author: 'Dr. Kibet Kitur', price: 1200, rating: 4.9, image: '/books/immortalknowledge.jpg' },
-  { id: '2', title: 'Kalenjin Folklore Tales', author: 'John Kamau', price: 500, rating: 4.5, image: '/books/folklore-tales.png' },
+  { id: '2', title: 'Kjin Folklore Tales', author: 'John Kamau', price: 500, rating: 4.5, image: '/books/folklore-tales.png' },
   { id: '3', title: 'Traditional Wisdom', author: 'Jane Kiplagat', price: 750, rating: 4.8, image: '/books/traditional-wisdom.png' },
   { id: '4', title: 'Children Stories', author: 'Sarah Chebet', price: 400, rating: 4.7, image: '/books/children-stories.png' },
 ];
@@ -24,7 +24,6 @@ export default function Home() {
             <div className="hidden md:flex items-center gap-8">
               <Link href="/books" className="text-neutral-brown-700 hover:text-primary font-medium">Books</Link>
               <Link href="/authors" className="text-neutral-brown-700 hover:text-primary font-medium">Authors</Link>
-              <Link href="/blogs" className="text-neutral-brown-700 hover:text-primary font-medium">Blogs</Link>
               <Link href="/about" className="text-neutral-brown-700 hover:text-primary font-medium">About</Link>
             </div>
 
@@ -68,7 +67,7 @@ export default function Home() {
             {featuredBooks.map((book) => (
               <Link key={book.id} href={`/books/${book.id}`} className="group">
                 <div className="bg-white rounded-2xl p-4 shadow-md hover:shadow-xl transition-shadow">
-                  <div className="aspect-[3/4] rounded-xl overflow-hidden mb-4 bg-neutral-cream">
+                  <div className="aspect-3/4 rounded-xl overflow-hidden mb-4 bg-neutral-cream">
                     <img src={book.image} alt={book.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
                   </div>
                   <h3 className="font-bold text-neutral-brown-900 mb-1 truncate">{book.title}</h3>
@@ -123,7 +122,6 @@ export default function Home() {
               <ul className="space-y-2 text-sm text-neutral-brown-500">
                 <li><Link href="/books" className="hover:text-primary">Browse Books</Link></li>
                 <li><Link href="/authors" className="hover:text-primary">Authors</Link></li>
-                <li><Link href="/blogs" className="hover:text-primary">Blogs</Link></li>
               </ul>
             </div>
             <div>
@@ -143,7 +141,7 @@ export default function Home() {
             </div>
           </div>
           <div className="border-t border-white/10 pt-8 text-center text-neutral-brown-500 text-sm">
-            <p>© 2025 KaleeReads. All rights reserved.</p>
+            <p>© 2024 KaleeReads. All rights reserved.</p>
           </div>
         </div>
       </footer>

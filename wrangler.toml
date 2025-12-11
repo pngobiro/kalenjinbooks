@@ -1,6 +1,7 @@
-name = "kaleereads"
-main = "src/index.ts"
-compatibility_date = "2024-12-02"
+name = "kalenjin-books-worker"
+main = "src/worker/index.ts"
+compatibility_date = "2024-12-11"
+compatibility_flags = ["nodejs_compat"]
 
 # R2 bucket binding for book storage
 [[r2_buckets]]
@@ -11,12 +12,19 @@ bucket_name = "kalenjin-books"
 [[d1_databases]]
 binding = "DB"
 database_name = "kalenjin-books-db"
-database_id = "" # Will be filled after creating the database
+database_id = "20c23a0e-1b05-4aa7-a17f-2dc5a5e8f65c" # Will be filled after creating the database
 
-# KV namespace for caching (optional)
+# KV namespaces for caching and sessions
 [[kv_namespaces]]
 binding = "CACHE"
-id = "" # Will be filled after creating KV namespace
+id = "027a028d8b764515ba1754f337a64cef"
+preview_id = "8959da36c5414ab389ad118c122d45a0"
+
+[[kv_namespaces]]
+binding = "SESSION"
+id = "99d4cf1bf19047c481445f3a3d37d14b"
+preview_id = "0299bf93510c4aab970cd04fbfcb42c5"
+
 
 # Environment variables
 [vars]

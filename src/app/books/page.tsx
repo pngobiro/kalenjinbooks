@@ -1,34 +1,42 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Search, Book, Star, ArrowLeft } from 'lucide-react';
 import KaleeReadsLogo from '@/components/KaleeReadsLogo';
-
-const books = [
-  { id: '1', title: 'Immortal Knowledge', author: 'Dr. Kibet Kitur', price: 1200, rating: 4.9, category: 'Non-Fiction', language: 'English', image: '/books/immortalknowledge.jpg' },
-  { id: '2', title: 'Kalenjin Folklore Tales', author: 'John Kamau', price: 500, rating: 4.5, category: 'Folklore', language: 'Kalenjin', image: '/books/folklore-tales.png' },
-  { id: '3', title: 'Traditional Wisdom', author: 'Jane Kiplagat', price: 750, rating: 4.8, category: 'Non-Fiction', language: 'Bilingual', image: '/books/traditional-wisdom.png' },
-  { id: '4', title: 'Cultural Heritage', author: 'Mike Korir', price: 600, rating: 4.3, category: 'History', language: 'English', image: '/books/cultural-heritage.png' },
-  { id: '5', title: 'Children Stories', author: 'Sarah Chebet', price: 400, rating: 4.7, category: 'Children', language: 'Kalenjin', image: '/books/children-stories.png' },
-  { id: '6', title: 'Modern Kalenjin Poetry', author: 'David Ruto', price: 550, rating: 4.6, category: 'Poetry', language: 'Kalenjin' },
-  { id: '7', title: 'Educational Guide', author: 'Mary Jepkoech', price: 800, rating: 4.9, category: 'Education', language: 'Bilingual' },
-  { id: '8', title: 'Historical Narratives', author: 'Peter Kibet', price: 650, rating: 4.4, category: 'History', language: 'English' },
-  { id: '9', title: 'Fiction Adventures', author: 'Grace Chepkemoi', price: 700, rating: 4.5, category: 'Fiction', language: 'Kalenjin' },
-];
+import { fetchBooks, type Book as BookType } from '@/lib/api/books';
 
 const categories = ['All', 'Fiction', 'Non-Fiction', 'Folklore', 'History', 'Poetry', 'Children', 'Education'];
 
 export default function BooksPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const [books, setBooks] = useState<BookType[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const filteredBooks = books.filter((book) => {
-    const matchesSearch = book.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      book.author.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = selectedCategory === 'All' || book.category === selectedCategory;
-    return matchesSearch && matchesCategory;
-  });
+  useEffect(() => {
+    async function loadBooks() {
+      try {
+        setLoading(true);
+        const params: any = { limit: 50 };
+
+        if (searchQuery) params.search = searchQuery;
+        if (selectedCategory !== 'All') params.category = selectedCategory;
+
+        const response = await fetchBooks(params);
+        setBooks(response.data);
+        setError(null);
+      } catch (err) {
+        setError('Failed to load books. Please try again.');
+        console.error('Error loading books:', err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadBooks();
+  }, [searchQuery, selectedCategory]);
 
   return (
     <div className="min-h-screen bg-neutral-cream">
@@ -90,11 +98,10 @@ export default function BooksPage() {
               <button
                 key={category}
                 onClick={() => setSelectedCategory(category)}
-                className={`px-5 py-2 rounded-full font-medium whitespace-nowrap transition-all ${
-                  selectedCategory === category
+                className={`px-5 py-2 rounded-full font-medium whitespace-nowrap transition-all ${selectedCategory === category
                     ? 'bg-primary text-white'
                     : 'bg-white text-neutral-brown-700 hover:bg-primary/10'
-                }`}
+                  }`}
               >
                 {category}
               </button>
@@ -102,43 +109,67 @@ export default function BooksPage() {
           </div>
 
           {/* Results count */}
-          <p className="text-neutral-brown-600 mb-6">
-            Showing <strong>{filteredBooks.length}</strong> books
-          </p>
+          {!loading && (
+            <p className="text-neutral-brown-600 mb-6">
+              Showing <strong>{books.length}</strong> books
+            </p>
+          )}
+
+          {/* Loading State */}
+          {loading && (
+            <div className="text-center py-12">
+              <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent"></div>
+              <p className="mt-4 text-neutral-brown-600">Loading books...</p>
+            </div>
+          )}
+
+          {/* Error State */}
+          {error && (
+            <div className="bg-red-50 border border-red-200 rounded-xl p-6 text-center">
+              <p className="text-red-600">{error}</p>
+            </div>
+          )}
 
           {/* Books Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {filteredBooks.map((book) => (
-              <Link key={book.id} href={`/books/${book.id}`} className="group">
-                <div className="bg-white rounded-2xl p-4 shadow-md hover:shadow-xl transition-all hover:-translate-y-2">
-                  <div className={`aspect-[3/4] rounded-xl mb-4 overflow-hidden ${book.image ? 'bg-neutral-cream' : 'bg-gradient-to-br from-primary/20 to-accent-green/20'}`}>
-                    {book.image ? (
-                      <img src={book.image} alt={book.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center">
-                        <Book size={48} className="text-neutral-brown-300" />
+          {!loading && !error && books.length > 0 && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {books.map((book) => (
+                <Link key={book.id} href={`/books/${book.id}`} className="group">
+                  <div className="bg-white rounded-2xl p-4 shadow-md hover:shadow-xl transition-all hover:-translate-y-2">
+                    <div className={`aspect-[3/4] rounded-xl mb-4 overflow-hidden ${book.coverImage ? 'bg-neutral-cream' : 'bg-gradient-to-br from-primary/20 to-accent-green/20'}`}>
+                      {book.coverImage ? (
+                        <img src={book.coverImage} alt={book.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center">
+                          <Book size={48} className="text-neutral-brown-300" />
+                        </div>
+                      )}
+                    </div>
+                    <h3 className="font-bold text-neutral-brown-900 mb-1 line-clamp-1">{book.title}</h3>
+                    <p className="text-sm text-neutral-brown-600 mb-2">{book.author.user.name}</p>
+                    <div className="flex items-center justify-between">
+                      <span className="text-lg font-bold text-primary">KES {book.price}</span>
+                      <div className="flex items-center gap-1">
+                        <Star size={14} className="fill-accent-gold text-accent-gold" />
+                        <span className="text-sm">4.8</span>
                       </div>
-                    )}
-                  </div>
-                  <h3 className="font-bold text-neutral-brown-900 mb-1 line-clamp-1">{book.title}</h3>
-                  <p className="text-sm text-neutral-brown-600 mb-2">{book.author}</p>
-                  <div className="flex items-center justify-between">
-                    <span className="text-lg font-bold text-primary">KES {book.price}</span>
-                    <div className="flex items-center gap-1">
-                      <Star size={14} className="fill-accent-gold text-accent-gold" />
-                      <span className="text-sm">{book.rating}</span>
+                    </div>
+                    <div className="flex gap-2 mt-3">
+                      {book.category && (
+                        <span className="text-xs px-2 py-1 bg-accent-green/10 text-accent-green rounded-full">{book.category}</span>
+                      )}
+                      {book.language && (
+                        <span className="text-xs px-2 py-1 bg-primary/10 text-primary rounded-full">{book.language}</span>
+                      )}
                     </div>
                   </div>
-                  <div className="flex gap-2 mt-3">
-                    <span className="text-xs px-2 py-1 bg-accent-green/10 text-accent-green rounded-full">{book.category}</span>
-                    <span className="text-xs px-2 py-1 bg-primary/10 text-primary rounded-full">{book.language}</span>
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
+                </Link>
+              ))}
+            </div>
+          )}
 
-          {filteredBooks.length === 0 && (
+          {/* Empty State */}
+          {!loading && !error && books.length === 0 && (
             <div className="bg-white rounded-xl p-12 text-center">
               <Book size={48} className="text-neutral-brown-300 mx-auto mb-4" />
               <h3 className="text-xl font-bold text-neutral-brown-900 mb-2">No books found</h3>
