@@ -8,10 +8,15 @@ export interface Book {
     description: string | null;
     coverImage: string | null;
     price: number;
+    rentalPrice: number | null;
     previewPages: number;
     category: string | null;
     language: string | null;
     isPublished: boolean;
+    isFeatured: boolean;
+    featuredOrder: number | null;
+    rating: number;
+    reviewCount: number;
     publishedAt: Date | null;
     author: {
         id: string;
@@ -69,6 +74,7 @@ export async function fetchBooks(params?: {
     search?: string;
     category?: string;
     authorId?: string;
+    featured?: boolean;
 }): Promise<PaginatedResponse<Book>> {
     const searchParams = new URLSearchParams();
 
@@ -77,6 +83,7 @@ export async function fetchBooks(params?: {
     if (params?.search) searchParams.set('search', params.search);
     if (params?.category) searchParams.set('category', params.category);
     if (params?.authorId) searchParams.set('authorId', params.authorId);
+    if (params?.featured) searchParams.set('featured', 'true');
 
     const baseUrl = getApiBaseUrl();
     const url = `${baseUrl}/api/books${searchParams.toString() ? `?${searchParams}` : ''}`;
@@ -88,6 +95,13 @@ export async function fetchBooks(params?: {
     }
 
     return response.json();
+}
+
+/**
+ * Fetch featured books
+ */
+export async function fetchFeaturedBooks(limit = 4): Promise<PaginatedResponse<Book>> {
+    return fetchBooks({ featured: true, limit });
 }
 
 /**

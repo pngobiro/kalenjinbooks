@@ -46553,13 +46553,15 @@ async function listBooks(request, env2) {
   const search = searchParams.get("search") || "";
   const category = searchParams.get("category") || "";
   const authorId = searchParams.get("authorId") || "";
+  const featured = searchParams.get("featured") === "true";
   const cacheKey = generateCacheKey(
     CachePrefix.BOOKS,
     `page:${page}`,
     `limit:${limit}`,
     `search:${search}`,
     `category:${category}`,
-    `author:${authorId}`
+    `author:${authorId}`,
+    `featured:${featured}`
   );
   return await withCache(env2.CACHE, cacheKey, CacheTTL.FIVE_MINUTES, async () => {
     const prisma = createD1PrismaClient(env2.DB);
@@ -46578,7 +46580,11 @@ async function listBooks(request, env2) {
     if (authorId) {
       where.authorId = authorId;
     }
+    if (featured) {
+      where.isFeatured = true;
+    }
     const total = await prisma.book.count({ where });
+    const orderBy = featured ? [{ featuredOrder: "asc" }, { publishedAt: "desc" }] : { publishedAt: "desc" };
     const books = await prisma.book.findMany({
       where,
       include: {
@@ -46592,7 +46598,7 @@ async function listBooks(request, env2) {
       },
       skip: (page - 1) * limit,
       take: limit,
-      orderBy: { publishedAt: "desc" }
+      orderBy
     });
     return paginatedResponse(books, total, page, limit);
   });
@@ -46643,7 +46649,7 @@ async function createBook(request, env2) {
       data: {
         title: title2,
         description,
-        price: parseFloat(price),
+        price: parseFloat(String(price)),
         category,
         previewPages: previewPages || 10,
         authorId: author.id,

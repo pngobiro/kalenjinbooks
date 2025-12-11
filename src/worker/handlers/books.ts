@@ -70,6 +70,7 @@ async function listBooks(request: WorkerRequest, env: Env): Promise<Response> {
     const search = searchParams.get('search') || '';
     const category = searchParams.get('category') || '';
     const authorId = searchParams.get('authorId') || '';
+    const featured = searchParams.get('featured') === 'true';
 
     // Generate cache key
     const cacheKey = generateCacheKey(
@@ -78,7 +79,8 @@ async function listBooks(request: WorkerRequest, env: Env): Promise<Response> {
         `limit:${limit}`,
         `search:${search}`,
         `category:${category}`,
-        `author:${authorId}`
+        `author:${authorId}`,
+        `featured:${featured}`
     );
 
     // Try cache first
@@ -105,10 +107,18 @@ async function listBooks(request: WorkerRequest, env: Env): Promise<Response> {
             where.authorId = authorId;
         }
 
+        if (featured) {
+            where.isFeatured = true;
+        }
+
         // Get total count
         const total = await prisma.book.count({ where });
 
-        // Get books
+        // Get books - order by featuredOrder if fetching featured books
+        const orderBy = featured 
+            ? [{ featuredOrder: 'asc' as const }, { publishedAt: 'desc' as const }]
+            : { publishedAt: 'desc' as const };
+
         const books = await prisma.book.findMany({
             where,
             include: {
@@ -122,7 +132,7 @@ async function listBooks(request: WorkerRequest, env: Env): Promise<Response> {
             },
             skip: (page - 1) * limit,
             take: limit,
-            orderBy: { publishedAt: 'desc' },
+            orderBy,
         });
 
         return paginatedResponse(books, total, page, limit);
@@ -166,7 +176,13 @@ async function createBook(request: WorkerRequest, env: Env): Promise<Response> {
     const prisma = createD1PrismaClient(env.DB);
 
     try {
-        const body = await request.json();
+        const body = await request.json() as { 
+            title?: string; 
+            description?: string; 
+            price?: string | number; 
+            category?: string; 
+            previewPages?: number;
+        };
         const { title, description, price, category, previewPages } = body;
 
         // Validate required fields
@@ -194,7 +210,7 @@ async function createBook(request: WorkerRequest, env: Env): Promise<Response> {
             data: {
                 title,
                 description,
-                price: parseFloat(price),
+                price: parseFloat(String(price)),
                 category,
                 previewPages: previewPages || 10,
                 authorId: author.id,
@@ -218,7 +234,7 @@ async function updateBook(request: WorkerRequest, env: Env, bookId: string): Pro
     const prisma = createD1PrismaClient(env.DB);
 
     try {
-        const body = await request.json();
+        const body = await request.json() as Record<string, unknown>;
         const userId = request.ctx?.user?.id;
 
         // Get book

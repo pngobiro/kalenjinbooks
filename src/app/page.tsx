@@ -1,15 +1,18 @@
 import Link from 'next/link';
 import { ArrowRight, Search, Star, Book } from 'lucide-react';
 import KaleeReadsLogo from '@/components/KaleeReadsLogo';
+import { fetchFeaturedBooks, Book as BookType } from '@/lib/api/books';
 
-const featuredBooks = [
-  { id: '1', title: 'Immortal Knowledge', author: 'Dr. Kibet Kitur', price: 1200, rating: 4.9, image: '/books/immortalknowledge.jpg' },
-  { id: '2', title: 'Kjin Folklore Tales', author: 'John Kamau', price: 500, rating: 4.5, image: '/books/folklore-tales.png' },
-  { id: '3', title: 'Traditional Wisdom', author: 'Jane Kiplagat', price: 750, rating: 4.8, image: '/books/traditional-wisdom.png' },
-  { id: '4', title: 'Children Stories', author: 'Sarah Chebet', price: 400, rating: 4.7, image: '/books/children-stories.png' },
-];
+export default async function Home() {
+  let books: BookType[] = [];
+  
+  try {
+    const response = await fetchFeaturedBooks(4);
+    books = response.data;
+  } catch (e) {
+    console.error('Failed to fetch featured books:', e);
+  }
 
-export default function Home() {
   return (
     <div className="min-h-screen w-full bg-neutral-cream">
       {/* Navigation */}
@@ -64,24 +67,37 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {featuredBooks.map((book) => (
-              <Link key={book.id} href={`/books/${book.id}`} className="group">
-                <div className="bg-white rounded-2xl p-4 shadow-md hover:shadow-xl transition-shadow">
-                  <div className="aspect-3/4 rounded-xl overflow-hidden mb-4 bg-neutral-cream">
-                    <img src={book.image} alt={book.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
-                  </div>
-                  <h3 className="font-bold text-neutral-brown-900 mb-1 truncate">{book.title}</h3>
-                  <p className="text-sm text-neutral-brown-600 mb-2">{book.author}</p>
-                  <div className="flex items-center justify-between">
-                    <span className="text-lg font-bold text-primary">KES {book.price}</span>
-                    <div className="flex items-center gap-1">
-                      <Star size={14} className="fill-accent-gold text-accent-gold" />
-                      <span className="text-sm">{book.rating}</span>
+            {books.length > 0 ? (
+              books.map((book) => (
+                <Link key={book.id} href={`/books/${book.id}`} className="group">
+                  <div className="bg-white rounded-2xl p-4 shadow-md hover:shadow-xl transition-shadow">
+                    <div className="aspect-3/4 rounded-xl overflow-hidden mb-4 bg-neutral-cream">
+                      {book.coverImage ? (
+                        <img src={book.coverImage} alt={book.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/20 to-accent-green/20">
+                          <Book size={48} className="text-neutral-brown-300" />
+                        </div>
+                      )}
+                    </div>
+                    <h3 className="font-bold text-neutral-brown-900 mb-1 truncate">{book.title}</h3>
+                    <p className="text-sm text-neutral-brown-600 mb-2">{book.author?.user?.name || 'Unknown Author'}</p>
+                    <div className="flex items-center justify-between">
+                      <span className="text-lg font-bold text-primary">KES {book.price}</span>
+                      <div className="flex items-center gap-1">
+                        <Star size={14} className="fill-accent-gold text-accent-gold" />
+                        <span className="text-sm">{book.rating?.toFixed(1) || '0.0'}</span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </Link>
-            ))}
+                </Link>
+              ))
+            ) : (
+              <div className="col-span-full text-center py-12">
+                <Book size={48} className="text-neutral-brown-300 mx-auto mb-4" />
+                <p className="text-neutral-brown-600">No books available yet.</p>
+              </div>
+            )}
           </div>
 
           <div className="text-center mt-12">
