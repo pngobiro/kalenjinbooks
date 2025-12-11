@@ -18,6 +18,7 @@ A modern, full-stack platform for showcasing, selling, and reading Kalenjin book
 
 ### 👤 Author Management
 - Author profiles with book collections
+- Profile editing with photo upload and social links
 - Author dashboard with analytics and earnings
 - Book upload and management system
 - Book editing with cover image upload
@@ -136,6 +137,8 @@ kalenjinbooks/
 │   │   │   └── author/       # Author-specific pages
 │   │   │       ├── analytics/ # Sales analytics
 │   │   │       ├── settings/  # Author settings
+│   │   │       ├── profile/   # Profile management
+│   │   │       │   └── edit/  # Profile editing
 │   │   │       └── books/     # Book management
 │   │   │           └── [id]/edit/ # Book editing
 │   │   └── request-hard-copy/ # Physical book requests

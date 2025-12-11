@@ -11,6 +11,7 @@
 
 ### 👤 Author System
 - [x] Author profiles and book collections
+- [x] Profile editing with photo and social links
 - [x] Author registration workflow
 - [x] Author dashboard with analytics
 - [x] Book management and editing interface
@@ -67,6 +68,7 @@
 
 ### Author Dashboard
 - **Analytics**: Revenue trends, sales metrics, book performance
+- **Profile Management**: Edit bio, photo, social links, writing preferences
 - **Settings**: Notifications, security, payment preferences
 - **Book Management**: Upload, edit, pricing, availability
 - **Book Editing**: Full edit interface with cover upload

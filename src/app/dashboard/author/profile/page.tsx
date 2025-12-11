@@ -1,4 +1,5 @@
 import { User, Mail, Phone, MapPin, Calendar, Edit } from 'lucide-react';
+import Link from 'next/link';
 
 // Mock author data
 const author = {
@@ -24,10 +25,10 @@ export default function ProfilePage() {
                         Manage your author profile and settings
                     </p>
                 </div>
-                <button className="bg-primary hover:bg-primary-dark text-white font-semibold px-6 py-3 rounded-lg flex items-center gap-2 transition-all">
+                <Link href="/dashboard/author/profile/edit" className="bg-primary hover:bg-primary-dark text-white font-semibold px-6 py-3 rounded-lg flex items-center gap-2 transition-all">
                     <Edit size={20} />
                     Edit Profile
-                </button>
+                </Link>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

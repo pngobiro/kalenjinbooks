@@ -252,6 +252,14 @@ Standard Stripe checkout flow with webhook handling.
 - Date range filtering (7d, 30d, 90d, 1y, custom)
 - Export functionality
 
+#### Profile Management (`/dashboard/author/profile`)
+- **Profile View**: Display author information and bio
+- **Profile Editing** (`/dashboard/author/profile/edit`):
+  - **Basic Information**: Name, email, phone, location, bio
+  - **Profile Photo**: Upload and manage profile image
+  - **Social Links**: Website, Twitter, Facebook integration
+  - **Writing Preferences**: Languages and genre specialties
+
 #### Settings Page (`/dashboard/author/settings`)
 - **Notifications**: Email, push, and report preferences
 - **Security**: Password change, 2FA toggle
