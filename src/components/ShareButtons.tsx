@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Share2, Twitter, Facebook, Link2, Check, MessageCircle } from 'lucide-react';
 
 interface ShareButtonsProps {
@@ -11,9 +11,13 @@ interface ShareButtonsProps {
 export default function ShareButtons({ title, url }: ShareButtonsProps) {
   const [copied, setCopied] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [currentUrl, setCurrentUrl] = useState('');
 
-  const shareUrl = url || (typeof window !== 'undefined' ? window.location.href : '');
-  const encodedUrl = encodeURIComponent(shareUrl);
+  useEffect(() => {
+    setCurrentUrl(url || window.location.href);
+  }, [url]);
+
+  const encodedUrl = encodeURIComponent(currentUrl);
   const encodedTitle = encodeURIComponent(title);
 
   const shareLinks = {
@@ -24,7 +28,7 @@ export default function ShareButtons({ title, url }: ShareButtonsProps) {
 
   const copyToClipboard = async () => {
     try {
-      await navigator.clipboard.writeText(shareUrl);
+      await navigator.clipboard.writeText(currentUrl);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
@@ -32,22 +36,12 @@ export default function ShareButtons({ title, url }: ShareButtonsProps) {
     }
   };
 
-  const handleShare = async () => {
-    if (navigator.share) {
-      try {
-        await navigator.share({ title, url: shareUrl });
-      } catch (err) {
-        if ((err as Error).name !== 'AbortError') {
-          setShowDropdown(!showDropdown);
-        }
-      }
-    } else {
-      setShowDropdown(!showDropdown);
-    }
+  const handleShare = () => {
+    setShowDropdown(!showDropdown);
   };
 
   return (
-    <div className="relative">
+    <div className="relative z-50">
       <button
         onClick={handleShare}
         className="flex items-center gap-2 px-4 py-2 bg-neutral-brown-100 hover:bg-neutral-brown-200 text-neutral-brown-700 rounded-lg transition-colors"
@@ -59,10 +53,10 @@ export default function ShareButtons({ title, url }: ShareButtonsProps) {
       {showDropdown && (
         <>
           <div 
-            className="fixed inset-0 z-40" 
+            className="fixed inset-0 z-[60]" 
             onClick={() => setShowDropdown(false)}
           />
-          <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-neutral-brown-100 py-2 z-50">
+          <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-neutral-brown-200 py-2 z-[70]">
             <a
               href={shareLinks.twitter}
               target="_blank"

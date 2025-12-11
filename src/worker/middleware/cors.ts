@@ -19,7 +19,7 @@ function getCorsConfig(env: Env): CorsConfig {
     return {
         allowedOrigins: isDevelopment
             ? ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:8787']
-            : [env.NEXTAUTH_URL, 'https://kalenjinbooks.com', 'https://www.kalenjinbooks.com'],
+            : [env.NEXTAUTH_URL, 'https://kalenjinbooks.com', 'https://www.kalenjinbooks.com', 'https://kalenjin-books.dspop.info'],
         allowedMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
         allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
         maxAge: 86400, // 24 hours

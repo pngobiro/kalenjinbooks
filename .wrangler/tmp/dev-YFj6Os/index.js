@@ -43977,7 +43977,7 @@ init_performance2();
 function getCorsConfig(env2) {
   const isDevelopment = env2.NEXTAUTH_URL?.includes("localhost");
   return {
-    allowedOrigins: isDevelopment ? ["http://localhost:3000", "http://localhost:3001", "http://localhost:8787"] : [env2.NEXTAUTH_URL, "https://kalenjinbooks.com", "https://www.kalenjinbooks.com"],
+    allowedOrigins: isDevelopment ? ["http://localhost:3000", "http://localhost:3001", "http://localhost:8787"] : [env2.NEXTAUTH_URL, "https://kalenjinbooks.com", "https://www.kalenjinbooks.com", "https://kalenjin-books.dspop.info"],
     allowedMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
     maxAge: 86400
