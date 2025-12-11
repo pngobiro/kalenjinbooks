@@ -258,17 +258,58 @@ Standard Stripe checkout flow with webhook handling.
 - **Payments**: M-Pesa number, bank account, payout settings
 - **Preferences**: Language, currency, timezone, privacy
 
-#### Books Management
+#### Books Management (`/dashboard/author/books`)
 - Upload new books
-- Edit existing books
-- View sales performance
-- Manage pricing and availability
+- View all published and draft books
+- Sales and earnings overview
+- Book status management
+
+#### Book Editing (`/dashboard/author/books/[id]/edit`)
+- **Basic Information**: Title, description, category, language
+- **Pricing**: Purchase price, rental price, preview pages
+- **Publishing**: Published status, featured status
+- **Cover Image**: Upload and manage book covers
+- **Actions**: Save changes, preview book, delete book
 
 ### Author Registration Flow
 1. User creates account
 2. Applies to become author
 3. Admin review (pending/approved/rejected states)
 4. Access to full dashboard upon approval
+
+## Super Admin Dashboard
+
+### Admin Features (`/dashboard/admin`)
+
+#### Overview Tab
+- Platform statistics (authors, books, revenue)
+- Pending applications summary
+- Top performing books
+- Quick action buttons
+
+#### Applications Tab (`/dashboard/admin?tab=applications`)
+- Review pending author applications
+- View applicant details and submitted books
+- Approve or reject applications
+- Search and filter applications
+
+#### Authors Tab (`/dashboard/admin?tab=authors`)
+- Manage all platform authors
+- View author statistics and performance
+- Author verification management
+- Status management (approved/suspended)
+
+#### Books Tab (`/dashboard/admin?tab=books`)
+- Manage all platform books
+- Toggle featured status for homepage
+- View book performance metrics
+- Search and filter books
+
+### Admin Actions
+- **Author Management**: Approve/reject applications, verify authors
+- **Book Management**: Feature/unfeature books, manage visibility
+- **Platform Monitoring**: Track growth, revenue, and user metrics
+- **Content Moderation**: Review and manage platform content
 
 ## Deployment Guide
 

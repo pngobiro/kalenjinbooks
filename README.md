@@ -20,8 +20,16 @@ A modern, full-stack platform for showcasing, selling, and reading Kalenjin book
 - Author profiles with book collections
 - Author dashboard with analytics and earnings
 - Book upload and management system
+- Book editing with cover image upload
 - Author settings (notifications, security, payments)
 - Revenue tracking and payout management
+
+### 🛡️ Super Admin Dashboard
+- Author application approval/rejection system
+- Book featured status management
+- Platform statistics and monitoring
+- Author and book management interface
+- Revenue and performance analytics
 
 ### 💳 Payment System
 - M-Pesa integration for Kenya (phone number input)
@@ -123,10 +131,13 @@ kalenjinbooks/
 │   │   ├── authors/          # Author profiles
 │   │   ├── payment/          # Payment flows
 │   │   │   └── mpesa/        # M-Pesa payment page
-│   │   ├── dashboard/        # Author dashboard
+│   │   ├── dashboard/        # Dashboard pages
+│   │   │   ├── admin/        # Super admin panel
 │   │   │   └── author/       # Author-specific pages
 │   │   │       ├── analytics/ # Sales analytics
-│   │   │       └── settings/  # Author settings
+│   │   │       ├── settings/  # Author settings
+│   │   │       └── books/     # Book management
+│   │   │           └── [id]/edit/ # Book editing
 │   │   └── request-hard-copy/ # Physical book requests
 │   ├── components/           # Reusable components
 │   │   ├── KaleeReadsLogo.tsx # Custom logo
