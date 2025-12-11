@@ -1,174 +1,264 @@
 # KaleeReads - Kalenjin Books Marketplace
 
-A modern, full-stack platform for showcasing, selling, and reading Kalenjin books online. Built with Next.js, React, Cloudflare infrastructure, and featuring author management, secure payments, and time-limited book access.
+A modern, full-stack platform for showcasing, selling, and reading Kalenjin books online. Built with Next.js, Cloudflare Workers, and featuring author management, secure payments, and book sharing capabilities.
 
 ![Next.js](https://img.shields.io/badge/Next.js-16.0-black)
 ![React](https://img.shields.io/badge/React-19.2-blue)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue)
-![Cloudflare](https://img.shields.io/badge/Cloudflare-R2%20%7C%20D1-orange)
+![Cloudflare](https://img.shields.io/badge/Cloudflare-Workers%20%7C%20D1%20%7C%20R2-orange)
 
-## 🌟 Features
+## 🌟 Current Features
 
-- **📚 Book Marketplace**: Browse, search, and purchase Kalenjin books
-- **👤 Author Profiles**: Dedicated pages for authors with their book collections
-- **📦 Hard Copy Requests**: Request physical copies of books with custom shipping
-- **💳 Secure Payments**: M-Pesa and Stripe integration for Kenya
-- **📖 Online Reading**: In-browser book viewer without downloads (PDF.js)
-- **🔗 Time-Limited Access**: Generate special links for temporary book access
-- **💰 Author Earnings**: Per-author payment tracking and payout system
-- **🌍 Global CDN**: Fast book delivery via Cloudflare CDN
-- **🔒 Authentication**: Secure user accounts with role-based access
+### 📚 Book Marketplace
+- Browse and search Kalenjin books with categories
+- Featured books section on homepage
+- Book detail pages with purchase options
+- Permanent purchase or 24-hour rental options
+- Share books via Twitter, Facebook, WhatsApp, or copy link
+
+### 👤 Author Management
+- Author profiles with book collections
+- Author dashboard with analytics and earnings
+- Book upload and management system
+- Author settings (notifications, security, payments)
+- Revenue tracking and payout management
+
+### 💳 Payment System
+- M-Pesa integration for Kenya (phone number input)
+- Stripe integration for international payments
+- Secure payment processing
+- Author revenue sharing (70% to authors)
+
+### 📦 Hard Copy Requests
+- Request physical copies of books
+- Custom shipping and contact information
+- Integrated with book detail pages
+
+### 📊 Analytics & Reporting
+- Sales analytics with date range filters
+- Revenue tracking by book and time period
+- Performance metrics and trends
+- Export functionality for reports
+
+### 🎨 Design & Branding
+- Custom KaleeReads logo with flame icon
+- African pattern borders throughout the site
+- Responsive design with Tailwind CSS
+- Kalenjin-inspired color scheme
 
 ## 🏗️ Technology Stack
 
 ### Frontend
 - **Framework**: Next.js 16.0 (App Router)
-- **UI Library**: React 19.2
+- **UI Library**: React 19.2 with TypeScript
 - **Styling**: Tailwind CSS v4
-- **Language**: TypeScript 5.x
-- **Book Viewer**: PDF.js + React-PDF
+- **Icons**: Lucide React
+- **State Management**: React hooks
 
 ### Backend & Infrastructure
-- **Hosting**: Cloudflare Workers/Pages
+- **API**: Cloudflare Workers
 - **Database**: Cloudflare D1 (SQLite)
-- **File Storage**: Cloudflare R2 (S3-compatible)
-- **CDN**: Cloudflare CDN
+- **File Storage**: Cloudflare R2
 - **ORM**: Prisma with D1 adapter
+- **CORS**: Custom middleware for cross-origin requests
 
-### Authentication & Payments
-- **Auth**: NextAuth.js
-- **Payments**: M-Pesa + Stripe integration
-- **Validation**: Zod
+### Development & Deployment
+- **Tunnel**: Cloudflare Tunnel for local development
+- **Environment**: Environment-based configuration
+- **Build**: Next.js build system
+- **Deployment**: Cloudflare Pages + Workers
 
-## 📋 Prerequisites
+## 🚀 Quick Start
 
-- Node.js 18+ and npm
-- Cloudflare account ([sign up here](https://dash.cloudflare.com/sign-up))
-- Stripe account for payments ([sign up here](https://stripe.com))
-- Wrangler CLI (installed via npm)
+### Prerequisites
+- Node.js 18+
+- Cloudflare account
+- Wrangler CLI
 
-## 🚀 Getting Started
-
-### 1. Clone the Repository
+### Installation
 
 ```bash
+# Clone repository
 git clone https://github.com/pngobiro/kalenjinbooks.git
 cd kalenjinbooks
-```
 
-### 2. Install Dependencies
-
-```bash
+# Install dependencies
 npm install
-```
 
-### 3. Set Up Environment Variables
+# Set up environment
+cp .env.example .env.local
+# Edit .env.local with your configuration
 
-Copy the example environment file:
-
-```bash
-cp .env.example .env
-```
-
-Edit `.env` and fill in your credentials.
-
-### 4. Run Development Server
-
-```bash
+# Start development server
 npm run dev
 ```
 
-Open [http://localhost:3001](http://localhost:3001) in your browser.
+### Database Setup
+
+```bash
+# Run migrations
+npx wrangler d1 execute DB --remote --file=prisma/migrations/add-book-fields.sql
+
+# Seed database
+npx wrangler d1 execute DB --remote --file=prisma/seed-books.sql
+```
+
+### Worker Deployment
+
+```bash
+# Deploy worker
+npx wrangler deploy
+
+# Start local worker (for development)
+npx wrangler dev --port 8787 --remote
+```
 
 ## 📁 Project Structure
 
 ```
 kalenjinbooks/
-├── prisma/
-│   └── schema.prisma          # Database schema
-├── public/
-│   ├── books/                 # Book cover images
-│   └── images/                # Site images & logos
 ├── src/
-│   ├── app/                   # Next.js App Router pages
-│   │   ├── books/            # Book pages
-│   │   ├── authors/          # Author pages
-│   │   ├── payment/          # Payment pages (M-Pesa, etc.)
+│   ├── app/                   # Next.js pages
+│   │   ├── books/            # Book browsing & details
+│   │   ├── authors/          # Author profiles
+│   │   ├── payment/          # Payment flows
+│   │   │   └── mpesa/        # M-Pesa payment page
 │   │   ├── dashboard/        # Author dashboard
-│   │   └── ...
-│   ├── components/           # React components
-│   │   └── KaleeReadsLogo.tsx # Custom logo component
-│   └── lib/                  # Utility functions
-├── docs/                     # Documentation
-└── package.json
+│   │   │   └── author/       # Author-specific pages
+│   │   │       ├── analytics/ # Sales analytics
+│   │   │       └── settings/  # Author settings
+│   │   └── request-hard-copy/ # Physical book requests
+│   ├── components/           # Reusable components
+│   │   ├── KaleeReadsLogo.tsx # Custom logo
+│   │   ├── ShareButtons.tsx   # Social sharing
+│   │   ├── AfricanBorder.tsx  # Decorative borders
+│   │   └── BookPurchaseOptions.tsx # Purchase UI
+│   ├── lib/
+│   │   └── api/              # API client functions
+│   └── worker/               # Cloudflare Worker code
+│       ├── handlers/         # API route handlers
+│       └── middleware/       # CORS & other middleware
+├── prisma/
+│   ├── schema.prisma         # Database schema
+│   ├── migrations/           # Database migrations
+│   └── seed-books.sql        # Sample data
+├── public/
+│   ├── books/                # Book cover images
+│   └── images/               # Logos & assets
+└── docs/                     # Documentation
 ```
 
-## 🎨 Brand Identity
+## 🌐 Live Demo
 
-KaleeReads features a custom logo inspired by:
-- **Kalenjin Gourd (Calabash)**: Traditional vessel symbolizing knowledge preservation
-- **Decorative Beads**: Cultural heritage and craftsmanship
-- **Book Pages**: Literature emerging from tradition
+- **Production**: https://kalenjin-books.dspop.info
+- **API**: https://kalenjin-books-worker.pngobiro.workers.dev
 
-## 💳 Payment Methods
+## 🔧 Development
 
-- **M-Pesa**: Mobile money payments for Kenya (STK Push)
-- **Stripe**: Credit/Debit cards (Visa, Mastercard, Amex)
-- **PayPal**: International payments
-- **Bank Transfer**: Direct bank transfers
-
-## 🌐 Cloudflare Tunnel
-
-Expose your local development server:
-
+### Local Development
 ```bash
-# Start the tunnel
+# Start Next.js (port 3001)
+npm run dev
+
+# Start Cloudflare Worker (port 8787)
+npx wrangler dev --port 8787 --remote
+```
+
+### Cloudflare Tunnel
+```bash
+# Start tunnel for external access
 bash start-tunnel.sh
 
 # Or manually
 docker-compose -f docker-compose.tunnel.yml up -d
 ```
 
-## 📚 Documentation
+### Environment Configuration
+The app auto-detects the API URL based on hostname:
+- `localhost` → Local worker (127.0.0.1:8787)
+- `*.dspop.info` → Deployed worker
+- Other domains → Deployed worker
 
-- [API Documentation](./docs/API.md)
-- [Database Schema](./docs/DATABASE.md)
-- [Cloudflare Setup Guide](./docs/CLOUDFLARE.md)
-- [UI/UX Design Guide](./docs/UI.md)
-- [Payment System](./docs/PAYMENTS.md)
-- [Author Dashboard](./docs/DASHBOARD.md)
+## 📊 Database Schema
 
-## 🔧 Development Commands
+### Core Tables
+- **User**: User accounts and authentication
+- **Author**: Author profiles and metadata
+- **Book**: Book information, pricing, and content
+- **Purchase**: Transaction records
+- **Review**: Book reviews and ratings
 
-```bash
-# Start development server (port 3001)
-npm run dev
+### Key Features
+- Featured books with custom ordering
+- Book categories and language support
+- Author revenue tracking
+- Rating and review system
 
-# Build for production
-npm run build
+## 🎨 Brand Identity
 
-# Start production server
-npm start
+### Logo Design
+- **KaleeReads** text with flame icon above the "R"
+- Inspired by traditional African elements
+- Colors: Brown (#8B4513) and Primary (#C85D3A)
 
-# Run linter
-npm run lint
-```
+### Visual Elements
+- African pattern borders between sections
+- Earth tone color palette
+- Responsive typography with custom fonts
+
+## 🔒 Security & CORS
+
+### CORS Configuration
+Allows requests from:
+- `localhost:3000`, `localhost:3001` (development)
+- `kalenjin-books.dspop.info` (tunnel)
+- `kalenjinbooks.com` (production)
+
+### Security Features
+- Environment-based configuration
+- Secure payment processing
+- Input validation and sanitization
+
+## 📚 API Documentation
+
+### Books API
+- `GET /api/books` - List books with filtering
+- `GET /api/books/:id` - Get single book
+- `GET /api/books?featured=true` - Get featured books
+
+### Query Parameters
+- `page`, `limit` - Pagination
+- `search` - Text search
+- `category` - Filter by category
+- `featured` - Featured books only
 
 ## 🚢 Deployment
 
-### Deploy to Cloudflare Pages
+### Cloudflare Workers
+```bash
+npx wrangler deploy
+```
 
+### Cloudflare Pages
 ```bash
 npm run build
 npx wrangler pages deploy .next
 ```
 
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
+
 ## 📄 License
 
-This project is licensed under the MIT License.
+MIT License - see LICENSE file for details.
 
 ## 🙏 Acknowledgments
 
-- Built with [Next.js](https://nextjs.org)
-- Powered by [Cloudflare](https://cloudflare.com)
-- Payments by [Stripe](https://stripe.com) & M-Pesa
+- Built with Next.js and Cloudflare
+- Inspired by Kalenjin culture and traditions
+- Community-driven book marketplace
