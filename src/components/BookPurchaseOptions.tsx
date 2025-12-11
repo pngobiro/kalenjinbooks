@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { ShoppingCart, BookOpen, Clock, Package, Share2 } from 'lucide-react';
+import { ShoppingCart, BookOpen, Clock, Package } from 'lucide-react';
 import { Book } from '@/lib/api/books';
 
 interface BookPurchaseOptionsProps {
@@ -13,7 +13,7 @@ export default function BookPurchaseOptions({ book }: BookPurchaseOptionsProps) 
     const [purchaseType, setPurchaseType] = useState<'permanent' | 'temporary'>('permanent');
 
     // Calculate rental price (assuming 50% of full price if not specified)
-    const rentalPrice = Math.floor(book.price * 0.5);
+    const rentalPrice = Math.floor(book.price * 0.1);
     const currentPrice = purchaseType === 'permanent' ? book.price : rentalPrice;
 
     return (
@@ -94,13 +94,10 @@ export default function BookPurchaseOptions({ book }: BookPurchaseOptionsProps) 
             <div className="flex gap-4">
                 <Link
                     href={`/request-hard-copy?book=${encodeURIComponent(book.title)}&id=${book.id}`}
-                    className="flex-1 py-3 border-2 border-primary text-primary hover:bg-primary hover:text-white rounded-full flex items-center justify-center gap-2 font-medium transition-all"
+                    className="flex-1 py-3 bg-primary text-white hover:bg-primary-dark rounded-full flex items-center justify-center gap-2 font-semibold transition-all shadow-md"
                 >
-                    <Package size={18} /> Hard Copy
+                    <Package size={18} /> Request Hard Copy
                 </Link>
-                <button className="flex-1 py-3 border-2 border-neutral-brown-200 text-neutral-brown-500 hover:border-blue-500 hover:text-blue-500 rounded-full flex items-center justify-center gap-2 font-medium transition-all">
-                    <Share2 size={18} /> Share
-                </button>
             </div>
         </>
     );
