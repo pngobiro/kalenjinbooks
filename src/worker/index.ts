@@ -5,6 +5,7 @@ import { createD1PrismaClient } from '../lib/db/d1-client';
 import { corsMiddleware } from './middleware/cors';
 import { errorResponse, successResponse, HttpStatus } from './utils/response';
 import { handleBooksRequest } from './handlers/books';
+import { handleAuthorsRequest } from './handlers/authors';
 import { handleUploadRequest } from './handlers/upload';
 import { handleAuthRequest } from './handlers/auth';
 
@@ -28,6 +29,11 @@ export default {
                 if (path.startsWith('/api/books')) {
                     console.log('[Worker] Routing to books handler');
                     return handleBooksRequest(request as WorkerRequest, env, ctx);
+                }
+
+                if (path.startsWith('/api/authors')) {
+                    console.log('[Worker] Routing to authors handler');
+                    return handleAuthorsRequest(request as WorkerRequest, env, ctx);
                 }
 
                 if (path.startsWith('/api/upload')) {

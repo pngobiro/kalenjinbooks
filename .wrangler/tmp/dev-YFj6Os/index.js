@@ -45907,6 +45907,107 @@ async function deleteBook2(request, env2, bookId) {
 }
 __name(deleteBook2, "deleteBook");
 
+// src/worker/handlers/authors.ts
+init_modules_watch_stub();
+init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
+init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
+init_performance2();
+init_d1_client();
+init_cache();
+async function handleAuthorsRequest(request, env2, ctx) {
+  const url = new URL(request.url);
+  const path = url.pathname;
+  const method = request.method;
+  console.log(`[AuthorsHandler] Path: ${path}, Method: ${method}`);
+  if (path === "/api/authors" && method === "GET") {
+    return await listAuthors(request, env2);
+  }
+  if (path.match(/^\/api\/authors\/[^/]+$/) && method === "GET") {
+    const authorId = path.split("/").pop();
+    return await getAuthor(request, env2, authorId);
+  }
+  return errorResponse(`Not Found. Path: ${path}, Method: ${method}`, HttpStatus.NOT_FOUND);
+}
+__name(handleAuthorsRequest, "handleAuthorsRequest");
+async function listAuthors(request, env2) {
+  const searchParams = getQueryParams(request.url);
+  const { page, limit } = getPaginationParams(searchParams);
+  const cacheKey = generateCacheKey(CachePrefix.AUTHORS, `page:${page}`, `limit:${limit}`);
+  const { getCached: getCached2, setCached: setCached2 } = await Promise.resolve().then(() => (init_cache(), cache_exports));
+  const cached = await getCached2(env2.CACHE, cacheKey);
+  if (cached) {
+    return paginatedResponse(cached.authors, cached.total, page, limit);
+  }
+  const prisma = createD1PrismaClient(env2.DB);
+  const total = await prisma.author.count();
+  const authors = await prisma.author.findMany({
+    include: {
+      user: {
+        select: { name: true, email: true }
+      },
+      books: {
+        where: { isPublished: true },
+        select: { id: true, rating: true }
+      }
+    },
+    skip: (page - 1) * limit,
+    take: limit
+  });
+  const transformedAuthors = authors.map((author) => ({
+    id: author.id,
+    name: author.user.name,
+    bio: author.bio,
+    profileImage: author.profileImage,
+    booksCount: author.books.length,
+    rating: author.books.length > 0 ? author.books.reduce((sum, book) => sum + (book.rating || 0), 0) / author.books.length : 0
+  }));
+  await setCached2(env2.CACHE, cacheKey, { authors: transformedAuthors, total }, CacheTTL.FIVE_MINUTES);
+  return paginatedResponse(transformedAuthors, total, page, limit);
+}
+__name(listAuthors, "listAuthors");
+async function getAuthor(request, env2, authorId) {
+  const cacheKey = generateCacheKey(CachePrefix.AUTHOR_DETAIL, authorId);
+  const { getCached: getCached2, setCached: setCached2 } = await Promise.resolve().then(() => (init_cache(), cache_exports));
+  const cached = await getCached2(env2.CACHE, cacheKey);
+  if (cached) {
+    return successResponse(cached);
+  }
+  const prisma = createD1PrismaClient(env2.DB);
+  const author = await prisma.author.findUnique({
+    where: { id: authorId },
+    include: {
+      user: {
+        select: { name: true }
+      },
+      books: {
+        where: { isPublished: true },
+        include: {
+          author: {
+            include: {
+              user: { select: { name: true } }
+            }
+          }
+        }
+      }
+    }
+  });
+  if (!author) {
+    return errorResponse("Author not found", HttpStatus.NOT_FOUND, ErrorCode.RESOURCE_NOT_FOUND);
+  }
+  const transformedAuthor = {
+    id: author.id,
+    name: author.user.name,
+    bio: author.bio,
+    profileImage: author.profileImage,
+    booksCount: author.books.length,
+    rating: author.books.length > 0 ? author.books.reduce((sum, book) => sum + (book.rating || 0), 0) / author.books.length : 0,
+    books: author.books
+  };
+  await setCached2(env2.CACHE, cacheKey, transformedAuthor, CacheTTL.TEN_MINUTES);
+  return successResponse(transformedAuthor);
+}
+__name(getAuthor, "getAuthor");
+
 // src/worker/handlers/upload.ts
 init_modules_watch_stub();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
@@ -46199,6 +46300,10 @@ var worker_default = {
         if (path.startsWith("/api/books")) {
           console.log("[Worker] Routing to books handler");
           return handleBooksRequest(request, env2, ctx);
+        }
+        if (path.startsWith("/api/authors")) {
+          console.log("[Worker] Routing to authors handler");
+          return handleAuthorsRequest(request, env2, ctx);
         }
         if (path.startsWith("/api/upload")) {
           return handleUploadRequest(request, env2, ctx);

@@ -1,56 +1,17 @@
-'use client';
-
-import KaleeReadsLogo from '@/components/KaleeReadsLogo';
 import { ArrowLeft, BookOpen, Star, User, Book } from 'lucide-react';
 import Link from 'next/link';
+import { fetchAuthors, Author } from '@/lib/api/authors';
 
-const authors = [
-  {
-    id: 1,
-    name: "Dr. Kibet Kitur",
-    role: "Author & Thought Leader",
-    bio: "Dr. Kibet Kitur delivers powerful messages to the African grassroots, calling for unity, economic freedom, and a mental revolution.",
-    booksCount: 1,
-    rating: 4.9,
-    image: "/images/author-kibet-kitur.png",
-  },
-  {
-    id: 2,
-    name: "Dr. Kiprop Lagat",
-    role: "Cultural Historian",
-    bio: "Dr. Lagat has spent over 20 years documenting the oral traditions of the Kalenjin people.",
-    booksCount: 5,
-    rating: 4.9,
-    image: "/images/author-kiprop.png",
-  },
-  {
-    id: 3,
-    name: "Chebet Rotich",
-    role: "Children's Author",
-    bio: "Chebet weaves magical tales that introduce young readers to African folklore.",
-    booksCount: 8,
-    rating: 4.8,
-    image: "/images/author-chebet.png",
-  },
-  {
-    id: 4,
-    name: "Kipchoge Keino",
-    role: "Biographer",
-    bio: "A legendary athlete turned writer, sharing inspiring stories from the Rift Valley.",
-    booksCount: 3,
-    rating: 4.7,
-  },
-  {
-    id: 5,
-    name: "Jepkorir Tanui",
-    role: "Poet",
-    bio: "Jepkorir's poetry captures the beauty of the Nandi Hills and the spirit of its people.",
-    booksCount: 4,
-    rating: 4.9,
+export default async function AuthorsPage() {
+  let authors: Author[] = [];
+  
+  try {
+    const response = await fetchAuthors({ limit: 20 });
+    authors = response?.data || [];
+  } catch (e) {
+    console.error('Failed to fetch authors:', e);
   }
-];
 
-export default function AuthorsPage() {
   return (
     <div className="min-h-screen bg-neutral-cream">
       {/* Navigation */}
@@ -93,38 +54,45 @@ export default function AuthorsPage() {
       <section className="py-12">
         <div className="max-w-6xl mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {authors.map((author) => (
-              <Link key={author.id} href={`/authors/${author.id}`} className="group">
-                <div className="bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all hover:-translate-y-2">
-                  <div className="flex items-center gap-4 mb-4">
-                    <div className="w-16 h-16 rounded-full overflow-hidden bg-gradient-to-br from-primary/20 to-accent-green/20 flex items-center justify-center">
-                      {author.image ? (
-                        <img src={author.image} alt={author.name} className="w-full h-full object-cover" />
-                      ) : (
-                        <User size={28} className="text-neutral-brown-400" />
-                      )}
+            {authors.length > 0 ? (
+              authors.map((author) => (
+                <Link key={author.id} href={`/authors/${author.id}`} className="group">
+                  <div className="bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all hover:-translate-y-2">
+                    <div className="flex items-center gap-4 mb-4">
+                      <div className="w-16 h-16 rounded-full overflow-hidden bg-gradient-to-br from-primary/20 to-accent-green/20 flex items-center justify-center">
+                        {author.profileImage ? (
+                          <img src={author.profileImage} alt={author.name || 'Author'} className="w-full h-full object-cover" />
+                        ) : (
+                          <User size={28} className="text-neutral-brown-400" />
+                        )}
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-neutral-brown-900 group-hover:text-primary transition-colors">{author.name || 'Unknown Author'}</h3>
+                        <p className="text-sm text-primary">Author</p>
+                      </div>
                     </div>
-                    <div>
-                      <h3 className="font-bold text-neutral-brown-900 group-hover:text-primary transition-colors">{author.name}</h3>
-                      <p className="text-sm text-primary">{author.role}</p>
+                    
+                    <p className="text-neutral-brown-600 text-sm mb-4 line-clamp-2">{author.bio || 'No bio available'}</p>
+                    
+                    <div className="flex items-center justify-between pt-4 border-t border-neutral-brown-100">
+                      <div className="flex items-center gap-1">
+                        <BookOpen size={16} className="text-accent-green" />
+                        <span className="text-sm font-medium">{author.booksCount} books</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Star size={16} className="fill-accent-gold text-accent-gold" />
+                        <span className="text-sm font-medium">{author.rating?.toFixed(1) || '0.0'}</span>
+                      </div>
                     </div>
                   </div>
-                  
-                  <p className="text-neutral-brown-600 text-sm mb-4 line-clamp-2">{author.bio}</p>
-                  
-                  <div className="flex items-center justify-between pt-4 border-t border-neutral-brown-100">
-                    <div className="flex items-center gap-1">
-                      <BookOpen size={16} className="text-accent-green" />
-                      <span className="text-sm font-medium">{author.booksCount} books</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <Star size={16} className="fill-accent-gold text-accent-gold" />
-                      <span className="text-sm font-medium">{author.rating}</span>
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            ))}
+                </Link>
+              ))
+            ) : (
+              <div className="col-span-full text-center py-12">
+                <User size={48} className="text-neutral-brown-300 mx-auto mb-4" />
+                <p className="text-neutral-brown-600">No authors available yet.</p>
+              </div>
+            )}
 
             {/* Join Card */}
             <div className="bg-neutral-brown-900 rounded-2xl p-6 flex flex-col items-center justify-center text-center">

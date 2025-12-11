@@ -14,8 +14,10 @@ datasource db {
 model User {
   id            String    @id @default(uuid())
   email         String    @unique
-  password      String
+  password      String?   // Optional for OAuth users
   name          String?
+  image         String?   // Profile image from OAuth
+  googleId      String?   @unique // Google OAuth ID
   role          UserRole  @default(READER)
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
@@ -41,6 +43,10 @@ model Author {
   paymentMethod String?   // e.g., "mpesa", "bank"
   paymentDetails String?  // JSON string with payment info
   totalEarnings Float     @default(0)
+  status        AuthorStatus @default(PENDING)
+  rejectionReason String? // Reason if rejected
+  appliedAt     DateTime  @default(now())
+  approvedAt    DateTime?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   
@@ -49,6 +55,12 @@ model Author {
   books         Book[]
   payments      Payment[]
   blogPosts     BlogPost[]
+}
+
+enum AuthorStatus {
+  PENDING
+  APPROVED
+  REJECTED
 }
 
 model Book {
