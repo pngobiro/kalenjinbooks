@@ -4,14 +4,12 @@ var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
 var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
 var __require = /* @__PURE__ */ ((x2) => typeof require !== "undefined" ? require : typeof Proxy !== "undefined" ? new Proxy(x2, {
   get: (a2, b2) => (typeof require !== "undefined" ? require : a2)[b2]
 }) : x2)(function(x2) {
-  if (typeof require !== "undefined")
-    return require.apply(this, arguments);
-  throw new Error('Dynamic require of "' + x2 + '" is not supported');
+  if (typeof require !== "undefined") return require.apply(this, arguments);
+  throw Error('Dynamic require of "' + x2 + '" is not supported');
 });
 var __esm = (fn, res) => function __init() {
   return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
@@ -39,41 +37,20 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
   isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
   mod
 ));
-var __publicField = (obj, key, value) => {
-  __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
-  return value;
-};
-
-// .wrangler/tmp/bundle-bwyUk4/strip-cf-connecting-ip-header.js
-function stripCfConnectingIPHeader(input, init3) {
-  const request = new Request(input, init3);
-  request.headers.delete("CF-Connecting-IP");
-  return request;
-}
-var init_strip_cf_connecting_ip_header = __esm({
-  ".wrangler/tmp/bundle-bwyUk4/strip-cf-connecting-ip-header.js"() {
-    "use strict";
-    __name(stripCfConnectingIPHeader, "stripCfConnectingIPHeader");
-    globalThis.fetch = new Proxy(globalThis.fetch, {
-      apply(target, thisArg, argArray) {
-        return Reflect.apply(target, thisArg, [
-          stripCfConnectingIPHeader.apply(null, argArray)
-        ]);
-      }
-    });
-  }
-});
 
 // node_modules/unenv/dist/runtime/_internal/utils.mjs
+// @__NO_SIDE_EFFECTS__
 function createNotImplementedError(name2) {
   return new Error(`[unenv] ${name2} is not implemented yet!`);
 }
+// @__NO_SIDE_EFFECTS__
 function notImplemented(name2) {
   const fn = /* @__PURE__ */ __name(() => {
-    throw createNotImplementedError(name2);
+    throw /* @__PURE__ */ createNotImplementedError(name2);
   }, "fn");
   return Object.assign(fn, { __unenv__: true });
 }
+// @__NO_SIDE_EFFECTS__
 function notImplementedClass(name2) {
   return class {
     __unenv__ = true;
@@ -84,7 +61,6 @@ function notImplementedClass(name2) {
 }
 var init_utils = __esm({
   "node_modules/unenv/dist/runtime/_internal/utils.mjs"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -99,7 +75,6 @@ var init_utils = __esm({
 var _timeOrigin, _performanceNow, nodeTiming, PerformanceEntry, PerformanceMark, PerformanceMeasure, PerformanceResourceTiming, PerformanceObserverEntryList, Performance, PerformanceObserver, performance;
 var init_performance = __esm({
   "node_modules/unenv/dist/runtime/node/internal/perf_hooks/performance.mjs"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -130,6 +105,9 @@ var init_performance = __esm({
       }
     };
     PerformanceEntry = class {
+      static {
+        __name(this, "PerformanceEntry");
+      }
       __unenv__ = true;
       detail;
       entryType = "event";
@@ -153,8 +131,10 @@ var init_performance = __esm({
         };
       }
     };
-    __name(PerformanceEntry, "PerformanceEntry");
-    PerformanceMark = /* @__PURE__ */ __name(class PerformanceMark2 extends PerformanceEntry {
+    PerformanceMark = class PerformanceMark2 extends PerformanceEntry {
+      static {
+        __name(this, "PerformanceMark");
+      }
       entryType = "mark";
       constructor() {
         super(...arguments);
@@ -162,12 +142,17 @@ var init_performance = __esm({
       get duration() {
         return 0;
       }
-    }, "PerformanceMark");
+    };
     PerformanceMeasure = class extends PerformanceEntry {
+      static {
+        __name(this, "PerformanceMeasure");
+      }
       entryType = "measure";
     };
-    __name(PerformanceMeasure, "PerformanceMeasure");
     PerformanceResourceTiming = class extends PerformanceEntry {
+      static {
+        __name(this, "PerformanceResourceTiming");
+      }
       entryType = "resource";
       serverTiming = [];
       connectEnd = 0;
@@ -191,8 +176,10 @@ var init_performance = __esm({
       workerStart = 0;
       responseStatus = 0;
     };
-    __name(PerformanceResourceTiming, "PerformanceResourceTiming");
     PerformanceObserverEntryList = class {
+      static {
+        __name(this, "PerformanceObserverEntryList");
+      }
       __unenv__ = true;
       getEntries() {
         return [];
@@ -204,8 +191,10 @@ var init_performance = __esm({
         return [];
       }
     };
-    __name(PerformanceObserverEntryList, "PerformanceObserverEntryList");
     Performance = class {
+      static {
+        __name(this, "Performance");
+      }
       __unenv__ = true;
       timeOrigin = _timeOrigin;
       eventCounts = /* @__PURE__ */ new Map();
@@ -291,9 +280,12 @@ var init_performance = __esm({
         return this;
       }
     };
-    __name(Performance, "Performance");
     PerformanceObserver = class {
+      static {
+        __name(this, "PerformanceObserver");
+      }
       __unenv__ = true;
+      static supportedEntryTypes = [];
       _callback = null;
       constructor(callback) {
         this._callback = callback;
@@ -323,8 +315,6 @@ var init_performance = __esm({
         return this;
       }
     };
-    __name(PerformanceObserver, "PerformanceObserver");
-    __publicField(PerformanceObserver, "supportedEntryTypes", []);
     performance = globalThis.performance && "addEventListener" in globalThis.performance ? globalThis.performance : new Performance();
   }
 });
@@ -332,7 +322,6 @@ var init_performance = __esm({
 // node_modules/unenv/dist/runtime/node/perf_hooks.mjs
 var init_perf_hooks = __esm({
   "node_modules/unenv/dist/runtime/node/perf_hooks.mjs"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -360,7 +349,6 @@ var init_performance2 = __esm({
 var noop_default;
 var init_noop = __esm({
   "node_modules/unenv/dist/runtime/mock/noop.mjs"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -375,7 +363,6 @@ import { Writable } from "node:stream";
 var _console, _ignoreErrors, _stderr, _stdout, log, info, trace, debug, table, error, warn, createTask, clear, count, countReset, dir, dirxml, group, groupEnd, groupCollapsed, profile, profileEnd, time, timeEnd, timeLog, timeStamp, Console, _times, _stdoutErrorHandler, _stderrErrorHandler;
 var init_console = __esm({
   "node_modules/unenv/dist/runtime/node/console.mjs"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -419,7 +406,6 @@ var init_console = __esm({
 var workerdConsole, assert, clear2, context, count2, countReset2, createTask2, debug2, dir2, dirxml2, error2, group2, groupCollapsed2, groupEnd2, info2, log2, profile2, profileEnd2, table2, time2, timeEnd2, timeLog2, timeStamp2, trace2, warn2, console_default;
 var init_console2 = __esm({
   "node_modules/@cloudflare/unenv-preset/dist/runtime/node/console.mjs"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -483,7 +469,6 @@ var init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console = __
 var hrtime;
 var init_hrtime = __esm({
   "node_modules/unenv/dist/runtime/node/internal/process/hrtime.mjs"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -509,46 +494,48 @@ var init_hrtime = __esm({
 });
 
 // node_modules/unenv/dist/runtime/node/internal/tty/read-stream.mjs
-import { Socket } from "node:net";
 var ReadStream;
 var init_read_stream = __esm({
   "node_modules/unenv/dist/runtime/node/internal/tty/read-stream.mjs"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
     init_performance2();
-    ReadStream = class extends Socket {
+    ReadStream = class {
+      static {
+        __name(this, "ReadStream");
+      }
       fd;
+      isRaw = false;
+      isTTY = false;
       constructor(fd) {
-        super();
         this.fd = fd;
       }
-      isRaw = false;
       setRawMode(mode) {
         this.isRaw = mode;
         return this;
       }
-      isTTY = false;
     };
-    __name(ReadStream, "ReadStream");
   }
 });
 
 // node_modules/unenv/dist/runtime/node/internal/tty/write-stream.mjs
-import { Socket as Socket2 } from "node:net";
 var WriteStream;
 var init_write_stream = __esm({
   "node_modules/unenv/dist/runtime/node/internal/tty/write-stream.mjs"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
     init_performance2();
-    WriteStream = class extends Socket2 {
+    WriteStream = class {
+      static {
+        __name(this, "WriteStream");
+      }
       fd;
+      columns = 80;
+      rows = 24;
+      isTTY = false;
       constructor(fd) {
-        super();
         this.fd = fd;
       }
       clearLine(dir3, callback) {
@@ -576,18 +563,24 @@ var init_write_stream = __esm({
       getWindowSize() {
         return [this.columns, this.rows];
       }
-      columns = 80;
-      rows = 24;
-      isTTY = false;
+      write(str, encoding, cb2) {
+        if (str instanceof Uint8Array) {
+          str = new TextDecoder().decode(str);
+        }
+        try {
+          console.log(str);
+        } catch {
+        }
+        cb2 && typeof cb2 === "function" && cb2();
+        return false;
+      }
     };
-    __name(WriteStream, "WriteStream");
   }
 });
 
 // node_modules/unenv/dist/runtime/node/tty.mjs
 var init_tty = __esm({
   "node_modules/unenv/dist/runtime/node/tty.mjs"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -597,19 +590,34 @@ var init_tty = __esm({
   }
 });
 
+// node_modules/unenv/dist/runtime/node/internal/process/node-version.mjs
+var NODE_VERSION;
+var init_node_version = __esm({
+  "node_modules/unenv/dist/runtime/node/internal/process/node-version.mjs"() {
+    init_modules_watch_stub();
+    init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
+    init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
+    init_performance2();
+    NODE_VERSION = "22.14.0";
+  }
+});
+
 // node_modules/unenv/dist/runtime/node/internal/process/process.mjs
 import { EventEmitter } from "node:events";
 var Process;
 var init_process = __esm({
   "node_modules/unenv/dist/runtime/node/internal/process/process.mjs"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
     init_performance2();
     init_tty();
     init_utils();
-    Process = class extends EventEmitter {
+    init_node_version();
+    Process = class _Process extends EventEmitter {
+      static {
+        __name(this, "Process");
+      }
       env;
       hrtime;
       nextTick;
@@ -618,13 +626,14 @@ var init_process = __esm({
         this.env = impl.env;
         this.hrtime = impl.hrtime;
         this.nextTick = impl.nextTick;
-        for (const prop of [...Object.getOwnPropertyNames(Process.prototype), ...Object.getOwnPropertyNames(EventEmitter.prototype)]) {
+        for (const prop of [...Object.getOwnPropertyNames(_Process.prototype), ...Object.getOwnPropertyNames(EventEmitter.prototype)]) {
           const value = this[prop];
           if (typeof value === "function") {
             this[prop] = value.bind(this);
           }
         }
       }
+      // --- event emitter ---
       emitWarning(warning, type, code) {
         console.warn(`${code ? `[${code}] ` : ""}${type ? `${type}: ` : ""}${warning}`);
       }
@@ -634,6 +643,7 @@ var init_process = __esm({
       listeners(eventName) {
         return super.listeners(eventName);
       }
+      // --- stdio (lazy initializers) ---
       #stdin;
       #stdout;
       #stderr;
@@ -646,6 +656,7 @@ var init_process = __esm({
       get stderr() {
         return this.#stderr ??= new WriteStream(2);
       }
+      // --- cwd ---
       #cwd = "/";
       chdir(cwd2) {
         this.#cwd = cwd2;
@@ -653,6 +664,7 @@ var init_process = __esm({
       cwd() {
         return this.#cwd;
       }
+      // --- dummy props and getters ---
       arch = "";
       platform = "";
       argv = [];
@@ -663,10 +675,10 @@ var init_process = __esm({
       pid = 200;
       ppid = 100;
       get version() {
-        return "";
+        return `v${NODE_VERSION}`;
       }
       get versions() {
-        return {};
+        return { node: NODE_VERSION };
       }
       get allowedNodeEnvironmentFlags() {
         return /* @__PURE__ */ new Set();
@@ -710,10 +722,12 @@ var init_process = __esm({
       resourceUsage() {
         return {};
       }
+      // --- noop methods ---
       ref() {
       }
       unref() {
       }
+      // --- unimplemented methods ---
       umask() {
         throw createNotImplementedError("process.umask");
       }
@@ -768,6 +782,7 @@ var init_process = __esm({
       binding() {
         throw createNotImplementedError("process.binding");
       }
+      // --- attached interfaces ---
       permission = { has: /* @__PURE__ */ notImplemented("process.permission.has") };
       report = {
         directory: "",
@@ -791,9 +806,11 @@ var init_process = __esm({
         external: 0,
         heapTotal: 0,
         heapUsed: 0
-      }), { rss: () => 0 });
+      }), { rss: /* @__PURE__ */ __name(() => 0, "rss") });
+      // --- undefined props ---
       mainModule = void 0;
       domain = void 0;
+      // optional
       send = void 0;
       exitCode = void 0;
       channel = void 0;
@@ -807,6 +824,7 @@ var init_process = __esm({
       setgid = void 0;
       setgroups = void 0;
       setuid = void 0;
+      // internals
       _events = void 0;
       _eventsCount = void 0;
       _exiting = void 0;
@@ -829,15 +847,13 @@ var init_process = __esm({
       _send = void 0;
       _linkedBinding = void 0;
     };
-    __name(Process, "Process");
   }
 });
 
 // node_modules/@cloudflare/unenv-preset/dist/runtime/node/process.mjs
-var globalProcess, getBuiltinModule, exit, platform, nextTick, unenvProcess, abort, addListener, allowedNodeEnvironmentFlags, hasUncaughtExceptionCaptureCallback, setUncaughtExceptionCaptureCallback, loadEnvFile, sourceMapsEnabled, arch, argv, argv0, chdir, config, connected, constrainedMemory, availableMemory, cpuUsage, cwd, debugPort, dlopen, disconnect, emit, emitWarning, env, eventNames, execArgv, execPath, finalization, features, getActiveResourcesInfo, getMaxListeners, hrtime3, kill, listeners, listenerCount, memoryUsage, on, off, once, pid, ppid, prependListener, prependOnceListener, rawListeners, release, removeAllListeners, removeListener, report, resourceUsage, setMaxListeners, setSourceMapsEnabled, stderr, stdin, stdout, title, throwDeprecation, traceDeprecation, umask, uptime, version, versions, domain, initgroups, moduleLoadList, reallyExit, openStdin, assert2, binding, send, exitCode, channel, getegid, geteuid, getgid, getgroups, getuid, setegid, seteuid, setgid, setgroups, setuid, permission, mainModule, _events, _eventsCount, _exiting, _maxListeners, _debugEnd, _debugProcess, _fatalException, _getActiveHandles, _getActiveRequests, _kill, _preload_modules, _rawDebug, _startProfilerIdleNotifier, _stopProfilerIdleNotifier, _tickCallback, _disconnect, _handleQueue, _pendingMessage, _channel, _send, _linkedBinding, _process, process_default;
+var globalProcess, getBuiltinModule, workerdProcess, isWorkerdProcessV2, unenvProcess, exit, features, platform, env, hrtime3, nextTick, _channel, _disconnect, _events, _eventsCount, _handleQueue, _maxListeners, _pendingMessage, _send, assert2, disconnect, mainModule, _debugEnd, _debugProcess, _exiting, _fatalException, _getActiveHandles, _getActiveRequests, _kill, _linkedBinding, _preload_modules, _rawDebug, _startProfilerIdleNotifier, _stopProfilerIdleNotifier, _tickCallback, abort, addListener, allowedNodeEnvironmentFlags, arch, argv, argv0, availableMemory, binding, channel, chdir, config, connected, constrainedMemory, cpuUsage, cwd, debugPort, dlopen, domain, emit, emitWarning, eventNames, execArgv, execPath, exitCode, finalization, getActiveResourcesInfo, getegid, geteuid, getgid, getgroups, getMaxListeners, getuid, hasUncaughtExceptionCaptureCallback, initgroups, kill, listenerCount, listeners, loadEnvFile, memoryUsage, moduleLoadList, off, on, once, openStdin, permission, pid, ppid, prependListener, prependOnceListener, rawListeners, reallyExit, ref, release, removeAllListeners, removeListener, report, resourceUsage, send, setegid, seteuid, setgid, setgroups, setMaxListeners, setSourceMapsEnabled, setuid, setUncaughtExceptionCaptureCallback, sourceMapsEnabled, stderr, stdin, stdout, throwDeprecation, title, traceDeprecation, umask, unref, uptime, version, versions, _process, process_default;
 var init_process2 = __esm({
   "node_modules/@cloudflare/unenv-preset/dist/runtime/node/process.mjs"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -846,119 +862,193 @@ var init_process2 = __esm({
     init_process();
     globalProcess = globalThis["process"];
     getBuiltinModule = globalProcess.getBuiltinModule;
-    ({ exit, platform, nextTick } = getBuiltinModule(
-      "node:process"
-    ));
+    workerdProcess = getBuiltinModule("node:process");
+    isWorkerdProcessV2 = globalThis.Cloudflare.compatibilityFlags.enable_nodejs_process_v2;
     unenvProcess = new Process({
       env: globalProcess.env,
-      hrtime,
-      nextTick
+      // `hrtime` is only available from workerd process v2
+      hrtime: isWorkerdProcessV2 ? workerdProcess.hrtime : hrtime,
+      // `nextTick` is available from workerd process v1
+      nextTick: workerdProcess.nextTick
     });
+    ({ exit, features, platform } = workerdProcess);
     ({
+      env: (
+        // Always implemented by workerd
+        env
+      ),
+      hrtime: (
+        // Only implemented in workerd v2
+        hrtime3
+      ),
+      nextTick: (
+        // Always implemented by workerd
+        nextTick
+      )
+    } = unenvProcess);
+    ({
+      _channel,
+      _disconnect,
+      _events,
+      _eventsCount,
+      _handleQueue,
+      _maxListeners,
+      _pendingMessage,
+      _send,
+      assert: assert2,
+      disconnect,
+      mainModule
+    } = unenvProcess);
+    ({
+      _debugEnd: (
+        // @ts-expect-error `_debugEnd` is missing typings
+        _debugEnd
+      ),
+      _debugProcess: (
+        // @ts-expect-error `_debugProcess` is missing typings
+        _debugProcess
+      ),
+      _exiting: (
+        // @ts-expect-error `_exiting` is missing typings
+        _exiting
+      ),
+      _fatalException: (
+        // @ts-expect-error `_fatalException` is missing typings
+        _fatalException
+      ),
+      _getActiveHandles: (
+        // @ts-expect-error `_getActiveHandles` is missing typings
+        _getActiveHandles
+      ),
+      _getActiveRequests: (
+        // @ts-expect-error `_getActiveRequests` is missing typings
+        _getActiveRequests
+      ),
+      _kill: (
+        // @ts-expect-error `_kill` is missing typings
+        _kill
+      ),
+      _linkedBinding: (
+        // @ts-expect-error `_linkedBinding` is missing typings
+        _linkedBinding
+      ),
+      _preload_modules: (
+        // @ts-expect-error `_preload_modules` is missing typings
+        _preload_modules
+      ),
+      _rawDebug: (
+        // @ts-expect-error `_rawDebug` is missing typings
+        _rawDebug
+      ),
+      _startProfilerIdleNotifier: (
+        // @ts-expect-error `_startProfilerIdleNotifier` is missing typings
+        _startProfilerIdleNotifier
+      ),
+      _stopProfilerIdleNotifier: (
+        // @ts-expect-error `_stopProfilerIdleNotifier` is missing typings
+        _stopProfilerIdleNotifier
+      ),
+      _tickCallback: (
+        // @ts-expect-error `_tickCallback` is missing typings
+        _tickCallback
+      ),
       abort,
       addListener,
       allowedNodeEnvironmentFlags,
-      hasUncaughtExceptionCaptureCallback,
-      setUncaughtExceptionCaptureCallback,
-      loadEnvFile,
-      sourceMapsEnabled,
       arch,
       argv,
       argv0,
+      availableMemory,
+      binding: (
+        // @ts-expect-error `binding` is missing typings
+        binding
+      ),
+      channel,
       chdir,
       config,
       connected,
       constrainedMemory,
-      availableMemory,
       cpuUsage,
       cwd,
       debugPort,
       dlopen,
-      disconnect,
+      domain: (
+        // @ts-expect-error `domain` is missing typings
+        domain
+      ),
       emit,
       emitWarning,
-      env,
       eventNames,
       execArgv,
       execPath,
+      exitCode,
       finalization,
-      features,
       getActiveResourcesInfo,
+      getegid,
+      geteuid,
+      getgid,
+      getgroups,
       getMaxListeners,
-      hrtime: hrtime3,
+      getuid,
+      hasUncaughtExceptionCaptureCallback,
+      initgroups: (
+        // @ts-expect-error `initgroups` is missing typings
+        initgroups
+      ),
       kill,
-      listeners,
       listenerCount,
+      listeners,
+      loadEnvFile,
       memoryUsage,
-      on,
+      moduleLoadList: (
+        // @ts-expect-error `moduleLoadList` is missing typings
+        moduleLoadList
+      ),
       off,
+      on,
       once,
+      openStdin: (
+        // @ts-expect-error `openStdin` is missing typings
+        openStdin
+      ),
+      permission,
       pid,
       ppid,
       prependListener,
       prependOnceListener,
       rawListeners,
+      reallyExit: (
+        // @ts-expect-error `reallyExit` is missing typings
+        reallyExit
+      ),
+      ref,
       release,
       removeAllListeners,
       removeListener,
       report,
       resourceUsage,
-      setMaxListeners,
-      setSourceMapsEnabled,
-      stderr,
-      stdin,
-      stdout,
-      title,
-      throwDeprecation,
-      traceDeprecation,
-      umask,
-      uptime,
-      version,
-      versions,
-      domain,
-      initgroups,
-      moduleLoadList,
-      reallyExit,
-      openStdin,
-      assert: assert2,
-      binding,
       send,
-      exitCode,
-      channel,
-      getegid,
-      geteuid,
-      getgid,
-      getgroups,
-      getuid,
       setegid,
       seteuid,
       setgid,
       setgroups,
+      setMaxListeners,
+      setSourceMapsEnabled,
       setuid,
-      permission,
-      mainModule,
-      _events,
-      _eventsCount,
-      _exiting,
-      _maxListeners,
-      _debugEnd,
-      _debugProcess,
-      _fatalException,
-      _getActiveHandles,
-      _getActiveRequests,
-      _kill,
-      _preload_modules,
-      _rawDebug,
-      _startProfilerIdleNotifier,
-      _stopProfilerIdleNotifier,
-      _tickCallback,
-      _disconnect,
-      _handleQueue,
-      _pendingMessage,
-      _channel,
-      _send,
-      _linkedBinding
-    } = unenvProcess);
+      setUncaughtExceptionCaptureCallback,
+      sourceMapsEnabled,
+      stderr,
+      stdin,
+      stdout,
+      throwDeprecation,
+      title,
+      traceDeprecation,
+      umask,
+      unref,
+      uptime,
+      version,
+      versions
+    } = isWorkerdProcessV2 ? workerdProcess : unenvProcess);
     _process = {
       abort,
       addListener,
@@ -1084,7 +1174,6 @@ var init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process = __
 // wrangler-modules-watch:wrangler:modules-watch
 var init_wrangler_modules_watch = __esm({
   "wrangler-modules-watch:wrangler:modules-watch"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -1103,7 +1192,6 @@ var init_modules_watch_stub = __esm({
 var require_wasm_engine_edge = __commonJS({
   "node_modules/@prisma/client/runtime/wasm-engine-edge.js"(exports, module) {
     "use strict";
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -1117,34 +1205,26 @@ var require_wasm_engine_edge = __commonJS({
     var ie = /* @__PURE__ */ __name((t2, e2) => () => (t2 && (e2 = t2(t2 = 0)), e2), "ie");
     var Ot = /* @__PURE__ */ __name((t2, e2) => () => (e2 || t2((e2 = { exports: {} }).exports, e2), e2.exports), "Ot");
     var rt = /* @__PURE__ */ __name((t2, e2) => {
-      for (var r2 in e2)
-        St(t2, r2, { get: e2[r2], enumerable: true });
+      for (var r2 in e2) St(t2, r2, { get: e2[r2], enumerable: true });
     }, "rt");
     var dn = /* @__PURE__ */ __name((t2, e2, r2, n2) => {
-      if (e2 && typeof e2 == "object" || typeof e2 == "function")
-        for (let i2 of Xo(e2))
-          !es.call(t2, i2) && i2 !== r2 && St(t2, i2, { get: () => e2[i2], enumerable: !(n2 = Yo(e2, i2)) || n2.enumerable });
+      if (e2 && typeof e2 == "object" || typeof e2 == "function") for (let i2 of Xo(e2)) !es.call(t2, i2) && i2 !== r2 && St(t2, i2, { get: /* @__PURE__ */ __name(() => e2[i2], "get"), enumerable: !(n2 = Yo(e2, i2)) || n2.enumerable });
       return t2;
     }, "dn");
     var kt = /* @__PURE__ */ __name((t2, e2, r2) => (r2 = t2 != null ? zo(Zo(t2)) : {}, dn(e2 || !t2 || !t2.__esModule ? St(r2, "default", { value: t2, enumerable: true }) : r2, t2)), "kt");
     var ts = /* @__PURE__ */ __name((t2) => dn(St({}, "__esModule", { value: true }), t2), "ts");
     function xr(t2, e2) {
-      if (e2 = e2.toLowerCase(), e2 === "utf8" || e2 === "utf-8")
-        return new y2(os.encode(t2));
-      if (e2 === "base64" || e2 === "base64url")
-        return t2 = t2.replace(/-/g, "+").replace(/_/g, "/"), t2 = t2.replace(/[^A-Za-z0-9+/]/g, ""), new y2([...atob(t2)].map((r2) => r2.charCodeAt(0)));
-      if (e2 === "binary" || e2 === "ascii" || e2 === "latin1" || e2 === "latin-1")
-        return new y2([...t2].map((r2) => r2.charCodeAt(0)));
+      if (e2 = e2.toLowerCase(), e2 === "utf8" || e2 === "utf-8") return new y2(os.encode(t2));
+      if (e2 === "base64" || e2 === "base64url") return t2 = t2.replace(/-/g, "+").replace(/_/g, "/"), t2 = t2.replace(/[^A-Za-z0-9+/]/g, ""), new y2([...atob(t2)].map((r2) => r2.charCodeAt(0)));
+      if (e2 === "binary" || e2 === "ascii" || e2 === "latin1" || e2 === "latin-1") return new y2([...t2].map((r2) => r2.charCodeAt(0)));
       if (e2 === "ucs2" || e2 === "ucs-2" || e2 === "utf16le" || e2 === "utf-16le") {
         let r2 = new y2(t2.length * 2), n2 = new DataView(r2.buffer);
-        for (let i2 = 0; i2 < t2.length; i2++)
-          n2.setUint16(i2 * 2, t2.charCodeAt(i2), true);
+        for (let i2 = 0; i2 < t2.length; i2++) n2.setUint16(i2 * 2, t2.charCodeAt(i2), true);
         return r2;
       }
       if (e2 === "hex") {
         let r2 = new y2(t2.length / 2);
-        for (let n2 = 0, i2 = 0; i2 < t2.length; i2 += 2, n2++)
-          r2[n2] = parseInt(t2.slice(i2, i2 + 2), 16);
+        for (let n2 = 0, i2 = 0; i2 < t2.length; i2 += 2, n2++) r2[n2] = parseInt(t2.slice(i2, i2 + 2), 16);
         return r2;
       }
       gn(`encoding "${e2}"`);
@@ -1171,8 +1251,7 @@ var require_wasm_engine_edge = __commonJS({
     }
     __name(gn, "gn");
     function Dt(t2, e2) {
-      if (!(t2 instanceof Uint8Array))
-        throw new TypeError(`The "${e2}" argument must be an instance of Buffer or Uint8Array`);
+      if (!(t2 instanceof Uint8Array)) throw new TypeError(`The "${e2}" argument must be an instance of Buffer or Uint8Array`);
     }
     __name(Dt, "Dt");
     function $3(t2, e2, r2 = ls + 1) {
@@ -1224,7 +1303,10 @@ var require_wasm_engine_edge = __commonJS({
     var Er;
     var u2 = ie(() => {
       "use strict";
-      y2 = /* @__PURE__ */ __name(class t2 extends Uint8Array {
+      y2 = class t2 extends Uint8Array {
+        static {
+          __name(this, "t");
+        }
         _isBuffer = true;
         get offset() {
           return this.byteOffset;
@@ -1242,10 +1324,8 @@ var require_wasm_engine_edge = __commonJS({
           return e2 && !!e2._isBuffer;
         }
         static byteLength(e2, r2 = "utf8") {
-          if (typeof e2 == "string")
-            return xr(e2, r2).byteLength;
-          if (e2 && e2.byteLength)
-            return e2.byteLength;
+          if (typeof e2 == "string") return xr(e2, r2).byteLength;
+          if (e2 && e2.byteLength) return e2.byteLength;
           let n2 = new TypeError('The "string" argument must be of type string or an instance of Buffer or ArrayBuffer.');
           throw n2.code = "ERR_INVALID_ARG_TYPE", n2;
         }
@@ -1255,31 +1335,24 @@ var require_wasm_engine_edge = __commonJS({
         static compare(e2, r2) {
           Dt(e2, "buff1"), Dt(r2, "buff2");
           for (let n2 = 0; n2 < e2.length; n2++) {
-            if (e2[n2] < r2[n2])
-              return -1;
-            if (e2[n2] > r2[n2])
-              return 1;
+            if (e2[n2] < r2[n2]) return -1;
+            if (e2[n2] > r2[n2]) return 1;
           }
           return e2.length === r2.length ? 0 : e2.length > r2.length ? 1 : -1;
         }
         static from(e2, r2 = "utf8") {
-          if (e2 && typeof e2 == "object" && e2.type === "Buffer")
-            return new t2(e2.data);
-          if (typeof e2 == "number")
-            return new t2(new Uint8Array(e2));
-          if (typeof e2 == "string")
-            return xr(e2, r2);
+          if (e2 && typeof e2 == "object" && e2.type === "Buffer") return new t2(e2.data);
+          if (typeof e2 == "number") return new t2(new Uint8Array(e2));
+          if (typeof e2 == "string") return xr(e2, r2);
           if (ArrayBuffer.isView(e2)) {
             let { byteOffset: n2, byteLength: i2, buffer: o2 } = e2;
             return "map" in e2 && typeof e2.map == "function" ? new t2(e2.map((s2) => s2 % 256), n2, i2) : new t2(o2, n2, i2);
           }
-          if (e2 && typeof e2 == "object" && ("length" in e2 || "byteLength" in e2 || "buffer" in e2))
-            return new t2(e2);
+          if (e2 && typeof e2 == "object" && ("length" in e2 || "byteLength" in e2 || "buffer" in e2)) return new t2(e2);
           throw new TypeError("First argument must be a string, Buffer, ArrayBuffer, Array, or array-like object.");
         }
         static concat(e2, r2) {
-          if (e2.length === 0)
-            return t2.alloc(0);
+          if (e2.length === 0) return t2.alloc(0);
           let n2 = [].concat(...e2.map((o2) => [...o2])), i2 = t2.alloc(r2 !== void 0 ? r2 : n2.length);
           return i2.set(r2 !== void 0 ? n2.slice(0, r2) : n2), i2;
         }
@@ -1295,22 +1368,19 @@ var require_wasm_engine_edge = __commonJS({
         readIntBE(e2, r2) {
           V2(e2, "offset"), X2(e2, "offset"), $3(e2, "offset", this.length - 1), V2(r2, "byteLength"), X2(r2, "byteLength");
           let n2 = new DataView(this.buffer, e2, r2), i2 = 0;
-          for (let o2 = 0; o2 < r2; o2++)
-            i2 = i2 * 256 + n2.getUint8(o2);
+          for (let o2 = 0; o2 < r2; o2++) i2 = i2 * 256 + n2.getUint8(o2);
           return n2.getUint8(0) & 128 && (i2 -= Math.pow(256, r2)), i2;
         }
         readIntLE(e2, r2) {
           V2(e2, "offset"), X2(e2, "offset"), $3(e2, "offset", this.length - 1), V2(r2, "byteLength"), X2(r2, "byteLength");
           let n2 = new DataView(this.buffer, e2, r2), i2 = 0;
-          for (let o2 = 0; o2 < r2; o2++)
-            i2 += n2.getUint8(o2) * Math.pow(256, o2);
+          for (let o2 = 0; o2 < r2; o2++) i2 += n2.getUint8(o2) * Math.pow(256, o2);
           return n2.getUint8(r2 - 1) & 128 && (i2 -= Math.pow(256, r2)), i2;
         }
         readUIntBE(e2, r2) {
           V2(e2, "offset"), X2(e2, "offset"), $3(e2, "offset", this.length - 1), V2(r2, "byteLength"), X2(r2, "byteLength");
           let n2 = new DataView(this.buffer, e2, r2), i2 = 0;
-          for (let o2 = 0; o2 < r2; o2++)
-            i2 = i2 * 256 + n2.getUint8(o2);
+          for (let o2 = 0; o2 < r2; o2++) i2 = i2 * 256 + n2.getUint8(o2);
           return i2;
         }
         readUintBE(e2, r2) {
@@ -1319,8 +1389,7 @@ var require_wasm_engine_edge = __commonJS({
         readUIntLE(e2, r2) {
           V2(e2, "offset"), X2(e2, "offset"), $3(e2, "offset", this.length - 1), V2(r2, "byteLength"), X2(r2, "byteLength");
           let n2 = new DataView(this.buffer, e2, r2), i2 = 0;
-          for (let o2 = 0; o2 < r2; o2++)
-            i2 += n2.getUint8(o2) * Math.pow(256, o2);
+          for (let o2 = 0; o2 < r2; o2++) i2 += n2.getUint8(o2) * Math.pow(256, o2);
           return i2;
         }
         readUintLE(e2, r2) {
@@ -1335,8 +1404,7 @@ var require_wasm_engine_edge = __commonJS({
         writeUIntBE(e2, r2, n2) {
           V2(r2, "offset"), X2(r2, "offset"), $3(r2, "offset", this.length - 1), V2(n2, "byteLength"), X2(n2, "byteLength");
           let i2 = new DataView(this.buffer, r2, n2);
-          for (let o2 = n2 - 1; o2 >= 0; o2--)
-            i2.setUint8(o2, e2 & 255), e2 = e2 / 256;
+          for (let o2 = n2 - 1; o2 >= 0; o2--) i2.setUint8(o2, e2 & 255), e2 = e2 / 256;
           return r2 + n2;
         }
         writeUintBE(e2, r2, n2) {
@@ -1345,8 +1413,7 @@ var require_wasm_engine_edge = __commonJS({
         writeUIntLE(e2, r2, n2) {
           V2(r2, "offset"), X2(r2, "offset"), $3(r2, "offset", this.length - 1), V2(n2, "byteLength"), X2(n2, "byteLength");
           let i2 = new DataView(this.buffer, r2, n2);
-          for (let o2 = 0; o2 < n2; o2++)
-            i2.setUint8(o2, e2 & 255), e2 = e2 / 256;
+          for (let o2 = 0; o2 < n2; o2++) i2.setUint8(o2, e2 & 255), e2 = e2 / 256;
           return r2 + n2;
         }
         writeUintLE(e2, r2, n2) {
@@ -1357,20 +1424,17 @@ var require_wasm_engine_edge = __commonJS({
         }
         swap16() {
           let e2 = new DataView(this.buffer, this.byteOffset, this.byteLength);
-          for (let r2 = 0; r2 < this.length; r2 += 2)
-            e2.setUint16(r2, e2.getUint16(r2, true), false);
+          for (let r2 = 0; r2 < this.length; r2 += 2) e2.setUint16(r2, e2.getUint16(r2, true), false);
           return this;
         }
         swap32() {
           let e2 = new DataView(this.buffer, this.byteOffset, this.byteLength);
-          for (let r2 = 0; r2 < this.length; r2 += 4)
-            e2.setUint32(r2, e2.getUint32(r2, true), false);
+          for (let r2 = 0; r2 < this.length; r2 += 4) e2.setUint32(r2, e2.getUint32(r2, true), false);
           return this;
         }
         swap64() {
           let e2 = new DataView(this.buffer, this.byteOffset, this.byteLength);
-          for (let r2 = 0; r2 < this.length; r2 += 8)
-            e2.setBigUint64(r2, e2.getBigUint64(r2, true), false);
+          for (let r2 = 0; r2 < this.length; r2 += 8) e2.setBigUint64(r2, e2.getBigUint64(r2, true), false);
           return this;
         }
         compare(e2, r2 = 0, n2 = e2.length, i2 = 0, o2 = this.length) {
@@ -1382,8 +1446,7 @@ var require_wasm_engine_edge = __commonJS({
         copy(e2, r2 = 0, n2 = 0, i2 = this.length) {
           $3(r2, "targetStart"), $3(n2, "sourceStart", this.length), $3(i2, "sourceEnd"), r2 >>>= 0, n2 >>>= 0, i2 >>>= 0;
           let o2 = 0;
-          for (; n2 < i2 && !(this[n2] === void 0 || e2[r2] === void 0); )
-            e2[r2] = this[n2], o2++, n2++, r2++;
+          for (; n2 < i2 && !(this[n2] === void 0 || e2[r2] === void 0); ) e2[r2] = this[n2], o2++, n2++, r2++;
           return o2;
         }
         write(e2, r2, n2, i2 = "utf8") {
@@ -1392,9 +1455,7 @@ var require_wasm_engine_edge = __commonJS({
         }
         fill(e2 = 0, r2 = 0, n2 = this.length, i2 = "utf-8") {
           let o2 = typeof r2 == "string" ? 0 : r2, s2 = typeof n2 == "string" ? this.length : n2;
-          if (i2 = typeof r2 == "string" ? r2 : typeof n2 == "string" ? n2 : i2, e2 = t2.from(typeof e2 == "number" ? [e2] : e2 ?? [], i2), fn(i2, "encoding"), $3(o2, "offset", this.length), $3(s2, "end", this.length), e2.length !== 0)
-            for (let a2 = o2; a2 < s2; a2 += e2.length)
-              super.set(e2.slice(0, e2.length + a2 >= this.length ? this.length - a2 : e2.length), a2);
+          if (i2 = typeof r2 == "string" ? r2 : typeof n2 == "string" ? n2 : i2, e2 = t2.from(typeof e2 == "number" ? [e2] : e2 ?? [], i2), fn(i2, "encoding"), $3(o2, "offset", this.length), $3(s2, "end", this.length), e2.length !== 0) for (let a2 = o2; a2 < s2; a2 += e2.length) super.set(e2.slice(0, e2.length + a2 >= this.length ? this.length - a2 : e2.length), a2);
           return this;
         }
         includes(e2, r2 = null, n2 = "utf-8") {
@@ -1410,22 +1471,18 @@ var require_wasm_engine_edge = __commonJS({
           return a2 = typeof r2 == "number" ? a2 : null, a2 = Number.isNaN(a2) ? null : a2, a2 ??= i2 ? this.length : 0, a2 = a2 < 0 ? this.length + a2 : a2, s2.length === 0 && i2 === false ? a2 >= this.length ? this.length : a2 : s2.length === 0 && i2 === true ? (a2 >= this.length ? this.length : a2) || this.length : o2((f2, h2) => (i2 ? h2 <= a2 : h2 >= a2) && this[h2] === s2[0] && s2.every((A2, k2) => this[h2 + k2] === A2));
         }
         toString(e2 = "utf8", r2 = 0, n2 = this.length) {
-          if (r2 = r2 < 0 ? 0 : r2, e2 = e2.toString().toLowerCase(), n2 <= 0)
-            return "";
-          if (e2 === "utf8" || e2 === "utf-8")
-            return ss.decode(this.slice(r2, n2));
+          if (r2 = r2 < 0 ? 0 : r2, e2 = e2.toString().toLowerCase(), n2 <= 0) return "";
+          if (e2 === "utf8" || e2 === "utf-8") return ss.decode(this.slice(r2, n2));
           if (e2 === "base64" || e2 === "base64url") {
             let i2 = btoa(this.reduce((o2, s2) => o2 + Er(s2), ""));
             return e2 === "base64url" ? i2.replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "") : i2;
           }
-          if (e2 === "binary" || e2 === "ascii" || e2 === "latin1" || e2 === "latin-1")
-            return this.slice(r2, n2).reduce((i2, o2) => i2 + Er(o2 & (e2 === "ascii" ? 127 : 255)), "");
+          if (e2 === "binary" || e2 === "ascii" || e2 === "latin1" || e2 === "latin-1") return this.slice(r2, n2).reduce((i2, o2) => i2 + Er(o2 & (e2 === "ascii" ? 127 : 255)), "");
           if (e2 === "ucs2" || e2 === "ucs-2" || e2 === "utf16le" || e2 === "utf-16le") {
             let i2 = new DataView(this.buffer.slice(r2, n2));
             return Array.from({ length: i2.byteLength / 2 }, (o2, s2) => s2 * 2 + 1 < i2.byteLength ? Er(i2.getUint16(s2 * 2, true)) : "").join("");
           }
-          if (e2 === "hex")
-            return this.slice(r2, n2).reduce((i2, o2) => i2 + o2.toString(16).padStart(2, "0"), "");
+          if (e2 === "hex") return this.slice(r2, n2).reduce((i2, o2) => i2 + o2.toString(16).padStart(2, "0"), "");
           gn(`encoding "${e2}"`);
         }
         toLocaleString() {
@@ -1434,7 +1491,7 @@ var require_wasm_engine_edge = __commonJS({
         inspect() {
           return `<Buffer ${this.toString("hex").match(/.{1,2}/g).join(" ")}>`;
         }
-      }, "t");
+      };
       is = { int8: [-128, 127], int16: [-32768, 32767], int32: [-2147483648, 2147483647], uint8: [0, 255], uint16: [0, 65535], uint32: [0, 4294967295], float32: [-1 / 0, 1 / 0], float64: [-1 / 0, 1 / 0], bigint64: [-0x8000000000000000n, 0x7fffffffffffffffn], biguint64: [0n, 0xffffffffffffffffn] }, os = new TextEncoder(), ss = new TextDecoder(), as2 = ["utf8", "utf-8", "hex", "base64", "ascii", "binary", "base64url", "ucs2", "ucs-2", "utf16le", "utf-16le", "latin1", "latin-1"], ls = 4294967295;
       rs(y2.prototype);
       b2 = new Proxy(us, { construct(t2, [e2, r2]) {
@@ -1447,18 +1504,18 @@ var require_wasm_engine_edge = __commonJS({
     var E2;
     var c2 = ie(() => {
       "use strict";
-      g2 = { nextTick: (t2, ...e2) => {
+      g2 = { nextTick: /* @__PURE__ */ __name((t2, ...e2) => {
         setTimeout(() => {
           t2(...e2);
         }, 0);
-      }, env: {}, version: "", cwd: () => "/", stderr: {}, argv: ["/bin/node"], pid: 1e4 }, { cwd: E2 } = g2;
+      }, "nextTick"), env: {}, version: "", cwd: /* @__PURE__ */ __name(() => "/", "cwd"), stderr: {}, argv: ["/bin/node"], pid: 1e4 }, { cwd: E2 } = g2;
     });
     var P2;
     var m2 = ie(() => {
       "use strict";
       P2 = globalThis.performance ?? (() => {
         let t2 = Date.now();
-        return { now: () => Date.now() - t2 };
+        return { now: /* @__PURE__ */ __name(() => Date.now() - t2, "now") };
       })();
     });
     var x2;
@@ -1471,7 +1528,10 @@ var require_wasm_engine_edge = __commonJS({
     var w2;
     var d2 = ie(() => {
       "use strict";
-      w2 = /* @__PURE__ */ __name(class {
+      w2 = class {
+        static {
+          __name(this, "w");
+        }
         value;
         constructor(e2) {
           this.value = e2;
@@ -1479,54 +1539,42 @@ var require_wasm_engine_edge = __commonJS({
         deref() {
           return this.value;
         }
-      }, "w");
+      };
     });
     function wn(t2, e2) {
       var r2, n2, i2, o2, s2, a2, f2, h2, C2 = t2.constructor, A2 = C2.precision;
-      if (!t2.s || !e2.s)
-        return e2.s || (e2 = new C2(t2)), q2 ? L2(e2, A2) : e2;
+      if (!t2.s || !e2.s) return e2.s || (e2 = new C2(t2)), q2 ? L2(e2, A2) : e2;
       if (f2 = t2.d, h2 = e2.d, s2 = t2.e, i2 = e2.e, f2 = f2.slice(), o2 = s2 - i2, o2) {
-        for (o2 < 0 ? (n2 = f2, o2 = -o2, a2 = h2.length) : (n2 = h2, i2 = s2, a2 = f2.length), s2 = Math.ceil(A2 / N2), a2 = s2 > a2 ? s2 + 1 : a2 + 1, o2 > a2 && (o2 = a2, n2.length = 1), n2.reverse(); o2--; )
-          n2.push(0);
+        for (o2 < 0 ? (n2 = f2, o2 = -o2, a2 = h2.length) : (n2 = h2, i2 = s2, a2 = f2.length), s2 = Math.ceil(A2 / N2), a2 = s2 > a2 ? s2 + 1 : a2 + 1, o2 > a2 && (o2 = a2, n2.length = 1), n2.reverse(); o2--; ) n2.push(0);
         n2.reverse();
       }
-      for (a2 = f2.length, o2 = h2.length, a2 - o2 < 0 && (o2 = a2, n2 = h2, h2 = f2, f2 = n2), r2 = 0; o2; )
-        r2 = (f2[--o2] = f2[o2] + h2[o2] + r2) / J2 | 0, f2[o2] %= J2;
-      for (r2 && (f2.unshift(r2), ++i2), a2 = f2.length; f2[--a2] == 0; )
-        f2.pop();
+      for (a2 = f2.length, o2 = h2.length, a2 - o2 < 0 && (o2 = a2, n2 = h2, h2 = f2, f2 = n2), r2 = 0; o2; ) r2 = (f2[--o2] = f2[o2] + h2[o2] + r2) / J2 | 0, f2[o2] %= J2;
+      for (r2 && (f2.unshift(r2), ++i2), a2 = f2.length; f2[--a2] == 0; ) f2.pop();
       return e2.d = f2, e2.e = i2, q2 ? L2(e2, A2) : e2;
     }
     __name(wn, "wn");
     function ce2(t2, e2, r2) {
-      if (t2 !== ~~t2 || t2 < e2 || t2 > r2)
-        throw Error(Oe + t2);
+      if (t2 !== ~~t2 || t2 < e2 || t2 > r2) throw Error(Oe + t2);
     }
     __name(ce2, "ce");
     function ue(t2) {
       var e2, r2, n2, i2 = t2.length - 1, o2 = "", s2 = t2[0];
       if (i2 > 0) {
-        for (o2 += s2, e2 = 1; e2 < i2; e2++)
-          n2 = t2[e2] + "", r2 = N2 - n2.length, r2 && (o2 += Pe(r2)), o2 += n2;
+        for (o2 += s2, e2 = 1; e2 < i2; e2++) n2 = t2[e2] + "", r2 = N2 - n2.length, r2 && (o2 += Pe(r2)), o2 += n2;
         s2 = t2[e2], n2 = s2 + "", r2 = N2 - n2.length, r2 && (o2 += Pe(r2));
-      } else if (s2 === 0)
-        return "0";
-      for (; s2 % 10 === 0; )
-        s2 /= 10;
+      } else if (s2 === 0) return "0";
+      for (; s2 % 10 === 0; ) s2 /= 10;
       return o2 + s2;
     }
     __name(ue, "ue");
     function xn(t2, e2) {
       var r2, n2, i2, o2, s2, a2, f2 = 0, h2 = 0, C2 = t2.constructor, A2 = C2.precision;
-      if (j2(t2) > 16)
-        throw Error(vr + j2(t2));
-      if (!t2.s)
-        return new C2(te);
-      for (e2 == null ? (q2 = false, a2 = A2) : a2 = e2, s2 = new C2(0.03125); t2.abs().gte(0.1); )
-        t2 = t2.times(s2), h2 += 5;
+      if (j2(t2) > 16) throw Error(vr + j2(t2));
+      if (!t2.s) return new C2(te);
+      for (e2 == null ? (q2 = false, a2 = A2) : a2 = e2, s2 = new C2(0.03125); t2.abs().gte(0.1); ) t2 = t2.times(s2), h2 += 5;
       for (n2 = Math.log(Se(2, h2)) / Math.LN10 * 2 + 5 | 0, a2 += n2, r2 = i2 = o2 = new C2(te), C2.precision = a2; ; ) {
         if (i2 = L2(i2.times(t2), a2), r2 = r2.times(++f2), s2 = o2.plus(he(i2, r2, a2)), ue(s2.d).slice(0, a2) === ue(o2.d).slice(0, a2)) {
-          for (; h2--; )
-            o2 = L2(o2.times(o2), a2);
+          for (; h2--; ) o2 = L2(o2.times(o2), a2);
           return C2.precision = A2, e2 == null ? (q2 = true, L2(o2, A2)) : o2;
         }
         o2 = s2;
@@ -1534,128 +1582,95 @@ var require_wasm_engine_edge = __commonJS({
     }
     __name(xn, "xn");
     function j2(t2) {
-      for (var e2 = t2.e * N2, r2 = t2.d[0]; r2 >= 10; r2 /= 10)
-        e2++;
+      for (var e2 = t2.e * N2, r2 = t2.d[0]; r2 >= 10; r2 /= 10) e2++;
       return e2;
     }
     __name(j2, "j");
     function Pr(t2, e2, r2) {
-      if (e2 > t2.LN10.sd())
-        throw q2 = true, r2 && (t2.precision = r2), Error(oe + "LN10 precision limit exceeded");
+      if (e2 > t2.LN10.sd()) throw q2 = true, r2 && (t2.precision = r2), Error(oe + "LN10 precision limit exceeded");
       return L2(new t2(t2.LN10), e2);
     }
     __name(Pr, "Pr");
     function Pe(t2) {
-      for (var e2 = ""; t2--; )
-        e2 += "0";
+      for (var e2 = ""; t2--; ) e2 += "0";
       return e2;
     }
     __name(Pe, "Pe");
     function nt(t2, e2) {
       var r2, n2, i2, o2, s2, a2, f2, h2, C2, A2 = 1, k2 = 10, R2 = t2, _ = R2.d, O2 = R2.constructor, D2 = O2.precision;
-      if (R2.s < 1)
-        throw Error(oe + (R2.s ? "NaN" : "-Infinity"));
-      if (R2.eq(te))
-        return new O2(0);
-      if (e2 == null ? (q2 = false, h2 = D2) : h2 = e2, R2.eq(10))
-        return e2 == null && (q2 = true), Pr(O2, h2);
+      if (R2.s < 1) throw Error(oe + (R2.s ? "NaN" : "-Infinity"));
+      if (R2.eq(te)) return new O2(0);
+      if (e2 == null ? (q2 = false, h2 = D2) : h2 = e2, R2.eq(10)) return e2 == null && (q2 = true), Pr(O2, h2);
       if (h2 += k2, O2.precision = h2, r2 = ue(_), n2 = r2.charAt(0), o2 = j2(R2), Math.abs(o2) < 15e14) {
-        for (; n2 < 7 && n2 != 1 || n2 == 1 && r2.charAt(1) > 3; )
-          R2 = R2.times(t2), r2 = ue(R2.d), n2 = r2.charAt(0), A2++;
+        for (; n2 < 7 && n2 != 1 || n2 == 1 && r2.charAt(1) > 3; ) R2 = R2.times(t2), r2 = ue(R2.d), n2 = r2.charAt(0), A2++;
         o2 = j2(R2), n2 > 1 ? (R2 = new O2("0." + r2), o2++) : R2 = new O2(n2 + "." + r2.slice(1));
-      } else
-        return f2 = Pr(O2, h2 + 2, D2).times(o2 + ""), R2 = nt(new O2(n2 + "." + r2.slice(1)), h2 - k2).plus(f2), O2.precision = D2, e2 == null ? (q2 = true, L2(R2, D2)) : R2;
+      } else return f2 = Pr(O2, h2 + 2, D2).times(o2 + ""), R2 = nt(new O2(n2 + "." + r2.slice(1)), h2 - k2).plus(f2), O2.precision = D2, e2 == null ? (q2 = true, L2(R2, D2)) : R2;
       for (a2 = s2 = R2 = he(R2.minus(te), R2.plus(te), h2), C2 = L2(R2.times(R2), h2), i2 = 3; ; ) {
-        if (s2 = L2(s2.times(C2), h2), f2 = a2.plus(he(s2, new O2(i2), h2)), ue(f2.d).slice(0, h2) === ue(a2.d).slice(0, h2))
-          return a2 = a2.times(2), o2 !== 0 && (a2 = a2.plus(Pr(O2, h2 + 2, D2).times(o2 + ""))), a2 = he(a2, new O2(A2), h2), O2.precision = D2, e2 == null ? (q2 = true, L2(a2, D2)) : a2;
+        if (s2 = L2(s2.times(C2), h2), f2 = a2.plus(he(s2, new O2(i2), h2)), ue(f2.d).slice(0, h2) === ue(a2.d).slice(0, h2)) return a2 = a2.times(2), o2 !== 0 && (a2 = a2.plus(Pr(O2, h2 + 2, D2).times(o2 + ""))), a2 = he(a2, new O2(A2), h2), O2.precision = D2, e2 == null ? (q2 = true, L2(a2, D2)) : a2;
         a2 = f2, i2 += 2;
       }
     }
     __name(nt, "nt");
     function yn(t2, e2) {
       var r2, n2, i2;
-      for ((r2 = e2.indexOf(".")) > -1 && (e2 = e2.replace(".", "")), (n2 = e2.search(/e/i)) > 0 ? (r2 < 0 && (r2 = n2), r2 += +e2.slice(n2 + 1), e2 = e2.substring(0, n2)) : r2 < 0 && (r2 = e2.length), n2 = 0; e2.charCodeAt(n2) === 48; )
-        ++n2;
-      for (i2 = e2.length; e2.charCodeAt(i2 - 1) === 48; )
-        --i2;
+      for ((r2 = e2.indexOf(".")) > -1 && (e2 = e2.replace(".", "")), (n2 = e2.search(/e/i)) > 0 ? (r2 < 0 && (r2 = n2), r2 += +e2.slice(n2 + 1), e2 = e2.substring(0, n2)) : r2 < 0 && (r2 = e2.length), n2 = 0; e2.charCodeAt(n2) === 48; ) ++n2;
+      for (i2 = e2.length; e2.charCodeAt(i2 - 1) === 48; ) --i2;
       if (e2 = e2.slice(n2, i2), e2) {
         if (i2 -= n2, r2 = r2 - n2 - 1, t2.e = Fe(r2 / N2), t2.d = [], n2 = (r2 + 1) % N2, r2 < 0 && (n2 += N2), n2 < i2) {
-          for (n2 && t2.d.push(+e2.slice(0, n2)), i2 -= N2; n2 < i2; )
-            t2.d.push(+e2.slice(n2, n2 += N2));
+          for (n2 && t2.d.push(+e2.slice(0, n2)), i2 -= N2; n2 < i2; ) t2.d.push(+e2.slice(n2, n2 += N2));
           e2 = e2.slice(n2), n2 = N2 - e2.length;
-        } else
-          n2 -= i2;
-        for (; n2--; )
-          e2 += "0";
-        if (t2.d.push(+e2), q2 && (t2.e > It || t2.e < -It))
-          throw Error(vr + r2);
-      } else
-        t2.s = 0, t2.e = 0, t2.d = [0];
+        } else n2 -= i2;
+        for (; n2--; ) e2 += "0";
+        if (t2.d.push(+e2), q2 && (t2.e > It || t2.e < -It)) throw Error(vr + r2);
+      } else t2.s = 0, t2.e = 0, t2.d = [0];
       return t2;
     }
     __name(yn, "yn");
     function L2(t2, e2, r2) {
       var n2, i2, o2, s2, a2, f2, h2, C2, A2 = t2.d;
-      for (s2 = 1, o2 = A2[0]; o2 >= 10; o2 /= 10)
-        s2++;
-      if (n2 = e2 - s2, n2 < 0)
-        n2 += N2, i2 = e2, h2 = A2[C2 = 0];
+      for (s2 = 1, o2 = A2[0]; o2 >= 10; o2 /= 10) s2++;
+      if (n2 = e2 - s2, n2 < 0) n2 += N2, i2 = e2, h2 = A2[C2 = 0];
       else {
-        if (C2 = Math.ceil((n2 + 1) / N2), o2 = A2.length, C2 >= o2)
-          return t2;
-        for (h2 = o2 = A2[C2], s2 = 1; o2 >= 10; o2 /= 10)
-          s2++;
+        if (C2 = Math.ceil((n2 + 1) / N2), o2 = A2.length, C2 >= o2) return t2;
+        for (h2 = o2 = A2[C2], s2 = 1; o2 >= 10; o2 /= 10) s2++;
         n2 %= N2, i2 = n2 - N2 + s2;
       }
-      if (r2 !== void 0 && (o2 = Se(10, s2 - i2 - 1), a2 = h2 / o2 % 10 | 0, f2 = e2 < 0 || A2[C2 + 1] !== void 0 || h2 % o2, f2 = r2 < 4 ? (a2 || f2) && (r2 == 0 || r2 == (t2.s < 0 ? 3 : 2)) : a2 > 5 || a2 == 5 && (r2 == 4 || f2 || r2 == 6 && (n2 > 0 ? i2 > 0 ? h2 / Se(10, s2 - i2) : 0 : A2[C2 - 1]) % 10 & 1 || r2 == (t2.s < 0 ? 8 : 7))), e2 < 1 || !A2[0])
-        return f2 ? (o2 = j2(t2), A2.length = 1, e2 = e2 - o2 - 1, A2[0] = Se(10, (N2 - e2 % N2) % N2), t2.e = Fe(-e2 / N2) || 0) : (A2.length = 1, A2[0] = t2.e = t2.s = 0), t2;
-      if (n2 == 0 ? (A2.length = C2, o2 = 1, C2--) : (A2.length = C2 + 1, o2 = Se(10, N2 - n2), A2[C2] = i2 > 0 ? (h2 / Se(10, s2 - i2) % Se(10, i2) | 0) * o2 : 0), f2)
-        for (; ; )
-          if (C2 == 0) {
-            (A2[0] += o2) == J2 && (A2[0] = 1, ++t2.e);
-            break;
-          } else {
-            if (A2[C2] += o2, A2[C2] != J2)
-              break;
-            A2[C2--] = 0, o2 = 1;
-          }
-      for (n2 = A2.length; A2[--n2] === 0; )
-        A2.pop();
-      if (q2 && (t2.e > It || t2.e < -It))
-        throw Error(vr + j2(t2));
+      if (r2 !== void 0 && (o2 = Se(10, s2 - i2 - 1), a2 = h2 / o2 % 10 | 0, f2 = e2 < 0 || A2[C2 + 1] !== void 0 || h2 % o2, f2 = r2 < 4 ? (a2 || f2) && (r2 == 0 || r2 == (t2.s < 0 ? 3 : 2)) : a2 > 5 || a2 == 5 && (r2 == 4 || f2 || r2 == 6 && (n2 > 0 ? i2 > 0 ? h2 / Se(10, s2 - i2) : 0 : A2[C2 - 1]) % 10 & 1 || r2 == (t2.s < 0 ? 8 : 7))), e2 < 1 || !A2[0]) return f2 ? (o2 = j2(t2), A2.length = 1, e2 = e2 - o2 - 1, A2[0] = Se(10, (N2 - e2 % N2) % N2), t2.e = Fe(-e2 / N2) || 0) : (A2.length = 1, A2[0] = t2.e = t2.s = 0), t2;
+      if (n2 == 0 ? (A2.length = C2, o2 = 1, C2--) : (A2.length = C2 + 1, o2 = Se(10, N2 - n2), A2[C2] = i2 > 0 ? (h2 / Se(10, s2 - i2) % Se(10, i2) | 0) * o2 : 0), f2) for (; ; ) if (C2 == 0) {
+        (A2[0] += o2) == J2 && (A2[0] = 1, ++t2.e);
+        break;
+      } else {
+        if (A2[C2] += o2, A2[C2] != J2) break;
+        A2[C2--] = 0, o2 = 1;
+      }
+      for (n2 = A2.length; A2[--n2] === 0; ) A2.pop();
+      if (q2 && (t2.e > It || t2.e < -It)) throw Error(vr + j2(t2));
       return t2;
     }
     __name(L2, "L");
     function En(t2, e2) {
       var r2, n2, i2, o2, s2, a2, f2, h2, C2, A2, k2 = t2.constructor, R2 = k2.precision;
-      if (!t2.s || !e2.s)
-        return e2.s ? e2.s = -e2.s : e2 = new k2(t2), q2 ? L2(e2, R2) : e2;
+      if (!t2.s || !e2.s) return e2.s ? e2.s = -e2.s : e2 = new k2(t2), q2 ? L2(e2, R2) : e2;
       if (f2 = t2.d, A2 = e2.d, n2 = e2.e, h2 = t2.e, f2 = f2.slice(), s2 = h2 - n2, s2) {
-        for (C2 = s2 < 0, C2 ? (r2 = f2, s2 = -s2, a2 = A2.length) : (r2 = A2, n2 = h2, a2 = f2.length), i2 = Math.max(Math.ceil(R2 / N2), a2) + 2, s2 > i2 && (s2 = i2, r2.length = 1), r2.reverse(), i2 = s2; i2--; )
-          r2.push(0);
+        for (C2 = s2 < 0, C2 ? (r2 = f2, s2 = -s2, a2 = A2.length) : (r2 = A2, n2 = h2, a2 = f2.length), i2 = Math.max(Math.ceil(R2 / N2), a2) + 2, s2 > i2 && (s2 = i2, r2.length = 1), r2.reverse(), i2 = s2; i2--; ) r2.push(0);
         r2.reverse();
       } else {
-        for (i2 = f2.length, a2 = A2.length, C2 = i2 < a2, C2 && (a2 = i2), i2 = 0; i2 < a2; i2++)
-          if (f2[i2] != A2[i2]) {
-            C2 = f2[i2] < A2[i2];
-            break;
-          }
+        for (i2 = f2.length, a2 = A2.length, C2 = i2 < a2, C2 && (a2 = i2), i2 = 0; i2 < a2; i2++) if (f2[i2] != A2[i2]) {
+          C2 = f2[i2] < A2[i2];
+          break;
+        }
         s2 = 0;
       }
-      for (C2 && (r2 = f2, f2 = A2, A2 = r2, e2.s = -e2.s), a2 = f2.length, i2 = A2.length - a2; i2 > 0; --i2)
-        f2[a2++] = 0;
+      for (C2 && (r2 = f2, f2 = A2, A2 = r2, e2.s = -e2.s), a2 = f2.length, i2 = A2.length - a2; i2 > 0; --i2) f2[a2++] = 0;
       for (i2 = A2.length; i2 > s2; ) {
         if (f2[--i2] < A2[i2]) {
-          for (o2 = i2; o2 && f2[--o2] === 0; )
-            f2[o2] = J2 - 1;
+          for (o2 = i2; o2 && f2[--o2] === 0; ) f2[o2] = J2 - 1;
           --f2[o2], f2[i2] += J2;
         }
         f2[i2] -= A2[i2];
       }
-      for (; f2[--a2] === 0; )
-        f2.pop();
-      for (; f2[0] === 0; f2.shift())
-        --n2;
+      for (; f2[--a2] === 0; ) f2.pop();
+      for (; f2[0] === 0; f2.shift()) --n2;
       return f2[0] ? (e2.d = f2, e2.e = n2, q2 ? L2(e2, R2) : e2) : new k2(0);
     }
     __name(En, "En");
@@ -1665,27 +1680,22 @@ var require_wasm_engine_edge = __commonJS({
     }
     __name(ke, "ke");
     function hn(t2, e2) {
-      if (t2.length > e2)
-        return t2.length = e2, true;
+      if (t2.length > e2) return t2.length = e2, true;
     }
     __name(hn, "hn");
     function Pn(t2) {
       var e2, r2, n2;
       function i2(o2) {
         var s2 = this;
-        if (!(s2 instanceof i2))
-          return new i2(o2);
+        if (!(s2 instanceof i2)) return new i2(o2);
         if (s2.constructor = i2, o2 instanceof i2) {
           s2.s = o2.s, s2.e = o2.e, s2.d = (o2 = o2.d) ? o2.slice() : o2;
           return;
         }
         if (typeof o2 == "number") {
-          if (o2 * 0 !== 0)
-            throw Error(Oe + o2);
-          if (o2 > 0)
-            s2.s = 1;
-          else if (o2 < 0)
-            o2 = -o2, s2.s = -1;
+          if (o2 * 0 !== 0) throw Error(Oe + o2);
+          if (o2 > 0) s2.s = 1;
+          else if (o2 < 0) o2 = -o2, s2.s = -1;
           else {
             s2.s = 0, s2.e = 0, s2.d = [0];
             return;
@@ -1695,35 +1705,22 @@ var require_wasm_engine_edge = __commonJS({
             return;
           }
           return yn(s2, o2.toString());
-        } else if (typeof o2 != "string")
-          throw Error(Oe + o2);
-        if (o2.charCodeAt(0) === 45 ? (o2 = o2.slice(1), s2.s = -1) : s2.s = 1, ms.test(o2))
-          yn(s2, o2);
-        else
-          throw Error(Oe + o2);
+        } else if (typeof o2 != "string") throw Error(Oe + o2);
+        if (o2.charCodeAt(0) === 45 ? (o2 = o2.slice(1), s2.s = -1) : s2.s = 1, ms.test(o2)) yn(s2, o2);
+        else throw Error(Oe + o2);
       }
       __name(i2, "i");
-      if (i2.prototype = S2, i2.ROUND_UP = 0, i2.ROUND_DOWN = 1, i2.ROUND_CEIL = 2, i2.ROUND_FLOOR = 3, i2.ROUND_HALF_UP = 4, i2.ROUND_HALF_DOWN = 5, i2.ROUND_HALF_EVEN = 6, i2.ROUND_HALF_CEIL = 7, i2.ROUND_HALF_FLOOR = 8, i2.clone = Pn, i2.config = i2.set = ps, t2 === void 0 && (t2 = {}), t2)
-        for (n2 = ["precision", "rounding", "toExpNeg", "toExpPos", "LN10"], e2 = 0; e2 < n2.length; )
-          t2.hasOwnProperty(r2 = n2[e2++]) || (t2[r2] = this[r2]);
+      if (i2.prototype = S2, i2.ROUND_UP = 0, i2.ROUND_DOWN = 1, i2.ROUND_CEIL = 2, i2.ROUND_FLOOR = 3, i2.ROUND_HALF_UP = 4, i2.ROUND_HALF_DOWN = 5, i2.ROUND_HALF_EVEN = 6, i2.ROUND_HALF_CEIL = 7, i2.ROUND_HALF_FLOOR = 8, i2.clone = Pn, i2.config = i2.set = ps, t2 === void 0 && (t2 = {}), t2) for (n2 = ["precision", "rounding", "toExpNeg", "toExpPos", "LN10"], e2 = 0; e2 < n2.length; ) t2.hasOwnProperty(r2 = n2[e2++]) || (t2[r2] = this[r2]);
       return i2.config(t2), i2;
     }
     __name(Pn, "Pn");
     function ps(t2) {
-      if (!t2 || typeof t2 != "object")
-        throw Error(oe + "Object expected");
+      if (!t2 || typeof t2 != "object") throw Error(oe + "Object expected");
       var e2, r2, n2, i2 = ["precision", 1, Le, "rounding", 0, 8, "toExpNeg", -1 / 0, 0, "toExpPos", 0, 1 / 0];
-      for (e2 = 0; e2 < i2.length; e2 += 3)
-        if ((n2 = t2[r2 = i2[e2]]) !== void 0)
-          if (Fe(n2) === n2 && n2 >= i2[e2 + 1] && n2 <= i2[e2 + 2])
-            this[r2] = n2;
-          else
-            throw Error(Oe + r2 + ": " + n2);
-      if ((n2 = t2[r2 = "LN10"]) !== void 0)
-        if (n2 == Math.LN10)
-          this[r2] = new this(n2);
-        else
-          throw Error(Oe + r2 + ": " + n2);
+      for (e2 = 0; e2 < i2.length; e2 += 3) if ((n2 = t2[r2 = i2[e2]]) !== void 0) if (Fe(n2) === n2 && n2 >= i2[e2 + 1] && n2 <= i2[e2 + 2]) this[r2] = n2;
+      else throw Error(Oe + r2 + ": " + n2);
+      if ((n2 = t2[r2 = "LN10"]) !== void 0) if (n2 == Math.LN10) this[r2] = new this(n2);
+      else throw Error(Oe + r2 + ": " + n2);
       return this;
     }
     __name(ps, "ps");
@@ -1761,20 +1758,14 @@ var require_wasm_engine_edge = __commonJS({
       };
       S2.comparedTo = S2.cmp = function(t2) {
         var e2, r2, n2, i2, o2 = this;
-        if (t2 = new o2.constructor(t2), o2.s !== t2.s)
-          return o2.s || -t2.s;
-        if (o2.e !== t2.e)
-          return o2.e > t2.e ^ o2.s < 0 ? 1 : -1;
-        for (n2 = o2.d.length, i2 = t2.d.length, e2 = 0, r2 = n2 < i2 ? n2 : i2; e2 < r2; ++e2)
-          if (o2.d[e2] !== t2.d[e2])
-            return o2.d[e2] > t2.d[e2] ^ o2.s < 0 ? 1 : -1;
+        if (t2 = new o2.constructor(t2), o2.s !== t2.s) return o2.s || -t2.s;
+        if (o2.e !== t2.e) return o2.e > t2.e ^ o2.s < 0 ? 1 : -1;
+        for (n2 = o2.d.length, i2 = t2.d.length, e2 = 0, r2 = n2 < i2 ? n2 : i2; e2 < r2; ++e2) if (o2.d[e2] !== t2.d[e2]) return o2.d[e2] > t2.d[e2] ^ o2.s < 0 ? 1 : -1;
         return n2 === i2 ? 0 : n2 > i2 ^ o2.s < 0 ? 1 : -1;
       };
       S2.decimalPlaces = S2.dp = function() {
         var t2 = this, e2 = t2.d.length - 1, r2 = (e2 - t2.e) * N2;
-        if (e2 = t2.d[e2], e2)
-          for (; e2 % 10 == 0; e2 /= 10)
-            r2--;
+        if (e2 = t2.d[e2], e2) for (; e2 % 10 == 0; e2 /= 10) r2--;
         return r2 < 0 ? 0 : r2;
       };
       S2.dividedBy = S2.div = function(t2) {
@@ -1816,12 +1807,9 @@ var require_wasm_engine_edge = __commonJS({
       };
       S2.logarithm = S2.log = function(t2) {
         var e2, r2 = this, n2 = r2.constructor, i2 = n2.precision, o2 = i2 + 5;
-        if (t2 === void 0)
-          t2 = new n2(10);
-        else if (t2 = new n2(t2), t2.s < 1 || t2.eq(te))
-          throw Error(oe + "NaN");
-        if (r2.s < 1)
-          throw Error(oe + (r2.s ? "NaN" : "-Infinity"));
+        if (t2 === void 0) t2 = new n2(10);
+        else if (t2 = new n2(t2), t2.s < 1 || t2.eq(te)) throw Error(oe + "NaN");
+        if (r2.s < 1) throw Error(oe + (r2.s ? "NaN" : "-Infinity"));
         return r2.eq(te) ? new n2(0) : (q2 = false, e2 = he(nt(r2, o2), nt(t2, o2), o2), q2 = true, L2(e2, i2));
       };
       S2.minus = S2.sub = function(t2) {
@@ -1830,8 +1818,7 @@ var require_wasm_engine_edge = __commonJS({
       };
       S2.modulo = S2.mod = function(t2) {
         var e2, r2 = this, n2 = r2.constructor, i2 = n2.precision;
-        if (t2 = new n2(t2), !t2.s)
-          throw Error(oe + "NaN");
+        if (t2 = new n2(t2), !t2.s) throw Error(oe + "NaN");
         return r2.s ? (q2 = false, e2 = he(r2, t2, 0, 1).times(t2), q2 = true, r2.minus(e2)) : L2(new n2(r2), i2);
       };
       S2.naturalExponential = S2.exp = function() {
@@ -1850,49 +1837,39 @@ var require_wasm_engine_edge = __commonJS({
       };
       S2.precision = S2.sd = function(t2) {
         var e2, r2, n2, i2 = this;
-        if (t2 !== void 0 && t2 !== !!t2 && t2 !== 1 && t2 !== 0)
-          throw Error(Oe + t2);
+        if (t2 !== void 0 && t2 !== !!t2 && t2 !== 1 && t2 !== 0) throw Error(Oe + t2);
         if (e2 = j2(i2) + 1, n2 = i2.d.length - 1, r2 = n2 * N2 + 1, n2 = i2.d[n2], n2) {
-          for (; n2 % 10 == 0; n2 /= 10)
-            r2--;
-          for (n2 = i2.d[0]; n2 >= 10; n2 /= 10)
-            r2++;
+          for (; n2 % 10 == 0; n2 /= 10) r2--;
+          for (n2 = i2.d[0]; n2 >= 10; n2 /= 10) r2++;
         }
         return t2 && e2 > r2 ? e2 : r2;
       };
       S2.squareRoot = S2.sqrt = function() {
         var t2, e2, r2, n2, i2, o2, s2, a2 = this, f2 = a2.constructor;
         if (a2.s < 1) {
-          if (!a2.s)
-            return new f2(0);
+          if (!a2.s) return new f2(0);
           throw Error(oe + "NaN");
         }
-        for (t2 = j2(a2), q2 = false, i2 = Math.sqrt(+a2), i2 == 0 || i2 == 1 / 0 ? (e2 = ue(a2.d), (e2.length + t2) % 2 == 0 && (e2 += "0"), i2 = Math.sqrt(e2), t2 = Fe((t2 + 1) / 2) - (t2 < 0 || t2 % 2), i2 == 1 / 0 ? e2 = "5e" + t2 : (e2 = i2.toExponential(), e2 = e2.slice(0, e2.indexOf("e") + 1) + t2), n2 = new f2(e2)) : n2 = new f2(i2.toString()), r2 = f2.precision, i2 = s2 = r2 + 3; ; )
-          if (o2 = n2, n2 = o2.plus(he(a2, o2, s2 + 2)).times(0.5), ue(o2.d).slice(0, s2) === (e2 = ue(n2.d)).slice(0, s2)) {
-            if (e2 = e2.slice(s2 - 3, s2 + 1), i2 == s2 && e2 == "4999") {
-              if (L2(o2, r2 + 1, 0), o2.times(o2).eq(a2)) {
-                n2 = o2;
-                break;
-              }
-            } else if (e2 != "9999")
+        for (t2 = j2(a2), q2 = false, i2 = Math.sqrt(+a2), i2 == 0 || i2 == 1 / 0 ? (e2 = ue(a2.d), (e2.length + t2) % 2 == 0 && (e2 += "0"), i2 = Math.sqrt(e2), t2 = Fe((t2 + 1) / 2) - (t2 < 0 || t2 % 2), i2 == 1 / 0 ? e2 = "5e" + t2 : (e2 = i2.toExponential(), e2 = e2.slice(0, e2.indexOf("e") + 1) + t2), n2 = new f2(e2)) : n2 = new f2(i2.toString()), r2 = f2.precision, i2 = s2 = r2 + 3; ; ) if (o2 = n2, n2 = o2.plus(he(a2, o2, s2 + 2)).times(0.5), ue(o2.d).slice(0, s2) === (e2 = ue(n2.d)).slice(0, s2)) {
+          if (e2 = e2.slice(s2 - 3, s2 + 1), i2 == s2 && e2 == "4999") {
+            if (L2(o2, r2 + 1, 0), o2.times(o2).eq(a2)) {
+              n2 = o2;
               break;
-            s2 += 4;
-          }
+            }
+          } else if (e2 != "9999") break;
+          s2 += 4;
+        }
         return q2 = true, L2(n2, r2);
       };
       S2.times = S2.mul = function(t2) {
         var e2, r2, n2, i2, o2, s2, a2, f2, h2, C2 = this, A2 = C2.constructor, k2 = C2.d, R2 = (t2 = new A2(t2)).d;
-        if (!C2.s || !t2.s)
-          return new A2(0);
-        for (t2.s *= C2.s, r2 = C2.e + t2.e, f2 = k2.length, h2 = R2.length, f2 < h2 && (o2 = k2, k2 = R2, R2 = o2, s2 = f2, f2 = h2, h2 = s2), o2 = [], s2 = f2 + h2, n2 = s2; n2--; )
-          o2.push(0);
+        if (!C2.s || !t2.s) return new A2(0);
+        for (t2.s *= C2.s, r2 = C2.e + t2.e, f2 = k2.length, h2 = R2.length, f2 < h2 && (o2 = k2, k2 = R2, R2 = o2, s2 = f2, f2 = h2, h2 = s2), o2 = [], s2 = f2 + h2, n2 = s2; n2--; ) o2.push(0);
         for (n2 = h2; --n2 >= 0; ) {
-          for (e2 = 0, i2 = f2 + n2; i2 > n2; )
-            a2 = o2[i2] + R2[n2] * k2[i2 - n2 - 1] + e2, o2[i2--] = a2 % J2 | 0, e2 = a2 / J2 | 0;
+          for (e2 = 0, i2 = f2 + n2; i2 > n2; ) a2 = o2[i2] + R2[n2] * k2[i2 - n2 - 1] + e2, o2[i2--] = a2 % J2 | 0, e2 = a2 / J2 | 0;
           o2[i2] = (o2[i2] + e2) % J2 | 0;
         }
-        for (; !o2[--s2]; )
-          o2.pop();
+        for (; !o2[--s2]; ) o2.pop();
         return e2 ? ++r2 : o2.shift(), t2.d = o2, t2.e = r2, q2 ? L2(t2, A2.precision) : t2;
       };
       S2.toDecimalPlaces = S2.todp = function(t2, e2) {
@@ -1916,25 +1893,19 @@ var require_wasm_engine_edge = __commonJS({
       };
       S2.toPower = S2.pow = function(t2) {
         var e2, r2, n2, i2, o2, s2, a2 = this, f2 = a2.constructor, h2 = 12, C2 = +(t2 = new f2(t2));
-        if (!t2.s)
-          return new f2(te);
+        if (!t2.s) return new f2(te);
         if (a2 = new f2(a2), !a2.s) {
-          if (t2.s < 1)
-            throw Error(oe + "Infinity");
+          if (t2.s < 1) throw Error(oe + "Infinity");
           return a2;
         }
-        if (a2.eq(te))
-          return a2;
-        if (n2 = f2.precision, t2.eq(te))
-          return L2(a2, n2);
+        if (a2.eq(te)) return a2;
+        if (n2 = f2.precision, t2.eq(te)) return L2(a2, n2);
         if (e2 = t2.e, r2 = t2.d.length - 1, s2 = e2 >= r2, o2 = a2.s, s2) {
           if ((r2 = C2 < 0 ? -C2 : C2) <= bn2) {
-            for (i2 = new f2(te), e2 = Math.ceil(n2 / N2 + 4), q2 = false; r2 % 2 && (i2 = i2.times(a2), hn(i2.d, e2)), r2 = Fe(r2 / 2), r2 !== 0; )
-              a2 = a2.times(a2), hn(a2.d, e2);
+            for (i2 = new f2(te), e2 = Math.ceil(n2 / N2 + 4), q2 = false; r2 % 2 && (i2 = i2.times(a2), hn(i2.d, e2)), r2 = Fe(r2 / 2), r2 !== 0; ) a2 = a2.times(a2), hn(a2.d, e2);
             return q2 = true, t2.s < 0 ? new f2(te).div(i2) : L2(i2, n2);
           }
-        } else if (o2 < 0)
-          throw Error(oe + "NaN");
+        } else if (o2 < 0) throw Error(oe + "NaN");
         return o2 = o2 < 0 && t2.d[Math.max(e2, r2)] & 1 ? -1 : 1, a2.s = 1, q2 = false, i2 = t2.times(nt(a2, n2 + h2)), q2 = true, i2 = xn(i2), i2.s = o2, i2;
       };
       S2.toPrecision = function(t2, e2) {
@@ -1949,50 +1920,37 @@ var require_wasm_engine_edge = __commonJS({
         var t2 = this, e2 = j2(t2), r2 = t2.constructor;
         return ke(t2, e2 <= r2.toExpNeg || e2 >= r2.toExpPos);
       };
-      he = function() {
+      he = /* @__PURE__ */ (function() {
         function t2(n2, i2) {
           var o2, s2 = 0, a2 = n2.length;
-          for (n2 = n2.slice(); a2--; )
-            o2 = n2[a2] * i2 + s2, n2[a2] = o2 % J2 | 0, s2 = o2 / J2 | 0;
+          for (n2 = n2.slice(); a2--; ) o2 = n2[a2] * i2 + s2, n2[a2] = o2 % J2 | 0, s2 = o2 / J2 | 0;
           return s2 && n2.unshift(s2), n2;
         }
         __name(t2, "t");
         function e2(n2, i2, o2, s2) {
           var a2, f2;
-          if (o2 != s2)
-            f2 = o2 > s2 ? 1 : -1;
-          else
-            for (a2 = f2 = 0; a2 < o2; a2++)
-              if (n2[a2] != i2[a2]) {
-                f2 = n2[a2] > i2[a2] ? 1 : -1;
-                break;
-              }
+          if (o2 != s2) f2 = o2 > s2 ? 1 : -1;
+          else for (a2 = f2 = 0; a2 < o2; a2++) if (n2[a2] != i2[a2]) {
+            f2 = n2[a2] > i2[a2] ? 1 : -1;
+            break;
+          }
           return f2;
         }
         __name(e2, "e");
         function r2(n2, i2, o2) {
-          for (var s2 = 0; o2--; )
-            n2[o2] -= s2, s2 = n2[o2] < i2[o2] ? 1 : 0, n2[o2] = s2 * J2 + n2[o2] - i2[o2];
-          for (; !n2[0] && n2.length > 1; )
-            n2.shift();
+          for (var s2 = 0; o2--; ) n2[o2] -= s2, s2 = n2[o2] < i2[o2] ? 1 : 0, n2[o2] = s2 * J2 + n2[o2] - i2[o2];
+          for (; !n2[0] && n2.length > 1; ) n2.shift();
         }
         __name(r2, "r");
         return function(n2, i2, o2, s2) {
           var a2, f2, h2, C2, A2, k2, R2, _, O2, D2, ye, z2, F2, Y2, Re, wr, se, At, Rt = n2.constructor, Ho = n2.s == i2.s ? 1 : -1, le = n2.d, B2 = i2.d;
-          if (!n2.s)
-            return new Rt(n2);
-          if (!i2.s)
-            throw Error(oe + "Division by zero");
-          for (f2 = n2.e - i2.e, se = B2.length, Re = le.length, R2 = new Rt(Ho), _ = R2.d = [], h2 = 0; B2[h2] == (le[h2] || 0); )
-            ++h2;
-          if (B2[h2] > (le[h2] || 0) && --f2, o2 == null ? z2 = o2 = Rt.precision : s2 ? z2 = o2 + (j2(n2) - j2(i2)) + 1 : z2 = o2, z2 < 0)
-            return new Rt(0);
-          if (z2 = z2 / N2 + 2 | 0, h2 = 0, se == 1)
-            for (C2 = 0, B2 = B2[0], z2++; (h2 < Re || C2) && z2--; h2++)
-              F2 = C2 * J2 + (le[h2] || 0), _[h2] = F2 / B2 | 0, C2 = F2 % B2 | 0;
+          if (!n2.s) return new Rt(n2);
+          if (!i2.s) throw Error(oe + "Division by zero");
+          for (f2 = n2.e - i2.e, se = B2.length, Re = le.length, R2 = new Rt(Ho), _ = R2.d = [], h2 = 0; B2[h2] == (le[h2] || 0); ) ++h2;
+          if (B2[h2] > (le[h2] || 0) && --f2, o2 == null ? z2 = o2 = Rt.precision : s2 ? z2 = o2 + (j2(n2) - j2(i2)) + 1 : z2 = o2, z2 < 0) return new Rt(0);
+          if (z2 = z2 / N2 + 2 | 0, h2 = 0, se == 1) for (C2 = 0, B2 = B2[0], z2++; (h2 < Re || C2) && z2--; h2++) F2 = C2 * J2 + (le[h2] || 0), _[h2] = F2 / B2 | 0, C2 = F2 % B2 | 0;
           else {
-            for (C2 = J2 / (B2[0] + 1) | 0, C2 > 1 && (B2 = t2(B2, C2), le = t2(le, C2), se = B2.length, Re = le.length), Y2 = se, O2 = le.slice(0, se), D2 = O2.length; D2 < se; )
-              O2[D2++] = 0;
+            for (C2 = J2 / (B2[0] + 1) | 0, C2 > 1 && (B2 = t2(B2, C2), le = t2(le, C2), se = B2.length, Re = le.length), Y2 = se, O2 = le.slice(0, se), D2 = O2.length; D2 < se; ) O2[D2++] = 0;
             At = B2.slice(), At.unshift(0), wr = B2[0], B2[1] >= J2 / 2 && ++wr;
             do
               C2 = 0, a2 = e2(B2, O2, se, D2), a2 < 0 ? (ye = O2[0], se != D2 && (ye = ye * J2 + (O2[1] || 0)), C2 = ye / wr | 0, C2 > 1 ? (C2 >= J2 && (C2 = J2 - 1), A2 = t2(B2, C2), k2 = A2.length, D2 = O2.length, a2 = e2(A2, O2, k2, D2), a2 == 1 && (C2--, r2(A2, se < k2 ? At : B2, k2))) : (C2 == 0 && (a2 = C2 = 1), A2 = B2.slice()), k2 = A2.length, k2 < D2 && A2.unshift(0), r2(O2, A2, D2), a2 == -1 && (D2 = O2.length, a2 = e2(B2, O2, se, D2), a2 < 1 && (C2++, r2(O2, se < D2 ? At : B2, D2))), D2 = O2.length) : a2 === 0 && (C2++, O2 = [0]), _[h2++] = C2, a2 && O2[0] ? O2[D2++] = le[Y2] || 0 : (O2 = [le[Y2]], D2 = 1);
@@ -2000,7 +1958,7 @@ var require_wasm_engine_edge = __commonJS({
           }
           return _[0] || _.shift(), R2.e = f2, L2(R2, s2 ? o2 + j2(R2) + 1 : o2);
         };
-      }();
+      })();
       Tr = Pn(cs2);
       te = new Tr(1);
       Mt = Tr;
@@ -2010,7 +1968,10 @@ var require_wasm_engine_edge = __commonJS({
     var l2 = ie(() => {
       "use strict";
       vn();
-      v2 = /* @__PURE__ */ __name(class extends Mt {
+      v2 = class extends Mt {
+        static {
+          __name(this, "v");
+        }
         static isDecimal(e2) {
           return e2 instanceof Mt;
         }
@@ -2020,7 +1981,7 @@ var require_wasm_engine_edge = __commonJS({
             return new Mt(`0.${n2.slice(0, e2)}`);
           }
         }
-      }, "v"), be2 = v2;
+      }, be2 = v2;
     });
     function bs2() {
       return false;
@@ -2075,10 +2036,10 @@ var require_wasm_engine_edge = __commonJS({
     }
     __name(Ds, "Ds");
     function Is() {
-      return { close: () => {
-      }, on: () => {
-      }, removeAllListeners: () => {
-      } };
+      return { close: /* @__PURE__ */ __name(() => {
+      }, "close"), on: /* @__PURE__ */ __name(() => {
+      }, "on"), removeAllListeners: /* @__PURE__ */ __name(() => {
+      }, "removeAllListeners") };
     }
     __name(Is, "Is");
     function Ms(t2, e2) {
@@ -2125,8 +2086,7 @@ var require_wasm_engine_edge = __commonJS({
     __name(Qn, "Qn");
     function js(t2) {
       let e2 = t2.split("/").filter((i2) => i2 !== "" && i2 !== "."), r2 = [];
-      for (let i2 of e2)
-        i2 === ".." ? r2.pop() : r2.push(i2);
+      for (let i2 of e2) i2 === ".." ? r2.pop() : r2.push(i2);
       let n2 = r2.join("/");
       return t2.startsWith("/") ? "/" + n2 : n2;
     }
@@ -2156,14 +2116,10 @@ var require_wasm_engine_edge = __commonJS({
       d2();
       l2();
       zn.exports = (t2, e2 = 1, r2) => {
-        if (r2 = { indent: " ", includeEmptyLines: false, ...r2 }, typeof t2 != "string")
-          throw new TypeError(`Expected \`input\` to be a \`string\`, got \`${typeof t2}\``);
-        if (typeof e2 != "number")
-          throw new TypeError(`Expected \`count\` to be a \`number\`, got \`${typeof e2}\``);
-        if (typeof r2.indent != "string")
-          throw new TypeError(`Expected \`options.indent\` to be a \`string\`, got \`${typeof r2.indent}\``);
-        if (e2 === 0)
-          return t2;
+        if (r2 = { indent: " ", includeEmptyLines: false, ...r2 }, typeof t2 != "string") throw new TypeError(`Expected \`input\` to be a \`string\`, got \`${typeof t2}\``);
+        if (typeof e2 != "number") throw new TypeError(`Expected \`count\` to be a \`number\`, got \`${typeof e2}\``);
+        if (typeof r2.indent != "string") throw new TypeError(`Expected \`options.indent\` to be a \`string\`, got \`${typeof r2.indent}\``);
+        if (e2 === 0) return t2;
         let n2 = r2.includeEmptyLines ? /^/gm : /^(?!\s*$)/gm;
         return t2.replace(n2, r2.indent.repeat(e2));
       };
@@ -2176,36 +2132,27 @@ var require_wasm_engine_edge = __commonJS({
       p2();
       d2();
       l2();
-      ni.exports = function() {
+      ni.exports = /* @__PURE__ */ (function() {
         function t2(e2, r2, n2, i2, o2) {
           return e2 < r2 || n2 < r2 ? e2 > n2 ? n2 + 1 : e2 + 1 : i2 === o2 ? r2 : r2 + 1;
         }
         __name(t2, "t");
         return function(e2, r2) {
-          if (e2 === r2)
-            return 0;
+          if (e2 === r2) return 0;
           if (e2.length > r2.length) {
             var n2 = e2;
             e2 = r2, r2 = n2;
           }
-          for (var i2 = e2.length, o2 = r2.length; i2 > 0 && e2.charCodeAt(i2 - 1) === r2.charCodeAt(o2 - 1); )
-            i2--, o2--;
-          for (var s2 = 0; s2 < i2 && e2.charCodeAt(s2) === r2.charCodeAt(s2); )
-            s2++;
-          if (i2 -= s2, o2 -= s2, i2 === 0 || o2 < 3)
-            return o2;
+          for (var i2 = e2.length, o2 = r2.length; i2 > 0 && e2.charCodeAt(i2 - 1) === r2.charCodeAt(o2 - 1); ) i2--, o2--;
+          for (var s2 = 0; s2 < i2 && e2.charCodeAt(s2) === r2.charCodeAt(s2); ) s2++;
+          if (i2 -= s2, o2 -= s2, i2 === 0 || o2 < 3) return o2;
           var a2 = 0, f2, h2, C2, A2, k2, R2, _, O2, D2, ye, z2, F2, Y2 = [];
-          for (f2 = 0; f2 < i2; f2++)
-            Y2.push(f2 + 1), Y2.push(e2.charCodeAt(s2 + f2));
-          for (var Re = Y2.length - 1; a2 < o2 - 3; )
-            for (D2 = r2.charCodeAt(s2 + (h2 = a2)), ye = r2.charCodeAt(s2 + (C2 = a2 + 1)), z2 = r2.charCodeAt(s2 + (A2 = a2 + 2)), F2 = r2.charCodeAt(s2 + (k2 = a2 + 3)), R2 = a2 += 4, f2 = 0; f2 < Re; f2 += 2)
-              _ = Y2[f2], O2 = Y2[f2 + 1], h2 = t2(_, h2, C2, D2, O2), C2 = t2(h2, C2, A2, ye, O2), A2 = t2(C2, A2, k2, z2, O2), R2 = t2(A2, k2, R2, F2, O2), Y2[f2] = R2, k2 = A2, A2 = C2, C2 = h2, h2 = _;
-          for (; a2 < o2; )
-            for (D2 = r2.charCodeAt(s2 + (h2 = a2)), R2 = ++a2, f2 = 0; f2 < Re; f2 += 2)
-              _ = Y2[f2], Y2[f2] = R2 = t2(_, h2, R2, D2, Y2[f2 + 1]), h2 = _;
+          for (f2 = 0; f2 < i2; f2++) Y2.push(f2 + 1), Y2.push(e2.charCodeAt(s2 + f2));
+          for (var Re = Y2.length - 1; a2 < o2 - 3; ) for (D2 = r2.charCodeAt(s2 + (h2 = a2)), ye = r2.charCodeAt(s2 + (C2 = a2 + 1)), z2 = r2.charCodeAt(s2 + (A2 = a2 + 2)), F2 = r2.charCodeAt(s2 + (k2 = a2 + 3)), R2 = a2 += 4, f2 = 0; f2 < Re; f2 += 2) _ = Y2[f2], O2 = Y2[f2 + 1], h2 = t2(_, h2, C2, D2, O2), C2 = t2(h2, C2, A2, ye, O2), A2 = t2(C2, A2, k2, z2, O2), R2 = t2(A2, k2, R2, F2, O2), Y2[f2] = R2, k2 = A2, A2 = C2, C2 = h2, h2 = _;
+          for (; a2 < o2; ) for (D2 = r2.charCodeAt(s2 + (h2 = a2)), R2 = ++a2, f2 = 0; f2 < Re; f2 += 2) _ = Y2[f2], Y2[f2] = R2 = t2(_, h2, R2, D2, Y2[f2 + 1]), h2 = _;
           return R2;
         };
-      }();
+      })();
     });
     var li = ie(() => {
       "use strict";
@@ -2237,7 +2184,10 @@ var require_wasm_engine_edge = __commonJS({
       p2();
       d2();
       l2();
-      sr = /* @__PURE__ */ __name(class {
+      sr = class {
+        static {
+          __name(this, "sr");
+        }
         events = {};
         on(e2, r2) {
           return this.events[e2] || (this.events[e2] = []), this.events[e2].push(r2), this;
@@ -2247,10 +2197,10 @@ var require_wasm_engine_edge = __commonJS({
             n2(...r2);
           }), true) : false;
         }
-      }, "sr");
+      };
     });
     var Xl = {};
-    rt(Xl, { DMMF: () => ct2, Debug: () => G2, Decimal: () => be2, Extensions: () => Cr, MetricsClient: () => He, PrismaClientInitializationError: () => I2, PrismaClientKnownRequestError: () => Z2, PrismaClientRustPanicError: () => xe, PrismaClientUnknownRequestError: () => Q2, PrismaClientValidationError: () => K2, Public: () => Ar, Sql: () => ee, createParam: () => Ci, defineDmmfProperty: () => Di, deserializeJsonResponse: () => Xe, deserializeRawResult: () => hr, dmmfToRuntimeDataModel: () => ri, empty: () => Fi, getPrismaClient: () => Go, getRuntime: () => Ze, join: () => Li, makeStrictEnum: () => Wo, makeTypedQueryFactory: () => Ii, objectEnumValues: () => zt, raw: () => zr, serializeJsonQuery: () => nr, skip: () => rr, sqltag: () => Yr, warnEnvConflicts: () => void 0, warnOnce: () => at2 });
+    rt(Xl, { DMMF: /* @__PURE__ */ __name(() => ct2, "DMMF"), Debug: /* @__PURE__ */ __name(() => G2, "Debug"), Decimal: /* @__PURE__ */ __name(() => be2, "Decimal"), Extensions: /* @__PURE__ */ __name(() => Cr, "Extensions"), MetricsClient: /* @__PURE__ */ __name(() => He, "MetricsClient"), PrismaClientInitializationError: /* @__PURE__ */ __name(() => I2, "PrismaClientInitializationError"), PrismaClientKnownRequestError: /* @__PURE__ */ __name(() => Z2, "PrismaClientKnownRequestError"), PrismaClientRustPanicError: /* @__PURE__ */ __name(() => xe, "PrismaClientRustPanicError"), PrismaClientUnknownRequestError: /* @__PURE__ */ __name(() => Q2, "PrismaClientUnknownRequestError"), PrismaClientValidationError: /* @__PURE__ */ __name(() => K2, "PrismaClientValidationError"), Public: /* @__PURE__ */ __name(() => Ar, "Public"), Sql: /* @__PURE__ */ __name(() => ee, "Sql"), createParam: /* @__PURE__ */ __name(() => Ci, "createParam"), defineDmmfProperty: /* @__PURE__ */ __name(() => Di, "defineDmmfProperty"), deserializeJsonResponse: /* @__PURE__ */ __name(() => Xe, "deserializeJsonResponse"), deserializeRawResult: /* @__PURE__ */ __name(() => hr, "deserializeRawResult"), dmmfToRuntimeDataModel: /* @__PURE__ */ __name(() => ri, "dmmfToRuntimeDataModel"), empty: /* @__PURE__ */ __name(() => Fi, "empty"), getPrismaClient: /* @__PURE__ */ __name(() => Go, "getPrismaClient"), getRuntime: /* @__PURE__ */ __name(() => Ze, "getRuntime"), join: /* @__PURE__ */ __name(() => Li, "join"), makeStrictEnum: /* @__PURE__ */ __name(() => Wo, "makeStrictEnum"), makeTypedQueryFactory: /* @__PURE__ */ __name(() => Ii, "makeTypedQueryFactory"), objectEnumValues: /* @__PURE__ */ __name(() => zt, "objectEnumValues"), raw: /* @__PURE__ */ __name(() => zr, "raw"), serializeJsonQuery: /* @__PURE__ */ __name(() => nr, "serializeJsonQuery"), skip: /* @__PURE__ */ __name(() => rr, "skip"), sqltag: /* @__PURE__ */ __name(() => Yr, "sqltag"), warnEnvConflicts: /* @__PURE__ */ __name(() => void 0, "warnEnvConflicts"), warnOnce: /* @__PURE__ */ __name(() => at2, "warnOnce") });
     module.exports = ts(Xl);
     u2();
     c2();
@@ -2259,7 +2209,7 @@ var require_wasm_engine_edge = __commonJS({
     d2();
     l2();
     var Cr = {};
-    rt(Cr, { defineExtension: () => Tn, getExtensionContext: () => Cn });
+    rt(Cr, { defineExtension: /* @__PURE__ */ __name(() => Tn, "defineExtension"), getExtensionContext: /* @__PURE__ */ __name(() => Cn, "getExtensionContext") });
     u2();
     c2();
     m2();
@@ -2287,7 +2237,7 @@ var require_wasm_engine_edge = __commonJS({
     }
     __name(Cn, "Cn");
     var Ar = {};
-    rt(Ar, { validator: () => An });
+    rt(Ar, { validator: /* @__PURE__ */ __name(() => An, "validator") });
     u2();
     c2();
     m2();
@@ -2384,32 +2334,30 @@ var require_wasm_engine_edge = __commonJS({
     }, enabled(t2) {
       let e2 = globalThis.DEBUG.split(",").map((i2) => i2.replace(/[.+?^${}()|[\]\\]/g, "\\$&")), r2 = e2.some((i2) => i2 === "" || i2[0] === "-" ? false : t2.match(RegExp(i2.split("*").join(".*") + "$"))), n2 = e2.some((i2) => i2 === "" || i2[0] !== "-" ? false : t2.match(RegExp(i2.slice(1).split("*").join(".*") + "$")));
       return r2 && !n2;
-    }, log: (...t2) => {
+    }, log: /* @__PURE__ */ __name((...t2) => {
       let [e2, r2, ...n2] = t2;
       (console.warn ?? console.log)(`${e2} ${r2}`, ...n2);
-    }, formatters: {} };
+    }, "log"), formatters: {} };
     function ys(t2) {
-      let e2 = { color: Un[gs++ % Un.length], enabled: it.enabled(t2), namespace: t2, log: it.log, extend: () => {
-      } }, r2 = /* @__PURE__ */ __name((...n2) => {
+      let e2 = { color: Un[gs++ % Un.length], enabled: it.enabled(t2), namespace: t2, log: it.log, extend: /* @__PURE__ */ __name(() => {
+      }, "extend") }, r2 = /* @__PURE__ */ __name((...n2) => {
         let { enabled: i2, namespace: o2, color: s2, log: a2 } = e2;
         if (n2.length !== 0 && Ft.push([o2, ...n2]), Ft.length > fs && Ft.shift(), it.enabled(o2) || i2) {
           let f2 = n2.map((C2) => typeof C2 == "string" ? C2 : hs(C2)), h2 = `+${Date.now() - Nn}ms`;
           Nn = Date.now(), a2(o2, ...f2, h2);
         }
       }, "r");
-      return new Proxy(r2, { get: (n2, i2) => e2[i2], set: (n2, i2, o2) => e2[i2] = o2 });
+      return new Proxy(r2, { get: /* @__PURE__ */ __name((n2, i2) => e2[i2], "get"), set: /* @__PURE__ */ __name((n2, i2, o2) => e2[i2] = o2, "set") });
     }
     __name(ys, "ys");
-    var G2 = new Proxy(ys, { get: (t2, e2) => it[e2], set: (t2, e2, r2) => it[e2] = r2 });
+    var G2 = new Proxy(ys, { get: /* @__PURE__ */ __name((t2, e2) => it[e2], "get"), set: /* @__PURE__ */ __name((t2, e2, r2) => it[e2] = r2, "set") });
     function hs(t2, e2 = 2) {
       let r2 = /* @__PURE__ */ new Set();
       return JSON.stringify(t2, (n2, i2) => {
         if (typeof i2 == "object" && i2 !== null) {
-          if (r2.has(i2))
-            return "[Circular *]";
+          if (r2.has(i2)) return "[Circular *]";
           r2.add(i2);
-        } else if (typeof i2 == "bigint")
-          return i2.toString();
+        } else if (typeof i2 == "bigint") return i2.toString();
         return i2;
       }, e2);
     }
@@ -2510,20 +2458,22 @@ var require_wasm_engine_edge = __commonJS({
     }
     __name(De, "De");
     var Wn = G2("driver-adapter-utils");
-    var Mr = /* @__PURE__ */ __name(class {
+    var Mr = class {
+      static {
+        __name(this, "Mr");
+      }
       registeredErrors = [];
       consumeError(e2) {
         return this.registeredErrors[e2];
       }
       registerNewError(e2) {
         let r2 = 0;
-        for (; this.registeredErrors[r2] !== void 0; )
-          r2++;
+        for (; this.registeredErrors[r2] !== void 0; ) r2++;
         return this.registeredErrors[r2] = { error: e2 }, r2;
       }
-    }, "Mr");
+    };
     var qt = /* @__PURE__ */ __name((t2, e2 = new Mr()) => {
-      let r2 = { adapterName: t2.adapterName, errorRegistry: e2, queryRaw: we(e2, t2.queryRaw.bind(t2)), executeRaw: we(e2, t2.executeRaw.bind(t2)), executeScript: we(e2, t2.executeScript.bind(t2)), dispose: we(e2, t2.dispose.bind(t2)), provider: t2.provider, startTransaction: async (...n2) => (await we(e2, t2.startTransaction.bind(t2))(...n2)).map((o2) => Ws(e2, o2)) };
+      let r2 = { adapterName: t2.adapterName, errorRegistry: e2, queryRaw: we(e2, t2.queryRaw.bind(t2)), executeRaw: we(e2, t2.executeRaw.bind(t2)), executeScript: we(e2, t2.executeScript.bind(t2)), dispose: we(e2, t2.dispose.bind(t2)), provider: t2.provider, startTransaction: /* @__PURE__ */ __name(async (...n2) => (await we(e2, t2.startTransaction.bind(t2))(...n2)).map((o2) => Ws(e2, o2)), "startTransaction") };
       return t2.getConnectionInfo && (r2.getConnectionInfo = Ks(e2, t2.getConnectionInfo.bind(t2))), r2;
     }, "qt");
     var Ws = /* @__PURE__ */ __name((t2, e2) => ({ adapterName: e2.adapterName, provider: e2.provider, options: e2.options, queryRaw: we(t2, e2.queryRaw.bind(e2)), executeRaw: we(t2, e2.executeRaw.bind(e2)), commit: we(t2, e2.commit.bind(e2)), rollback: we(t2, e2.rollback.bind(e2)) }), "Ws");
@@ -2532,8 +2482,7 @@ var require_wasm_engine_edge = __commonJS({
         try {
           return Nt(await e2(...r2));
         } catch (n2) {
-          if (Wn("[error@wrapAsync]", n2), Ir(n2))
-            return De(n2.cause);
+          if (Wn("[error@wrapAsync]", n2), Ir(n2)) return De(n2.cause);
           let i2 = t2.registerNewError(n2);
           return De({ kind: "GenericJs", id: i2 });
         }
@@ -2545,8 +2494,7 @@ var require_wasm_engine_edge = __commonJS({
         try {
           return Nt(e2(...r2));
         } catch (n2) {
-          if (Wn("[error@wrapSync]", n2), Ir(n2))
-            return De(n2.cause);
+          if (Wn("[error@wrapSync]", n2), Ir(n2)) return De(n2.cause);
           let i2 = t2.registerNewError(n2);
           return De({ kind: "GenericJs", id: i2 });
         }
@@ -2566,7 +2514,7 @@ var require_wasm_engine_edge = __commonJS({
     }
     __name(_r, "_r");
     var st = {};
-    rt(st, { error: () => Ys, info: () => zs, log: () => Hs, query: () => Xs, should: () => Xn, tags: () => ot, warn: () => Lr });
+    rt(st, { error: /* @__PURE__ */ __name(() => Ys, "error"), info: /* @__PURE__ */ __name(() => zs, "info"), log: /* @__PURE__ */ __name(() => Hs, "log"), query: /* @__PURE__ */ __name(() => Xs, "query"), should: /* @__PURE__ */ __name(() => Xn, "should"), tags: /* @__PURE__ */ __name(() => ot, "tags"), warn: /* @__PURE__ */ __name(() => Lr, "warn") });
     u2();
     c2();
     m2();
@@ -2574,7 +2522,7 @@ var require_wasm_engine_edge = __commonJS({
     d2();
     l2();
     var ot = { error: Ue("prisma:error"), warn: Mn("prisma:warn"), info: Ln("prisma:info"), query: _n("prisma:query") };
-    var Xn = { warn: () => !g2.env.PRISMA_DISABLE_WARNINGS };
+    var Xn = { warn: /* @__PURE__ */ __name(() => !g2.env.PRISMA_DISABLE_WARNINGS, "warn") };
     function Hs(...t2) {
       console.log(...t2);
     }
@@ -2602,8 +2550,7 @@ var require_wasm_engine_edge = __commonJS({
     d2();
     l2();
     function Bt(t2, e2) {
-      if (!t2)
-        throw new Error(`${e2}. This should never happen. If you see this error, please, open an issue at https://pris.ly/prisma-prisma-bug-report`);
+      if (!t2) throw new Error(`${e2}. This should never happen. If you see this error, please, open an issue at https://pris.ly/prisma-prisma-bug-report`);
     }
     __name(Bt, "Bt");
     u2();
@@ -2635,8 +2582,7 @@ var require_wasm_engine_edge = __commonJS({
     __name(Fr, "Fr");
     var Zs = Fr();
     function Ur(t2) {
-      if (typeof t2 != "string")
-        throw new TypeError(`Expected a \`string\`, got \`${typeof t2}\``);
+      if (typeof t2 != "string") throw new TypeError(`Expected a \`string\`, got \`${typeof t2}\``);
       return t2.replace(Zs, "");
     }
     __name(Ur, "Ur");
@@ -2658,8 +2604,7 @@ var require_wasm_engine_edge = __commonJS({
     l2();
     function Vt(t2, e2) {
       let r2 = {};
-      for (let n2 of Object.keys(t2))
-        r2[n2] = e2(t2[n2], n2);
+      for (let n2 of Object.keys(t2)) r2[n2] = e2(t2[n2], n2);
       return r2;
     }
     __name(Vt, "Vt");
@@ -2670,11 +2615,9 @@ var require_wasm_engine_edge = __commonJS({
     d2();
     l2();
     function qr(t2, e2) {
-      if (t2.length === 0)
-        return;
+      if (t2.length === 0) return;
       let r2 = t2[0];
-      for (let n2 = 1; n2 < t2.length; n2++)
-        e2(r2, t2[n2]) < 0 && (r2 = t2[n2]);
+      for (let n2 = 1; n2 < t2.length; n2++) e2(r2, t2[n2]) < 0 && (r2 = t2[n2]);
       return r2;
     }
     __name(qr, "qr");
@@ -2698,7 +2641,10 @@ var require_wasm_engine_edge = __commonJS({
     var at2 = /* @__PURE__ */ __name((t2, e2, ...r2) => {
       Zn.has(t2) || (Zn.add(t2), Lr(e2, ...r2));
     }, "at");
-    var I2 = /* @__PURE__ */ __name(class t2 extends Error {
+    var I2 = class t2 extends Error {
+      static {
+        __name(this, "t");
+      }
       clientVersion;
       errorCode;
       retryable;
@@ -2708,7 +2654,7 @@ var require_wasm_engine_edge = __commonJS({
       get [Symbol.toStringTag]() {
         return "PrismaClientInitializationError";
       }
-    }, "t");
+    };
     re(I2, "PrismaClientInitializationError");
     u2();
     c2();
@@ -2716,7 +2662,10 @@ var require_wasm_engine_edge = __commonJS({
     p2();
     d2();
     l2();
-    var Z2 = /* @__PURE__ */ __name(class extends Error {
+    var Z2 = class extends Error {
+      static {
+        __name(this, "Z");
+      }
       code;
       meta;
       clientVersion;
@@ -2727,7 +2676,7 @@ var require_wasm_engine_edge = __commonJS({
       get [Symbol.toStringTag]() {
         return "PrismaClientKnownRequestError";
       }
-    }, "Z");
+    };
     re(Z2, "PrismaClientKnownRequestError");
     u2();
     c2();
@@ -2735,7 +2684,10 @@ var require_wasm_engine_edge = __commonJS({
     p2();
     d2();
     l2();
-    var xe = /* @__PURE__ */ __name(class extends Error {
+    var xe = class extends Error {
+      static {
+        __name(this, "xe");
+      }
       clientVersion;
       constructor(e2, r2) {
         super(e2), this.name = "PrismaClientRustPanicError", this.clientVersion = r2;
@@ -2743,7 +2695,7 @@ var require_wasm_engine_edge = __commonJS({
       get [Symbol.toStringTag]() {
         return "PrismaClientRustPanicError";
       }
-    }, "xe");
+    };
     re(xe, "PrismaClientRustPanicError");
     u2();
     c2();
@@ -2751,7 +2703,10 @@ var require_wasm_engine_edge = __commonJS({
     p2();
     d2();
     l2();
-    var Q2 = /* @__PURE__ */ __name(class extends Error {
+    var Q2 = class extends Error {
+      static {
+        __name(this, "Q");
+      }
       clientVersion;
       batchRequestIdx;
       constructor(e2, { clientVersion: r2, batchRequestIdx: n2 }) {
@@ -2760,7 +2715,7 @@ var require_wasm_engine_edge = __commonJS({
       get [Symbol.toStringTag]() {
         return "PrismaClientUnknownRequestError";
       }
-    }, "Q");
+    };
     re(Q2, "PrismaClientUnknownRequestError");
     u2();
     c2();
@@ -2768,7 +2723,10 @@ var require_wasm_engine_edge = __commonJS({
     p2();
     d2();
     l2();
-    var K2 = /* @__PURE__ */ __name(class extends Error {
+    var K2 = class extends Error {
+      static {
+        __name(this, "K");
+      }
       name = "PrismaClientValidationError";
       clientVersion;
       constructor(e2, { clientVersion: r2 }) {
@@ -2777,7 +2735,7 @@ var require_wasm_engine_edge = __commonJS({
       get [Symbol.toStringTag]() {
         return "PrismaClientValidationError";
       }
-    }, "K");
+    };
     re(K2, "PrismaClientValidationError");
     u2();
     c2();
@@ -2797,7 +2755,10 @@ var require_wasm_engine_edge = __commonJS({
     p2();
     d2();
     l2();
-    var me = /* @__PURE__ */ __name(class {
+    var me = class {
+      static {
+        __name(this, "me");
+      }
       _map = /* @__PURE__ */ new Map();
       get(e2) {
         return this._map.get(e2)?.value;
@@ -2807,12 +2768,11 @@ var require_wasm_engine_edge = __commonJS({
       }
       getOrCreate(e2, r2) {
         let n2 = this._map.get(e2);
-        if (n2)
-          return n2.value;
+        if (n2) return n2.value;
         let i2 = r2();
         return this.set(e2, i2), i2;
       }
-    }, "me");
+    };
     u2();
     c2();
     m2();
@@ -2863,8 +2823,7 @@ var require_wasm_engine_edge = __commonJS({
     __name(ri, "ri");
     function Br(t2) {
       let e2 = {};
-      for (let { name: r2, ...n2 } of t2)
-        e2[r2] = n2;
+      for (let { name: r2, ...n2 } of t2) e2[r2] = n2;
       return e2;
     }
     __name(Br, "Br");
@@ -2906,7 +2865,7 @@ var require_wasm_engine_edge = __commonJS({
     d2();
     l2();
     var ct2 = {};
-    rt(ct2, { ModelAction: () => ut, datamodelEnumToSchemaEnum: () => ea });
+    rt(ct2, { ModelAction: /* @__PURE__ */ __name(() => ut, "ModelAction"), datamodelEnumToSchemaEnum: /* @__PURE__ */ __name(() => ea, "datamodelEnumToSchemaEnum") });
     u2();
     c2();
     m2();
@@ -2931,8 +2890,8 @@ var require_wasm_engine_edge = __commonJS({
     l2();
     var ut = ((F2) => (F2.findUnique = "findUnique", F2.findUniqueOrThrow = "findUniqueOrThrow", F2.findFirst = "findFirst", F2.findFirstOrThrow = "findFirstOrThrow", F2.findMany = "findMany", F2.create = "create", F2.createMany = "createMany", F2.createManyAndReturn = "createManyAndReturn", F2.update = "update", F2.updateMany = "updateMany", F2.updateManyAndReturn = "updateManyAndReturn", F2.upsert = "upsert", F2.delete = "delete", F2.deleteMany = "deleteMany", F2.groupBy = "groupBy", F2.count = "count", F2.aggregate = "aggregate", F2.findRaw = "findRaw", F2.aggregateRaw = "aggregateRaw", F2))(ut || {});
     var ta = kt(Yn());
-    var ra = { red: Ue, gray: Fn, dim: Lt, bold: _t, underline: Dn, highlightSource: (t2) => t2.highlight() };
-    var na = { red: (t2) => t2, gray: (t2) => t2, dim: (t2) => t2, bold: (t2) => t2, underline: (t2) => t2, highlightSource: (t2) => t2 };
+    var ra = { red: Ue, gray: Fn, dim: Lt, bold: _t, underline: Dn, highlightSource: /* @__PURE__ */ __name((t2) => t2.highlight(), "highlightSource") };
+    var na = { red: /* @__PURE__ */ __name((t2) => t2, "red"), gray: /* @__PURE__ */ __name((t2) => t2, "gray"), dim: /* @__PURE__ */ __name((t2) => t2, "dim"), bold: /* @__PURE__ */ __name((t2) => t2, "bold"), underline: /* @__PURE__ */ __name((t2) => t2, "underline"), highlightSource: /* @__PURE__ */ __name((t2) => t2, "highlightSource") };
     function ia({ message: t2, originalMethod: e2, isPanic: r2, callArguments: n2 }) {
       return { functionName: `prisma.${e2}()`, message: t2, isPanic: r2 ?? false, callArguments: n2 };
     }
@@ -2943,8 +2902,7 @@ var require_wasm_engine_edge = __commonJS({
         a2.push("");
         let h2 = [i2.toString()];
         o2 && (h2.push(o2), h2.push(s2.dim(")"))), a2.push(h2.join("")), o2 && a2.push("");
-      } else
-        a2.push(""), o2 && a2.push(o2), a2.push("");
+      } else a2.push(""), o2 && a2.push(o2), a2.push("");
       return a2.push(r2), a2.join(`
 `);
     }
@@ -3030,7 +2988,10 @@ var require_wasm_engine_edge = __commonJS({
     p2();
     d2();
     l2();
-    var ne = /* @__PURE__ */ __name(class {
+    var ne = class {
+      static {
+        __name(this, "ne");
+      }
       constructor(e2, r2) {
         this.name = e2;
         this.value = r2;
@@ -3043,7 +3004,7 @@ var require_wasm_engine_edge = __commonJS({
         let { colors: { green: r2 } } = e2.context;
         e2.addMarginSymbol(r2(this.isRequired ? "+" : "?")), e2.write(r2(this.name)), this.isRequired || e2.write(r2("?")), e2.write(r2(": ")), typeof this.value == "string" ? e2.write(r2(this.value)) : e2.write(this.value);
       }
-    }, "ne");
+    };
     u2();
     c2();
     m2();
@@ -3063,7 +3024,10 @@ var require_wasm_engine_edge = __commonJS({
     p2();
     d2();
     l2();
-    var Ve = /* @__PURE__ */ __name(class {
+    var Ve = class {
+      static {
+        __name(this, "Ve");
+      }
       constructor(e2 = 0, r2) {
         this.context = r2;
         this.currentIndent = e2;
@@ -3078,8 +3042,7 @@ var require_wasm_engine_edge = __commonJS({
       }
       writeJoined(e2, r2, n2 = (i2, o2) => o2.write(i2)) {
         let i2 = r2.length - 1;
-        for (let o2 = 0; o2 < r2.length; o2++)
-          n2(r2[o2], this), o2 !== i2 && this.write(e2);
+        for (let o2 = 0; o2 < r2.length; o2++) n2(r2[o2], this), o2 !== i2 && this.write(e2);
         return this;
       }
       writeLine(e2) {
@@ -3116,7 +3079,7 @@ var require_wasm_engine_edge = __commonJS({
         let e2 = this.currentLine.padStart(this.currentLine.length + 2 * this.currentIndent);
         return this.marginSymbol ? this.marginSymbol + e2.slice(1) : e2;
       }
-    }, "Ve");
+    };
     li();
     u2();
     c2();
@@ -3130,7 +3093,10 @@ var require_wasm_engine_edge = __commonJS({
     p2();
     d2();
     l2();
-    var Jt = /* @__PURE__ */ __name(class {
+    var Jt = class {
+      static {
+        __name(this, "Jt");
+      }
       constructor(e2) {
         this.value = e2;
       }
@@ -3140,7 +3106,7 @@ var require_wasm_engine_edge = __commonJS({
       markAsError() {
         this.value.markAsError();
       }
-    }, "Jt");
+    };
     u2();
     c2();
     m2();
@@ -3159,12 +3125,15 @@ var require_wasm_engine_edge = __commonJS({
     p2();
     d2();
     l2();
-    var pe = /* @__PURE__ */ __name(class {
+    var pe = class {
+      static {
+        __name(this, "pe");
+      }
       constructor(e2) {
         this.contents = e2;
       }
       isUnderlined = false;
-      color = (e2) => e2;
+      color = /* @__PURE__ */ __name((e2) => e2, "color");
       underline() {
         return this.isUnderlined = true, this;
       }
@@ -3177,20 +3146,26 @@ var require_wasm_engine_edge = __commonJS({
           e2.write(" ".repeat(r2)).writeLine(this.color("~".repeat(this.contents.length)));
         });
       }
-    }, "pe");
+    };
     u2();
     c2();
     m2();
     p2();
     d2();
     l2();
-    var Te = /* @__PURE__ */ __name(class {
+    var Te = class {
+      static {
+        __name(this, "Te");
+      }
       hasError = false;
       markAsError() {
         return this.hasError = true, this;
       }
-    }, "Te");
-    var $e = /* @__PURE__ */ __name(class extends Te {
+    };
+    var $e = class extends Te {
+      static {
+        __name(this, "$e");
+      }
       items = [];
       addItem(e2) {
         return this.items.push(new Jt(e2)), this;
@@ -3220,8 +3195,11 @@ var require_wasm_engine_edge = __commonJS({
       }
       asObject() {
       }
-    }, "$e");
-    var Qe = /* @__PURE__ */ __name(class t2 extends Te {
+    };
+    var Qe = class t2 extends Te {
+      static {
+        __name(this, "t");
+      }
       fields = {};
       suggestions = [];
       addField(e2) {
@@ -3235,13 +3213,11 @@ var require_wasm_engine_edge = __commonJS({
       }
       getDeepField(e2) {
         let [r2, ...n2] = e2, i2 = this.getField(r2);
-        if (!i2)
-          return;
+        if (!i2) return;
         let o2 = i2;
         for (let s2 of n2) {
           let a2;
-          if (o2.value instanceof t2 ? a2 = o2.value.getField(s2) : o2.value instanceof $e && (a2 = o2.value.getField(Number(s2))), !a2)
-            return;
+          if (o2.value instanceof t2 ? a2 = o2.value.getField(s2) : o2.value instanceof $e && (a2 = o2.value.getField(Number(s2))), !a2) return;
           o2 = a2;
         }
         return o2;
@@ -3270,38 +3246,31 @@ var require_wasm_engine_edge = __commonJS({
       getDeepSubSelectionValue(e2) {
         let r2 = this;
         for (let n2 of e2) {
-          if (!(r2 instanceof t2))
-            return;
+          if (!(r2 instanceof t2)) return;
           let i2 = r2.getSubSelectionValue(n2);
-          if (!i2)
-            return;
+          if (!i2) return;
           r2 = i2;
         }
         return r2;
       }
       getDeepSelectionParent(e2) {
         let r2 = this.getSelectionParent();
-        if (!r2)
-          return;
+        if (!r2) return;
         let n2 = r2;
         for (let i2 of e2) {
           let o2 = n2.value.getFieldValue(i2);
-          if (!o2 || !(o2 instanceof t2))
-            return;
+          if (!o2 || !(o2 instanceof t2)) return;
           let s2 = o2.getSelectionParent();
-          if (!s2)
-            return;
+          if (!s2) return;
           n2 = s2;
         }
         return n2;
       }
       getSelectionParent() {
         let e2 = this.getField("select")?.value.asObject();
-        if (e2)
-          return { kind: "select", value: e2 };
+        if (e2) return { kind: "select", value: e2 };
         let r2 = this.getField("include")?.value.asObject();
-        if (r2)
-          return { kind: "include", value: r2 };
+        if (r2) return { kind: "include", value: r2 };
       }
       getSubSelectionValue(e2) {
         return this.getSelectionParent()?.value.fields[e2].value;
@@ -3332,14 +3301,17 @@ var require_wasm_engine_edge = __commonJS({
           e2.writeLine(e2.context.colors.red("~".repeat(this.getPrintWidth())));
         });
       }
-    }, "t");
+    };
     u2();
     c2();
     m2();
     p2();
     d2();
     l2();
-    var W2 = /* @__PURE__ */ __name(class extends Te {
+    var W2 = class extends Te {
+      static {
+        __name(this, "W");
+      }
       constructor(r2) {
         super();
         this.text = r2;
@@ -3353,14 +3325,17 @@ var require_wasm_engine_edge = __commonJS({
       }
       asObject() {
       }
-    }, "W");
+    };
     u2();
     c2();
     m2();
     p2();
     d2();
     l2();
-    var mt = /* @__PURE__ */ __name(class {
+    var mt = class {
+      static {
+        __name(this, "mt");
+      }
       fields = [];
       addField(e2, r2) {
         return this.fields.push({ write(n2) {
@@ -3374,7 +3349,7 @@ var require_wasm_engine_edge = __commonJS({
           e2.writeJoined(je, this.fields).newLine();
         }).write(r2("}")).addMarginSymbol(r2("+"));
       }
-    }, "mt");
+    };
     function Qt(t2, e2, r2) {
       switch (t2.kind) {
         case "MutuallyExclusiveFields":
@@ -3431,9 +3406,7 @@ var require_wasm_engine_edge = __commonJS({
     __name(ca2, "ca");
     function ma(t2, e2) {
       let [r2, n2] = Je(t2.selectionPath), i2 = t2.outputType, o2 = e2.arguments.getDeepSelectionParent(r2)?.value;
-      if (o2 && (o2.getField(n2)?.markAsError(), i2))
-        for (let s2 of i2.fields)
-          s2.isRelation && o2.addSuggestion(new ne(s2.name, "true"));
+      if (o2 && (o2.getField(n2)?.markAsError(), i2)) for (let s2 of i2.fields) s2.isRelation && o2.addSuggestion(new ne(s2.name, "true"));
       e2.addErrorMessage((s2) => {
         let a2 = `Invalid scalar field ${s2.red(`\`${n2}\``)} for ${s2.bold("include")} statement`;
         return i2 ? a2 += ` on model ${s2.bold(i2.name)}. ${pt(s2)}` : a2 += ".", a2 += `
@@ -3463,8 +3436,7 @@ Note that ${s2.bold("include")} statements only accept relation fields.`, a2;
     __name(pa, "pa");
     function da(t2, e2, r2) {
       r2.removeAllFields();
-      for (let n2 of t2.outputType.fields)
-        r2.addSuggestion(new ne(n2.name, "false"));
+      for (let n2 of t2.outputType.fields) r2.addSuggestion(new ne(n2.name, "false"));
       e2.addErrorMessage((n2) => `The ${n2.red("omit")} statement includes every field of the model ${n2.bold(t2.outputType.name)}. At least one field must be included in the result`);
     }
     __name(da, "da");
@@ -3475,11 +3447,9 @@ Note that ${s2.bold("include")} statements only accept relation fields.`, a2;
     __name(fa, "fa");
     function ga(t2, e2) {
       let r2 = new mt();
-      for (let i2 of t2.outputType.fields)
-        i2.isRelation || r2.addField(i2.name, "false");
+      for (let i2 of t2.outputType.fields) i2.isRelation || r2.addField(i2.name, "false");
       let n2 = new ne("omit", r2).makeRequired();
-      if (t2.selectionPath.length === 0)
-        e2.arguments.addSuggestion(n2);
+      if (t2.selectionPath.length === 0) e2.arguments.addSuggestion(n2);
       else {
         let [i2, o2] = Je(t2.selectionPath), a2 = e2.arguments.getDeepSelectionParent(i2)?.value.asObject()?.getField(o2);
         if (a2) {
@@ -3542,13 +3512,11 @@ Note that ${s2.bold("include")} statements only accept relation fields.`, a2;
       let r2;
       e2.addErrorMessage((f2) => r2?.value instanceof W2 && r2.value.text === "null" ? `Argument \`${f2.green(o2)}\` must not be ${f2.red("null")}.` : `Argument \`${f2.green(o2)}\` is missing.`);
       let n2 = e2.arguments.getDeepSubSelectionValue(t2.selectionPath)?.asObject();
-      if (!n2)
-        return;
+      if (!n2) return;
       let [i2, o2] = Je(t2.argumentPath), s2 = new mt(), a2 = n2.getDeepFieldValue(i2)?.asObject();
       if (a2) {
         if (r2 = a2.getField(o2), r2 && a2.removeField(o2), t2.inputTypes.length === 1 && t2.inputTypes[0].kind === "object") {
-          for (let f2 of t2.inputTypes[0].fields)
-            s2.addField(f2.name, f2.typeNames.join(" | "));
+          for (let f2 of t2.inputTypes[0].fields) s2.addField(f2.name, f2.typeNames.join(" | "));
           a2.addSuggestion(new ne(o2, s2).makeRequired());
         } else {
           let f2 = t2.inputTypes.map(di).join(" | ");
@@ -3623,43 +3591,35 @@ Note that ${s2.bold("include")} statements only accept relation fields.`, a2;
     }
     __name(Ca, "Ca");
     function fi(t2, e2) {
-      for (let r2 of e2.fields)
-        t2.hasField(r2.name) || t2.addSuggestion(new ne(r2.name, "true"));
+      for (let r2 of e2.fields) t2.hasField(r2.name) || t2.addSuggestion(new ne(r2.name, "true"));
     }
     __name(fi, "fi");
     function Aa(t2, e2) {
-      for (let r2 of e2.fields)
-        r2.isRelation && !t2.hasField(r2.name) && t2.addSuggestion(new ne(r2.name, "true"));
+      for (let r2 of e2.fields) r2.isRelation && !t2.hasField(r2.name) && t2.addSuggestion(new ne(r2.name, "true"));
     }
     __name(Aa, "Aa");
     function Ra(t2, e2) {
-      for (let r2 of e2.fields)
-        !t2.hasField(r2.name) && !r2.isRelation && t2.addSuggestion(new ne(r2.name, "true"));
+      for (let r2 of e2.fields) !t2.hasField(r2.name) && !r2.isRelation && t2.addSuggestion(new ne(r2.name, "true"));
     }
     __name(Ra, "Ra");
     function Sa(t2, e2) {
-      for (let r2 of e2)
-        t2.hasField(r2.name) || t2.addSuggestion(new ne(r2.name, r2.typeNames.join(" | ")));
+      for (let r2 of e2) t2.hasField(r2.name) || t2.addSuggestion(new ne(r2.name, r2.typeNames.join(" | ")));
     }
     __name(Sa, "Sa");
     function gi(t2, e2) {
       let [r2, n2] = Je(t2), i2 = e2.arguments.getDeepSubSelectionValue(r2)?.asObject();
-      if (!i2)
-        return { parentKind: "unknown", fieldName: n2 };
+      if (!i2) return { parentKind: "unknown", fieldName: n2 };
       let o2 = i2.getFieldValue("select")?.asObject(), s2 = i2.getFieldValue("include")?.asObject(), a2 = i2.getFieldValue("omit")?.asObject(), f2 = o2?.getField(n2);
       return o2 && f2 ? { parentKind: "select", parent: o2, field: f2, fieldName: n2 } : (f2 = s2?.getField(n2), s2 && f2 ? { parentKind: "include", field: f2, parent: s2, fieldName: n2 } : (f2 = a2?.getField(n2), a2 && f2 ? { parentKind: "omit", field: f2, parent: a2, fieldName: n2 } : { parentKind: "unknown", fieldName: n2 }));
     }
     __name(gi, "gi");
     function yi(t2, e2) {
-      if (e2.kind === "object")
-        for (let r2 of e2.fields)
-          t2.hasField(r2.name) || t2.addSuggestion(new ne(r2.name, r2.typeNames.join(" | ")));
+      if (e2.kind === "object") for (let r2 of e2.fields) t2.hasField(r2.name) || t2.addSuggestion(new ne(r2.name, r2.typeNames.join(" | ")));
     }
     __name(yi, "yi");
     function Je(t2) {
       let e2 = [...t2], r2 = e2.pop();
-      if (!r2)
-        throw new Error("unexpected empty path");
+      if (!r2) throw new Error("unexpected empty path");
       return [e2, r2];
     }
     __name(Je, "Je");
@@ -3668,8 +3628,7 @@ Note that ${s2.bold("include")} statements only accept relation fields.`, a2;
     }
     __name(pt, "pt");
     function Kt(t2, e2) {
-      if (e2.length === 1)
-        return e2[0];
+      if (e2.length === 1) return e2[0];
       let r2 = [...e2], n2 = r2.pop();
       return `${r2.join(", ")} ${t2} ${n2}`;
     }
@@ -3696,7 +3655,10 @@ Note that ${s2.bold("include")} statements only accept relation fields.`, a2;
     p2();
     d2();
     l2();
-    var dt = /* @__PURE__ */ __name(class {
+    var dt = class {
+      static {
+        __name(this, "dt");
+      }
       modelName;
       name;
       typeName;
@@ -3709,7 +3671,7 @@ Note that ${s2.bold("include")} statements only accept relation fields.`, a2;
         let e2 = this.isList ? "List" : "", r2 = this.isEnum ? "Enum" : "";
         return `${e2}${r2}${this.typeName}FieldRefInput<${this.modelName}>`;
       }
-    }, "dt");
+    };
     function Ge(t2) {
       return t2 instanceof dt;
     }
@@ -3722,7 +3684,10 @@ Note that ${s2.bold("include")} statements only accept relation fields.`, a2;
     l2();
     var Ht = Symbol();
     var $r = /* @__PURE__ */ new WeakMap();
-    var Ee = /* @__PURE__ */ __name(class {
+    var Ee = class {
+      static {
+        __name(this, "Ee");
+      }
       constructor(e2) {
         e2 === Ht ? $r.set(this, `Prisma.${this._getName()}`) : $r.set(this, `new Prisma.${this._getNamespace()}.${this._getName()}()`);
       }
@@ -3732,23 +3697,35 @@ Note that ${s2.bold("include")} statements only accept relation fields.`, a2;
       toString() {
         return $r.get(this);
       }
-    }, "Ee");
-    var ft = /* @__PURE__ */ __name(class extends Ee {
+    };
+    var ft = class extends Ee {
+      static {
+        __name(this, "ft");
+      }
       _getNamespace() {
         return "NullTypes";
       }
-    }, "ft");
-    var gt = /* @__PURE__ */ __name(class extends ft {
+    };
+    var gt = class extends ft {
+      static {
+        __name(this, "gt");
+      }
       #e;
-    }, "gt");
+    };
     Qr(gt, "DbNull");
-    var yt = /* @__PURE__ */ __name(class extends ft {
+    var yt = class extends ft {
+      static {
+        __name(this, "yt");
+      }
       #e;
-    }, "yt");
+    };
     Qr(yt, "JsonNull");
-    var ht = /* @__PURE__ */ __name(class extends ft {
+    var ht = class extends ft {
+      static {
+        __name(this, "ht");
+      }
       #e;
-    }, "ht");
+    };
     Qr(ht, "AnyNull");
     var zt = { classes: { DbNull: gt, JsonNull: yt, AnyNull: ht }, instances: { DbNull: new gt(Ht), JsonNull: new yt(Ht), AnyNull: new ht(Ht) } };
     function Qr(t2, e2) {
@@ -3762,7 +3739,10 @@ Note that ${s2.bold("include")} statements only accept relation fields.`, a2;
     d2();
     l2();
     var hi = ": ";
-    var Yt = /* @__PURE__ */ __name(class {
+    var Yt = class {
+      static {
+        __name(this, "Yt");
+      }
       constructor(e2, r2) {
         this.name = e2;
         this.value = r2;
@@ -3778,8 +3758,11 @@ Note that ${s2.bold("include")} statements only accept relation fields.`, a2;
         let r2 = new pe(this.name);
         this.hasError && r2.underline().setColor(e2.context.colors.red), e2.write(r2).write(hi).write(this.value);
       }
-    }, "Yt");
-    var Jr = /* @__PURE__ */ __name(class {
+    };
+    var Jr = class {
+      static {
+        __name(this, "Jr");
+      }
       arguments;
       errorMessages = [];
       constructor(e2) {
@@ -3795,7 +3778,7 @@ Note that ${s2.bold("include")} statements only accept relation fields.`, a2;
         return this.errorMessages.map((r2) => r2(e2)).join(`
 `);
       }
-    }, "Jr");
+    };
     function We(t2) {
       return new Jr(bi2(t2));
     }
@@ -3810,20 +3793,13 @@ Note that ${s2.bold("include")} statements only accept relation fields.`, a2;
     }
     __name(bi2, "bi");
     function wi(t2) {
-      if (typeof t2 == "string")
-        return new W2(JSON.stringify(t2));
-      if (typeof t2 == "number" || typeof t2 == "boolean")
-        return new W2(String(t2));
-      if (typeof t2 == "bigint")
-        return new W2(`${t2}n`);
-      if (t2 === null)
-        return new W2("null");
-      if (t2 === void 0)
-        return new W2("undefined");
-      if (Be(t2))
-        return new W2(`new Prisma.Decimal("${t2.toFixed()}")`);
-      if (t2 instanceof Uint8Array)
-        return b2.isBuffer(t2) ? new W2(`Buffer.alloc(${t2.byteLength})`) : new W2(`new Uint8Array(${t2.byteLength})`);
+      if (typeof t2 == "string") return new W2(JSON.stringify(t2));
+      if (typeof t2 == "number" || typeof t2 == "boolean") return new W2(String(t2));
+      if (typeof t2 == "bigint") return new W2(`${t2}n`);
+      if (t2 === null) return new W2("null");
+      if (t2 === void 0) return new W2("undefined");
+      if (Be(t2)) return new W2(`new Prisma.Decimal("${t2.toFixed()}")`);
+      if (t2 instanceof Uint8Array) return b2.isBuffer(t2) ? new W2(`Buffer.alloc(${t2.byteLength})`) : new W2(`new Uint8Array(${t2.byteLength})`);
       if (t2 instanceof Date) {
         let e2 = jt(t2) ? t2.toISOString() : "Invalid Date";
         return new W2(`new Date("${e2}")`);
@@ -3833,8 +3809,7 @@ Note that ${s2.bold("include")} statements only accept relation fields.`, a2;
     __name(wi, "wi");
     function Da(t2) {
       let e2 = new $e();
-      for (let r2 of t2)
-        e2.addItem(wi(r2));
+      for (let r2 of t2) e2.addItem(wi(r2));
       return e2;
     }
     __name(Da, "Da");
@@ -3845,8 +3820,7 @@ Note that ${s2.bold("include")} statements only accept relation fields.`, a2;
     __name(Xt, "Xt");
     function Zt({ args: t2, errors: e2, errorFormat: r2, callsite: n2, originalMethod: i2, clientVersion: o2, globalOmit: s2 }) {
       let a2 = We(t2);
-      for (let A2 of e2)
-        Qt(A2, a2, s2);
+      for (let A2 of e2) Qt(A2, a2, s2);
       let { message: f2, args: h2 } = Xt(a2, r2), C2 = $t({ message: f2, callsite: n2, originalMethod: i2, showColors: r2 === "pretty", callArguments: h2 });
       throw new K2(C2, { clientVersion: o2 });
     }
@@ -3893,28 +3867,23 @@ Note that ${s2.bold("include")} statements only accept relation fields.`, a2;
     }
     __name(Ma, "Ma");
     function Pi(t2, e2) {
-      if (!e2)
-        return t2;
+      if (!e2) return t2;
       let r2 = { ...t2 };
-      for (let n2 of Object.values(e2))
-        if (t2[n2.name])
-          for (let i2 of n2.needs)
-            r2[i2] = true;
+      for (let n2 of Object.values(e2)) if (t2[n2.name]) for (let i2 of n2.needs) r2[i2] = true;
       return r2;
     }
     __name(Pi, "Pi");
     function vi(t2, e2) {
-      if (!e2)
-        return t2;
+      if (!e2) return t2;
       let r2 = { ...t2 };
-      for (let n2 of Object.values(e2))
-        if (!t2[n2.name])
-          for (let i2 of n2.needs)
-            delete r2[i2];
+      for (let n2 of Object.values(e2)) if (!t2[n2.name]) for (let i2 of n2.needs) delete r2[i2];
       return r2;
     }
     __name(vi, "vi");
-    var er = /* @__PURE__ */ __name(class {
+    var er = class {
+      static {
+        __name(this, "er");
+      }
       constructor(e2, r2) {
         this.extension = e2;
         this.previous = r2;
@@ -3948,8 +3917,11 @@ Note that ${s2.bold("include")} statements only accept relation fields.`, a2;
       getAllBatchQueryCallbacks() {
         return this.batchCallbacks.get();
       }
-    }, "er");
-    var Ke = /* @__PURE__ */ __name(class t2 {
+    };
+    var Ke = class t2 {
+      static {
+        __name(this, "t");
+      }
       constructor(e2) {
         this.head = e2;
       }
@@ -3980,18 +3952,21 @@ Note that ${s2.bold("include")} statements only accept relation fields.`, a2;
       getAllBatchQueryCallbacks() {
         return this.head?.getAllBatchQueryCallbacks() ?? [];
       }
-    }, "t");
+    };
     u2();
     c2();
     m2();
     p2();
     d2();
     l2();
-    var tr = /* @__PURE__ */ __name(class {
+    var tr = class {
+      static {
+        __name(this, "tr");
+      }
       constructor(e2) {
         this.name = e2;
       }
-    }, "tr");
+    };
     function Ti(t2) {
       return t2 instanceof tr;
     }
@@ -4013,15 +3988,17 @@ Note that ${s2.bold("include")} statements only accept relation fields.`, a2;
     d2();
     l2();
     var Ai = Symbol();
-    var bt2 = /* @__PURE__ */ __name(class {
+    var bt2 = class {
+      static {
+        __name(this, "bt");
+      }
       constructor(e2) {
-        if (e2 !== Ai)
-          throw new Error("Skip instance can not be constructed directly");
+        if (e2 !== Ai) throw new Error("Skip instance can not be constructed directly");
       }
       ifUndefined(e2) {
         return e2 === void 0 ? rr : e2;
       }
-    }, "bt");
+    };
     var rr = new bt2(Ai);
     function fe(t2) {
       return t2 instanceof bt2;
@@ -4050,8 +4027,7 @@ Note that ${s2.bold("include")} statements only accept relation fields.`, a2;
     __name(Fa, "Fa");
     function Ua(t2, e2, r2) {
       for (let [n2, i2] of Object.entries(e2)) {
-        if (fe(i2))
-          continue;
+        if (fe(i2)) continue;
         let o2 = r2.nestSelection(n2);
         if (Wr(i2, o2), i2 === false || i2 === void 0) {
           t2[n2] = false;
@@ -4073,8 +4049,7 @@ Note that ${s2.bold("include")} statements only accept relation fields.`, a2;
     function Na(t2, e2, r2) {
       let n2 = r2.getComputedFields(), i2 = { ...r2.getGlobalOmit(), ...e2 }, o2 = vi(i2, n2);
       for (let [s2, a2] of Object.entries(o2)) {
-        if (fe(a2))
-          continue;
+        if (fe(a2)) continue;
         Wr(a2, r2.nestSelection(s2));
         let f2 = r2.findField(s2);
         n2?.[s2] && !f2 || (t2[s2] = !a2);
@@ -4084,8 +4059,7 @@ Note that ${s2.bold("include")} statements only accept relation fields.`, a2;
     function qa(t2, e2) {
       let r2 = {}, n2 = e2.getComputedFields(), i2 = Pi(t2, n2);
       for (let [o2, s2] of Object.entries(i2)) {
-        if (fe(s2))
-          continue;
+        if (fe(s2)) continue;
         let a2 = e2.nestSelection(o2);
         Wr(s2, a2);
         let f2 = e2.findField(o2);
@@ -4105,46 +4079,33 @@ Note that ${s2.bold("include")} statements only accept relation fields.`, a2;
     }
     __name(qa, "qa");
     function Si(t2, e2) {
-      if (t2 === null)
-        return null;
-      if (typeof t2 == "string" || typeof t2 == "number" || typeof t2 == "boolean")
-        return t2;
-      if (typeof t2 == "bigint")
-        return { $type: "BigInt", value: String(t2) };
+      if (t2 === null) return null;
+      if (typeof t2 == "string" || typeof t2 == "number" || typeof t2 == "boolean") return t2;
+      if (typeof t2 == "bigint") return { $type: "BigInt", value: String(t2) };
       if (qe(t2)) {
-        if (jt(t2))
-          return { $type: "DateTime", value: t2.toISOString() };
+        if (jt(t2)) return { $type: "DateTime", value: t2.toISOString() };
         e2.throwValidationError({ kind: "InvalidArgumentValue", selectionPath: e2.getSelectionPath(), argumentPath: e2.getArgumentPath(), argument: { name: e2.getArgumentName(), typeNames: ["Date"] }, underlyingError: "Provided Date object is invalid" });
       }
-      if (Ti(t2))
-        return { $type: "Param", value: t2.name };
-      if (Ge(t2))
-        return { $type: "FieldRef", value: { _ref: t2.name, _container: t2.modelName } };
-      if (Array.isArray(t2))
-        return Ba(t2, e2);
+      if (Ti(t2)) return { $type: "Param", value: t2.name };
+      if (Ge(t2)) return { $type: "FieldRef", value: { _ref: t2.name, _container: t2.modelName } };
+      if (Array.isArray(t2)) return Ba(t2, e2);
       if (ArrayBuffer.isView(t2)) {
         let { buffer: r2, byteOffset: n2, byteLength: i2 } = t2;
         return { $type: "Bytes", value: b2.from(r2, n2, i2).toString("base64") };
       }
-      if (Va(t2))
-        return t2.values;
-      if (Be(t2))
-        return { $type: "Decimal", value: t2.toFixed() };
+      if (Va(t2)) return t2.values;
+      if (Be(t2)) return { $type: "Decimal", value: t2.toFixed() };
       if (t2 instanceof Ee) {
-        if (t2 !== zt.instances[t2._getName()])
-          throw new Error("Invalid ObjectEnumValue");
+        if (t2 !== zt.instances[t2._getName()]) throw new Error("Invalid ObjectEnumValue");
         return { $type: "Enum", value: t2._getName() };
       }
-      if (ja(t2))
-        return t2.toJSON();
-      if (typeof t2 == "object")
-        return Oi(t2, e2);
+      if (ja(t2)) return t2.toJSON();
+      if (typeof t2 == "object") return Oi(t2, e2);
       e2.throwValidationError({ kind: "InvalidArgumentValue", selectionPath: e2.getSelectionPath(), argumentPath: e2.getArgumentPath(), argument: { name: e2.getArgumentName(), typeNames: [] }, underlyingError: `We could not serialize ${Object.prototype.toString.call(t2)} value. Serialize the object to JSON or implement a ".toJSON()" method on it` });
     }
     __name(Si, "Si");
     function Oi(t2, e2) {
-      if (t2.$type)
-        return { $type: "Raw", value: t2 };
+      if (t2.$type) return { $type: "Raw", value: t2 };
       let r2 = {};
       for (let n2 in t2) {
         let i2 = t2[n2], o2 = e2.nestArgument(n2);
@@ -4178,7 +4139,10 @@ Note that ${s2.bold("include")} statements only accept relation fields.`, a2;
       t2 === void 0 && e2.isPreviewFeatureOn("strictUndefinedChecks") && e2.throwValidationError({ kind: "InvalidSelectionValue", selectionPath: e2.getSelectionPath(), underlyingError: Ri });
     }
     __name(Wr, "Wr");
-    var Gr = /* @__PURE__ */ __name(class t2 {
+    var Gr = class t2 {
+      static {
+        __name(this, "t");
+      }
       constructor(e2) {
         this.params = e2;
         this.params.modelName && (this.modelOrType = this.params.runtimeDataModel.models[this.params.modelName] ?? this.params.runtimeDataModel.types[this.params.modelName]);
@@ -4197,8 +4161,7 @@ Note that ${s2.bold("include")} statements only accept relation fields.`, a2;
         return this.params.argumentPath[this.params.argumentPath.length - 1];
       }
       getOutputTypeDescription() {
-        if (!(!this.params.modelName || !this.modelOrType))
-          return { name: this.params.modelName, fields: this.modelOrType.fields.map((e2) => ({ name: e2.name, typeName: "boolean", isRelation: e2.kind === "object" })) };
+        if (!(!this.params.modelName || !this.modelOrType)) return { name: this.params.modelName, fields: this.modelOrType.fields.map((e2) => ({ name: e2.name, typeName: "boolean", isRelation: e2.kind === "object" })) };
       }
       isRawAction() {
         return ["executeRaw", "queryRaw", "runCommandRaw", "findRaw", "aggregateRaw"].includes(this.params.action);
@@ -4207,8 +4170,7 @@ Note that ${s2.bold("include")} statements only accept relation fields.`, a2;
         return this.params.previewFeatures.includes(e2);
       }
       getComputedFields() {
-        if (this.params.modelName)
-          return this.params.extensions.getAllComputedFields(this.params.modelName);
+        if (this.params.modelName) return this.params.extensions.getAllComputedFields(this.params.modelName);
       }
       findField(e2) {
         return this.modelOrType?.fields.find((r2) => r2.name === e2);
@@ -4253,7 +4215,7 @@ Note that ${s2.bold("include")} statements only accept relation fields.`, a2;
       nestArgument(e2) {
         return new t2({ ...this.params, argumentPath: this.params.argumentPath.concat(e2) });
       }
-    }, "t");
+    };
     u2();
     c2();
     m2();
@@ -4261,11 +4223,13 @@ Note that ${s2.bold("include")} statements only accept relation fields.`, a2;
     d2();
     l2();
     function ki(t2) {
-      if (!t2._hasPreviewFlag("metrics"))
-        throw new K2("`metrics` preview feature must be enabled in order to access metrics API", { clientVersion: t2._clientVersion });
+      if (!t2._hasPreviewFlag("metrics")) throw new K2("`metrics` preview feature must be enabled in order to access metrics API", { clientVersion: t2._clientVersion });
     }
     __name(ki, "ki");
-    var He = /* @__PURE__ */ __name(class {
+    var He = class {
+      static {
+        __name(this, "He");
+      }
       _client;
       constructor(e2) {
         this._client = e2;
@@ -4276,7 +4240,7 @@ Note that ${s2.bold("include")} statements only accept relation fields.`, a2;
       json(e2) {
         return ki(this._client), this._client._engine.metrics({ format: "json", ...e2 });
       }
-    }, "He");
+    };
     u2();
     c2();
     m2();
@@ -4285,7 +4249,7 @@ Note that ${s2.bold("include")} statements only accept relation fields.`, a2;
     l2();
     function Di(t2, e2) {
       let r2 = lt(() => $a(e2));
-      Object.defineProperty(t2, "dmmf", { get: () => r2.get() });
+      Object.defineProperty(t2, "dmmf", { get: /* @__PURE__ */ __name(() => r2.get(), "get") });
     }
     __name(Di, "Di");
     function $a(t2) {
@@ -4300,7 +4264,10 @@ Note that ${s2.bold("include")} statements only accept relation fields.`, a2;
     l2();
     var Hr = /* @__PURE__ */ new WeakMap();
     var ir = "$$PrismaTypedSql";
-    var xt = /* @__PURE__ */ __name(class {
+    var xt = class {
+      static {
+        __name(this, "xt");
+      }
       constructor(e2, r2) {
         Hr.set(this, { sql: e2, values: r2 }), Object.defineProperty(this, ir, { value: ir });
       }
@@ -4310,7 +4277,7 @@ Note that ${s2.bold("include")} statements only accept relation fields.`, a2;
       get values() {
         return Hr.get(this).values;
       }
-    }, "xt");
+    };
     function Ii(t2) {
       return (...e2) => new xt(t2, e2);
     }
@@ -4341,10 +4308,12 @@ Note that ${s2.bold("include")} statements only accept relation fields.`, a2;
     p2();
     d2();
     l2();
-    var ee = /* @__PURE__ */ __name(class t2 {
+    var ee = class t2 {
+      static {
+        __name(this, "t");
+      }
       constructor(e2, r2) {
-        if (e2.length - 1 !== r2.length)
-          throw e2.length === 0 ? new TypeError("Expected at least 1 string") : new TypeError(`Expected ${e2.length} strings to have ${e2.length - 1} values`);
+        if (e2.length - 1 !== r2.length) throw e2.length === 0 ? new TypeError("Expected at least 1 string") : new TypeError(`Expected ${e2.length} strings to have ${e2.length - 1} values`);
         let n2 = r2.reduce((s2, a2) => s2 + (a2 instanceof t2 ? a2.values.length : 1), 0);
         this.values = new Array(n2), this.strings = new Array(n2 + 1), this.strings[0] = e2[0];
         let i2 = 0, o2 = 0;
@@ -4353,38 +4322,32 @@ Note that ${s2.bold("include")} statements only accept relation fields.`, a2;
           if (s2 instanceof t2) {
             this.strings[o2] += s2.strings[0];
             let f2 = 0;
-            for (; f2 < s2.values.length; )
-              this.values[o2++] = s2.values[f2++], this.strings[o2] = s2.strings[f2];
+            for (; f2 < s2.values.length; ) this.values[o2++] = s2.values[f2++], this.strings[o2] = s2.strings[f2];
             this.strings[o2] += a2;
-          } else
-            this.values[o2++] = s2, this.strings[o2] = a2;
+          } else this.values[o2++] = s2, this.strings[o2] = a2;
         }
       }
       get sql() {
         let e2 = this.strings.length, r2 = 1, n2 = this.strings[0];
-        for (; r2 < e2; )
-          n2 += `?${this.strings[r2++]}`;
+        for (; r2 < e2; ) n2 += `?${this.strings[r2++]}`;
         return n2;
       }
       get statement() {
         let e2 = this.strings.length, r2 = 1, n2 = this.strings[0];
-        for (; r2 < e2; )
-          n2 += `:${r2}${this.strings[r2++]}`;
+        for (; r2 < e2; ) n2 += `:${r2}${this.strings[r2++]}`;
         return n2;
       }
       get text() {
         let e2 = this.strings.length, r2 = 1, n2 = this.strings[0];
-        for (; r2 < e2; )
-          n2 += `$${r2}${this.strings[r2++]}`;
+        for (; r2 < e2; ) n2 += `$${r2}${this.strings[r2++]}`;
         return n2;
       }
       inspect() {
         return { sql: this.sql, statement: this.statement, text: this.text, values: this.values };
       }
-    }, "t");
+    };
     function Li(t2, e2 = ",", r2 = "", n2 = "") {
-      if (t2.length === 0)
-        throw new TypeError("Expected `join([])` to be called with an array of multiple elements, but got an empty array");
+      if (t2.length === 0) throw new TypeError("Expected `join([])` to be called with an array of multiple elements, but got an empty array");
       return new ee([r2, ...Array(t2.length - 1).fill(e2), n2], t2);
     }
     __name(Li, "Li");
@@ -4463,19 +4426,17 @@ Note that ${s2.bold("include")} statements only accept relation fields.`, a2;
     var ar2 = { enumerable: true, configurable: true, writable: true };
     function lr(t2) {
       let e2 = new Set(t2);
-      return { getPrototypeOf: () => Object.prototype, getOwnPropertyDescriptor: () => ar2, has: (r2, n2) => e2.has(n2), set: (r2, n2, i2) => e2.add(n2) && Reflect.set(r2, n2, i2), ownKeys: () => [...e2] };
+      return { getPrototypeOf: /* @__PURE__ */ __name(() => Object.prototype, "getPrototypeOf"), getOwnPropertyDescriptor: /* @__PURE__ */ __name(() => ar2, "getOwnPropertyDescriptor"), has: /* @__PURE__ */ __name((r2, n2) => e2.has(n2), "has"), set: /* @__PURE__ */ __name((r2, n2, i2) => e2.add(n2) && Reflect.set(r2, n2, i2), "set"), ownKeys: /* @__PURE__ */ __name(() => [...e2], "ownKeys") };
     }
     __name(lr, "lr");
     var Ui = Symbol.for("nodejs.util.inspect.custom");
     function ae2(t2, e2) {
       let r2 = Ja(e2), n2 = /* @__PURE__ */ new Set(), i2 = new Proxy(t2, { get(o2, s2) {
-        if (n2.has(s2))
-          return o2[s2];
+        if (n2.has(s2)) return o2[s2];
         let a2 = r2.get(s2);
         return a2 ? a2.getPropertyValue(s2) : o2[s2];
       }, has(o2, s2) {
-        if (n2.has(s2))
-          return true;
+        if (n2.has(s2)) return true;
         let a2 = r2.get(s2);
         return a2 ? a2.has?.(s2) ?? true : Reflect.has(o2, s2);
       }, ownKeys(o2) {
@@ -4485,13 +4446,12 @@ Note that ${s2.bold("include")} statements only accept relation fields.`, a2;
         return r2.get(s2)?.getPropertyDescriptor?.(s2)?.writable === false ? false : (n2.add(s2), Reflect.set(o2, s2, a2));
       }, getOwnPropertyDescriptor(o2, s2) {
         let a2 = Reflect.getOwnPropertyDescriptor(o2, s2);
-        if (a2 && !a2.configurable)
-          return a2;
+        if (a2 && !a2.configurable) return a2;
         let f2 = r2.get(s2);
         return f2 ? f2.getPropertyDescriptor ? { ...ar2, ...f2?.getPropertyDescriptor(s2) } : ar2 : a2;
       }, defineProperty(o2, s2, a2) {
         return n2.add(s2), Reflect.defineProperty(o2, s2, a2);
-      }, getPrototypeOf: () => Object.prototype });
+      }, getPrototypeOf: /* @__PURE__ */ __name(() => Object.prototype, "getPrototypeOf") });
       return i2[Ui] = function() {
         let o2 = { ...this };
         return delete o2[Ui], o2;
@@ -4502,8 +4462,7 @@ Note that ${s2.bold("include")} statements only accept relation fields.`, a2;
       let e2 = /* @__PURE__ */ new Map();
       for (let r2 of t2) {
         let n2 = r2.getKeys();
-        for (let i2 of n2)
-          e2.set(i2, r2);
+        for (let i2 of n2) e2.set(i2, r2);
       }
       return e2;
     }
@@ -4544,8 +4503,7 @@ Note that ${s2.bold("include")} statements only accept relation fields.`, a2;
     d2();
     l2();
     function qi(t2) {
-      if (t2 === void 0)
-        return "";
+      if (t2 === void 0) return "";
       let e2 = We(t2);
       return new Ve(0, { colors: Wt }).write(e2).toString();
     }
@@ -4597,11 +4555,14 @@ Prisma Accelerate has built-in connection pooling to prevent such errors: https:
     p2();
     d2();
     l2();
-    var Xr = /* @__PURE__ */ __name(class {
+    var Xr = class {
+      static {
+        __name(this, "Xr");
+      }
       getLocation() {
         return null;
       }
-    }, "Xr");
+    };
     function Ce(t2) {
       return typeof $EnabledCallSite == "function" && t2 !== "minimal" ? new $EnabledCallSite() : new Xr();
     }
@@ -4670,11 +4631,8 @@ Prisma Accelerate has built-in connection pooling to prevent such errors: https:
     l2();
     function Xa(t2 = {}) {
       let e2 = Ye(t2);
-      if (Array.isArray(e2.by))
-        for (let r2 of e2.by)
-          typeof r2 == "string" && (e2.select[r2] = true);
-      else
-        typeof e2.by == "string" && (e2.select[e2.by] = true);
+      if (Array.isArray(e2.by)) for (let r2 of e2.by) typeof r2 == "string" && (e2.select[r2] = true);
+      else typeof e2.by == "string" && (e2.select[e2.by] = true);
       return e2;
     }
     __name(Xa, "Xa");
@@ -4689,12 +4647,9 @@ Prisma Accelerate has built-in connection pooling to prevent such errors: https:
     }
     __name($i, "$i");
     function Qi(t2, e2, r2) {
-      if (e2 === "aggregate")
-        return (n2) => Vi(n2, r2);
-      if (e2 === "count")
-        return (n2) => ji(n2, r2);
-      if (e2 === "groupBy")
-        return (n2) => $i(n2, r2);
+      if (e2 === "aggregate") return (n2) => Vi(n2, r2);
+      if (e2 === "count") return (n2) => ji(n2, r2);
+      if (e2 === "groupBy") return (n2) => $i(n2, r2);
     }
     __name(Qi, "Qi");
     u2();
@@ -4706,11 +4661,9 @@ Prisma Accelerate has built-in connection pooling to prevent such errors: https:
     function Ji(t2, e2) {
       let r2 = e2.fields.filter((i2) => !i2.relationName), n2 = ti(r2, "name");
       return new Proxy({}, { get(i2, o2) {
-        if (o2 in i2 || typeof o2 == "symbol")
-          return i2[o2];
+        if (o2 in i2 || typeof o2 == "symbol") return i2[o2];
         let s2 = n2[o2];
-        if (s2)
-          return new dt(t2, o2, s2.type, s2.isList, s2.kind === "enum");
+        if (s2) return new dt(t2, o2, s2.type, s2.isList, s2.kind === "enum");
       }, ...lr(Object.keys(n2)) });
     }
     __name(Ji, "Ji");
@@ -4742,8 +4695,7 @@ Prisma Accelerate has built-in connection pooling to prevent such errors: https:
       return (f2) => {
         let h2 = Ce(t2._errorFormat), C2 = el(n2, i2), A2 = tl(f2, o2, C2), k2 = r2({ dataPath: C2, callsite: h2 })(A2), R2 = rl(t2, e2);
         return new Proxy(k2, { get(_, O2) {
-          if (!R2.includes(O2))
-            return _[O2];
+          if (!R2.includes(O2)) return _[O2];
           let ye = [a2[O2].type, r2, O2], z2 = [C2, A2];
           return en(t2, ...ye, ...z2);
         }, ...lr([...R2, ...Object.getOwnPropertyNames(k2)]) });
@@ -4819,13 +4771,10 @@ Prisma Accelerate has built-in connection pooling to prevent such errors: https:
         return n2;
       }, getPropertyValue(i2) {
         let o2 = Ki(i2);
-        if (t2._runtimeDataModel.models[o2] !== void 0)
-          return tn(t2, o2);
-        if (t2._runtimeDataModel.models[i2] !== void 0)
-          return tn(t2, i2);
+        if (t2._runtimeDataModel.models[o2] !== void 0) return tn(t2, o2);
+        if (t2._runtimeDataModel.models[i2] !== void 0) return tn(t2, i2);
       }, getPropertyDescriptor(i2) {
-        if (!r2.includes(i2))
-          return { enumerable: false };
+        if (!r2.includes(i2)) return { enumerable: false };
       } });
     }
     __name(ul, "ul");
@@ -4834,8 +4783,7 @@ Prisma Accelerate has built-in connection pooling to prevent such errors: https:
     }
     __name(Hi, "Hi");
     function zi(t2) {
-      if (typeof t2 == "function")
-        return t2(this);
+      if (typeof t2 == "function") return t2(this);
       if (t2.client?.__AccelerateEngine) {
         let r2 = t2.client.__AccelerateEngine;
         this._originalClient._engine = new r2(this._originalClient._accelerateEngineConfig);
@@ -4858,18 +4806,15 @@ Prisma Accelerate has built-in connection pooling to prevent such errors: https:
     l2();
     function Yi({ result: t2, modelName: e2, select: r2, omit: n2, extensions: i2 }) {
       let o2 = i2.getAllComputedFields(e2);
-      if (!o2)
-        return t2;
+      if (!o2) return t2;
       let s2 = [], a2 = [];
       for (let f2 of Object.values(o2)) {
         if (n2) {
-          if (n2[f2.name])
-            continue;
+          if (n2[f2.name]) continue;
           let h2 = f2.needs.filter((C2) => n2[C2]);
           h2.length > 0 && a2.push(ze(h2));
         } else if (r2) {
-          if (!r2[f2.name])
-            continue;
+          if (!r2[f2.name]) continue;
           let h2 = f2.needs.filter((C2) => !r2[C2]);
           h2.length > 0 && a2.push(ze(h2));
         }
@@ -4894,8 +4839,7 @@ Prisma Accelerate has built-in connection pooling to prevent such errors: https:
     l2();
     function pr({ visitor: t2, result: e2, args: r2, runtimeDataModel: n2, modelName: i2 }) {
       if (Array.isArray(e2)) {
-        for (let s2 = 0; s2 < e2.length; s2++)
-          e2[s2] = pr({ result: e2[s2], args: r2, modelName: i2, runtimeDataModel: n2, visitor: t2 });
+        for (let s2 = 0; s2 < e2.length; s2++) e2[s2] = pr({ result: e2[s2], args: r2, modelName: i2, runtimeDataModel: n2, visitor: t2 });
         return e2;
       }
       let o2 = t2(e2, i2, r2) ?? e2;
@@ -4904,21 +4848,19 @@ Prisma Accelerate has built-in connection pooling to prevent such errors: https:
     __name(pr, "pr");
     function Xi({ includeOrSelect: t2, result: e2, parentModelName: r2, runtimeDataModel: n2, visitor: i2 }) {
       for (let [o2, s2] of Object.entries(t2)) {
-        if (!s2 || e2[o2] == null || fe(s2))
-          continue;
+        if (!s2 || e2[o2] == null || fe(s2)) continue;
         let f2 = n2.models[r2].fields.find((C2) => C2.name === o2);
-        if (!f2 || f2.kind !== "object" || !f2.relationName)
-          continue;
+        if (!f2 || f2.kind !== "object" || !f2.relationName) continue;
         let h2 = typeof s2 == "object" ? s2 : {};
         e2[o2] = pr({ visitor: i2, result: e2[o2], args: h2, modelName: f2.type, runtimeDataModel: n2 });
       }
     }
     __name(Xi, "Xi");
     function Zi({ result: t2, modelName: e2, args: r2, extensions: n2, runtimeDataModel: i2, globalOmit: o2 }) {
-      return n2.isEmpty() || t2 == null || typeof t2 != "object" || !i2.models[e2] ? t2 : pr({ result: t2, args: r2 ?? {}, modelName: e2, runtimeDataModel: i2, visitor: (a2, f2, h2) => {
+      return n2.isEmpty() || t2 == null || typeof t2 != "object" || !i2.models[e2] ? t2 : pr({ result: t2, args: r2 ?? {}, modelName: e2, runtimeDataModel: i2, visitor: /* @__PURE__ */ __name((a2, f2, h2) => {
         let C2 = de(f2);
         return Yi({ result: a2, modelName: C2, select: h2.select, omit: h2.select ? void 0 : { ...o2?.[C2], ...h2.omit }, extensions: n2 });
-      } });
+      }, "visitor") });
     }
     __name(Zi, "Zi");
     u2();
@@ -4943,19 +4885,15 @@ Prisma Accelerate has built-in connection pooling to prevent such errors: https:
     var pl = ["$connect", "$disconnect", "$on", "$transaction", "$extends"];
     var eo = pl;
     function to(t2) {
-      if (t2 instanceof ee)
-        return dl(t2);
-      if (or(t2))
-        return fl(t2);
+      if (t2 instanceof ee) return dl(t2);
+      if (or(t2)) return fl(t2);
       if (Array.isArray(t2)) {
         let r2 = [t2[0]];
-        for (let n2 = 1; n2 < t2.length; n2++)
-          r2[n2] = vt(t2[n2]);
+        for (let n2 = 1; n2 < t2.length; n2++) r2[n2] = vt(t2[n2]);
         return r2;
       }
       let e2 = {};
-      for (let r2 in t2)
-        e2[r2] = vt(t2[r2]);
+      for (let r2 in t2) e2[r2] = vt(t2[r2]);
       return e2;
     }
     __name(to, "to");
@@ -4968,24 +4906,18 @@ Prisma Accelerate has built-in connection pooling to prevent such errors: https:
     }
     __name(fl, "fl");
     function vt(t2) {
-      if (typeof t2 != "object" || t2 == null || t2 instanceof Ee || Ge(t2))
-        return t2;
-      if (Be(t2))
-        return new be2(t2.toFixed());
-      if (qe(t2))
-        return /* @__PURE__ */ new Date(+t2);
-      if (ArrayBuffer.isView(t2))
-        return t2.slice(0);
+      if (typeof t2 != "object" || t2 == null || t2 instanceof Ee || Ge(t2)) return t2;
+      if (Be(t2)) return new be2(t2.toFixed());
+      if (qe(t2)) return /* @__PURE__ */ new Date(+t2);
+      if (ArrayBuffer.isView(t2)) return t2.slice(0);
       if (Array.isArray(t2)) {
         let e2 = t2.length, r2;
-        for (r2 = Array(e2); e2--; )
-          r2[e2] = vt(t2[e2]);
+        for (r2 = Array(e2); e2--; ) r2[e2] = vt(t2[e2]);
         return r2;
       }
       if (typeof t2 == "object") {
         let e2 = {};
-        for (let r2 in t2)
-          r2 === "__proto__" ? Object.defineProperty(e2, r2, { value: vt(t2[r2]), configurable: true, enumerable: true, writable: true }) : e2[r2] = vt(t2[r2]);
+        for (let r2 in t2) r2 === "__proto__" ? Object.defineProperty(e2, r2, { value: vt(t2[r2]), configurable: true, enumerable: true, writable: true }) : e2[r2] = vt(t2[r2]);
         return e2;
       }
       Ie(t2, "Unknown value");
@@ -4994,17 +4926,16 @@ Prisma Accelerate has built-in connection pooling to prevent such errors: https:
     function no(t2, e2, r2, n2 = 0) {
       return t2._createPrismaPromise((i2) => {
         let o2 = e2.customDataProxyFetch;
-        return "transaction" in e2 && i2 !== void 0 && (e2.transaction?.kind === "batch" && e2.transaction.lock.then(), e2.transaction = i2), n2 === r2.length ? t2._executeRequest(e2) : r2[n2]({ model: e2.model, operation: e2.model ? e2.action : e2.clientMethod, args: to(e2.args ?? {}), __internalParams: e2, query: (s2, a2 = e2) => {
+        return "transaction" in e2 && i2 !== void 0 && (e2.transaction?.kind === "batch" && e2.transaction.lock.then(), e2.transaction = i2), n2 === r2.length ? t2._executeRequest(e2) : r2[n2]({ model: e2.model, operation: e2.model ? e2.action : e2.clientMethod, args: to(e2.args ?? {}), __internalParams: e2, query: /* @__PURE__ */ __name((s2, a2 = e2) => {
           let f2 = a2.customDataProxyFetch;
           return a2.customDataProxyFetch = ao2(o2, f2), a2.args = s2, no(t2, a2, r2, n2 + 1);
-        } });
+        }, "query") });
       });
     }
     __name(no, "no");
     function io(t2, e2) {
       let { jsModelName: r2, action: n2, clientMethod: i2 } = e2, o2 = r2 ? n2 : i2;
-      if (t2._extensions.isEmpty())
-        return t2._executeRequest(e2);
+      if (t2._extensions.isEmpty()) return t2._executeRequest(e2);
       let s2 = t2._extensions.getAllQueryCallbacks(r2 ?? "$none", o2);
       return no(t2, e2, s2);
     }
@@ -5017,8 +4948,7 @@ Prisma Accelerate has built-in connection pooling to prevent such errors: https:
     }
     __name(oo, "oo");
     function so(t2, e2, r2, n2) {
-      if (r2 === e2.length)
-        return n2(t2);
+      if (r2 === e2.length) return n2(t2);
       let i2 = t2.customDataProxyFetch, o2 = t2.requests[0].transaction;
       return e2[r2]({ args: { queries: t2.requests.map((s2) => ({ model: s2.modelName, operation: s2.action, args: s2.args })), transaction: o2 ? { isolationLevel: o2.kind === "batch" ? o2.isolationLevel : void 0 } : void 0 }, __internalParams: t2, query(s2, a2 = t2) {
         let f2 = a2.customDataProxyFetch;
@@ -5100,8 +5030,7 @@ Learn how: https://pris.ly/d/${uo[e2]}-build`;
     __name(gl, "gl");
     function yl(t2, e2) {
       let r2 = {};
-      for (let n2 of Object.keys(t2))
-        r2[n2] = e2(t2[n2], n2);
+      for (let n2 of Object.keys(t2)) r2[n2] = e2(t2[n2], n2);
       return r2;
     }
     __name(yl, "yl");
@@ -5159,13 +5088,11 @@ Learn how: https://pris.ly/d/${uo[e2]}-build`;
     __name(Ze, "Ze");
     function dr({ inlineDatasources: t2, overrideDatasources: e2, env: r2, clientVersion: n2 }) {
       let i2, o2 = Object.keys(t2)[0], s2 = t2[o2]?.url, a2 = e2[o2]?.url;
-      if (o2 === void 0 ? i2 = void 0 : a2 ? i2 = a2 : s2?.value ? i2 = s2.value : s2?.fromEnvVar && (i2 = r2[s2.fromEnvVar]), s2?.fromEnvVar !== void 0 && i2 === void 0)
-        throw Ze().id === "workerd" ? new I2(`error: Environment variable not found: ${s2.fromEnvVar}.
+      if (o2 === void 0 ? i2 = void 0 : a2 ? i2 = a2 : s2?.value ? i2 = s2.value : s2?.fromEnvVar && (i2 = r2[s2.fromEnvVar]), s2?.fromEnvVar !== void 0 && i2 === void 0) throw Ze().id === "workerd" ? new I2(`error: Environment variable not found: ${s2.fromEnvVar}.
 
 In Cloudflare module Workers, environment variables are available only in the Worker's \`env\` parameter of \`fetch\`.
 To solve this, provide the connection string directly: https://pris.ly/d/cloudflare-datasource-url`, n2) : new I2(`error: Environment variable not found: ${s2.fromEnvVar}.`, n2);
-      if (i2 === void 0)
-        throw new I2("error: Missing URL environment variable, value, or override.", n2);
+      if (i2 === void 0) throw new I2("error: Missing URL environment variable, value, or override.", n2);
       return i2;
     }
     __name(dr, "dr");
@@ -5182,8 +5109,7 @@ To solve this, provide the connection string directly: https://pris.ly/d/cloudfl
     d2();
     l2();
     function go(t2) {
-      if (t2?.kind === "itx")
-        return t2.options.id;
+      if (t2?.kind === "itx") return t2.options.id;
     }
     __name(go, "go");
     u2();
@@ -5195,14 +5121,11 @@ To solve this, provide the connection string directly: https://pris.ly/d/cloudfl
     var nn;
     var yo = { async loadLibrary(t2) {
       let { clientVersion: e2, adapter: r2, engineWasm: n2 } = t2;
-      if (r2 === void 0)
-        throw new I2(`The \`adapter\` option for \`PrismaClient\` is required in this context (${Ze().prettyName})`, e2);
-      if (n2 === void 0)
-        throw new I2("WASM engine was unexpectedly `undefined`", e2);
+      if (r2 === void 0) throw new I2(`The \`adapter\` option for \`PrismaClient\` is required in this context (${Ze().prettyName})`, e2);
+      if (n2 === void 0) throw new I2("WASM engine was unexpectedly `undefined`", e2);
       nn === void 0 && (nn = (async () => {
         let o2 = await n2.getRuntime(), s2 = await n2.getQueryEngineWasmModule();
-        if (s2 == null)
-          throw new I2("The loaded wasm module was unexpectedly `undefined` or `null` once loaded", e2);
+        if (s2 == null) throw new I2("The loaded wasm module was unexpectedly `undefined` or `null` once loaded", e2);
         let a2 = { "./query_engine_bg.js": o2 }, f2 = new WebAssembly.Instance(s2, a2), h2 = f2.exports.__wbindgen_start;
         return o2.__wbg_set_wasm(f2.exports), h2(), o2.QueryEngine;
       })());
@@ -5233,7 +5156,10 @@ To solve this, provide the connection string directly: https://pris.ly/d/cloudfl
       return on2 > kl && (on2 = 1n), t2;
     }
     __name(Dl, "Dl");
-    var Tt = /* @__PURE__ */ __name(class {
+    var Tt = class {
+      static {
+        __name(this, "Tt");
+      }
       name = "LibraryEngine";
       engine;
       libraryInstantiationPromise;
@@ -5290,26 +5216,22 @@ To solve this, provide the connection string directly: https://pris.ly/d/cloudfl
         if (e2 === "start") {
           let f2 = JSON.stringify({ max_wait: n2.maxWait, timeout: n2.timeout, isolation_level: n2.isolationLevel });
           s2 = await this.engine?.startTransaction(f2, o2);
-        } else
-          e2 === "commit" ? s2 = await this.engine?.commitTransaction(n2.id, o2) : e2 === "rollback" && (s2 = await this.engine?.rollbackTransaction(n2.id, o2));
+        } else e2 === "commit" ? s2 = await this.engine?.commitTransaction(n2.id, o2) : e2 === "rollback" && (s2 = await this.engine?.rollbackTransaction(n2.id, o2));
         let a2 = this.parseEngineResponse(s2);
         if (Il(a2)) {
           let f2 = this.getExternalAdapterError(a2, i2?.errorRegistry);
           throw f2 ? f2.error : new Z2(a2.message, { code: a2.error_code, clientVersion: this.config.clientVersion, meta: a2.meta });
-        } else if (typeof a2.message == "string")
-          throw new Q2(a2.message, { clientVersion: this.config.clientVersion });
+        } else if (typeof a2.message == "string") throw new Q2(a2.message, { clientVersion: this.config.clientVersion });
         return a2;
       }
       async instantiateLibrary() {
-        if (ge("internalSetup"), this.libraryInstantiationPromise)
-          return this.libraryInstantiationPromise;
+        if (ge("internalSetup"), this.libraryInstantiationPromise) return this.libraryInstantiationPromise;
         this.binaryTarget = await this.getCurrentBinaryTarget(), await this.tracingHelper.runInChildSpan("load_engine", () => this.loadEngine()), this.version();
       }
       async getCurrentBinaryTarget() {
       }
       parseEngineResponse(e2) {
-        if (!e2)
-          throw new Q2("Response from the Engine was empty", { clientVersion: this.config.clientVersion });
+        if (!e2) throw new Q2("Response from the Engine was empty", { clientVersion: this.config.clientVersion });
         try {
           return JSON.parse(e2);
         } catch {
@@ -5354,10 +5276,8 @@ To solve this, provide the connection string directly: https://pris.ly/d/cloudfl
         throw new Error('"beforeExit" hook is not applicable to the library engine since Prisma 5.0.0, it is only relevant and implemented for the binary engine. Please add your event listener to the `process` object directly instead.');
       }
       async start() {
-        if (this.libraryInstantiationPromise || (this.libraryInstantiationPromise = this.instantiateLibrary()), await this.libraryInstantiationPromise, await this.libraryStoppingPromise, this.libraryStartingPromise)
-          return ge(`library already starting, this.libraryStarted: ${this.libraryStarted}`), this.libraryStartingPromise;
-        if (this.libraryStarted)
-          return;
+        if (this.libraryInstantiationPromise || (this.libraryInstantiationPromise = this.instantiateLibrary()), await this.libraryInstantiationPromise, await this.libraryStoppingPromise, this.libraryStartingPromise) return ge(`library already starting, this.libraryStarted: ${this.libraryStarted}`), this.libraryStartingPromise;
+        if (this.libraryStarted) return;
         let e2 = /* @__PURE__ */ __name(async () => {
           ge("library starting");
           try {
@@ -5373,8 +5293,7 @@ To solve this, provide the connection string directly: https://pris.ly/d/cloudfl
         return this.libraryStartingPromise = this.tracingHelper.runInChildSpan("connect", e2), this.libraryStartingPromise;
       }
       async stop() {
-        if (await this.libraryInstantiationPromise, await this.libraryStartingPromise, await this.executingQueryPromise, this.libraryStoppingPromise)
-          return ge("library is already stopping"), this.libraryStoppingPromise;
+        if (await this.libraryInstantiationPromise, await this.libraryStartingPromise, await this.executingQueryPromise, this.libraryStoppingPromise) return ge("library is already stopping"), this.libraryStoppingPromise;
         if (!this.libraryStarted) {
           await (await this.adapterPromise)?.dispose(), this.adapterPromise = void 0;
           return;
@@ -5400,14 +5319,11 @@ To solve this, provide the connection string directly: https://pris.ly/d/cloudfl
           let s2 = await this.adapterPromise;
           this.executingQueryPromise = this.engine?.query(o2, i2, n2?.id), this.lastQuery = o2;
           let a2 = this.parseEngineResponse(await this.executingQueryPromise);
-          if (a2.errors)
-            throw a2.errors.length === 1 ? this.buildQueryError(a2.errors[0], s2?.errorRegistry) : new Q2(JSON.stringify(a2.errors), { clientVersion: this.config.clientVersion });
-          if (this.loggerRustPanic)
-            throw this.loggerRustPanic;
+          if (a2.errors) throw a2.errors.length === 1 ? this.buildQueryError(a2.errors[0], s2?.errorRegistry) : new Q2(JSON.stringify(a2.errors), { clientVersion: this.config.clientVersion });
+          if (this.loggerRustPanic) throw this.loggerRustPanic;
           return { data: a2 };
         } catch (s2) {
-          if (s2 instanceof I2)
-            throw s2;
+          if (s2 instanceof I2) throw s2;
           s2.code === "GenericFailure" && s2.message?.startsWith("PANIC:");
           let a2 = this.parseRequestError(s2.message);
           throw typeof a2 == "string" ? s2 : new Q2(`${a2.message}
@@ -5421,11 +5337,9 @@ ${a2.backtrace}`, { clientVersion: this.config.clientVersion });
         let o2 = await this.adapterPromise;
         this.lastQuery = JSON.stringify(i2), this.executingQueryPromise = this.engine?.query(this.lastQuery, JSON.stringify({ traceparent: n2 }), go(r2));
         let s2 = await this.executingQueryPromise, a2 = this.parseEngineResponse(s2);
-        if (a2.errors)
-          throw a2.errors.length === 1 ? this.buildQueryError(a2.errors[0], o2?.errorRegistry) : new Q2(JSON.stringify(a2.errors), { clientVersion: this.config.clientVersion });
+        if (a2.errors) throw a2.errors.length === 1 ? this.buildQueryError(a2.errors[0], o2?.errorRegistry) : new Q2(JSON.stringify(a2.errors), { clientVersion: this.config.clientVersion });
         let { batchResult: f2, errors: h2 } = a2;
-        if (Array.isArray(f2))
-          return f2.map((C2) => C2.errors && C2.errors.length > 0 ? this.loggerRustPanic ?? this.buildQueryError(C2.errors[0], o2?.errorRegistry) : { data: C2 });
+        if (Array.isArray(f2)) return f2.map((C2) => C2.errors && C2.errors.length > 0 ? this.loggerRustPanic ?? this.buildQueryError(C2.errors[0], o2?.errorRegistry) : { data: C2 });
         throw h2 && h2.length === 1 ? new Error(h2[0].error) : new Error(JSON.stringify(a2));
       }
       buildQueryError(e2, r2) {
@@ -5446,7 +5360,7 @@ ${a2.backtrace}`, { clientVersion: this.config.clientVersion });
         let r2 = await this.engine.metrics(JSON.stringify(e2));
         return e2.format === "prometheus" ? r2 : this.parseEngineResponse(r2);
       }
-    }, "Tt");
+    };
     function Il(t2) {
       return typeof t2 == "object" && t2 !== null && t2.error_code !== void 0;
     }
@@ -5458,7 +5372,10 @@ ${a2.backtrace}`, { clientVersion: this.config.clientVersion });
     d2();
     l2();
     var Ct = "Accelerate has not been setup correctly. Make sure your client is using `.$extends(withAccelerate())`. See https://pris.ly/d/accelerate-getting-started";
-    var fr = /* @__PURE__ */ __name(class {
+    var fr = class {
+      static {
+        __name(this, "fr");
+      }
       constructor(e2) {
         this.config = e2;
         this.resolveDatasourceUrl = this.config.accelerateUtils?.resolveDatasourceUrl, this.getBatchRequestPayload = this.config.accelerateUtils?.getBatchRequestPayload, this.prismaGraphQLToJSError = this.config.accelerateUtils?.prismaGraphQLToJSError, this.PrismaClientUnknownRequestError = this.config.accelerateUtils?.PrismaClientUnknownRequestError, this.PrismaClientInitializationError = this.config.accelerateUtils?.PrismaClientInitializationError, this.PrismaClientKnownRequestError = this.config.accelerateUtils?.PrismaClientKnownRequestError, this.debug = this.config.accelerateUtils?.debug, this.engineVersion = this.config.accelerateUtils?.engineVersion, this.clientVersion = this.config.accelerateUtils?.clientVersion;
@@ -5497,7 +5414,7 @@ ${a2.backtrace}`, { clientVersion: this.config.clientVersion });
       applyPendingMigrations() {
         throw new I2(Ct, this.config.clientVersion);
       }
-    }, "fr");
+    };
     u2();
     c2();
     m2();
@@ -5530,8 +5447,7 @@ ${a2.backtrace}`, { clientVersion: this.config.clientVersion });
       } catch {
       }
       let { ok: n2, isUsing: i2, diagnostics: o2 } = ho({ url: r2, adapter: e2.adapter, copyEngine: t2, targetBuildType: "wasm-engine-edge" });
-      for (let A2 of o2.warnings)
-        at2(...A2.value);
+      for (let A2 of o2.warnings) at2(...A2.value);
       if (!n2) {
         let A2 = o2.errors[0];
         throw new K2(A2.value, { clientVersion: e2.clientVersion });
@@ -5540,7 +5456,10 @@ ${a2.backtrace}`, { clientVersion: this.config.clientVersion });
       return i2.accelerate, i2.driverAdapters ? new Tt(e2) : i2.accelerate ? new fr(e2) : new sn({ clientVersion: e2.clientVersion });
     }
     __name(bo2, "bo");
-    var sn = /* @__PURE__ */ __name(class {
+    var sn = class {
+      static {
+        __name(this, "sn");
+      }
       constructor(e2) {
         return new Proxy(this, { get(r2, n2) {
           let i2 = `In order to run Prisma Client on edge runtime, either:
@@ -5549,7 +5468,7 @@ ${a2.backtrace}`, { clientVersion: this.config.clientVersion });
           throw new K2(i2, e2);
         } });
       }
-    }, "sn");
+    };
     u2();
     c2();
     m2();
@@ -5600,18 +5519,12 @@ ${a2.backtrace}`, { clientVersion: this.config.clientVersion });
     }
     __name(Po, "Po");
     function To(t2, e2) {
-      if (Array.isArray(t2))
-        return t2.map((r2) => To(r2, e2));
-      if (typeof t2 == "bigint")
-        return { prisma__type: "bigint", prisma__value: t2.toString() };
-      if (qe(t2))
-        return { prisma__type: "date", prisma__value: t2.toJSON() };
-      if (be2.isDecimal(t2))
-        return { prisma__type: "decimal", prisma__value: t2.toJSON() };
-      if (b2.isBuffer(t2))
-        return { prisma__type: "bytes", prisma__value: t2.toString("base64") };
-      if (Ml(t2))
-        return { prisma__type: "bytes", prisma__value: b2.from(t2).toString("base64") };
+      if (Array.isArray(t2)) return t2.map((r2) => To(r2, e2));
+      if (typeof t2 == "bigint") return { prisma__type: "bigint", prisma__value: t2.toString() };
+      if (qe(t2)) return { prisma__type: "date", prisma__value: t2.toJSON() };
+      if (be2.isDecimal(t2)) return { prisma__type: "decimal", prisma__value: t2.toJSON() };
+      if (b2.isBuffer(t2)) return { prisma__type: "bytes", prisma__value: t2.toString("base64") };
+      if (Ml(t2)) return { prisma__type: "bytes", prisma__value: b2.from(t2).toString("base64") };
       if (ArrayBuffer.isView(t2)) {
         let { buffer: r2, byteOffset: n2, byteLength: i2 } = t2;
         return { prisma__type: "bytes", prisma__value: b2.from(r2, n2, i2).toString("base64") };
@@ -5624,15 +5537,11 @@ ${a2.backtrace}`, { clientVersion: this.config.clientVersion });
     }
     __name(Ml, "Ml");
     function Co(t2) {
-      if (typeof t2 != "object" || t2 === null)
-        return t2;
-      if (typeof t2.toJSON == "function")
-        return t2.toJSON();
-      if (Array.isArray(t2))
-        return t2.map(vo);
+      if (typeof t2 != "object" || t2 === null) return t2;
+      if (typeof t2.toJSON == "function") return t2.toJSON();
+      if (Array.isArray(t2)) return t2.map(vo);
       let e2 = {};
-      for (let r2 of Object.keys(t2))
-        e2[r2] = vo(t2[r2]);
+      for (let r2 of Object.keys(t2)) e2[r2] = vo(t2[r2]);
       return e2;
     }
     __name(Co, "Co");
@@ -5643,8 +5552,7 @@ ${a2.backtrace}`, { clientVersion: this.config.clientVersion });
     var _l = /^(\s*alter\s)/i;
     var Ao = G2("prisma:client");
     function an2(t2, e2, r2, n2) {
-      if (!(t2 !== "postgresql" && t2 !== "cockroachdb") && r2.length > 0 && _l.exec(e2))
-        throw new Error(`Running ALTER using ${n2} is not supported
+      if (!(t2 !== "postgresql" && t2 !== "cockroachdb") && r2.length > 0 && _l.exec(e2)) throw new Error(`Running ALTER using ${n2} is not supported
 Using the example below you can still execute your query with Prisma, but please note that it is vulnerable to SQL injection attacks and requires you to take care of input sanitization.
 
 Example:
@@ -5656,31 +5564,29 @@ More Information: https://pris.ly/d/execute-raw
     __name(an2, "an");
     var ln = /* @__PURE__ */ __name(({ clientMethod: t2, activeProvider: e2 }) => (r2) => {
       let n2 = "", i2;
-      if (or(r2))
-        n2 = r2.sql, i2 = { values: et(r2.values), __prismaRawParameters__: true };
+      if (or(r2)) n2 = r2.sql, i2 = { values: et(r2.values), __prismaRawParameters__: true };
       else if (Array.isArray(r2)) {
         let [o2, ...s2] = r2;
         n2 = o2, i2 = { values: et(s2 || []), __prismaRawParameters__: true };
-      } else
-        switch (e2) {
-          case "sqlite":
-          case "mysql": {
-            n2 = r2.sql, i2 = { values: et(r2.values), __prismaRawParameters__: true };
-            break;
-          }
-          case "cockroachdb":
-          case "postgresql":
-          case "postgres": {
-            n2 = r2.text, i2 = { values: et(r2.values), __prismaRawParameters__: true };
-            break;
-          }
-          case "sqlserver": {
-            n2 = Eo(r2), i2 = { values: et(r2.values), __prismaRawParameters__: true };
-            break;
-          }
-          default:
-            throw new Error(`The ${e2} provider does not support ${t2}`);
+      } else switch (e2) {
+        case "sqlite":
+        case "mysql": {
+          n2 = r2.sql, i2 = { values: et(r2.values), __prismaRawParameters__: true };
+          break;
         }
+        case "cockroachdb":
+        case "postgresql":
+        case "postgres": {
+          n2 = r2.text, i2 = { values: et(r2.values), __prismaRawParameters__: true };
+          break;
+        }
+        case "sqlserver": {
+          n2 = Eo(r2), i2 = { values: et(r2.values), __prismaRawParameters__: true };
+          break;
+        }
+        default:
+          throw new Error(`The ${e2} provider does not support ${t2}`);
+      }
       return i2?.values ? Ao(`prisma.${t2}(${n2}, ${i2.values})`) : Ao(`prisma.${t2}(${n2})`), { query: n2, parameters: i2 };
     }, "ln");
     var Ro = { requestArgsToMiddlewareArgs(t2) {
@@ -5744,7 +5650,10 @@ More Information: https://pris.ly/d/execute-raw
     }, runInChildSpan(t2, e2) {
       return e2();
     } };
-    var cn2 = /* @__PURE__ */ __name(class {
+    var cn2 = class {
+      static {
+        __name(this, "cn");
+      }
       isEnabled() {
         return this.getGlobalTracingHelper().isEnabled();
       }
@@ -5764,7 +5673,7 @@ More Information: https://pris.ly/d/execute-raw
         let e2 = globalThis[`V${Ll}_PRISMA_INSTRUMENTATION`], r2 = globalThis.PRISMA_INSTRUMENTATION;
         return e2?.helper ?? r2?.helper ?? Fl;
       }
-    }, "cn");
+    };
     function ko() {
       return new cn2();
     }
@@ -5819,8 +5728,7 @@ More Information: https://pris.ly/d/execute-raw
     d2();
     l2();
     function Mo(t2) {
-      if (t2.action !== "findUnique" && t2.action !== "findUniqueOrThrow")
-        return;
+      if (t2.action !== "findUnique" && t2.action !== "findUniqueOrThrow") return;
       let e2 = [];
       return t2.modelName && e2.push(t2.modelName), t2.query.arguments && e2.push(mn(t2.query.arguments)), e2.push(mn(t2.query.selection)), e2.join("");
     }
@@ -5849,7 +5757,10 @@ More Information: https://pris.ly/d/execute-raw
     p2();
     d2();
     l2();
-    var yr = /* @__PURE__ */ __name(class {
+    var yr = class {
+      static {
+        __name(this, "yr");
+      }
       constructor(e2) {
         this.options = e2;
         this.batches = {};
@@ -5872,24 +5783,20 @@ More Information: https://pris.ly/d/execute-raw
           }).catch((n2) => {
             r2[0].reject(n2);
           }) : (r2.sort((n2, i2) => this.options.batchOrder(n2.request, i2.request)), this.options.batchLoader(r2.map((n2) => n2.request)).then((n2) => {
-            if (n2 instanceof Error)
-              for (let i2 = 0; i2 < r2.length; i2++)
-                r2[i2].reject(n2);
-            else
-              for (let i2 = 0; i2 < r2.length; i2++) {
-                let o2 = n2[i2];
-                o2 instanceof Error ? r2[i2].reject(o2) : r2[i2].resolve(o2);
-              }
+            if (n2 instanceof Error) for (let i2 = 0; i2 < r2.length; i2++) r2[i2].reject(n2);
+            else for (let i2 = 0; i2 < r2.length; i2++) {
+              let o2 = n2[i2];
+              o2 instanceof Error ? r2[i2].reject(o2) : r2[i2].resolve(o2);
+            }
           }).catch((n2) => {
-            for (let i2 = 0; i2 < r2.length; i2++)
-              r2[i2].reject(n2);
+            for (let i2 = 0; i2 < r2.length; i2++) r2[i2].reject(n2);
           }));
         }
       }
       get [Symbol.toStringTag]() {
         return "DataLoader";
       }
-    }, "yr");
+    };
     u2();
     c2();
     m2();
@@ -5898,8 +5805,7 @@ More Information: https://pris.ly/d/execute-raw
     l2();
     l2();
     function _e2(t2, e2) {
-      if (e2 === null)
-        return e2;
+      if (e2 === null) return e2;
       switch (t2) {
         case "bigint":
           return BigInt(e2);
@@ -5935,8 +5841,7 @@ More Information: https://pris.ly/d/execute-raw
       let e2 = [], r2 = Nl(t2);
       for (let n2 = 0; n2 < t2.rows.length; n2++) {
         let i2 = t2.rows[n2], o2 = { ...r2 };
-        for (let s2 = 0; s2 < i2.length; s2++)
-          o2[t2.columns[s2]] = _e2(t2.types[s2], i2[s2]);
+        for (let s2 = 0; s2 < i2.length; s2++) o2[t2.columns[s2]] = _e2(t2.types[s2], i2[s2]);
         e2.push(o2);
       }
       return e2;
@@ -5944,13 +5849,15 @@ More Information: https://pris.ly/d/execute-raw
     __name(hr, "hr");
     function Nl(t2) {
       let e2 = {};
-      for (let r2 = 0; r2 < t2.columns.length; r2++)
-        e2[t2.columns[r2]] = null;
+      for (let r2 = 0; r2 < t2.columns.length; r2++) e2[t2.columns[r2]] = null;
       return e2;
     }
     __name(Nl, "Nl");
     var ql = G2("prisma:client:request_handler");
-    var br2 = /* @__PURE__ */ __name(class {
+    var br2 = class {
+      static {
+        __name(this, "br");
+      }
       client;
       dataloader;
       logEmitter;
@@ -5958,18 +5865,17 @@ More Information: https://pris.ly/d/execute-raw
         this.logEmitter = r2, this.client = e2, this.dataloader = new yr({ batchLoader: oo(async ({ requests: n2, customDataProxyFetch: i2 }) => {
           let { transaction: o2, otelParentCtx: s2 } = n2[0], a2 = n2.map((A2) => A2.protocolQuery), f2 = this.client._tracingHelper.getTraceParent(s2), h2 = n2.some((A2) => pn(A2.protocolQuery.action));
           return (await this.client._engine.requestBatch(a2, { traceparent: f2, transaction: Bl(o2), containsWrite: h2, customDataProxyFetch: i2 })).map((A2, k2) => {
-            if (A2 instanceof Error)
-              return A2;
+            if (A2 instanceof Error) return A2;
             try {
               return this.mapQueryEngineResult(n2[k2], A2);
             } catch (R2) {
               return R2;
             }
           });
-        }), singleLoader: async (n2) => {
+        }), singleLoader: /* @__PURE__ */ __name(async (n2) => {
           let i2 = n2.transaction?.kind === "itx" ? _o(n2.transaction) : void 0, o2 = await this.client._engine.request(n2.protocolQuery, { traceparent: this.client._tracingHelper.getTraceParent(), interactiveTransaction: i2, isWrite: pn(n2.protocolQuery.action), customDataProxyFetch: n2.customDataProxyFetch });
           return this.mapQueryEngineResult(n2, o2);
-        }, batchBy: (n2) => n2.transaction?.id ? `transaction-${n2.transaction.id}` : Mo(n2.protocolQuery), batchOrder(n2, i2) {
+        }, "singleLoader"), batchBy: /* @__PURE__ */ __name((n2) => n2.transaction?.id ? `transaction-${n2.transaction.id}` : Mo(n2.protocolQuery), "batchBy"), batchOrder(n2, i2) {
           return n2.transaction?.kind === "batch" && i2.transaction?.kind === "batch" ? n2.transaction.index - i2.transaction.index : 0;
         } });
       }
@@ -5993,8 +5899,7 @@ More Information: https://pris.ly/d/execute-raw
         }
       }
       handleRequestError({ error: e2, clientMethod: r2, callsite: n2, transaction: i2, args: o2, modelName: s2, globalOmit: a2 }) {
-        if (ql(e2), Vl(e2, i2))
-          throw e2;
+        if (ql(e2), Vl(e2, i2)) throw e2;
         if (e2 instanceof Z2 && jl(e2)) {
           let h2 = Lo(e2.meta);
           Zt({ args: o2, errors: [h2], callsite: n2, errorFormat: this.client._errorFormat, originalMethod: r2, clientVersion: this.client._clientVersion, globalOmit: a2 });
@@ -6004,14 +5909,10 @@ More Information: https://pris.ly/d/execute-raw
           let h2 = s2 ? { modelName: s2, ...e2.meta } : e2.meta;
           throw new Z2(f2, { code: e2.code, clientVersion: this.client._clientVersion, meta: h2, batchRequestIdx: e2.batchRequestIdx });
         } else {
-          if (e2.isPanic)
-            throw new xe(f2, this.client._clientVersion);
-          if (e2 instanceof Q2)
-            throw new Q2(f2, { clientVersion: this.client._clientVersion, batchRequestIdx: e2.batchRequestIdx });
-          if (e2 instanceof I2)
-            throw new I2(f2, this.client._clientVersion);
-          if (e2 instanceof xe)
-            throw new xe(f2, this.client._clientVersion);
+          if (e2.isPanic) throw new xe(f2, this.client._clientVersion);
+          if (e2 instanceof Q2) throw new Q2(f2, { clientVersion: this.client._clientVersion, batchRequestIdx: e2.batchRequestIdx });
+          if (e2 instanceof I2) throw new I2(f2, this.client._clientVersion);
+          if (e2 instanceof xe) throw new xe(f2, this.client._clientVersion);
         }
         throw e2.clientVersion = this.client._clientVersion, e2;
       }
@@ -6019,21 +5920,18 @@ More Information: https://pris.ly/d/execute-raw
         return this.client._errorFormat && this.client._errorFormat !== "pretty" ? Ur(e2) : e2;
       }
       unpack(e2, r2, n2) {
-        if (!e2 || (e2.data && (e2 = e2.data), !e2))
-          return e2;
+        if (!e2 || (e2.data && (e2 = e2.data), !e2)) return e2;
         let i2 = Object.keys(e2)[0], o2 = Object.values(e2)[0], s2 = r2.filter((h2) => h2 !== "select" && h2 !== "include"), a2 = Zr(o2, s2), f2 = i2 === "queryRaw" ? hr(a2) : Xe(a2);
         return n2 ? n2(f2) : f2;
       }
       get [Symbol.toStringTag]() {
         return "RequestHandler";
       }
-    }, "br");
+    };
     function Bl(t2) {
       if (t2) {
-        if (t2.kind === "batch")
-          return { kind: "batch", options: { isolationLevel: t2.isolationLevel } };
-        if (t2.kind === "itx")
-          return { kind: "itx", options: _o(t2) };
+        if (t2.kind === "batch") return { kind: "batch", options: { isolationLevel: t2.isolationLevel } };
+        if (t2.kind === "itx") return { kind: "itx", options: _o(t2) };
         Ie(t2, "Unknown transaction kind");
       }
     }
@@ -6051,8 +5949,7 @@ More Information: https://pris.ly/d/execute-raw
     }
     __name(jl, "jl");
     function Lo(t2) {
-      if (t2.kind === "Union")
-        return { kind: "Union", errors: t2.errors.map(Lo) };
+      if (t2.kind === "Union") return { kind: "Union", errors: t2.errors.map(Lo) };
       if (Array.isArray(t2.selectionPath)) {
         let [, ...e2] = t2.selectionPath;
         return { ...t2, selectionPath: e2 };
@@ -6080,7 +5977,10 @@ More Information: https://pris.ly/d/execute-raw
     p2();
     d2();
     l2();
-    var M2 = /* @__PURE__ */ __name(class extends Error {
+    var M2 = class extends Error {
+      static {
+        __name(this, "M");
+      }
       constructor(e2) {
         super(e2 + `
 Read more at https://pris.ly/d/client-constructor`), this.name = "PrismaClientConstructorValidationError";
@@ -6088,61 +5988,49 @@ Read more at https://pris.ly/d/client-constructor`), this.name = "PrismaClientCo
       get [Symbol.toStringTag]() {
         return "PrismaClientConstructorValidationError";
       }
-    }, "M");
+    };
     re(M2, "PrismaClientConstructorValidationError");
     var Uo = ["datasources", "datasourceUrl", "errorFormat", "adapter", "log", "transactionOptions", "omit", "__internal"];
     var No = ["pretty", "colorless", "minimal"];
     var qo = ["info", "query", "warn", "error"];
-    var $l = { datasources: (t2, { datasourceNames: e2 }) => {
+    var $l = { datasources: /* @__PURE__ */ __name((t2, { datasourceNames: e2 }) => {
       if (t2) {
-        if (typeof t2 != "object" || Array.isArray(t2))
-          throw new M2(`Invalid value ${JSON.stringify(t2)} for "datasources" provided to PrismaClient constructor`);
+        if (typeof t2 != "object" || Array.isArray(t2)) throw new M2(`Invalid value ${JSON.stringify(t2)} for "datasources" provided to PrismaClient constructor`);
         for (let [r2, n2] of Object.entries(t2)) {
           if (!e2.includes(r2)) {
             let i2 = tt(r2, e2) || ` Available datasources: ${e2.join(", ")}`;
             throw new M2(`Unknown datasource ${r2} provided to PrismaClient constructor.${i2}`);
           }
-          if (typeof n2 != "object" || Array.isArray(n2))
-            throw new M2(`Invalid value ${JSON.stringify(t2)} for datasource "${r2}" provided to PrismaClient constructor.
+          if (typeof n2 != "object" || Array.isArray(n2)) throw new M2(`Invalid value ${JSON.stringify(t2)} for datasource "${r2}" provided to PrismaClient constructor.
 It should have this form: { url: "CONNECTION_STRING" }`);
-          if (n2 && typeof n2 == "object")
-            for (let [i2, o2] of Object.entries(n2)) {
-              if (i2 !== "url")
-                throw new M2(`Invalid value ${JSON.stringify(t2)} for datasource "${r2}" provided to PrismaClient constructor.
+          if (n2 && typeof n2 == "object") for (let [i2, o2] of Object.entries(n2)) {
+            if (i2 !== "url") throw new M2(`Invalid value ${JSON.stringify(t2)} for datasource "${r2}" provided to PrismaClient constructor.
 It should have this form: { url: "CONNECTION_STRING" }`);
-              if (typeof o2 != "string")
-                throw new M2(`Invalid value ${JSON.stringify(o2)} for datasource "${r2}" provided to PrismaClient constructor.
+            if (typeof o2 != "string") throw new M2(`Invalid value ${JSON.stringify(o2)} for datasource "${r2}" provided to PrismaClient constructor.
 It should have this form: { url: "CONNECTION_STRING" }`);
-            }
+          }
         }
       }
-    }, adapter: (t2, e2) => {
-      if (!t2 && Ne(e2.generator) === "client")
-        throw new M2('Using engine type "client" requires a driver adapter to be provided to PrismaClient constructor.');
+    }, "datasources"), adapter: /* @__PURE__ */ __name((t2, e2) => {
+      if (!t2 && Ne(e2.generator) === "client") throw new M2('Using engine type "client" requires a driver adapter to be provided to PrismaClient constructor.');
       if (t2 !== null) {
-        if (t2 === void 0)
-          throw new M2('"adapter" property must not be undefined, use null to conditionally disable driver adapters.');
-        if (Ne(e2.generator) === "binary")
-          throw new M2('Cannot use a driver adapter with the "binary" Query Engine. Please use the "library" Query Engine.');
+        if (t2 === void 0) throw new M2('"adapter" property must not be undefined, use null to conditionally disable driver adapters.');
+        if (Ne(e2.generator) === "binary") throw new M2('Cannot use a driver adapter with the "binary" Query Engine. Please use the "library" Query Engine.');
       }
-    }, datasourceUrl: (t2) => {
-      if (typeof t2 < "u" && typeof t2 != "string")
-        throw new M2(`Invalid value ${JSON.stringify(t2)} for "datasourceUrl" provided to PrismaClient constructor.
+    }, "adapter"), datasourceUrl: /* @__PURE__ */ __name((t2) => {
+      if (typeof t2 < "u" && typeof t2 != "string") throw new M2(`Invalid value ${JSON.stringify(t2)} for "datasourceUrl" provided to PrismaClient constructor.
 Expected string or undefined.`);
-    }, errorFormat: (t2) => {
+    }, "datasourceUrl"), errorFormat: /* @__PURE__ */ __name((t2) => {
       if (t2) {
-        if (typeof t2 != "string")
-          throw new M2(`Invalid value ${JSON.stringify(t2)} for "errorFormat" provided to PrismaClient constructor.`);
+        if (typeof t2 != "string") throw new M2(`Invalid value ${JSON.stringify(t2)} for "errorFormat" provided to PrismaClient constructor.`);
         if (!No.includes(t2)) {
           let e2 = tt(t2, No);
           throw new M2(`Invalid errorFormat ${t2} provided to PrismaClient constructor.${e2}`);
         }
       }
-    }, log: (t2) => {
-      if (!t2)
-        return;
-      if (!Array.isArray(t2))
-        throw new M2(`Invalid value ${JSON.stringify(t2)} for "log" provided to PrismaClient constructor.`);
+    }, "errorFormat"), log: /* @__PURE__ */ __name((t2) => {
+      if (!t2) return;
+      if (!Array.isArray(t2)) throw new M2(`Invalid value ${JSON.stringify(t2)} for "log" provided to PrismaClient constructor.`);
       function e2(r2) {
         if (typeof r2 == "string" && !qo.includes(r2)) {
           let n2 = tt(r2, qo);
@@ -6152,34 +6040,25 @@ Expected string or undefined.`);
       __name(e2, "e");
       for (let r2 of t2) {
         e2(r2);
-        let n2 = { level: e2, emit: (i2) => {
+        let n2 = { level: e2, emit: /* @__PURE__ */ __name((i2) => {
           let o2 = ["stdout", "event"];
           if (!o2.includes(i2)) {
             let s2 = tt(i2, o2);
             throw new M2(`Invalid value ${JSON.stringify(i2)} for "emit" in logLevel provided to PrismaClient constructor.${s2}`);
           }
-        } };
-        if (r2 && typeof r2 == "object")
-          for (let [i2, o2] of Object.entries(r2))
-            if (n2[i2])
-              n2[i2](o2);
-            else
-              throw new M2(`Invalid property ${i2} for "log" provided to PrismaClient constructor`);
+        }, "emit") };
+        if (r2 && typeof r2 == "object") for (let [i2, o2] of Object.entries(r2)) if (n2[i2]) n2[i2](o2);
+        else throw new M2(`Invalid property ${i2} for "log" provided to PrismaClient constructor`);
       }
-    }, transactionOptions: (t2) => {
-      if (!t2)
-        return;
+    }, "log"), transactionOptions: /* @__PURE__ */ __name((t2) => {
+      if (!t2) return;
       let e2 = t2.maxWait;
-      if (e2 != null && e2 <= 0)
-        throw new M2(`Invalid value ${e2} for maxWait in "transactionOptions" provided to PrismaClient constructor. maxWait needs to be greater than 0`);
+      if (e2 != null && e2 <= 0) throw new M2(`Invalid value ${e2} for maxWait in "transactionOptions" provided to PrismaClient constructor. maxWait needs to be greater than 0`);
       let r2 = t2.timeout;
-      if (r2 != null && r2 <= 0)
-        throw new M2(`Invalid value ${r2} for timeout in "transactionOptions" provided to PrismaClient constructor. timeout needs to be greater than 0`);
-    }, omit: (t2, e2) => {
-      if (typeof t2 != "object")
-        throw new M2('"omit" option is expected to be an object.');
-      if (t2 === null)
-        throw new M2('"omit" option can not be `null`');
+      if (r2 != null && r2 <= 0) throw new M2(`Invalid value ${r2} for timeout in "transactionOptions" provided to PrismaClient constructor. timeout needs to be greater than 0`);
+    }, "transactionOptions"), omit: /* @__PURE__ */ __name((t2, e2) => {
+      if (typeof t2 != "object") throw new M2('"omit" option is expected to be an object.');
+      if (t2 === null) throw new M2('"omit" option can not be `null`');
       let r2 = [];
       for (let [n2, i2] of Object.entries(t2)) {
         let o2 = Jl(n2, e2.runtimeDataModel);
@@ -6200,20 +6079,16 @@ Expected string or undefined.`);
           typeof a2 != "boolean" && r2.push({ kind: "InvalidFieldValue", modelKey: n2, fieldName: s2 });
         }
       }
-      if (r2.length > 0)
-        throw new M2(Gl(t2, r2));
-    }, __internal: (t2) => {
-      if (!t2)
-        return;
+      if (r2.length > 0) throw new M2(Gl(t2, r2));
+    }, "omit"), __internal: /* @__PURE__ */ __name((t2) => {
+      if (!t2) return;
       let e2 = ["debug", "engine", "configOverride"];
-      if (typeof t2 != "object")
-        throw new M2(`Invalid value ${JSON.stringify(t2)} for "__internal" to PrismaClient constructor`);
-      for (let [r2] of Object.entries(t2))
-        if (!e2.includes(r2)) {
-          let n2 = tt(r2, e2);
-          throw new M2(`Invalid property ${JSON.stringify(r2)} for "__internal" provided to PrismaClient constructor.${n2}`);
-        }
-    } };
+      if (typeof t2 != "object") throw new M2(`Invalid value ${JSON.stringify(t2)} for "__internal" to PrismaClient constructor`);
+      for (let [r2] of Object.entries(t2)) if (!e2.includes(r2)) {
+        let n2 = tt(r2, e2);
+        throw new M2(`Invalid property ${JSON.stringify(r2)} for "__internal" provided to PrismaClient constructor.${n2}`);
+      }
+    }, "__internal") };
     function jo(t2, e2) {
       for (let [r2, n2] of Object.entries(t2)) {
         if (!Uo.includes(r2)) {
@@ -6222,20 +6097,17 @@ Expected string or undefined.`);
         }
         $l[r2](n2, e2);
       }
-      if (t2.datasourceUrl && t2.datasources)
-        throw new M2('Can not use "datasourceUrl" and "datasources" options at the same time. Pick one of them');
+      if (t2.datasourceUrl && t2.datasources) throw new M2('Can not use "datasourceUrl" and "datasources" options at the same time. Pick one of them');
     }
     __name(jo, "jo");
     function tt(t2, e2) {
-      if (e2.length === 0 || typeof t2 != "string")
-        return "";
+      if (e2.length === 0 || typeof t2 != "string") return "";
       let r2 = Ql(t2, e2);
       return r2 ? ` Did you mean "${r2}"?` : "";
     }
     __name(tt, "tt");
     function Ql(t2, e2) {
-      if (e2.length === 0)
-        return null;
+      if (e2.length === 0) return null;
       let r2 = e2.map((i2) => ({ value: i2, distance: (0, Vo.default)(t2, i2) }));
       r2.sort((i2, o2) => i2.distance < o2.distance ? -1 : 1);
       let n2 = r2[0];
@@ -6248,27 +6120,25 @@ Expected string or undefined.`);
     __name(Jl, "Jl");
     function Bo(t2, e2) {
       let r2 = Object.keys(t2).find((n2) => ve(n2) === e2);
-      if (r2)
-        return t2[r2];
+      if (r2) return t2[r2];
     }
     __name(Bo, "Bo");
     function Gl(t2, e2) {
       let r2 = We(t2);
-      for (let o2 of e2)
-        switch (o2.kind) {
-          case "UnknownModel":
-            r2.arguments.getField(o2.modelKey)?.markAsError(), r2.addErrorMessage(() => `Unknown model name: ${o2.modelKey}.`);
-            break;
-          case "UnknownField":
-            r2.arguments.getDeepField([o2.modelKey, o2.fieldName])?.markAsError(), r2.addErrorMessage(() => `Model "${o2.modelKey}" does not have a field named "${o2.fieldName}".`);
-            break;
-          case "RelationInOmit":
-            r2.arguments.getDeepField([o2.modelKey, o2.fieldName])?.markAsError(), r2.addErrorMessage(() => 'Relations are already excluded by default and can not be specified in "omit".');
-            break;
-          case "InvalidFieldValue":
-            r2.arguments.getDeepFieldValue([o2.modelKey, o2.fieldName])?.markAsError(), r2.addErrorMessage(() => "Omit field option value must be a boolean.");
-            break;
-        }
+      for (let o2 of e2) switch (o2.kind) {
+        case "UnknownModel":
+          r2.arguments.getField(o2.modelKey)?.markAsError(), r2.addErrorMessage(() => `Unknown model name: ${o2.modelKey}.`);
+          break;
+        case "UnknownField":
+          r2.arguments.getDeepField([o2.modelKey, o2.fieldName])?.markAsError(), r2.addErrorMessage(() => `Model "${o2.modelKey}" does not have a field named "${o2.fieldName}".`);
+          break;
+        case "RelationInOmit":
+          r2.arguments.getDeepField([o2.modelKey, o2.fieldName])?.markAsError(), r2.addErrorMessage(() => 'Relations are already excluded by default and can not be specified in "omit".');
+          break;
+        case "InvalidFieldValue":
+          r2.arguments.getDeepFieldValue([o2.modelKey, o2.fieldName])?.markAsError(), r2.addErrorMessage(() => "Omit field option value must be a boolean.");
+          break;
+      }
       let { message: n2, args: i2 } = Xt(r2, "colorless");
       return `Error validating "omit" option:
 
@@ -6290,28 +6160,30 @@ ${n2}`;
         }, "a"), f2 = /* @__PURE__ */ __name((h2) => {
           o2 || (o2 = true, r2(h2));
         }, "f");
-        for (let h2 = 0; h2 < t2.length; h2++)
-          t2[h2].then((C2) => {
-            n2[h2] = C2, a2();
-          }, (C2) => {
-            if (!gr(C2)) {
-              f2(C2);
-              return;
-            }
-            C2.batchRequestIdx === h2 ? f2(C2) : (i2 || (i2 = C2), a2());
-          });
+        for (let h2 = 0; h2 < t2.length; h2++) t2[h2].then((C2) => {
+          n2[h2] = C2, a2();
+        }, (C2) => {
+          if (!gr(C2)) {
+            f2(C2);
+            return;
+          }
+          C2.batchRequestIdx === h2 ? f2(C2) : (i2 || (i2 = C2), a2());
+        });
       });
     }
     __name($o, "$o");
     var Ae = G2("prisma:client");
     typeof globalThis == "object" && (globalThis.NODE_CLIENT = true);
-    var Wl = { requestArgsToMiddlewareArgs: (t2) => t2, middlewareArgsToRequestArgs: (t2) => t2 };
+    var Wl = { requestArgsToMiddlewareArgs: /* @__PURE__ */ __name((t2) => t2, "requestArgsToMiddlewareArgs"), middlewareArgsToRequestArgs: /* @__PURE__ */ __name((t2) => t2, "middlewareArgsToRequestArgs") };
     var Kl = Symbol.for("prisma.client.transaction.id");
     var Hl = { id: 0, nextId() {
       return ++this.id;
     } };
     function Go(t2) {
       class e2 {
+        static {
+          __name(this, "e");
+        }
         _originalClient = this;
         _runtimeDataModel;
         _requestHandler;
@@ -6338,10 +6210,8 @@ ${n2}`;
           if (n2?.adapter) {
             s2 = n2.adapter;
             let f2 = t2.activeProvider === "postgresql" || t2.activeProvider === "cockroachdb" ? "postgres" : t2.activeProvider;
-            if (s2.provider !== f2)
-              throw new I2(`The Driver Adapter \`${s2.adapterName}\`, based on \`${s2.provider}\`, is not compatible with the provider \`${f2}\` specified in the Prisma schema.`, this._clientVersion);
-            if (n2.datasources || n2.datasourceUrl !== void 0)
-              throw new I2("Custom datasource configuration is not compatible with Prisma Driver Adapters. Please define the database connection string directly in the Driver Adapter configuration.", this._clientVersion);
+            if (s2.provider !== f2) throw new I2(`The Driver Adapter \`${s2.adapterName}\`, based on \`${s2.provider}\`, is not compatible with the provider \`${f2}\` specified in the Prisma schema.`, this._clientVersion);
+            if (n2.datasources || n2.datasourceUrl !== void 0) throw new I2("Custom datasource configuration is not compatible with Prisma Driver Adapters. Please define the database connection string directly in the Driver Adapter configuration.", this._clientVersion);
           }
           let a2 = t2.injectableEdgeEnv?.();
           try {
@@ -6350,13 +6220,12 @@ ${n2}`;
             let A2 = Ut.resolve(t2.dirname, t2.relativePath);
             Bn.existsSync(A2) || (A2 = t2.dirname), Ae("dirname", t2.dirname), Ae("relativePath", t2.relativePath), Ae("cwd", A2);
             let k2 = h2.engine || {};
-            if (f2.errorFormat ? this._errorFormat = f2.errorFormat : g2.env.NODE_ENV === "production" ? this._errorFormat = "minimal" : g2.env.NO_COLOR ? this._errorFormat = "colorless" : this._errorFormat = "colorless", this._runtimeDataModel = t2.runtimeDataModel, this._engineConfig = { cwd: A2, dirname: t2.dirname, enableDebugLogs: C2, allowTriggerPanic: k2.allowTriggerPanic, prismaPath: k2.binaryPath ?? void 0, engineEndpoint: k2.endpoint, generator: t2.generator, showColors: this._errorFormat === "pretty", logLevel: f2.log && Io(f2.log), logQueries: f2.log && !!(typeof f2.log == "string" ? f2.log === "query" : f2.log.find((R2) => typeof R2 == "string" ? R2 === "query" : R2.level === "query")), env: a2?.parsed ?? {}, flags: [], engineWasm: t2.engineWasm, compilerWasm: t2.compilerWasm, clientVersion: t2.clientVersion, engineVersion: t2.engineVersion, previewFeatures: this._previewFeatures, activeProvider: t2.activeProvider, inlineSchema: t2.inlineSchema, overrideDatasources: mo(f2, t2.datasourceNames), inlineDatasources: t2.inlineDatasources, inlineSchemaHash: t2.inlineSchemaHash, tracingHelper: this._tracingHelper, transactionOptions: { maxWait: f2.transactionOptions?.maxWait ?? 2e3, timeout: f2.transactionOptions?.timeout ?? 5e3, isolationLevel: f2.transactionOptions?.isolationLevel }, logEmitter: i2, isBundled: t2.isBundled, adapter: s2 }, this._accelerateEngineConfig = { ...this._engineConfig, accelerateUtils: { resolveDatasourceUrl: dr, getBatchRequestPayload: ur, prismaGraphQLToJSError: cr2, PrismaClientUnknownRequestError: Q2, PrismaClientInitializationError: I2, PrismaClientKnownRequestError: Z2, debug: G2("prisma:client:accelerateEngine"), engineVersion: Jo.version, clientVersion: t2.clientVersion } }, Ae("clientVersion", t2.clientVersion), this._engine = bo2(t2, this._engineConfig), this._requestHandler = new br2(this, i2), f2.log)
-              for (let R2 of f2.log) {
-                let _ = typeof R2 == "string" ? R2 : R2.emit === "stdout" ? R2.level : null;
-                _ && this.$on(_, (O2) => {
-                  st.log(`${st.tags[_] ?? ""}`, O2.message || O2.query);
-                });
-              }
+            if (f2.errorFormat ? this._errorFormat = f2.errorFormat : g2.env.NODE_ENV === "production" ? this._errorFormat = "minimal" : g2.env.NO_COLOR ? this._errorFormat = "colorless" : this._errorFormat = "colorless", this._runtimeDataModel = t2.runtimeDataModel, this._engineConfig = { cwd: A2, dirname: t2.dirname, enableDebugLogs: C2, allowTriggerPanic: k2.allowTriggerPanic, prismaPath: k2.binaryPath ?? void 0, engineEndpoint: k2.endpoint, generator: t2.generator, showColors: this._errorFormat === "pretty", logLevel: f2.log && Io(f2.log), logQueries: f2.log && !!(typeof f2.log == "string" ? f2.log === "query" : f2.log.find((R2) => typeof R2 == "string" ? R2 === "query" : R2.level === "query")), env: a2?.parsed ?? {}, flags: [], engineWasm: t2.engineWasm, compilerWasm: t2.compilerWasm, clientVersion: t2.clientVersion, engineVersion: t2.engineVersion, previewFeatures: this._previewFeatures, activeProvider: t2.activeProvider, inlineSchema: t2.inlineSchema, overrideDatasources: mo(f2, t2.datasourceNames), inlineDatasources: t2.inlineDatasources, inlineSchemaHash: t2.inlineSchemaHash, tracingHelper: this._tracingHelper, transactionOptions: { maxWait: f2.transactionOptions?.maxWait ?? 2e3, timeout: f2.transactionOptions?.timeout ?? 5e3, isolationLevel: f2.transactionOptions?.isolationLevel }, logEmitter: i2, isBundled: t2.isBundled, adapter: s2 }, this._accelerateEngineConfig = { ...this._engineConfig, accelerateUtils: { resolveDatasourceUrl: dr, getBatchRequestPayload: ur, prismaGraphQLToJSError: cr2, PrismaClientUnknownRequestError: Q2, PrismaClientInitializationError: I2, PrismaClientKnownRequestError: Z2, debug: G2("prisma:client:accelerateEngine"), engineVersion: Jo.version, clientVersion: t2.clientVersion } }, Ae("clientVersion", t2.clientVersion), this._engine = bo2(t2, this._engineConfig), this._requestHandler = new br2(this, i2), f2.log) for (let R2 of f2.log) {
+              let _ = typeof R2 == "string" ? R2 : R2.emit === "stdout" ? R2.level : null;
+              _ && this.$on(_, (O2) => {
+                st.log(`${st.tags[_] ?? ""}`, O2.message || O2.query);
+              });
+            }
           } catch (f2) {
             throw f2.clientVersion = this._clientVersion, f2;
           }
@@ -6401,8 +6270,7 @@ ${n2}`;
           return this._createPrismaPromise((o2) => (an2(this._activeProvider, n2, i2, "prisma.$executeRawUnsafe(<SQL>, [...values])"), this.$executeRawInternal(o2, "$executeRawUnsafe", [n2, ...i2])));
         }
         $runCommandRaw(n2) {
-          if (t2.activeProvider !== "mongodb")
-            throw new K2(`The ${t2.activeProvider} provider does not support $runCommandRaw. Use the mongodb provider.`, { clientVersion: this._clientVersion });
+          if (t2.activeProvider !== "mongodb") throw new K2(`The ${t2.activeProvider} provider does not support $runCommandRaw. Use the mongodb provider.`, { clientVersion: this._clientVersion });
           return this._createPrismaPromise((i2) => this._request({ args: n2, clientMethod: "$runCommandRaw", dataPath: [], action: "runCommandRaw", argsMapper: xo, callsite: Ce(this._errorFormat), transaction: i2 }));
         }
         async $queryRawInternal(n2, i2, o2, s2) {
@@ -6411,15 +6279,13 @@ ${n2}`;
         }
         $queryRaw(n2, ...i2) {
           return this._createPrismaPromise((o2) => {
-            if (n2.raw !== void 0 || n2.sql !== void 0)
-              return this.$queryRawInternal(o2, "$queryRaw", ...Qo(n2, i2));
+            if (n2.raw !== void 0 || n2.sql !== void 0) return this.$queryRawInternal(o2, "$queryRaw", ...Qo(n2, i2));
             throw new K2("`$queryRaw` is a tag function, please use it like the following:\n```\nconst result = await prisma.$queryRaw`SELECT * FROM User WHERE id = ${1} OR email = ${'user@email.com'};`\n```\n\nOr read our docs at https://www.prisma.io/docs/concepts/components/prisma-client/raw-database-access#queryraw\n", { clientVersion: this._clientVersion });
           });
         }
         $queryRawTyped(n2) {
           return this._createPrismaPromise((i2) => {
-            if (!this._hasPreviewFlag("typedSql"))
-              throw new K2("`typedSql` preview feature must be enabled in order to access $queryRawTyped API", { clientVersion: this._clientVersion });
+            if (!this._hasPreviewFlag("typedSql")) throw new K2("`typedSql` preview feature must be enabled in order to access $queryRawTyped API", { clientVersion: this._clientVersion });
             return this.$queryRawInternal(i2, "$queryRawTyped", n2);
           });
         }
@@ -6428,8 +6294,7 @@ ${n2}`;
         }
         _transactionWithArray({ promises: n2, options: i2 }) {
           let o2 = Hl.nextId(), s2 = Do(n2.length), a2 = n2.map((f2, h2) => {
-            if (f2?.[Symbol.toStringTag] !== "PrismaPromise")
-              throw new Error("All elements of the array need to be Prisma Client promises. Hint: Please make sure you are not awaiting the Prisma client calls you intended to pass in the $transaction function.");
+            if (f2?.[Symbol.toStringTag] !== "PrismaPromise") throw new Error("All elements of the array need to be Prisma Client promises. Hint: Please make sure you are not awaiting the Prisma client calls you intended to pass in the $transaction function.");
             let C2 = i2?.isolationLevel ?? this._engineConfig.transactionOptions.isolationLevel, A2 = { kind: "batch", id: o2, index: h2, isolationLevel: C2, lock: s2 };
             return f2.requestTransaction?.(A2) ?? f2;
           });
@@ -6486,7 +6351,6 @@ ${n2}`;
         }
         $extends = zi;
       }
-      __name(e2, "e");
       return e2;
     }
     __name(Go, "Go");
@@ -6507,10 +6371,8 @@ ${n2}`;
     var Yl = /* @__PURE__ */ new Set(["toJSON", "$$typeof", "asymmetricMatch", Symbol.iterator, Symbol.toStringTag, Symbol.isConcatSpreadable, Symbol.toPrimitive]);
     function Wo(t2) {
       return new Proxy(t2, { get(e2, r2) {
-        if (r2 in e2)
-          return e2[r2];
-        if (!Yl.has(r2))
-          throw new TypeError(`Invalid enum value: ${String(r2)}`);
+        if (r2 in e2) return e2[r2];
+        if (!Yl.has(r2)) throw new TypeError(`Invalid enum value: ${String(r2)}`);
       } });
     }
     __name(Wo, "Wo");
@@ -6528,7 +6390,6 @@ ${n2}`;
 var require_query_engine_bg = __commonJS({
   "node_modules/.prisma/client/query_engine_bg.js"(exports, module) {
     "use strict";
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -6538,18 +6399,15 @@ var require_query_engine_bg = __commonJS({
     var R2 = Object.getOwnPropertyNames;
     var U2 = Object.prototype.hasOwnProperty;
     var L2 = /* @__PURE__ */ __name((e2, t2) => {
-      for (var n2 in t2)
-        F2(e2, n2, { get: t2[n2], enumerable: true });
+      for (var n2 in t2) F2(e2, n2, { get: t2[n2], enumerable: true });
     }, "L");
     var N2 = /* @__PURE__ */ __name((e2, t2, n2, _) => {
-      if (t2 && typeof t2 == "object" || typeof t2 == "function")
-        for (let o2 of R2(t2))
-          !U2.call(e2, o2) && o2 !== n2 && F2(e2, o2, { get: () => t2[o2], enumerable: !(_ = B2(t2, o2)) || _.enumerable });
+      if (t2 && typeof t2 == "object" || typeof t2 == "function") for (let o2 of R2(t2)) !U2.call(e2, o2) && o2 !== n2 && F2(e2, o2, { get: /* @__PURE__ */ __name(() => t2[o2], "get"), enumerable: !(_ = B2(t2, o2)) || _.enumerable });
       return e2;
     }, "N");
     var C2 = /* @__PURE__ */ __name((e2) => N2(F2({}, "__esModule", { value: true }), e2), "C");
     var qt = {};
-    L2(qt, { QueryEngine: () => E2, __wbg_Error_e83987f665cf5504: () => J2, __wbg_Number_bb48ca12f395cd08: () => X2, __wbg_String_8f0eb39a4a4c2f66: () => Y2, __wbg___wbindgen_bigint_get_as_i64_f3ebc5a755000afd: () => K2, __wbg___wbindgen_boolean_get_6d5a1ee65bab5f68: () => Z2, __wbg___wbindgen_debug_string_df47ffb5e35e6763: () => ee, __wbg___wbindgen_in_bb933bd9e1b3bc0f: () => te, __wbg___wbindgen_is_bigint_cb320707dcd35f0b: () => ne, __wbg___wbindgen_is_function_ee8a6c5833c90377: () => re, __wbg___wbindgen_is_object_c818261d21f283a4: () => _e2, __wbg___wbindgen_is_string_fbb76cb2940daafd: () => oe, __wbg___wbindgen_is_undefined_2d472862bd29a478: () => ce2, __wbg___wbindgen_jsval_eq_6b13ab83478b1c50: () => ie, __wbg___wbindgen_jsval_loose_eq_b664b38a2f582147: () => se, __wbg___wbindgen_number_get_a20bf9b85341449d: () => ue, __wbg___wbindgen_string_get_e4f06c90489ad01b: () => be2, __wbg___wbindgen_throw_b855445ff6a94295: () => fe, __wbg__wbg_cb_unref_2454a539ea5790d9: () => ae2, __wbg_call_525440f72fbfc0ea: () => ge, __wbg_call_e762c39fa8ea36bf: () => le, __wbg_crypto_805be4ce92f1e370: () => de, __wbg_done_2042aa2670fb1db1: () => we, __wbg_entries_e171b586f8f6bdbf: () => pe, __wbg_getRandomValues_f6a868620c8bab49: () => xe, __wbg_getTime_14776bfb48a1bff9: () => ye, __wbg_get_7bed016f185add81: () => me, __wbg_get_ece95cf6585650d9: () => he, __wbg_get_efcb449f58ec27c2: () => Te, __wbg_get_with_ref_key_1dc361bd10053bfe: () => Ae, __wbg_has_787fafc980c3ccdb: () => Se, __wbg_instanceof_ArrayBuffer_70beb1189ca63b38: () => Fe, __wbg_instanceof_Map_8579b5e2ab5437c7: () => Ie, __wbg_instanceof_Promise_001fdd42afa1b7ef: () => qe, __wbg_instanceof_Uint8Array_20c8e73002f7af98: () => ke, __wbg_isArray_96e0af9891d0945d: () => Ee, __wbg_isSafeInteger_d216eda7911dde36: () => Oe, __wbg_iterator_e5822695327a3c39: () => Me, __wbg_keys_b4d27b02ad14f4be: () => ve, __wbg_length_69bca3cb64fc8748: () => De, __wbg_length_cdd215e10d9dd507: () => je, __wbg_msCrypto_2ac4d17c4748234a: () => Be, __wbg_new_0_f9740686d739025c: () => Re, __wbg_new_1acc0b6eea89d040: () => Ue, __wbg_new_3c3d849046688a66: () => Le, __wbg_new_5a79be3ab53b8aa5: () => Ne, __wbg_new_68651c719dcda04e: () => Ce, __wbg_new_e17d9f43105b08be: () => $e, __wbg_new_from_slice_92f4d78ca282a2d2: () => Ve, __wbg_new_no_args_ee98eee5275000a4: () => We, __wbg_new_with_length_01aa0dc35aa13543: () => ze, __wbg_next_020810e0ae8ebcb0: () => Pe, __wbg_next_2c826fe5dfec6b6a: () => Ge, __wbg_node_ecc8306b9857f33d: () => Qe, __wbg_now_793306c526e2e3b6: () => He, __wbg_now_7fd00a794a07d388: () => Je, __wbg_now_b3f7572f6ef3d3a9: () => Xe, __wbg_process_5cff2739921be718: () => Ye, __wbg_prototypesetcall_2a6620b6922694b2: () => Ke, __wbg_push_df81a39d04db858c: () => Ze, __wbg_queueMicrotask_5a8a9131f3f0b37b: () => et, __wbg_queueMicrotask_6d79674585219521: () => tt, __wbg_randomFillSync_d3c85af7e31cf1f8: () => nt, __wbg_require_0c566c6f2eef6c79: () => rt, __wbg_resolve_caf97c30b83f7053: () => _t, __wbg_setTimeout_5d6a1d4fc51ea450: () => ot, __wbg_set_3f1d0b984ed272ed: () => ct2, __wbg_set_907fb406c34a251d: () => it, __wbg_set_c213c871859d6500: () => st, __wbg_set_c2abbebe8b9ebee1: () => ut, __wbg_set_wasm: () => $3, __wbg_static_accessor_GLOBAL_89e1d9ac6a1b250e: () => bt2, __wbg_static_accessor_GLOBAL_THIS_8b530f326a9e48ac: () => ft, __wbg_static_accessor_SELF_6fdf4b64710cc91b: () => at2, __wbg_static_accessor_WINDOW_b45bfc5a37f6cfa2: () => gt, __wbg_subarray_480600f3d6a9f26c: () => lt, __wbg_then_4f46f6544e6b4a28: () => dt, __wbg_then_70d05cf780a18d77: () => wt, __wbg_valueOf_9eee4828c11458ca: () => pt, __wbg_value_692627309814bb8c: () => xt, __wbg_versions_a8e5a362e1f16442: () => yt, __wbindgen_cast_126e48f66237b479: () => mt, __wbindgen_cast_2241b6af4c4b2941: () => ht, __wbindgen_cast_4625c577ab2ec9ee: () => Tt, __wbindgen_cast_9ae0607507abb057: () => At, __wbindgen_cast_cb9088102bce6b30: () => St, __wbindgen_cast_d6cd19b81560fd6e: () => Ft, __wbindgen_init_externref_table: () => It, debug_panic: () => P2, getBuildTimeInfo: () => G2 });
+    L2(qt, { QueryEngine: /* @__PURE__ */ __name(() => E2, "QueryEngine"), __wbg_Error_e83987f665cf5504: /* @__PURE__ */ __name(() => J2, "__wbg_Error_e83987f665cf5504"), __wbg_Number_bb48ca12f395cd08: /* @__PURE__ */ __name(() => X2, "__wbg_Number_bb48ca12f395cd08"), __wbg_String_8f0eb39a4a4c2f66: /* @__PURE__ */ __name(() => Y2, "__wbg_String_8f0eb39a4a4c2f66"), __wbg___wbindgen_bigint_get_as_i64_f3ebc5a755000afd: /* @__PURE__ */ __name(() => K2, "__wbg___wbindgen_bigint_get_as_i64_f3ebc5a755000afd"), __wbg___wbindgen_boolean_get_6d5a1ee65bab5f68: /* @__PURE__ */ __name(() => Z2, "__wbg___wbindgen_boolean_get_6d5a1ee65bab5f68"), __wbg___wbindgen_debug_string_df47ffb5e35e6763: /* @__PURE__ */ __name(() => ee, "__wbg___wbindgen_debug_string_df47ffb5e35e6763"), __wbg___wbindgen_in_bb933bd9e1b3bc0f: /* @__PURE__ */ __name(() => te, "__wbg___wbindgen_in_bb933bd9e1b3bc0f"), __wbg___wbindgen_is_bigint_cb320707dcd35f0b: /* @__PURE__ */ __name(() => ne, "__wbg___wbindgen_is_bigint_cb320707dcd35f0b"), __wbg___wbindgen_is_function_ee8a6c5833c90377: /* @__PURE__ */ __name(() => re, "__wbg___wbindgen_is_function_ee8a6c5833c90377"), __wbg___wbindgen_is_object_c818261d21f283a4: /* @__PURE__ */ __name(() => _e2, "__wbg___wbindgen_is_object_c818261d21f283a4"), __wbg___wbindgen_is_string_fbb76cb2940daafd: /* @__PURE__ */ __name(() => oe, "__wbg___wbindgen_is_string_fbb76cb2940daafd"), __wbg___wbindgen_is_undefined_2d472862bd29a478: /* @__PURE__ */ __name(() => ce2, "__wbg___wbindgen_is_undefined_2d472862bd29a478"), __wbg___wbindgen_jsval_eq_6b13ab83478b1c50: /* @__PURE__ */ __name(() => ie, "__wbg___wbindgen_jsval_eq_6b13ab83478b1c50"), __wbg___wbindgen_jsval_loose_eq_b664b38a2f582147: /* @__PURE__ */ __name(() => se, "__wbg___wbindgen_jsval_loose_eq_b664b38a2f582147"), __wbg___wbindgen_number_get_a20bf9b85341449d: /* @__PURE__ */ __name(() => ue, "__wbg___wbindgen_number_get_a20bf9b85341449d"), __wbg___wbindgen_string_get_e4f06c90489ad01b: /* @__PURE__ */ __name(() => be2, "__wbg___wbindgen_string_get_e4f06c90489ad01b"), __wbg___wbindgen_throw_b855445ff6a94295: /* @__PURE__ */ __name(() => fe, "__wbg___wbindgen_throw_b855445ff6a94295"), __wbg__wbg_cb_unref_2454a539ea5790d9: /* @__PURE__ */ __name(() => ae2, "__wbg__wbg_cb_unref_2454a539ea5790d9"), __wbg_call_525440f72fbfc0ea: /* @__PURE__ */ __name(() => ge, "__wbg_call_525440f72fbfc0ea"), __wbg_call_e762c39fa8ea36bf: /* @__PURE__ */ __name(() => le, "__wbg_call_e762c39fa8ea36bf"), __wbg_crypto_805be4ce92f1e370: /* @__PURE__ */ __name(() => de, "__wbg_crypto_805be4ce92f1e370"), __wbg_done_2042aa2670fb1db1: /* @__PURE__ */ __name(() => we, "__wbg_done_2042aa2670fb1db1"), __wbg_entries_e171b586f8f6bdbf: /* @__PURE__ */ __name(() => pe, "__wbg_entries_e171b586f8f6bdbf"), __wbg_getRandomValues_f6a868620c8bab49: /* @__PURE__ */ __name(() => xe, "__wbg_getRandomValues_f6a868620c8bab49"), __wbg_getTime_14776bfb48a1bff9: /* @__PURE__ */ __name(() => ye, "__wbg_getTime_14776bfb48a1bff9"), __wbg_get_7bed016f185add81: /* @__PURE__ */ __name(() => me, "__wbg_get_7bed016f185add81"), __wbg_get_ece95cf6585650d9: /* @__PURE__ */ __name(() => he, "__wbg_get_ece95cf6585650d9"), __wbg_get_efcb449f58ec27c2: /* @__PURE__ */ __name(() => Te, "__wbg_get_efcb449f58ec27c2"), __wbg_get_with_ref_key_1dc361bd10053bfe: /* @__PURE__ */ __name(() => Ae, "__wbg_get_with_ref_key_1dc361bd10053bfe"), __wbg_has_787fafc980c3ccdb: /* @__PURE__ */ __name(() => Se, "__wbg_has_787fafc980c3ccdb"), __wbg_instanceof_ArrayBuffer_70beb1189ca63b38: /* @__PURE__ */ __name(() => Fe, "__wbg_instanceof_ArrayBuffer_70beb1189ca63b38"), __wbg_instanceof_Map_8579b5e2ab5437c7: /* @__PURE__ */ __name(() => Ie, "__wbg_instanceof_Map_8579b5e2ab5437c7"), __wbg_instanceof_Promise_001fdd42afa1b7ef: /* @__PURE__ */ __name(() => qe, "__wbg_instanceof_Promise_001fdd42afa1b7ef"), __wbg_instanceof_Uint8Array_20c8e73002f7af98: /* @__PURE__ */ __name(() => ke, "__wbg_instanceof_Uint8Array_20c8e73002f7af98"), __wbg_isArray_96e0af9891d0945d: /* @__PURE__ */ __name(() => Ee, "__wbg_isArray_96e0af9891d0945d"), __wbg_isSafeInteger_d216eda7911dde36: /* @__PURE__ */ __name(() => Oe, "__wbg_isSafeInteger_d216eda7911dde36"), __wbg_iterator_e5822695327a3c39: /* @__PURE__ */ __name(() => Me, "__wbg_iterator_e5822695327a3c39"), __wbg_keys_b4d27b02ad14f4be: /* @__PURE__ */ __name(() => ve, "__wbg_keys_b4d27b02ad14f4be"), __wbg_length_69bca3cb64fc8748: /* @__PURE__ */ __name(() => De, "__wbg_length_69bca3cb64fc8748"), __wbg_length_cdd215e10d9dd507: /* @__PURE__ */ __name(() => je, "__wbg_length_cdd215e10d9dd507"), __wbg_msCrypto_2ac4d17c4748234a: /* @__PURE__ */ __name(() => Be, "__wbg_msCrypto_2ac4d17c4748234a"), __wbg_new_0_f9740686d739025c: /* @__PURE__ */ __name(() => Re, "__wbg_new_0_f9740686d739025c"), __wbg_new_1acc0b6eea89d040: /* @__PURE__ */ __name(() => Ue, "__wbg_new_1acc0b6eea89d040"), __wbg_new_3c3d849046688a66: /* @__PURE__ */ __name(() => Le, "__wbg_new_3c3d849046688a66"), __wbg_new_5a79be3ab53b8aa5: /* @__PURE__ */ __name(() => Ne, "__wbg_new_5a79be3ab53b8aa5"), __wbg_new_68651c719dcda04e: /* @__PURE__ */ __name(() => Ce, "__wbg_new_68651c719dcda04e"), __wbg_new_e17d9f43105b08be: /* @__PURE__ */ __name(() => $e, "__wbg_new_e17d9f43105b08be"), __wbg_new_from_slice_92f4d78ca282a2d2: /* @__PURE__ */ __name(() => Ve, "__wbg_new_from_slice_92f4d78ca282a2d2"), __wbg_new_no_args_ee98eee5275000a4: /* @__PURE__ */ __name(() => We, "__wbg_new_no_args_ee98eee5275000a4"), __wbg_new_with_length_01aa0dc35aa13543: /* @__PURE__ */ __name(() => ze, "__wbg_new_with_length_01aa0dc35aa13543"), __wbg_next_020810e0ae8ebcb0: /* @__PURE__ */ __name(() => Pe, "__wbg_next_020810e0ae8ebcb0"), __wbg_next_2c826fe5dfec6b6a: /* @__PURE__ */ __name(() => Ge, "__wbg_next_2c826fe5dfec6b6a"), __wbg_node_ecc8306b9857f33d: /* @__PURE__ */ __name(() => Qe, "__wbg_node_ecc8306b9857f33d"), __wbg_now_793306c526e2e3b6: /* @__PURE__ */ __name(() => He, "__wbg_now_793306c526e2e3b6"), __wbg_now_7fd00a794a07d388: /* @__PURE__ */ __name(() => Je, "__wbg_now_7fd00a794a07d388"), __wbg_now_b3f7572f6ef3d3a9: /* @__PURE__ */ __name(() => Xe, "__wbg_now_b3f7572f6ef3d3a9"), __wbg_process_5cff2739921be718: /* @__PURE__ */ __name(() => Ye, "__wbg_process_5cff2739921be718"), __wbg_prototypesetcall_2a6620b6922694b2: /* @__PURE__ */ __name(() => Ke, "__wbg_prototypesetcall_2a6620b6922694b2"), __wbg_push_df81a39d04db858c: /* @__PURE__ */ __name(() => Ze, "__wbg_push_df81a39d04db858c"), __wbg_queueMicrotask_5a8a9131f3f0b37b: /* @__PURE__ */ __name(() => et, "__wbg_queueMicrotask_5a8a9131f3f0b37b"), __wbg_queueMicrotask_6d79674585219521: /* @__PURE__ */ __name(() => tt, "__wbg_queueMicrotask_6d79674585219521"), __wbg_randomFillSync_d3c85af7e31cf1f8: /* @__PURE__ */ __name(() => nt, "__wbg_randomFillSync_d3c85af7e31cf1f8"), __wbg_require_0c566c6f2eef6c79: /* @__PURE__ */ __name(() => rt, "__wbg_require_0c566c6f2eef6c79"), __wbg_resolve_caf97c30b83f7053: /* @__PURE__ */ __name(() => _t, "__wbg_resolve_caf97c30b83f7053"), __wbg_setTimeout_5d6a1d4fc51ea450: /* @__PURE__ */ __name(() => ot, "__wbg_setTimeout_5d6a1d4fc51ea450"), __wbg_set_3f1d0b984ed272ed: /* @__PURE__ */ __name(() => ct2, "__wbg_set_3f1d0b984ed272ed"), __wbg_set_907fb406c34a251d: /* @__PURE__ */ __name(() => it, "__wbg_set_907fb406c34a251d"), __wbg_set_c213c871859d6500: /* @__PURE__ */ __name(() => st, "__wbg_set_c213c871859d6500"), __wbg_set_c2abbebe8b9ebee1: /* @__PURE__ */ __name(() => ut, "__wbg_set_c2abbebe8b9ebee1"), __wbg_set_wasm: /* @__PURE__ */ __name(() => $3, "__wbg_set_wasm"), __wbg_static_accessor_GLOBAL_89e1d9ac6a1b250e: /* @__PURE__ */ __name(() => bt2, "__wbg_static_accessor_GLOBAL_89e1d9ac6a1b250e"), __wbg_static_accessor_GLOBAL_THIS_8b530f326a9e48ac: /* @__PURE__ */ __name(() => ft, "__wbg_static_accessor_GLOBAL_THIS_8b530f326a9e48ac"), __wbg_static_accessor_SELF_6fdf4b64710cc91b: /* @__PURE__ */ __name(() => at2, "__wbg_static_accessor_SELF_6fdf4b64710cc91b"), __wbg_static_accessor_WINDOW_b45bfc5a37f6cfa2: /* @__PURE__ */ __name(() => gt, "__wbg_static_accessor_WINDOW_b45bfc5a37f6cfa2"), __wbg_subarray_480600f3d6a9f26c: /* @__PURE__ */ __name(() => lt, "__wbg_subarray_480600f3d6a9f26c"), __wbg_then_4f46f6544e6b4a28: /* @__PURE__ */ __name(() => dt, "__wbg_then_4f46f6544e6b4a28"), __wbg_then_70d05cf780a18d77: /* @__PURE__ */ __name(() => wt, "__wbg_then_70d05cf780a18d77"), __wbg_valueOf_9eee4828c11458ca: /* @__PURE__ */ __name(() => pt, "__wbg_valueOf_9eee4828c11458ca"), __wbg_value_692627309814bb8c: /* @__PURE__ */ __name(() => xt, "__wbg_value_692627309814bb8c"), __wbg_versions_a8e5a362e1f16442: /* @__PURE__ */ __name(() => yt, "__wbg_versions_a8e5a362e1f16442"), __wbindgen_cast_126e48f66237b479: /* @__PURE__ */ __name(() => mt, "__wbindgen_cast_126e48f66237b479"), __wbindgen_cast_2241b6af4c4b2941: /* @__PURE__ */ __name(() => ht, "__wbindgen_cast_2241b6af4c4b2941"), __wbindgen_cast_4625c577ab2ec9ee: /* @__PURE__ */ __name(() => Tt, "__wbindgen_cast_4625c577ab2ec9ee"), __wbindgen_cast_9ae0607507abb057: /* @__PURE__ */ __name(() => At, "__wbindgen_cast_9ae0607507abb057"), __wbindgen_cast_cb9088102bce6b30: /* @__PURE__ */ __name(() => St, "__wbindgen_cast_cb9088102bce6b30"), __wbindgen_cast_d6cd19b81560fd6e: /* @__PURE__ */ __name(() => Ft, "__wbindgen_cast_d6cd19b81560fd6e"), __wbindgen_init_externref_table: /* @__PURE__ */ __name(() => It, "__wbindgen_init_externref_table"), debug_panic: /* @__PURE__ */ __name(() => P2, "debug_panic"), getBuildTimeInfo: /* @__PURE__ */ __name(() => G2, "getBuildTimeInfo") });
     module.exports = C2(qt);
     var h2 = /* @__PURE__ */ __name(() => {
     }, "h");
@@ -6592,8 +6450,7 @@ var require_query_engine_bg = __commonJS({
       let c2 = 0;
       for (; c2 < _; c2++) {
         const s2 = e2.charCodeAt(c2);
-        if (s2 > 127)
-          break;
+        if (s2 > 127) break;
         i2[o2 + c2] = s2;
       }
       if (c2 !== _) {
@@ -6615,10 +6472,8 @@ var require_query_engine_bg = __commonJS({
     __name(a2, "a");
     function q2(e2) {
       const t2 = typeof e2;
-      if (t2 == "number" || t2 == "boolean" || e2 == null)
-        return `${e2}`;
-      if (t2 == "string")
-        return `"${e2}"`;
+      if (t2 == "number" || t2 == "boolean" || e2 == null) return `${e2}`;
+      if (t2 == "string") return `"${e2}"`;
       if (t2 == "symbol") {
         const o2 = e2.description;
         return o2 == null ? "Symbol" : `Symbol(${o2})`;
@@ -6631,22 +6486,18 @@ var require_query_engine_bg = __commonJS({
         const o2 = e2.length;
         let i2 = "[";
         o2 > 0 && (i2 += q2(e2[0]));
-        for (let c2 = 1; c2 < o2; c2++)
-          i2 += ", " + q2(e2[c2]);
+        for (let c2 = 1; c2 < o2; c2++) i2 += ", " + q2(e2[c2]);
         return i2 += "]", i2;
       }
       const n2 = /\[object ([^\]]+)\]/.exec(toString.call(e2));
       let _;
-      if (n2 && n2.length > 1)
-        _ = n2[1];
-      else
-        return toString.call(e2);
-      if (_ == "Object")
-        try {
-          return "Object(" + JSON.stringify(e2) + ")";
-        } catch {
-          return "Object";
-        }
+      if (n2 && n2.length > 1) _ = n2[1];
+      else return toString.call(e2);
+      if (_ == "Object") try {
+        return "Object(" + JSON.stringify(e2) + ")";
+      } catch {
+        return "Object";
+      }
       return e2 instanceof Error ? `${e2.name}: ${e2.message}
 ${e2.stack}` : _;
     }
@@ -6669,9 +6520,9 @@ ${e2.stack}` : _;
       return e2 = e2 >>> 0, p2().subarray(e2 / 1, e2 / 1 + t2);
     }
     __name(k2, "k");
-    var O2 = typeof FinalizationRegistry > "u" ? { register: () => {
-    }, unregister: () => {
-    } } : new FinalizationRegistry((e2) => e2.dtor(e2.a, e2.b));
+    var O2 = typeof FinalizationRegistry > "u" ? { register: /* @__PURE__ */ __name(() => {
+    }, "register"), unregister: /* @__PURE__ */ __name(() => {
+    }, "unregister") } : new FinalizationRegistry((e2) => e2.dtor(e2.a, e2.b));
     function z2(e2, t2, n2, _) {
       const o2 = { a: e2, b: t2, cnt: 1, dtor: n2 }, i2 = /* @__PURE__ */ __name((...c2) => {
         o2.cnt++;
@@ -6696,8 +6547,7 @@ ${e2.stack}` : _;
     function P2(e2) {
       var t2 = a2(e2) ? 0 : b2(e2, r2.__wbindgen_malloc, r2.__wbindgen_realloc), n2 = u2;
       const _ = r2.debug_panic(t2, n2);
-      if (_[1])
-        throw M2(_[0]);
+      if (_[1]) throw M2(_[0]);
     }
     __name(P2, "P");
     function G2() {
@@ -6712,10 +6562,13 @@ ${e2.stack}` : _;
       r2.wasm_bindgen__convert__closures_____invoke__h1a2f20be69ab8911(e2, t2, n2, _);
     }
     __name(H2, "H");
-    var v2 = typeof FinalizationRegistry > "u" ? { register: () => {
-    }, unregister: () => {
-    } } : new FinalizationRegistry((e2) => r2.__wbg_queryengine_free(e2 >>> 0, 1));
+    var v2 = typeof FinalizationRegistry > "u" ? { register: /* @__PURE__ */ __name(() => {
+    }, "register"), unregister: /* @__PURE__ */ __name(() => {
+    }, "unregister") } : new FinalizationRegistry((e2) => r2.__wbg_queryengine_free(e2 >>> 0, 1));
     var E2 = class {
+      static {
+        __name(this, "E");
+      }
       __destroy_into_raw() {
         const t2 = this.__wbg_ptr;
         return this.__wbg_ptr = 0, v2.unregister(this), t2;
@@ -6742,8 +6595,7 @@ ${e2.stack}` : _;
       }
       constructor(t2, n2, _) {
         const o2 = r2.queryengine_new(t2, n2, _);
-        if (o2[2])
-          throw M2(o2[1]);
+        if (o2[2]) throw M2(o2[1]);
         return this.__wbg_ptr = o2[0] >>> 0, v2.register(this, this.__wbg_ptr, this), this;
       }
       query(t2, n2, _, o2) {
@@ -6765,7 +6617,6 @@ ${e2.stack}` : _;
         return r2.queryengine_metrics(this.__wbg_ptr, n2, _);
       }
     };
-    __name(E2, "E");
     Symbol.dispose && (E2.prototype[Symbol.dispose] = E2.prototype.free);
     function J2(e2, t2) {
       return Error(S2(e2, t2));
@@ -7194,7 +7045,6 @@ __export(wasm_worker_loader_exports, {
 var wasm_worker_loader_default;
 var init_wasm_worker_loader = __esm({
   "node_modules/.prisma/client/wasm-worker-loader.mjs"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -7206,7 +7056,6 @@ var init_wasm_worker_loader = __esm({
 // node_modules/.prisma/client/wasm.js
 var require_wasm = __commonJS({
   "node_modules/.prisma/client/wasm.js"(exports) {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -7296,11 +7145,16 @@ var require_wasm = __commonJS({
       fileSize: "fileSize",
       fileType: "fileType",
       price: "price",
+      rentalPrice: "rentalPrice",
       previewPages: "previewPages",
       category: "category",
       language: "language",
       publishedAt: "publishedAt",
       isPublished: "isPublished",
+      isFeatured: "isFeatured",
+      featuredOrder: "featuredOrder",
+      rating: "rating",
+      reviewCount: "reviewCount",
       authorId: "authorId",
       createdAt: "createdAt",
       updatedAt: "updatedAt"
@@ -7437,20 +7291,20 @@ var require_wasm = __commonJS({
           }
         }
       },
-      "inlineSchema": '// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\ngenerator client {\n  provider        = "prisma-client-js"\n  previewFeatures = ["driverAdapters"]\n}\n\ndatasource db {\n  provider = "sqlite"\n  url      = env("DATABASE_URL")\n}\n\nmodel User {\n  id        String   @id @default(uuid())\n  email     String   @unique\n  password  String\n  name      String?\n  role      UserRole @default(READER)\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  // Relations\n  author      Author?\n  purchases   Purchase[]\n  accessLinks TimeAccessLink[]\n}\n\nenum UserRole {\n  READER\n  AUTHOR\n  ADMIN\n}\n\nmodel Author {\n  id             String   @id @default(uuid())\n  userId         String   @unique\n  bio            String?\n  profileImage   String?\n  phoneNumber    String?\n  paymentMethod  String? // e.g., "mpesa", "bank"\n  paymentDetails String? // JSON string with payment info\n  totalEarnings  Float    @default(0)\n  createdAt      DateTime @default(now())\n  updatedAt      DateTime @updatedAt\n\n  // Relations\n  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)\n  books     Book[]\n  payments  Payment[]\n  blogPosts BlogPost[]\n}\n\nmodel Book {\n  id           String    @id @default(uuid())\n  title        String\n  description  String?\n  coverImage   String?\n  fileKey      String // R2 object key\n  fileSize     Int // in bytes\n  fileType     String // pdf, epub\n  price        Float\n  previewPages Int       @default(10)\n  category     String?\n  language     String    @default("Kalenjin")\n  publishedAt  DateTime?\n  isPublished  Boolean   @default(false)\n  authorId     String\n  createdAt    DateTime  @default(now())\n  updatedAt    DateTime  @updatedAt\n\n  // Relations\n  author      Author           @relation(fields: [authorId], references: [id], onDelete: Cascade)\n  purchases   Purchase[]\n  accessLinks TimeAccessLink[]\n}\n\nmodel Purchase {\n  id              String         @id @default(uuid())\n  userId          String\n  bookId          String\n  amount          Float\n  platformFee     Float\n  authorEarning   Float\n  stripePaymentId String?\n  mpesaPaymentId  String?\n  status          PurchaseStatus @default(PENDING)\n  purchasedAt     DateTime       @default(now())\n\n  // Relations\n  user User @relation(fields: [userId], references: [id], onDelete: Cascade)\n  book Book @relation(fields: [bookId], references: [id], onDelete: Cascade)\n}\n\nenum PurchaseStatus {\n  PENDING\n  COMPLETED\n  FAILED\n  REFUNDED\n}\n\nmodel Payment {\n  id        String        @id @default(uuid())\n  authorId  String\n  amount    Float\n  status    PaymentStatus @default(PENDING)\n  method    String // mpesa, bank_transfer\n  reference String?\n  paidAt    DateTime?\n  createdAt DateTime      @default(now())\n\n  // Relations\n  author Author @relation(fields: [authorId], references: [id], onDelete: Cascade)\n}\n\nenum PaymentStatus {\n  PENDING\n  PROCESSING\n  COMPLETED\n  FAILED\n}\n\nmodel TimeAccessLink {\n  id        String   @id @default(uuid())\n  token     String   @unique\n  userId    String\n  bookId    String\n  expiresAt DateTime\n  isRevoked Boolean  @default(false)\n  createdAt DateTime @default(now())\n\n  // Relations\n  user User @relation(fields: [userId], references: [id], onDelete: Cascade)\n  book Book @relation(fields: [bookId], references: [id], onDelete: Cascade)\n}\n\nmodel BlogPost {\n  id          String    @id @default(uuid())\n  title       String\n  slug        String    @unique\n  content     String // Rich text HTML content\n  excerpt     String? // Short summary for listings\n  coverImage  String? // R2 key for cover image\n  authorId    String\n  isPublished Boolean   @default(false)\n  publishedAt DateTime?\n  viewCount   Int       @default(0)\n  createdAt   DateTime  @default(now())\n  updatedAt   DateTime  @updatedAt\n\n  // Relations\n  author Author      @relation(fields: [authorId], references: [id], onDelete: Cascade)\n  images BlogImage[]\n}\n\nmodel BlogImage {\n  id         String   @id @default(uuid())\n  blogPostId String\n  imageKey   String // R2 object key\n  altText    String? // Accessibility text\n  createdAt  DateTime @default(now())\n\n  // Relations\n  blogPost BlogPost @relation(fields: [blogPostId], references: [id], onDelete: Cascade)\n}\n',
-      "inlineSchemaHash": "51a430cbdead45c454a9027ec2e165707c9c4ac2c6af6147b7c052013369b364",
+      "inlineSchema": '// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\ngenerator client {\n  provider        = "prisma-client-js"\n  previewFeatures = ["driverAdapters"]\n}\n\ndatasource db {\n  provider = "sqlite"\n  url      = env("DATABASE_URL")\n}\n\nmodel User {\n  id        String   @id @default(uuid())\n  email     String   @unique\n  password  String\n  name      String?\n  role      UserRole @default(READER)\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  // Relations\n  author      Author?\n  purchases   Purchase[]\n  accessLinks TimeAccessLink[]\n}\n\nenum UserRole {\n  READER\n  AUTHOR\n  ADMIN\n}\n\nmodel Author {\n  id             String   @id @default(uuid())\n  userId         String   @unique\n  bio            String?\n  profileImage   String?\n  phoneNumber    String?\n  paymentMethod  String? // e.g., "mpesa", "bank"\n  paymentDetails String? // JSON string with payment info\n  totalEarnings  Float    @default(0)\n  createdAt      DateTime @default(now())\n  updatedAt      DateTime @updatedAt\n\n  // Relations\n  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)\n  books     Book[]\n  payments  Payment[]\n  blogPosts BlogPost[]\n}\n\nmodel Book {\n  id            String    @id @default(uuid())\n  title         String\n  description   String?\n  coverImage    String?\n  fileKey       String // R2 object key\n  fileSize      Int // in bytes\n  fileType      String // pdf, epub\n  price         Float\n  rentalPrice   Float? // 24-hour access price\n  previewPages  Int       @default(10)\n  category      String?\n  language      String    @default("Kalenjin")\n  publishedAt   DateTime?\n  isPublished   Boolean   @default(false)\n  isFeatured    Boolean   @default(false)\n  featuredOrder Int? // Order in featured list (lower = first)\n  rating        Float     @default(0)\n  reviewCount   Int       @default(0)\n  authorId      String\n  createdAt     DateTime  @default(now())\n  updatedAt     DateTime  @updatedAt\n\n  // Relations\n  author      Author           @relation(fields: [authorId], references: [id], onDelete: Cascade)\n  purchases   Purchase[]\n  accessLinks TimeAccessLink[]\n}\n\nmodel Purchase {\n  id              String         @id @default(uuid())\n  userId          String\n  bookId          String\n  amount          Float\n  platformFee     Float\n  authorEarning   Float\n  stripePaymentId String?\n  mpesaPaymentId  String?\n  status          PurchaseStatus @default(PENDING)\n  purchasedAt     DateTime       @default(now())\n\n  // Relations\n  user User @relation(fields: [userId], references: [id], onDelete: Cascade)\n  book Book @relation(fields: [bookId], references: [id], onDelete: Cascade)\n}\n\nenum PurchaseStatus {\n  PENDING\n  COMPLETED\n  FAILED\n  REFUNDED\n}\n\nmodel Payment {\n  id        String        @id @default(uuid())\n  authorId  String\n  amount    Float\n  status    PaymentStatus @default(PENDING)\n  method    String // mpesa, bank_transfer\n  reference String?\n  paidAt    DateTime?\n  createdAt DateTime      @default(now())\n\n  // Relations\n  author Author @relation(fields: [authorId], references: [id], onDelete: Cascade)\n}\n\nenum PaymentStatus {\n  PENDING\n  PROCESSING\n  COMPLETED\n  FAILED\n}\n\nmodel TimeAccessLink {\n  id        String   @id @default(uuid())\n  token     String   @unique\n  userId    String\n  bookId    String\n  expiresAt DateTime\n  isRevoked Boolean  @default(false)\n  createdAt DateTime @default(now())\n\n  // Relations\n  user User @relation(fields: [userId], references: [id], onDelete: Cascade)\n  book Book @relation(fields: [bookId], references: [id], onDelete: Cascade)\n}\n\nmodel BlogPost {\n  id          String    @id @default(uuid())\n  title       String\n  slug        String    @unique\n  content     String // Rich text HTML content\n  excerpt     String? // Short summary for listings\n  coverImage  String? // R2 key for cover image\n  authorId    String\n  isPublished Boolean   @default(false)\n  publishedAt DateTime?\n  viewCount   Int       @default(0)\n  createdAt   DateTime  @default(now())\n  updatedAt   DateTime  @updatedAt\n\n  // Relations\n  author Author      @relation(fields: [authorId], references: [id], onDelete: Cascade)\n  images BlogImage[]\n}\n\nmodel BlogImage {\n  id         String   @id @default(uuid())\n  blogPostId String\n  imageKey   String // R2 object key\n  altText    String? // Accessibility text\n  createdAt  DateTime @default(now())\n\n  // Relations\n  blogPost BlogPost @relation(fields: [blogPostId], references: [id], onDelete: Cascade)\n}\n',
+      "inlineSchemaHash": "cd254d8803a6d5fecebd2d558cb4b54e28ed4bfec015069cbc5a14599d5e280e",
       "copyEngine": true
     };
     config2.dirname = "/";
-    config2.runtimeDataModel = JSON.parse('{"models":{"User":{"fields":[{"name":"id","kind":"scalar","type":"String"},{"name":"email","kind":"scalar","type":"String"},{"name":"password","kind":"scalar","type":"String"},{"name":"name","kind":"scalar","type":"String"},{"name":"role","kind":"enum","type":"UserRole"},{"name":"createdAt","kind":"scalar","type":"DateTime"},{"name":"updatedAt","kind":"scalar","type":"DateTime"},{"name":"author","kind":"object","type":"Author","relationName":"AuthorToUser"},{"name":"purchases","kind":"object","type":"Purchase","relationName":"PurchaseToUser"},{"name":"accessLinks","kind":"object","type":"TimeAccessLink","relationName":"TimeAccessLinkToUser"}],"dbName":null},"Author":{"fields":[{"name":"id","kind":"scalar","type":"String"},{"name":"userId","kind":"scalar","type":"String"},{"name":"bio","kind":"scalar","type":"String"},{"name":"profileImage","kind":"scalar","type":"String"},{"name":"phoneNumber","kind":"scalar","type":"String"},{"name":"paymentMethod","kind":"scalar","type":"String"},{"name":"paymentDetails","kind":"scalar","type":"String"},{"name":"totalEarnings","kind":"scalar","type":"Float"},{"name":"createdAt","kind":"scalar","type":"DateTime"},{"name":"updatedAt","kind":"scalar","type":"DateTime"},{"name":"user","kind":"object","type":"User","relationName":"AuthorToUser"},{"name":"books","kind":"object","type":"Book","relationName":"AuthorToBook"},{"name":"payments","kind":"object","type":"Payment","relationName":"AuthorToPayment"},{"name":"blogPosts","kind":"object","type":"BlogPost","relationName":"AuthorToBlogPost"}],"dbName":null},"Book":{"fields":[{"name":"id","kind":"scalar","type":"String"},{"name":"title","kind":"scalar","type":"String"},{"name":"description","kind":"scalar","type":"String"},{"name":"coverImage","kind":"scalar","type":"String"},{"name":"fileKey","kind":"scalar","type":"String"},{"name":"fileSize","kind":"scalar","type":"Int"},{"name":"fileType","kind":"scalar","type":"String"},{"name":"price","kind":"scalar","type":"Float"},{"name":"previewPages","kind":"scalar","type":"Int"},{"name":"category","kind":"scalar","type":"String"},{"name":"language","kind":"scalar","type":"String"},{"name":"publishedAt","kind":"scalar","type":"DateTime"},{"name":"isPublished","kind":"scalar","type":"Boolean"},{"name":"authorId","kind":"scalar","type":"String"},{"name":"createdAt","kind":"scalar","type":"DateTime"},{"name":"updatedAt","kind":"scalar","type":"DateTime"},{"name":"author","kind":"object","type":"Author","relationName":"AuthorToBook"},{"name":"purchases","kind":"object","type":"Purchase","relationName":"BookToPurchase"},{"name":"accessLinks","kind":"object","type":"TimeAccessLink","relationName":"BookToTimeAccessLink"}],"dbName":null},"Purchase":{"fields":[{"name":"id","kind":"scalar","type":"String"},{"name":"userId","kind":"scalar","type":"String"},{"name":"bookId","kind":"scalar","type":"String"},{"name":"amount","kind":"scalar","type":"Float"},{"name":"platformFee","kind":"scalar","type":"Float"},{"name":"authorEarning","kind":"scalar","type":"Float"},{"name":"stripePaymentId","kind":"scalar","type":"String"},{"name":"mpesaPaymentId","kind":"scalar","type":"String"},{"name":"status","kind":"enum","type":"PurchaseStatus"},{"name":"purchasedAt","kind":"scalar","type":"DateTime"},{"name":"user","kind":"object","type":"User","relationName":"PurchaseToUser"},{"name":"book","kind":"object","type":"Book","relationName":"BookToPurchase"}],"dbName":null},"Payment":{"fields":[{"name":"id","kind":"scalar","type":"String"},{"name":"authorId","kind":"scalar","type":"String"},{"name":"amount","kind":"scalar","type":"Float"},{"name":"status","kind":"enum","type":"PaymentStatus"},{"name":"method","kind":"scalar","type":"String"},{"name":"reference","kind":"scalar","type":"String"},{"name":"paidAt","kind":"scalar","type":"DateTime"},{"name":"createdAt","kind":"scalar","type":"DateTime"},{"name":"author","kind":"object","type":"Author","relationName":"AuthorToPayment"}],"dbName":null},"TimeAccessLink":{"fields":[{"name":"id","kind":"scalar","type":"String"},{"name":"token","kind":"scalar","type":"String"},{"name":"userId","kind":"scalar","type":"String"},{"name":"bookId","kind":"scalar","type":"String"},{"name":"expiresAt","kind":"scalar","type":"DateTime"},{"name":"isRevoked","kind":"scalar","type":"Boolean"},{"name":"createdAt","kind":"scalar","type":"DateTime"},{"name":"user","kind":"object","type":"User","relationName":"TimeAccessLinkToUser"},{"name":"book","kind":"object","type":"Book","relationName":"BookToTimeAccessLink"}],"dbName":null},"BlogPost":{"fields":[{"name":"id","kind":"scalar","type":"String"},{"name":"title","kind":"scalar","type":"String"},{"name":"slug","kind":"scalar","type":"String"},{"name":"content","kind":"scalar","type":"String"},{"name":"excerpt","kind":"scalar","type":"String"},{"name":"coverImage","kind":"scalar","type":"String"},{"name":"authorId","kind":"scalar","type":"String"},{"name":"isPublished","kind":"scalar","type":"Boolean"},{"name":"publishedAt","kind":"scalar","type":"DateTime"},{"name":"viewCount","kind":"scalar","type":"Int"},{"name":"createdAt","kind":"scalar","type":"DateTime"},{"name":"updatedAt","kind":"scalar","type":"DateTime"},{"name":"author","kind":"object","type":"Author","relationName":"AuthorToBlogPost"},{"name":"images","kind":"object","type":"BlogImage","relationName":"BlogImageToBlogPost"}],"dbName":null},"BlogImage":{"fields":[{"name":"id","kind":"scalar","type":"String"},{"name":"blogPostId","kind":"scalar","type":"String"},{"name":"imageKey","kind":"scalar","type":"String"},{"name":"altText","kind":"scalar","type":"String"},{"name":"createdAt","kind":"scalar","type":"DateTime"},{"name":"blogPost","kind":"object","type":"BlogPost","relationName":"BlogImageToBlogPost"}],"dbName":null}},"enums":{},"types":{}}');
+    config2.runtimeDataModel = JSON.parse('{"models":{"User":{"fields":[{"name":"id","kind":"scalar","type":"String"},{"name":"email","kind":"scalar","type":"String"},{"name":"password","kind":"scalar","type":"String"},{"name":"name","kind":"scalar","type":"String"},{"name":"role","kind":"enum","type":"UserRole"},{"name":"createdAt","kind":"scalar","type":"DateTime"},{"name":"updatedAt","kind":"scalar","type":"DateTime"},{"name":"author","kind":"object","type":"Author","relationName":"AuthorToUser"},{"name":"purchases","kind":"object","type":"Purchase","relationName":"PurchaseToUser"},{"name":"accessLinks","kind":"object","type":"TimeAccessLink","relationName":"TimeAccessLinkToUser"}],"dbName":null},"Author":{"fields":[{"name":"id","kind":"scalar","type":"String"},{"name":"userId","kind":"scalar","type":"String"},{"name":"bio","kind":"scalar","type":"String"},{"name":"profileImage","kind":"scalar","type":"String"},{"name":"phoneNumber","kind":"scalar","type":"String"},{"name":"paymentMethod","kind":"scalar","type":"String"},{"name":"paymentDetails","kind":"scalar","type":"String"},{"name":"totalEarnings","kind":"scalar","type":"Float"},{"name":"createdAt","kind":"scalar","type":"DateTime"},{"name":"updatedAt","kind":"scalar","type":"DateTime"},{"name":"user","kind":"object","type":"User","relationName":"AuthorToUser"},{"name":"books","kind":"object","type":"Book","relationName":"AuthorToBook"},{"name":"payments","kind":"object","type":"Payment","relationName":"AuthorToPayment"},{"name":"blogPosts","kind":"object","type":"BlogPost","relationName":"AuthorToBlogPost"}],"dbName":null},"Book":{"fields":[{"name":"id","kind":"scalar","type":"String"},{"name":"title","kind":"scalar","type":"String"},{"name":"description","kind":"scalar","type":"String"},{"name":"coverImage","kind":"scalar","type":"String"},{"name":"fileKey","kind":"scalar","type":"String"},{"name":"fileSize","kind":"scalar","type":"Int"},{"name":"fileType","kind":"scalar","type":"String"},{"name":"price","kind":"scalar","type":"Float"},{"name":"rentalPrice","kind":"scalar","type":"Float"},{"name":"previewPages","kind":"scalar","type":"Int"},{"name":"category","kind":"scalar","type":"String"},{"name":"language","kind":"scalar","type":"String"},{"name":"publishedAt","kind":"scalar","type":"DateTime"},{"name":"isPublished","kind":"scalar","type":"Boolean"},{"name":"isFeatured","kind":"scalar","type":"Boolean"},{"name":"featuredOrder","kind":"scalar","type":"Int"},{"name":"rating","kind":"scalar","type":"Float"},{"name":"reviewCount","kind":"scalar","type":"Int"},{"name":"authorId","kind":"scalar","type":"String"},{"name":"createdAt","kind":"scalar","type":"DateTime"},{"name":"updatedAt","kind":"scalar","type":"DateTime"},{"name":"author","kind":"object","type":"Author","relationName":"AuthorToBook"},{"name":"purchases","kind":"object","type":"Purchase","relationName":"BookToPurchase"},{"name":"accessLinks","kind":"object","type":"TimeAccessLink","relationName":"BookToTimeAccessLink"}],"dbName":null},"Purchase":{"fields":[{"name":"id","kind":"scalar","type":"String"},{"name":"userId","kind":"scalar","type":"String"},{"name":"bookId","kind":"scalar","type":"String"},{"name":"amount","kind":"scalar","type":"Float"},{"name":"platformFee","kind":"scalar","type":"Float"},{"name":"authorEarning","kind":"scalar","type":"Float"},{"name":"stripePaymentId","kind":"scalar","type":"String"},{"name":"mpesaPaymentId","kind":"scalar","type":"String"},{"name":"status","kind":"enum","type":"PurchaseStatus"},{"name":"purchasedAt","kind":"scalar","type":"DateTime"},{"name":"user","kind":"object","type":"User","relationName":"PurchaseToUser"},{"name":"book","kind":"object","type":"Book","relationName":"BookToPurchase"}],"dbName":null},"Payment":{"fields":[{"name":"id","kind":"scalar","type":"String"},{"name":"authorId","kind":"scalar","type":"String"},{"name":"amount","kind":"scalar","type":"Float"},{"name":"status","kind":"enum","type":"PaymentStatus"},{"name":"method","kind":"scalar","type":"String"},{"name":"reference","kind":"scalar","type":"String"},{"name":"paidAt","kind":"scalar","type":"DateTime"},{"name":"createdAt","kind":"scalar","type":"DateTime"},{"name":"author","kind":"object","type":"Author","relationName":"AuthorToPayment"}],"dbName":null},"TimeAccessLink":{"fields":[{"name":"id","kind":"scalar","type":"String"},{"name":"token","kind":"scalar","type":"String"},{"name":"userId","kind":"scalar","type":"String"},{"name":"bookId","kind":"scalar","type":"String"},{"name":"expiresAt","kind":"scalar","type":"DateTime"},{"name":"isRevoked","kind":"scalar","type":"Boolean"},{"name":"createdAt","kind":"scalar","type":"DateTime"},{"name":"user","kind":"object","type":"User","relationName":"TimeAccessLinkToUser"},{"name":"book","kind":"object","type":"Book","relationName":"BookToTimeAccessLink"}],"dbName":null},"BlogPost":{"fields":[{"name":"id","kind":"scalar","type":"String"},{"name":"title","kind":"scalar","type":"String"},{"name":"slug","kind":"scalar","type":"String"},{"name":"content","kind":"scalar","type":"String"},{"name":"excerpt","kind":"scalar","type":"String"},{"name":"coverImage","kind":"scalar","type":"String"},{"name":"authorId","kind":"scalar","type":"String"},{"name":"isPublished","kind":"scalar","type":"Boolean"},{"name":"publishedAt","kind":"scalar","type":"DateTime"},{"name":"viewCount","kind":"scalar","type":"Int"},{"name":"createdAt","kind":"scalar","type":"DateTime"},{"name":"updatedAt","kind":"scalar","type":"DateTime"},{"name":"author","kind":"object","type":"Author","relationName":"AuthorToBlogPost"},{"name":"images","kind":"object","type":"BlogImage","relationName":"BlogImageToBlogPost"}],"dbName":null},"BlogImage":{"fields":[{"name":"id","kind":"scalar","type":"String"},{"name":"blogPostId","kind":"scalar","type":"String"},{"name":"imageKey","kind":"scalar","type":"String"},{"name":"altText","kind":"scalar","type":"String"},{"name":"createdAt","kind":"scalar","type":"DateTime"},{"name":"blogPost","kind":"object","type":"BlogPost","relationName":"BlogImageToBlogPost"}],"dbName":null}},"enums":{},"types":{}}');
     defineDmmfProperty2(exports.Prisma, config2.runtimeDataModel);
     config2.engineWasm = {
-      getRuntime: async () => require_query_engine_bg(),
-      getQueryEngineWasmModule: async () => {
+      getRuntime: /* @__PURE__ */ __name(async () => require_query_engine_bg(), "getRuntime"),
+      getQueryEngineWasmModule: /* @__PURE__ */ __name(async () => {
         const loader = (await Promise.resolve().then(() => (init_wasm_worker_loader(), wasm_worker_loader_exports))).default;
         const engine = (await loader).default;
         return engine;
-      }
+      }, "getQueryEngineWasmModule")
     };
     config2.compilerWasm = void 0;
     config2.injectableEdgeEnv = () => ({
@@ -7470,7 +7324,6 @@ var require_wasm = __commonJS({
 // node_modules/.prisma/client/default.js
 var require_default = __commonJS({
   "node_modules/.prisma/client/default.js"(exports, module) {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -7482,7 +7335,6 @@ var require_default = __commonJS({
 // node_modules/@prisma/client/default.js
 var require_default2 = __commonJS({
   "node_modules/@prisma/client/default.js"(exports, module) {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -7498,8 +7350,7 @@ function init(x2, y2) {
   let rgx = new RegExp(`\\x1b\\[${y2}m`, "g");
   let open = `\x1B[${x2}m`, close = `\x1B[${y2}m`;
   return function(txt) {
-    if (!$.enabled || txt == null)
-      return txt;
+    if (!$.enabled || txt == null) return txt;
     return open + (!!~("" + txt).indexOf(close) ? txt.replace(rgx, close + open) : txt) + close;
   };
 }
@@ -7509,8 +7360,8 @@ function debugCreate(namespace) {
     enabled: topProps.enabled(namespace),
     namespace,
     log: topProps.log,
-    extend: () => {
-    }
+    extend: /* @__PURE__ */ __name(() => {
+    }, "extend")
     // not implemented
   };
   const debugCall = /* @__PURE__ */ __name((...args) => {
@@ -7538,8 +7389,8 @@ function debugCreate(namespace) {
     }
   }, "debugCall");
   return new Proxy(debugCall, {
-    get: (_, prop) => instanceProps[prop],
-    set: (_, prop, value) => instanceProps[prop] = value
+    get: /* @__PURE__ */ __name((_, prop) => instanceProps[prop], "get"),
+    set: /* @__PURE__ */ __name((_, prop, value) => instanceProps[prop] = value, "set")
   });
 }
 function safeStringify(value, indent = 2) {
@@ -7563,7 +7414,6 @@ function safeStringify(value, indent = 2) {
 var __defProp2, __export2, colors_exports, FORCE_COLOR, NODE_DISABLE_COLORS, NO_COLOR, TERM, isTTY, $, reset, bold, dim, italic, underline, inverse, hidden, strikethrough, black, red, green, yellow, blue, magenta, cyan, white, gray, grey, bgBlack, bgRed, bgGreen, bgYellow, bgBlue, bgMagenta, bgCyan, bgWhite, MAX_ARGS_HISTORY, COLORS, argsHistory, lastTimestamp, lastColor, processEnv, topProps, Debug2;
 var init_dist = __esm({
   "node_modules/@prisma/debug/dist/index.mjs"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -7575,33 +7425,33 @@ var init_dist = __esm({
     }, "__export");
     colors_exports = {};
     __export2(colors_exports, {
-      $: () => $,
-      bgBlack: () => bgBlack,
-      bgBlue: () => bgBlue,
-      bgCyan: () => bgCyan,
-      bgGreen: () => bgGreen,
-      bgMagenta: () => bgMagenta,
-      bgRed: () => bgRed,
-      bgWhite: () => bgWhite,
-      bgYellow: () => bgYellow,
-      black: () => black,
-      blue: () => blue,
-      bold: () => bold,
-      cyan: () => cyan,
-      dim: () => dim,
-      gray: () => gray,
-      green: () => green,
-      grey: () => grey,
-      hidden: () => hidden,
-      inverse: () => inverse,
-      italic: () => italic,
-      magenta: () => magenta,
-      red: () => red,
-      reset: () => reset,
-      strikethrough: () => strikethrough,
-      underline: () => underline,
-      white: () => white,
-      yellow: () => yellow
+      $: /* @__PURE__ */ __name(() => $, "$"),
+      bgBlack: /* @__PURE__ */ __name(() => bgBlack, "bgBlack"),
+      bgBlue: /* @__PURE__ */ __name(() => bgBlue, "bgBlue"),
+      bgCyan: /* @__PURE__ */ __name(() => bgCyan, "bgCyan"),
+      bgGreen: /* @__PURE__ */ __name(() => bgGreen, "bgGreen"),
+      bgMagenta: /* @__PURE__ */ __name(() => bgMagenta, "bgMagenta"),
+      bgRed: /* @__PURE__ */ __name(() => bgRed, "bgRed"),
+      bgWhite: /* @__PURE__ */ __name(() => bgWhite, "bgWhite"),
+      bgYellow: /* @__PURE__ */ __name(() => bgYellow, "bgYellow"),
+      black: /* @__PURE__ */ __name(() => black, "black"),
+      blue: /* @__PURE__ */ __name(() => blue, "blue"),
+      bold: /* @__PURE__ */ __name(() => bold, "bold"),
+      cyan: /* @__PURE__ */ __name(() => cyan, "cyan"),
+      dim: /* @__PURE__ */ __name(() => dim, "dim"),
+      gray: /* @__PURE__ */ __name(() => gray, "gray"),
+      green: /* @__PURE__ */ __name(() => green, "green"),
+      grey: /* @__PURE__ */ __name(() => grey, "grey"),
+      hidden: /* @__PURE__ */ __name(() => hidden, "hidden"),
+      inverse: /* @__PURE__ */ __name(() => inverse, "inverse"),
+      italic: /* @__PURE__ */ __name(() => italic, "italic"),
+      magenta: /* @__PURE__ */ __name(() => magenta, "magenta"),
+      red: /* @__PURE__ */ __name(() => red, "red"),
+      reset: /* @__PURE__ */ __name(() => reset, "reset"),
+      strikethrough: /* @__PURE__ */ __name(() => strikethrough, "strikethrough"),
+      underline: /* @__PURE__ */ __name(() => underline, "underline"),
+      white: /* @__PURE__ */ __name(() => white, "white"),
+      yellow: /* @__PURE__ */ __name(() => yellow, "yellow")
     });
     isTTY = true;
     if (typeof process !== "undefined") {
@@ -7663,29 +7513,27 @@ var init_dist = __esm({
           return s2.replace(/[.+?^${}()|[\]\\]/g, "\\$&");
         });
         const isListened = listenedNamespaces.some((listenedNamespace) => {
-          if (listenedNamespace === "" || listenedNamespace[0] === "-")
-            return false;
+          if (listenedNamespace === "" || listenedNamespace[0] === "-") return false;
           return namespace.match(RegExp(listenedNamespace.split("*").join(".*") + "$"));
         });
         const isExcluded = listenedNamespaces.some((listenedNamespace) => {
-          if (listenedNamespace === "" || listenedNamespace[0] !== "-")
-            return false;
+          if (listenedNamespace === "" || listenedNamespace[0] !== "-") return false;
           return namespace.match(RegExp(listenedNamespace.slice(1).split("*").join(".*") + "$"));
         });
         return isListened && !isExcluded;
       },
-      log: (...args) => {
+      log: /* @__PURE__ */ __name((...args) => {
         const [namespace, format2, ...rest] = args;
         const logWithFormatting = console.warn ?? console.log;
         logWithFormatting(`${namespace} ${format2}`, ...rest);
-      },
+      }, "log"),
       formatters: {}
       // not implemented
     };
     __name(debugCreate, "debugCreate");
     Debug2 = new Proxy(debugCreate, {
-      get: (_, prop) => topProps[prop],
-      set: (_, prop, value) => topProps[prop] = value
+      get: /* @__PURE__ */ __name((_, prop) => topProps[prop], "get"),
+      set: /* @__PURE__ */ __name((_, prop, value) => topProps[prop] = value, "set")
     });
     __name(safeStringify, "safeStringify");
   }
@@ -7695,20 +7543,22 @@ var init_dist = __esm({
 var DriverAdapterError, debug3, ColumnTypeEnum, mockAdapterErrors;
 var init_dist2 = __esm({
   "node_modules/@prisma/driver-adapter-utils/dist/index.mjs"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
     init_performance2();
     init_dist();
-    DriverAdapterError = /* @__PURE__ */ __name(class extends Error {
+    DriverAdapterError = class extends Error {
+      static {
+        __name(this, "DriverAdapterError");
+      }
       name = "DriverAdapterError";
       cause;
       constructor(payload) {
         super(typeof payload["message"] === "string" ? payload["message"] : payload.kind);
         this.cause = payload;
       }
-    }, "DriverAdapterError");
+    };
     debug3 = Debug2("driver-adapter-utils");
     ColumnTypeEnum = {
       // Scalars
@@ -7761,12 +7611,14 @@ var init_dist2 = __esm({
 var HTTPError;
 var init_HTTPError = __esm({
   "node_modules/ky/distribution/errors/HTTPError.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
     init_performance2();
     HTTPError = class extends Error {
+      static {
+        __name(this, "HTTPError");
+      }
       response;
       request;
       options;
@@ -7782,7 +7634,6 @@ var init_HTTPError = __esm({
         this.options = options;
       }
     };
-    __name(HTTPError, "HTTPError");
   }
 });
 
@@ -7790,12 +7641,14 @@ var init_HTTPError = __esm({
 var TimeoutError;
 var init_TimeoutError = __esm({
   "node_modules/ky/distribution/errors/TimeoutError.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
     init_performance2();
     TimeoutError = class extends Error {
+      static {
+        __name(this, "TimeoutError");
+      }
       request;
       constructor(request) {
         super(`Request timed out: ${request.method} ${request.url}`);
@@ -7803,7 +7656,6 @@ var init_TimeoutError = __esm({
         this.request = request;
       }
     };
-    __name(TimeoutError, "TimeoutError");
   }
 });
 
@@ -7811,7 +7663,6 @@ var init_TimeoutError = __esm({
 var isObject;
 var init_is = __esm({
   "node_modules/ky/distribution/utils/is.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -7827,7 +7678,6 @@ function newHookValue(original, incoming, property) {
 var validateAndMerge, mergeHeaders, mergeHooks, deepMerge;
 var init_merge = __esm({
   "node_modules/ky/distribution/utils/merge.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -7897,7 +7747,6 @@ var init_merge = __esm({
 var supportsRequestStreams, supportsAbortController, supportsResponseStreams, supportsFormData, requestMethods, validate, responseTypes, maxSafeTimeout, stop, kyOptionKeys, requestOptionsRegistry;
 var init_constants = __esm({
   "node_modules/ky/distribution/core/constants.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -7980,7 +7829,6 @@ var init_constants = __esm({
 var normalizeRequestMethod, retryMethods, retryStatusCodes, retryAfterStatusCodes, defaultRetryOptions, normalizeRetryOptions;
 var init_normalize = __esm({
   "node_modules/ky/distribution/utils/normalize.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -7997,7 +7845,7 @@ var init_normalize = __esm({
       afterStatusCodes: retryAfterStatusCodes,
       maxRetryAfter: Number.POSITIVE_INFINITY,
       backoffLimit: Number.POSITIVE_INFINITY,
-      delay: (attemptCount) => 0.3 * 2 ** (attemptCount - 1) * 1e3
+      delay: /* @__PURE__ */ __name((attemptCount) => 0.3 * 2 ** (attemptCount - 1) * 1e3, "delay")
     };
     normalizeRetryOptions = /* @__PURE__ */ __name((retry = {}) => {
       if (typeof retry === "number") {
@@ -8036,7 +7884,6 @@ async function timeout(request, init3, abortController, options) {
 }
 var init_timeout = __esm({
   "node_modules/ky/distribution/utils/timeout.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -8066,7 +7913,6 @@ async function delay(ms, { signal }) {
 }
 var init_delay = __esm({
   "node_modules/ky/distribution/utils/delay.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -8079,7 +7925,6 @@ var init_delay = __esm({
 var findUnknownOptions;
 var init_options = __esm({
   "node_modules/ky/distribution/utils/options.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -8101,7 +7946,6 @@ var init_options = __esm({
 var Ky;
 var init_Ky = __esm({
   "node_modules/ky/distribution/core/Ky.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -8114,9 +7958,12 @@ var init_Ky = __esm({
     init_delay();
     init_options();
     init_constants();
-    Ky = class {
+    Ky = class _Ky {
+      static {
+        __name(this, "Ky");
+      }
       static create(input, options) {
-        const ky2 = new Ky(input, options);
+        const ky2 = new _Ky(input, options);
         const function_ = /* @__PURE__ */ __name(async () => {
           if (typeof ky2._options.timeout === "number" && ky2._options.timeout > maxSafeTimeout) {
             throw new RangeError(`The \`timeout\` option cannot be greater than ${maxSafeTimeout}`);
@@ -8357,7 +8204,6 @@ var init_Ky = __esm({
         });
       }
     };
-    __name(Ky, "Ky");
   }
 });
 
@@ -8365,7 +8211,6 @@ var init_Ky = __esm({
 var createInstance, ky, distribution_default;
 var init_distribution = __esm({
   "node_modules/ky/distribution/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -8398,31 +8243,29 @@ function init2(x2, y2) {
   let rgx = new RegExp(`\\x1b\\[${y2}m`, "g");
   let open = `\x1B[${x2}m`, close = `\x1B[${y2}m`;
   return function(txt) {
-    if (!$2.enabled || txt == null)
-      return txt;
+    if (!$2.enabled || txt == null) return txt;
     return open + (!!~("" + txt).indexOf(close) ? txt.replace(rgx, close + open) : txt) + close;
   };
 }
 function getColumnTypes(columnNames, rows) {
   const columnTypes = [];
-  columnLoop:
-    for (let columnIndex = 0; columnIndex < columnNames.length; columnIndex++) {
-      for (let rowIndex = 0; rowIndex < rows.length; rowIndex++) {
-        const candidateValue = rows[rowIndex][columnIndex];
-        if (candidateValue !== null) {
-          const inferred = inferColumnType(candidateValue);
-          if (columnTypes[columnIndex] === void 0 || inferred === ColumnTypeEnum.Text) {
-            columnTypes[columnIndex] = inferred;
-          }
-          if (inferred !== ColumnTypeEnum.UnknownNumber) {
-            continue columnLoop;
-          }
+  columnLoop: for (let columnIndex = 0; columnIndex < columnNames.length; columnIndex++) {
+    for (let rowIndex = 0; rowIndex < rows.length; rowIndex++) {
+      const candidateValue = rows[rowIndex][columnIndex];
+      if (candidateValue !== null) {
+        const inferred = inferColumnType(candidateValue);
+        if (columnTypes[columnIndex] === void 0 || inferred === ColumnTypeEnum.Text) {
+          columnTypes[columnIndex] = inferred;
+        }
+        if (inferred !== ColumnTypeEnum.UnknownNumber) {
+          continue columnLoop;
         }
       }
-      if (columnTypes[columnIndex] === void 0) {
-        columnTypes[columnIndex] = ColumnTypeEnum.Int32;
-      }
     }
+    if (columnTypes[columnIndex] === void 0) {
+      columnTypes[columnIndex] = ColumnTypeEnum.Int32;
+    }
+  }
   return columnTypes;
 }
 function inferColumnType(value) {
@@ -8615,7 +8458,6 @@ function onError2(error3) {
 var name, FORCE_COLOR2, NODE_DISABLE_COLORS2, NO_COLOR2, TERM2, isTTY2, $2, reset2, bold2, dim2, italic2, underline2, inverse2, hidden2, strikethrough2, black2, red2, green2, yellow2, blue2, magenta2, cyan2, white2, gray2, grey2, bgBlack2, bgRed2, bgGreen2, bgYellow2, bgBlue2, bgMagenta2, bgCyan2, bgWhite2, MAX_BIND_VALUES, GENERIC_SQLITE_ERROR, isoDateRegex, sqliteDateRegex, UnexpectedTypeError, debug4, D1HTTPQueryable, D1HTTPTransaction, PrismaD1HTTPAdapter, PrismaD1HTTPAdapterFactory, debug22, D1WorkerQueryable, D1WorkerTransaction, PrismaD1WorkerAdapter, PrismaD1WorkerAdapterFactory, PrismaD1;
 var init_dist3 = __esm({
   "node_modules/@prisma/adapter-d1/dist/index.mjs"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -8672,14 +8514,17 @@ var init_dist3 = __esm({
     __name(inferStringType, "inferStringType");
     __name(inferNumberType, "inferNumberType");
     __name(inferObjectType, "inferObjectType");
-    UnexpectedTypeError = /* @__PURE__ */ __name(class extends Error {
+    UnexpectedTypeError = class extends Error {
+      static {
+        __name(this, "UnexpectedTypeError");
+      }
       name = "UnexpectedTypeError";
       constructor(value) {
         const type = typeof value;
         const repr = type === "object" ? JSON.stringify(value) : String(value);
         super(`unexpected value of type ${type}: ${repr}`);
       }
-    }, "UnexpectedTypeError");
+    };
     __name(mapRow, "mapRow");
     __name(mapArg, "mapArg");
     __name(convertDriverError, "convertDriverError");
@@ -8691,7 +8536,10 @@ var init_dist3 = __esm({
     __name(onError, "onError");
     __name(performRawQuery, "performRawQuery");
     __name(isD1HTTPParams, "isD1HTTPParams");
-    D1HTTPQueryable = /* @__PURE__ */ __name(class {
+    D1HTTPQueryable = class {
+      static {
+        __name(this, "D1HTTPQueryable");
+      }
       constructor(client) {
         this.client = client;
       }
@@ -8756,8 +8604,11 @@ var init_dist3 = __esm({
           onError(e2);
         }
       }
-    }, "D1HTTPQueryable");
-    D1HTTPTransaction = /* @__PURE__ */ __name(class extends D1HTTPQueryable {
+    };
+    D1HTTPTransaction = class extends D1HTTPQueryable {
+      static {
+        __name(this, "D1HTTPTransaction");
+      }
       constructor(client, options) {
         super(client);
         this.options = options;
@@ -8768,8 +8619,11 @@ var init_dist3 = __esm({
       async rollback() {
         debug4(`[js::rollback]`);
       }
-    }, "D1HTTPTransaction");
-    PrismaD1HTTPAdapter = /* @__PURE__ */ __name(class extends D1HTTPQueryable {
+    };
+    PrismaD1HTTPAdapter = class extends D1HTTPQueryable {
+      static {
+        __name(this, "PrismaD1HTTPAdapter");
+      }
       constructor(params, release2) {
         const D1_API_BASE_URL = `https://api.cloudflare.com/client/v4/accounts/${params.CLOUDFLARE_ACCOUNT_ID}/d1/database/${params.CLOUDFLARE_DATABASE_ID}`;
         const client = distribution_default.create({
@@ -8800,12 +8654,12 @@ var init_dist3 = __esm({
        * await prisma.$transaction([ ...moreQueries ])
        * ```
        */
-      warnOnce = (key, message2, ...args) => {
+      warnOnce = /* @__PURE__ */ __name((key, message2, ...args) => {
         if (!this.alreadyWarned.has(key)) {
           this.alreadyWarned.add(key);
           console.info(`${this.tags.warn} ${message2}`, ...args);
         }
-      };
+      }, "warnOnce");
       async executeScript(script) {
         try {
           await performRawQuery(this.client, {
@@ -8844,8 +8698,11 @@ var init_dist3 = __esm({
       async dispose() {
         await this.release?.();
       }
-    }, "PrismaD1HTTPAdapter");
-    PrismaD1HTTPAdapterFactory = /* @__PURE__ */ __name(class {
+    };
+    PrismaD1HTTPAdapterFactory = class {
+      static {
+        __name(this, "PrismaD1HTTPAdapterFactory");
+      }
       constructor(params) {
         this.params = params;
       }
@@ -8902,9 +8759,12 @@ var init_dist3 = __esm({
         }, "dispose");
         return new PrismaD1HTTPAdapter(this.params, dispose);
       }
-    }, "PrismaD1HTTPAdapterFactory");
+    };
     debug22 = Debug2("prisma:driver-adapter:d1");
-    D1WorkerQueryable = /* @__PURE__ */ __name(class {
+    D1WorkerQueryable = class {
+      static {
+        __name(this, "D1WorkerQueryable");
+      }
       constructor(client) {
         this.client = client;
       }
@@ -8967,8 +8827,11 @@ var init_dist3 = __esm({
           onError2(e2);
         }
       }
-    }, "D1WorkerQueryable");
-    D1WorkerTransaction = /* @__PURE__ */ __name(class extends D1WorkerQueryable {
+    };
+    D1WorkerTransaction = class extends D1WorkerQueryable {
+      static {
+        __name(this, "D1WorkerTransaction");
+      }
       constructor(client, options) {
         super(client);
         this.options = options;
@@ -8979,8 +8842,11 @@ var init_dist3 = __esm({
       async rollback() {
         debug22(`[js::rollback]`);
       }
-    }, "D1WorkerTransaction");
-    PrismaD1WorkerAdapter = /* @__PURE__ */ __name(class extends D1WorkerQueryable {
+    };
+    PrismaD1WorkerAdapter = class extends D1WorkerQueryable {
+      static {
+        __name(this, "PrismaD1WorkerAdapter");
+      }
       constructor(client, release2) {
         super(client);
         this.release = release2;
@@ -9002,12 +8868,12 @@ var init_dist3 = __esm({
        * await prisma.$transaction([ ...moreQueries ])
        * ```
        */
-      warnOnce = (key, message2, ...args) => {
+      warnOnce = /* @__PURE__ */ __name((key, message2, ...args) => {
         if (!this.alreadyWarned.has(key)) {
           this.alreadyWarned.add(key);
           console.info(`${this.tags.warn} ${message2}`, ...args);
         }
-      };
+      }, "warnOnce");
       async executeScript(script) {
         try {
           await this.client.exec(script);
@@ -9042,8 +8908,11 @@ var init_dist3 = __esm({
       async dispose() {
         await this.release?.();
       }
-    }, "PrismaD1WorkerAdapter");
-    PrismaD1WorkerAdapterFactory = /* @__PURE__ */ __name(class {
+    };
+    PrismaD1WorkerAdapterFactory = class {
+      static {
+        __name(this, "PrismaD1WorkerAdapterFactory");
+      }
       constructor(client) {
         this.client = client;
       }
@@ -9053,9 +8922,12 @@ var init_dist3 = __esm({
         return new PrismaD1WorkerAdapter(this.client, async () => {
         });
       }
-    }, "PrismaD1WorkerAdapterFactory");
+    };
     __name(onError2, "onError2");
-    PrismaD1 = /* @__PURE__ */ __name(class {
+    PrismaD1 = class {
+      static {
+        __name(this, "PrismaD1");
+      }
       provider = "sqlite";
       adapterName = name;
       connect;
@@ -9072,7 +8944,7 @@ var init_dist3 = __esm({
           self2.connect = factory.connect.bind(factory);
         }
       }
-    }, "PrismaD1");
+    };
   }
 });
 
@@ -9164,7 +9036,6 @@ var import_client;
 var init_d1_client = __esm({
   "src/lib/db/d1-client.ts"() {
     "use strict";
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -9244,7 +9115,6 @@ var CacheTTL, CachePrefix;
 var init_cache = __esm({
   "src/worker/utils/cache.ts"() {
     "use strict";
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -9282,7 +9152,6 @@ var init_cache = __esm({
 var getHttpHandlerExtensionConfiguration, resolveHttpHandlerRuntimeConfig;
 var init_httpExtensionConfiguration = __esm({
   "node_modules/@smithy/protocol-http/dist-es/extensions/httpExtensionConfiguration.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -9314,7 +9183,6 @@ var init_httpExtensionConfiguration = __esm({
 // node_modules/@smithy/protocol-http/dist-es/extensions/index.js
 var init_extensions = __esm({
   "node_modules/@smithy/protocol-http/dist-es/extensions/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -9326,7 +9194,6 @@ var init_extensions = __esm({
 // node_modules/@smithy/types/dist-es/abort.js
 var init_abort = __esm({
   "node_modules/@smithy/types/dist-es/abort.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -9338,7 +9205,6 @@ var init_abort = __esm({
 var HttpAuthLocation;
 var init_auth = __esm({
   "node_modules/@smithy/types/dist-es/auth/auth.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -9354,7 +9220,6 @@ var init_auth = __esm({
 var HttpApiKeyAuthLocation;
 var init_HttpApiKeyAuth = __esm({
   "node_modules/@smithy/types/dist-es/auth/HttpApiKeyAuth.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -9369,7 +9234,6 @@ var init_HttpApiKeyAuth = __esm({
 // node_modules/@smithy/types/dist-es/auth/HttpAuthScheme.js
 var init_HttpAuthScheme = __esm({
   "node_modules/@smithy/types/dist-es/auth/HttpAuthScheme.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -9380,7 +9244,6 @@ var init_HttpAuthScheme = __esm({
 // node_modules/@smithy/types/dist-es/auth/HttpAuthSchemeProvider.js
 var init_HttpAuthSchemeProvider = __esm({
   "node_modules/@smithy/types/dist-es/auth/HttpAuthSchemeProvider.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -9391,7 +9254,6 @@ var init_HttpAuthSchemeProvider = __esm({
 // node_modules/@smithy/types/dist-es/auth/HttpSigner.js
 var init_HttpSigner = __esm({
   "node_modules/@smithy/types/dist-es/auth/HttpSigner.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -9402,7 +9264,6 @@ var init_HttpSigner = __esm({
 // node_modules/@smithy/types/dist-es/auth/IdentityProviderConfig.js
 var init_IdentityProviderConfig = __esm({
   "node_modules/@smithy/types/dist-es/auth/IdentityProviderConfig.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -9413,7 +9274,6 @@ var init_IdentityProviderConfig = __esm({
 // node_modules/@smithy/types/dist-es/auth/index.js
 var init_auth2 = __esm({
   "node_modules/@smithy/types/dist-es/auth/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -9430,7 +9290,6 @@ var init_auth2 = __esm({
 // node_modules/@smithy/types/dist-es/blob/blob-payload-input-types.js
 var init_blob_payload_input_types = __esm({
   "node_modules/@smithy/types/dist-es/blob/blob-payload-input-types.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -9441,7 +9300,6 @@ var init_blob_payload_input_types = __esm({
 // node_modules/@smithy/types/dist-es/checksum.js
 var init_checksum = __esm({
   "node_modules/@smithy/types/dist-es/checksum.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -9452,7 +9310,6 @@ var init_checksum = __esm({
 // node_modules/@smithy/types/dist-es/client.js
 var init_client = __esm({
   "node_modules/@smithy/types/dist-es/client.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -9463,7 +9320,6 @@ var init_client = __esm({
 // node_modules/@smithy/types/dist-es/command.js
 var init_command = __esm({
   "node_modules/@smithy/types/dist-es/command.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -9474,7 +9330,6 @@ var init_command = __esm({
 // node_modules/@smithy/types/dist-es/connection/config.js
 var init_config = __esm({
   "node_modules/@smithy/types/dist-es/connection/config.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -9485,7 +9340,6 @@ var init_config = __esm({
 // node_modules/@smithy/types/dist-es/connection/manager.js
 var init_manager = __esm({
   "node_modules/@smithy/types/dist-es/connection/manager.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -9496,7 +9350,6 @@ var init_manager = __esm({
 // node_modules/@smithy/types/dist-es/connection/pool.js
 var init_pool = __esm({
   "node_modules/@smithy/types/dist-es/connection/pool.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -9507,7 +9360,6 @@ var init_pool = __esm({
 // node_modules/@smithy/types/dist-es/connection/index.js
 var init_connection = __esm({
   "node_modules/@smithy/types/dist-es/connection/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -9521,7 +9373,6 @@ var init_connection = __esm({
 // node_modules/@smithy/types/dist-es/crypto.js
 var init_crypto = __esm({
   "node_modules/@smithy/types/dist-es/crypto.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -9532,7 +9383,6 @@ var init_crypto = __esm({
 // node_modules/@smithy/types/dist-es/encode.js
 var init_encode = __esm({
   "node_modules/@smithy/types/dist-es/encode.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -9544,7 +9394,6 @@ var init_encode = __esm({
 var EndpointURLScheme;
 var init_endpoint = __esm({
   "node_modules/@smithy/types/dist-es/endpoint.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -9559,7 +9408,6 @@ var init_endpoint = __esm({
 // node_modules/@smithy/types/dist-es/endpoints/EndpointRuleObject.js
 var init_EndpointRuleObject = __esm({
   "node_modules/@smithy/types/dist-es/endpoints/EndpointRuleObject.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -9570,7 +9418,6 @@ var init_EndpointRuleObject = __esm({
 // node_modules/@smithy/types/dist-es/endpoints/ErrorRuleObject.js
 var init_ErrorRuleObject = __esm({
   "node_modules/@smithy/types/dist-es/endpoints/ErrorRuleObject.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -9581,7 +9428,6 @@ var init_ErrorRuleObject = __esm({
 // node_modules/@smithy/types/dist-es/endpoints/RuleSetObject.js
 var init_RuleSetObject = __esm({
   "node_modules/@smithy/types/dist-es/endpoints/RuleSetObject.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -9592,7 +9438,6 @@ var init_RuleSetObject = __esm({
 // node_modules/@smithy/types/dist-es/endpoints/shared.js
 var init_shared = __esm({
   "node_modules/@smithy/types/dist-es/endpoints/shared.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -9603,7 +9448,6 @@ var init_shared = __esm({
 // node_modules/@smithy/types/dist-es/endpoints/TreeRuleObject.js
 var init_TreeRuleObject = __esm({
   "node_modules/@smithy/types/dist-es/endpoints/TreeRuleObject.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -9614,7 +9458,6 @@ var init_TreeRuleObject = __esm({
 // node_modules/@smithy/types/dist-es/endpoints/index.js
 var init_endpoints = __esm({
   "node_modules/@smithy/types/dist-es/endpoints/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -9630,7 +9473,6 @@ var init_endpoints = __esm({
 // node_modules/@smithy/types/dist-es/eventStream.js
 var init_eventStream = __esm({
   "node_modules/@smithy/types/dist-es/eventStream.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -9642,7 +9484,6 @@ var init_eventStream = __esm({
 var AlgorithmId;
 var init_checksum2 = __esm({
   "node_modules/@smithy/types/dist-es/extensions/checksum.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -9660,7 +9501,6 @@ var init_checksum2 = __esm({
 // node_modules/@smithy/types/dist-es/extensions/defaultClientConfiguration.js
 var init_defaultClientConfiguration = __esm({
   "node_modules/@smithy/types/dist-es/extensions/defaultClientConfiguration.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -9671,7 +9511,6 @@ var init_defaultClientConfiguration = __esm({
 // node_modules/@smithy/types/dist-es/extensions/defaultExtensionConfiguration.js
 var init_defaultExtensionConfiguration = __esm({
   "node_modules/@smithy/types/dist-es/extensions/defaultExtensionConfiguration.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -9682,7 +9521,6 @@ var init_defaultExtensionConfiguration = __esm({
 // node_modules/@smithy/types/dist-es/extensions/index.js
 var init_extensions2 = __esm({
   "node_modules/@smithy/types/dist-es/extensions/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -9696,7 +9534,6 @@ var init_extensions2 = __esm({
 // node_modules/@smithy/types/dist-es/feature-ids.js
 var init_feature_ids = __esm({
   "node_modules/@smithy/types/dist-es/feature-ids.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -9708,7 +9545,6 @@ var init_feature_ids = __esm({
 var FieldPosition;
 var init_http = __esm({
   "node_modules/@smithy/types/dist-es/http.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -9723,7 +9559,6 @@ var init_http = __esm({
 // node_modules/@smithy/types/dist-es/http/httpHandlerInitialization.js
 var init_httpHandlerInitialization = __esm({
   "node_modules/@smithy/types/dist-es/http/httpHandlerInitialization.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -9734,7 +9569,6 @@ var init_httpHandlerInitialization = __esm({
 // node_modules/@smithy/types/dist-es/identity/apiKeyIdentity.js
 var init_apiKeyIdentity = __esm({
   "node_modules/@smithy/types/dist-es/identity/apiKeyIdentity.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -9745,7 +9579,6 @@ var init_apiKeyIdentity = __esm({
 // node_modules/@smithy/types/dist-es/identity/awsCredentialIdentity.js
 var init_awsCredentialIdentity = __esm({
   "node_modules/@smithy/types/dist-es/identity/awsCredentialIdentity.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -9756,7 +9589,6 @@ var init_awsCredentialIdentity = __esm({
 // node_modules/@smithy/types/dist-es/identity/identity.js
 var init_identity = __esm({
   "node_modules/@smithy/types/dist-es/identity/identity.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -9767,7 +9599,6 @@ var init_identity = __esm({
 // node_modules/@smithy/types/dist-es/identity/tokenIdentity.js
 var init_tokenIdentity = __esm({
   "node_modules/@smithy/types/dist-es/identity/tokenIdentity.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -9778,7 +9609,6 @@ var init_tokenIdentity = __esm({
 // node_modules/@smithy/types/dist-es/identity/index.js
 var init_identity2 = __esm({
   "node_modules/@smithy/types/dist-es/identity/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -9793,7 +9623,6 @@ var init_identity2 = __esm({
 // node_modules/@smithy/types/dist-es/logger.js
 var init_logger = __esm({
   "node_modules/@smithy/types/dist-es/logger.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -9805,7 +9634,6 @@ var init_logger = __esm({
 var SMITHY_CONTEXT_KEY;
 var init_middleware = __esm({
   "node_modules/@smithy/types/dist-es/middleware.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -9817,7 +9645,6 @@ var init_middleware = __esm({
 // node_modules/@smithy/types/dist-es/pagination.js
 var init_pagination = __esm({
   "node_modules/@smithy/types/dist-es/pagination.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -9829,7 +9656,6 @@ var init_pagination = __esm({
 var IniSectionType;
 var init_profile = __esm({
   "node_modules/@smithy/types/dist-es/profile.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -9845,7 +9671,6 @@ var init_profile = __esm({
 // node_modules/@smithy/types/dist-es/response.js
 var init_response = __esm({
   "node_modules/@smithy/types/dist-es/response.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -9856,7 +9681,6 @@ var init_response = __esm({
 // node_modules/@smithy/types/dist-es/retry.js
 var init_retry = __esm({
   "node_modules/@smithy/types/dist-es/retry.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -9867,7 +9691,6 @@ var init_retry = __esm({
 // node_modules/@smithy/types/dist-es/schema/schema.js
 var init_schema = __esm({
   "node_modules/@smithy/types/dist-es/schema/schema.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -9878,7 +9701,6 @@ var init_schema = __esm({
 // node_modules/@smithy/types/dist-es/schema/traits.js
 var init_traits = __esm({
   "node_modules/@smithy/types/dist-es/schema/traits.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -9889,7 +9711,6 @@ var init_traits = __esm({
 // node_modules/@smithy/types/dist-es/schema/schema-deprecated.js
 var init_schema_deprecated = __esm({
   "node_modules/@smithy/types/dist-es/schema/schema-deprecated.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -9900,7 +9721,6 @@ var init_schema_deprecated = __esm({
 // node_modules/@smithy/types/dist-es/schema/sentinels.js
 var init_sentinels = __esm({
   "node_modules/@smithy/types/dist-es/schema/sentinels.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -9911,7 +9731,6 @@ var init_sentinels = __esm({
 // node_modules/@smithy/types/dist-es/schema/static-schemas.js
 var init_static_schemas = __esm({
   "node_modules/@smithy/types/dist-es/schema/static-schemas.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -9922,7 +9741,6 @@ var init_static_schemas = __esm({
 // node_modules/@smithy/types/dist-es/serde.js
 var init_serde = __esm({
   "node_modules/@smithy/types/dist-es/serde.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -9933,7 +9751,6 @@ var init_serde = __esm({
 // node_modules/@smithy/types/dist-es/shapes.js
 var init_shapes = __esm({
   "node_modules/@smithy/types/dist-es/shapes.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -9944,7 +9761,6 @@ var init_shapes = __esm({
 // node_modules/@smithy/types/dist-es/signature.js
 var init_signature = __esm({
   "node_modules/@smithy/types/dist-es/signature.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -9955,7 +9771,6 @@ var init_signature = __esm({
 // node_modules/@smithy/types/dist-es/stream.js
 var init_stream = __esm({
   "node_modules/@smithy/types/dist-es/stream.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -9966,7 +9781,6 @@ var init_stream = __esm({
 // node_modules/@smithy/types/dist-es/streaming-payload/streaming-blob-common-types.js
 var init_streaming_blob_common_types = __esm({
   "node_modules/@smithy/types/dist-es/streaming-payload/streaming-blob-common-types.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -9977,7 +9791,6 @@ var init_streaming_blob_common_types = __esm({
 // node_modules/@smithy/types/dist-es/streaming-payload/streaming-blob-payload-input-types.js
 var init_streaming_blob_payload_input_types = __esm({
   "node_modules/@smithy/types/dist-es/streaming-payload/streaming-blob-payload-input-types.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -9988,7 +9801,6 @@ var init_streaming_blob_payload_input_types = __esm({
 // node_modules/@smithy/types/dist-es/streaming-payload/streaming-blob-payload-output-types.js
 var init_streaming_blob_payload_output_types = __esm({
   "node_modules/@smithy/types/dist-es/streaming-payload/streaming-blob-payload-output-types.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -10000,7 +9812,6 @@ var init_streaming_blob_payload_output_types = __esm({
 var RequestHandlerProtocol;
 var init_transfer = __esm({
   "node_modules/@smithy/types/dist-es/transfer.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -10016,7 +9827,6 @@ var init_transfer = __esm({
 // node_modules/@smithy/types/dist-es/transform/client-payload-blob-type-narrow.js
 var init_client_payload_blob_type_narrow = __esm({
   "node_modules/@smithy/types/dist-es/transform/client-payload-blob-type-narrow.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -10027,7 +9837,6 @@ var init_client_payload_blob_type_narrow = __esm({
 // node_modules/@smithy/types/dist-es/transform/mutable.js
 var init_mutable = __esm({
   "node_modules/@smithy/types/dist-es/transform/mutable.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -10038,7 +9847,6 @@ var init_mutable = __esm({
 // node_modules/@smithy/types/dist-es/transform/no-undefined.js
 var init_no_undefined = __esm({
   "node_modules/@smithy/types/dist-es/transform/no-undefined.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -10049,7 +9857,6 @@ var init_no_undefined = __esm({
 // node_modules/@smithy/types/dist-es/transform/type-transform.js
 var init_type_transform = __esm({
   "node_modules/@smithy/types/dist-es/transform/type-transform.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -10060,7 +9867,6 @@ var init_type_transform = __esm({
 // node_modules/@smithy/types/dist-es/uri.js
 var init_uri = __esm({
   "node_modules/@smithy/types/dist-es/uri.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -10071,7 +9877,6 @@ var init_uri = __esm({
 // node_modules/@smithy/types/dist-es/util.js
 var init_util = __esm({
   "node_modules/@smithy/types/dist-es/util.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -10082,7 +9887,6 @@ var init_util = __esm({
 // node_modules/@smithy/types/dist-es/waiter.js
 var init_waiter = __esm({
   "node_modules/@smithy/types/dist-es/waiter.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -10093,7 +9897,6 @@ var init_waiter = __esm({
 // node_modules/@smithy/types/dist-es/index.js
 var init_dist_es = __esm({
   "node_modules/@smithy/types/dist-es/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -10147,7 +9950,6 @@ var init_dist_es = __esm({
 // node_modules/@smithy/protocol-http/dist-es/Field.js
 var init_Field = __esm({
   "node_modules/@smithy/protocol-http/dist-es/Field.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -10158,7 +9960,6 @@ var init_Field = __esm({
 // node_modules/@smithy/protocol-http/dist-es/Fields.js
 var init_Fields = __esm({
   "node_modules/@smithy/protocol-http/dist-es/Fields.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -10169,7 +9970,6 @@ var init_Fields = __esm({
 // node_modules/@smithy/protocol-http/dist-es/httpHandler.js
 var init_httpHandler = __esm({
   "node_modules/@smithy/protocol-http/dist-es/httpHandler.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -10190,12 +9990,14 @@ function cloneQuery(query) {
 var HttpRequest;
 var init_httpRequest = __esm({
   "node_modules/@smithy/protocol-http/dist-es/httpRequest.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
     init_performance2();
-    HttpRequest = class {
+    HttpRequest = class _HttpRequest {
+      static {
+        __name(this, "HttpRequest");
+      }
       method;
       protocol;
       hostname;
@@ -10221,7 +10023,7 @@ var init_httpRequest = __esm({
         this.fragment = options.fragment;
       }
       static clone(request) {
-        const cloned = new HttpRequest({
+        const cloned = new _HttpRequest({
           ...request,
           headers: { ...request.headers }
         });
@@ -10238,10 +10040,9 @@ var init_httpRequest = __esm({
         return "method" in req && "protocol" in req && "hostname" in req && "path" in req && typeof req["query"] === "object" && typeof req["headers"] === "object";
       }
       clone() {
-        return HttpRequest.clone(this);
+        return _HttpRequest.clone(this);
       }
     };
-    __name(HttpRequest, "HttpRequest");
     __name(cloneQuery, "cloneQuery");
   }
 });
@@ -10250,12 +10051,14 @@ var init_httpRequest = __esm({
 var HttpResponse;
 var init_httpResponse = __esm({
   "node_modules/@smithy/protocol-http/dist-es/httpResponse.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
     init_performance2();
     HttpResponse = class {
+      static {
+        __name(this, "HttpResponse");
+      }
       statusCode;
       reason;
       headers;
@@ -10273,14 +10076,12 @@ var init_httpResponse = __esm({
         return typeof resp.statusCode === "number" && typeof resp.headers === "object";
       }
     };
-    __name(HttpResponse, "HttpResponse");
   }
 });
 
 // node_modules/@smithy/protocol-http/dist-es/isValidHostname.js
 var init_isValidHostname = __esm({
   "node_modules/@smithy/protocol-http/dist-es/isValidHostname.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -10291,7 +10092,6 @@ var init_isValidHostname = __esm({
 // node_modules/@smithy/protocol-http/dist-es/types.js
 var init_types = __esm({
   "node_modules/@smithy/protocol-http/dist-es/types.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -10302,7 +10102,6 @@ var init_types = __esm({
 // node_modules/@smithy/protocol-http/dist-es/index.js
 var init_dist_es2 = __esm({
   "node_modules/@smithy/protocol-http/dist-es/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -10346,7 +10145,6 @@ function addExpectContinueMiddleware(options) {
 var addExpectContinueMiddlewareOptions, getAddExpectContinuePlugin;
 var init_dist_es3 = __esm({
   "node_modules/@aws-sdk/middleware-expect-continue/dist-es/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -10360,9 +10158,9 @@ var init_dist_es3 = __esm({
       override: true
     };
     getAddExpectContinuePlugin = /* @__PURE__ */ __name((options) => ({
-      applyToStack: (clientStack) => {
+      applyToStack: /* @__PURE__ */ __name((clientStack) => {
         clientStack.add(addExpectContinueMiddleware(options), addExpectContinueMiddlewareOptions);
-      }
+      }, "applyToStack")
     }), "getAddExpectContinuePlugin");
   }
 });
@@ -10371,7 +10169,6 @@ var init_dist_es3 = __esm({
 var RequestChecksumCalculation, DEFAULT_REQUEST_CHECKSUM_CALCULATION, ResponseChecksumValidation, DEFAULT_RESPONSE_CHECKSUM_VALIDATION, ChecksumAlgorithm, ChecksumLocation, DEFAULT_CHECKSUM_ALGORITHM;
 var init_constants2 = __esm({
   "node_modules/@aws-sdk/middleware-flexible-checksums/dist-es/constants.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -10405,7 +10202,6 @@ var init_constants2 = __esm({
 // node_modules/@aws-sdk/middleware-flexible-checksums/dist-es/NODE_REQUEST_CHECKSUM_CALCULATION_CONFIG_OPTIONS.js
 var init_NODE_REQUEST_CHECKSUM_CALCULATION_CONFIG_OPTIONS = __esm({
   "node_modules/@aws-sdk/middleware-flexible-checksums/dist-es/NODE_REQUEST_CHECKSUM_CALCULATION_CONFIG_OPTIONS.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -10416,7 +10212,6 @@ var init_NODE_REQUEST_CHECKSUM_CALCULATION_CONFIG_OPTIONS = __esm({
 // node_modules/@aws-sdk/middleware-flexible-checksums/dist-es/NODE_RESPONSE_CHECKSUM_VALIDATION_CONFIG_OPTIONS.js
 var init_NODE_RESPONSE_CHECKSUM_VALIDATION_CONFIG_OPTIONS = __esm({
   "node_modules/@aws-sdk/middleware-flexible-checksums/dist-es/NODE_RESPONSE_CHECKSUM_VALIDATION_CONFIG_OPTIONS.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -10428,7 +10223,6 @@ var init_NODE_RESPONSE_CHECKSUM_VALIDATION_CONFIG_OPTIONS = __esm({
 var crc64NvmeCrtContainer;
 var init_crc64_nvme_crt_container = __esm({
   "node_modules/@aws-sdk/middleware-flexible-checksums/dist-es/crc64-nvme-crt-container.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -10442,7 +10236,6 @@ var init_crc64_nvme_crt_container = __esm({
 // node_modules/@aws-sdk/core/dist-es/submodules/client/emitWarningIfUnsupportedVersion.js
 var init_emitWarningIfUnsupportedVersion = __esm({
   "node_modules/@aws-sdk/core/dist-es/submodules/client/emitWarningIfUnsupportedVersion.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -10460,7 +10253,6 @@ function setCredentialFeature(credentials, feature, value) {
 }
 var init_setCredentialFeature = __esm({
   "node_modules/@aws-sdk/core/dist-es/submodules/client/setCredentialFeature.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -10482,7 +10274,6 @@ function setFeature(context2, feature, value) {
 }
 var init_setFeature = __esm({
   "node_modules/@aws-sdk/core/dist-es/submodules/client/setFeature.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -10494,7 +10285,6 @@ var init_setFeature = __esm({
 // node_modules/@aws-sdk/core/dist-es/submodules/client/setTokenFeature.js
 var init_setTokenFeature = __esm({
   "node_modules/@aws-sdk/core/dist-es/submodules/client/setTokenFeature.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -10505,7 +10295,6 @@ var init_setTokenFeature = __esm({
 // node_modules/@aws-sdk/core/dist-es/submodules/client/index.js
 var init_client2 = __esm({
   "node_modules/@aws-sdk/core/dist-es/submodules/client/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -10521,7 +10310,6 @@ var init_client2 = __esm({
 var getDateHeader;
 var init_getDateHeader = __esm({
   "node_modules/@aws-sdk/core/dist-es/submodules/httpAuthSchemes/utils/getDateHeader.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -10535,7 +10323,6 @@ var init_getDateHeader = __esm({
 var getSkewCorrectedDate;
 var init_getSkewCorrectedDate = __esm({
   "node_modules/@aws-sdk/core/dist-es/submodules/httpAuthSchemes/utils/getSkewCorrectedDate.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -10548,7 +10335,6 @@ var init_getSkewCorrectedDate = __esm({
 var isClockSkewed;
 var init_isClockSkewed = __esm({
   "node_modules/@aws-sdk/core/dist-es/submodules/httpAuthSchemes/utils/isClockSkewed.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -10562,7 +10348,6 @@ var init_isClockSkewed = __esm({
 var getUpdatedSystemClockOffset;
 var init_getUpdatedSystemClockOffset = __esm({
   "node_modules/@aws-sdk/core/dist-es/submodules/httpAuthSchemes/utils/getUpdatedSystemClockOffset.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -10581,7 +10366,6 @@ var init_getUpdatedSystemClockOffset = __esm({
 // node_modules/@aws-sdk/core/dist-es/submodules/httpAuthSchemes/utils/index.js
 var init_utils2 = __esm({
   "node_modules/@aws-sdk/core/dist-es/submodules/httpAuthSchemes/utils/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -10596,7 +10380,6 @@ var init_utils2 = __esm({
 var throwSigningPropertyError, validateSigningProperties, AwsSdkSigV4Signer;
 var init_AwsSdkSigV4Signer = __esm({
   "node_modules/@aws-sdk/core/dist-es/submodules/httpAuthSchemes/aws_sdk/AwsSdkSigV4Signer.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -10627,6 +10410,9 @@ var init_AwsSdkSigV4Signer = __esm({
       };
     }, "validateSigningProperties");
     AwsSdkSigV4Signer = class {
+      static {
+        __name(this, "AwsSdkSigV4Signer");
+      }
       async sign(httpRequest, identity, signingProperties) {
         if (!HttpRequest.isInstance(httpRequest)) {
           throw new Error("The request is not an instance of `HttpRequest` and cannot be signed");
@@ -10672,7 +10458,6 @@ var init_AwsSdkSigV4Signer = __esm({
         }
       }
     };
-    __name(AwsSdkSigV4Signer, "AwsSdkSigV4Signer");
   }
 });
 
@@ -10680,7 +10465,6 @@ var init_AwsSdkSigV4Signer = __esm({
 var AwsSdkSigV4ASigner;
 var init_AwsSdkSigV4ASigner = __esm({
   "node_modules/@aws-sdk/core/dist-es/submodules/httpAuthSchemes/aws_sdk/AwsSdkSigV4ASigner.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -10689,6 +10473,9 @@ var init_AwsSdkSigV4ASigner = __esm({
     init_utils2();
     init_AwsSdkSigV4Signer();
     AwsSdkSigV4ASigner = class extends AwsSdkSigV4Signer {
+      static {
+        __name(this, "AwsSdkSigV4ASigner");
+      }
       async sign(httpRequest, identity, signingProperties) {
         if (!HttpRequest.isInstance(httpRequest)) {
           throw new Error("The request is not an instance of `HttpRequest` and cannot be signed");
@@ -10704,14 +10491,12 @@ var init_AwsSdkSigV4ASigner = __esm({
         return signedRequest;
       }
     };
-    __name(AwsSdkSigV4ASigner, "AwsSdkSigV4ASigner");
   }
 });
 
 // node_modules/@aws-sdk/core/dist-es/submodules/httpAuthSchemes/utils/getBearerTokenEnvKey.js
 var init_getBearerTokenEnvKey = __esm({
   "node_modules/@aws-sdk/core/dist-es/submodules/httpAuthSchemes/utils/getBearerTokenEnvKey.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -10722,7 +10507,6 @@ var init_getBearerTokenEnvKey = __esm({
 // node_modules/@aws-sdk/core/dist-es/submodules/httpAuthSchemes/aws_sdk/NODE_AUTH_SCHEME_PREFERENCE_OPTIONS.js
 var init_NODE_AUTH_SCHEME_PREFERENCE_OPTIONS = __esm({
   "node_modules/@aws-sdk/core/dist-es/submodules/httpAuthSchemes/aws_sdk/NODE_AUTH_SCHEME_PREFERENCE_OPTIONS.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -10733,7 +10517,6 @@ var init_NODE_AUTH_SCHEME_PREFERENCE_OPTIONS = __esm({
 // node_modules/@smithy/core/dist-es/getSmithyContext.js
 var init_getSmithyContext = __esm({
   "node_modules/@smithy/core/dist-es/getSmithyContext.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -10745,7 +10528,6 @@ var init_getSmithyContext = __esm({
 var getSmithyContext;
 var init_getSmithyContext2 = __esm({
   "node_modules/@smithy/util-middleware/dist-es/getSmithyContext.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -10759,7 +10541,6 @@ var init_getSmithyContext2 = __esm({
 var normalizeProvider;
 var init_normalizeProvider = __esm({
   "node_modules/@smithy/util-middleware/dist-es/normalizeProvider.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -10776,7 +10557,6 @@ var init_normalizeProvider = __esm({
 // node_modules/@smithy/util-middleware/dist-es/index.js
 var init_dist_es4 = __esm({
   "node_modules/@smithy/util-middleware/dist-es/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -10790,7 +10570,6 @@ var init_dist_es4 = __esm({
 var resolveAuthOptions;
 var init_resolveAuthOptions = __esm({
   "node_modules/@smithy/core/dist-es/middleware-http-auth-scheme/resolveAuthOptions.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -10829,7 +10608,6 @@ function convertHttpAuthSchemesToMap(httpAuthSchemes) {
 var httpAuthSchemeMiddleware;
 var init_httpAuthSchemeMiddleware = __esm({
   "node_modules/@smithy/core/dist-es/middleware-http-auth-scheme/httpAuthSchemeMiddleware.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -10877,7 +10655,6 @@ var init_httpAuthSchemeMiddleware = __esm({
 var httpAuthSchemeEndpointRuleSetMiddlewareOptions, getHttpAuthSchemeEndpointRuleSetPlugin;
 var init_getHttpAuthSchemeEndpointRuleSetPlugin = __esm({
   "node_modules/@smithy/core/dist-es/middleware-http-auth-scheme/getHttpAuthSchemeEndpointRuleSetPlugin.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -10892,12 +10669,12 @@ var init_getHttpAuthSchemeEndpointRuleSetPlugin = __esm({
       toMiddleware: "endpointV2Middleware"
     };
     getHttpAuthSchemeEndpointRuleSetPlugin = /* @__PURE__ */ __name((config2, { httpAuthSchemeParametersProvider, identityProviderConfigProvider }) => ({
-      applyToStack: (clientStack) => {
+      applyToStack: /* @__PURE__ */ __name((clientStack) => {
         clientStack.addRelativeTo(httpAuthSchemeMiddleware(config2, {
           httpAuthSchemeParametersProvider,
           identityProviderConfigProvider
         }), httpAuthSchemeEndpointRuleSetMiddlewareOptions);
-      }
+      }, "applyToStack")
     }), "getHttpAuthSchemeEndpointRuleSetPlugin");
   }
 });
@@ -10905,7 +10682,6 @@ var init_getHttpAuthSchemeEndpointRuleSetPlugin = __esm({
 // node_modules/@smithy/middleware-serde/dist-es/deserializerMiddleware.js
 var init_deserializerMiddleware = __esm({
   "node_modules/@smithy/middleware-serde/dist-es/deserializerMiddleware.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -10916,7 +10692,6 @@ var init_deserializerMiddleware = __esm({
 // node_modules/@smithy/middleware-serde/dist-es/serializerMiddleware.js
 var init_serializerMiddleware = __esm({
   "node_modules/@smithy/middleware-serde/dist-es/serializerMiddleware.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -10928,7 +10703,6 @@ var init_serializerMiddleware = __esm({
 var serializerMiddlewareOption;
 var init_serdePlugin = __esm({
   "node_modules/@smithy/middleware-serde/dist-es/serdePlugin.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -10945,7 +10719,6 @@ var init_serdePlugin = __esm({
 // node_modules/@smithy/middleware-serde/dist-es/index.js
 var init_dist_es5 = __esm({
   "node_modules/@smithy/middleware-serde/dist-es/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -10960,7 +10733,6 @@ var init_dist_es5 = __esm({
 var httpAuthSchemeMiddlewareOptions;
 var init_getHttpAuthSchemePlugin = __esm({
   "node_modules/@smithy/core/dist-es/middleware-http-auth-scheme/getHttpAuthSchemePlugin.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -10980,7 +10752,6 @@ var init_getHttpAuthSchemePlugin = __esm({
 // node_modules/@smithy/core/dist-es/middleware-http-auth-scheme/index.js
 var init_middleware_http_auth_scheme = __esm({
   "node_modules/@smithy/core/dist-es/middleware-http-auth-scheme/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -10995,7 +10766,6 @@ var init_middleware_http_auth_scheme = __esm({
 var defaultErrorHandler, defaultSuccessHandler, httpSigningMiddleware;
 var init_httpSigningMiddleware = __esm({
   "node_modules/@smithy/core/dist-es/middleware-http-signing/httpSigningMiddleware.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -11031,7 +10801,6 @@ var init_httpSigningMiddleware = __esm({
 var httpSigningMiddlewareOptions, getHttpSigningPlugin;
 var init_getHttpSigningMiddleware = __esm({
   "node_modules/@smithy/core/dist-es/middleware-http-signing/getHttpSigningMiddleware.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -11047,9 +10816,9 @@ var init_getHttpSigningMiddleware = __esm({
       toMiddleware: "retryMiddleware"
     };
     getHttpSigningPlugin = /* @__PURE__ */ __name((config2) => ({
-      applyToStack: (clientStack) => {
+      applyToStack: /* @__PURE__ */ __name((clientStack) => {
         clientStack.addRelativeTo(httpSigningMiddleware(config2), httpSigningMiddlewareOptions);
-      }
+      }, "applyToStack")
     }), "getHttpSigningPlugin");
   }
 });
@@ -11057,7 +10826,6 @@ var init_getHttpSigningMiddleware = __esm({
 // node_modules/@smithy/core/dist-es/middleware-http-signing/index.js
 var init_middleware_http_signing = __esm({
   "node_modules/@smithy/core/dist-es/middleware-http-signing/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -11071,7 +10839,6 @@ var init_middleware_http_signing = __esm({
 var normalizeProvider2;
 var init_normalizeProvider2 = __esm({
   "node_modules/@smithy/core/dist-es/normalizeProvider.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -11113,7 +10880,6 @@ function createPaginator(ClientCtor, CommandCtor, inputTokenName, outputTokenNam
 var makePagedClientRequest, get;
 var init_createPaginator = __esm({
   "node_modules/@smithy/core/dist-es/pagination/createPaginator.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -11142,7 +10908,6 @@ var init_createPaginator = __esm({
 var chars, alphabetByEncoding, alphabetByValue, bitsPerLetter, bitsPerByte, maxLetterValue;
 var init_constants_browser = __esm({
   "node_modules/@smithy/util-base64/dist-es/constants.browser.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -11163,7 +10928,6 @@ var init_constants_browser = __esm({
 var fromBase64;
 var init_fromBase64_browser = __esm({
   "node_modules/@smithy/util-base64/dist-es/fromBase64.browser.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -11209,7 +10973,6 @@ var init_fromBase64_browser = __esm({
 var fromUtf8;
 var init_fromUtf8_browser = __esm({
   "node_modules/@smithy/util-utf8/dist-es/fromUtf8.browser.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -11222,7 +10985,6 @@ var init_fromUtf8_browser = __esm({
 var toUint8Array;
 var init_toUint8Array = __esm({
   "node_modules/@smithy/util-utf8/dist-es/toUint8Array.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -11244,7 +11006,6 @@ var init_toUint8Array = __esm({
 var toUtf8;
 var init_toUtf8_browser = __esm({
   "node_modules/@smithy/util-utf8/dist-es/toUtf8.browser.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -11264,7 +11025,6 @@ var init_toUtf8_browser = __esm({
 // node_modules/@smithy/util-utf8/dist-es/index.js
 var init_dist_es6 = __esm({
   "node_modules/@smithy/util-utf8/dist-es/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -11308,7 +11068,6 @@ function toBase64(_input) {
 }
 var init_toBase64_browser = __esm({
   "node_modules/@smithy/util-base64/dist-es/toBase64.browser.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -11322,7 +11081,6 @@ var init_toBase64_browser = __esm({
 // node_modules/@smithy/util-base64/dist-es/index.js
 var init_dist_es7 = __esm({
   "node_modules/@smithy/util-base64/dist-es/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -11336,25 +11094,27 @@ var init_dist_es7 = __esm({
 var Uint8ArrayBlobAdapter;
 var init_Uint8ArrayBlobAdapter = __esm({
   "node_modules/@smithy/util-stream/dist-es/blob/Uint8ArrayBlobAdapter.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
     init_performance2();
     init_dist_es7();
     init_dist_es6();
-    Uint8ArrayBlobAdapter = class extends Uint8Array {
+    Uint8ArrayBlobAdapter = class _Uint8ArrayBlobAdapter extends Uint8Array {
+      static {
+        __name(this, "Uint8ArrayBlobAdapter");
+      }
       static fromString(source, encoding = "utf-8") {
         if (typeof source === "string") {
           if (encoding === "base64") {
-            return Uint8ArrayBlobAdapter.mutate(fromBase64(source));
+            return _Uint8ArrayBlobAdapter.mutate(fromBase64(source));
           }
-          return Uint8ArrayBlobAdapter.mutate(fromUtf8(source));
+          return _Uint8ArrayBlobAdapter.mutate(fromUtf8(source));
         }
         throw new Error(`Unsupported conversion from ${typeof source} to Uint8ArrayBlobAdapter.`);
       }
       static mutate(source) {
-        Object.setPrototypeOf(source, Uint8ArrayBlobAdapter.prototype);
+        Object.setPrototypeOf(source, _Uint8ArrayBlobAdapter.prototype);
         return source;
       }
       transformToString(encoding = "utf-8") {
@@ -11364,7 +11124,6 @@ var init_Uint8ArrayBlobAdapter = __esm({
         return toUtf8(this);
       }
     };
-    __name(Uint8ArrayBlobAdapter, "Uint8ArrayBlobAdapter");
   }
 });
 
@@ -11372,7 +11131,6 @@ var init_Uint8ArrayBlobAdapter = __esm({
 var ReadableStreamRef, ChecksumStream;
 var init_ChecksumStream_browser = __esm({
   "node_modules/@smithy/util-stream/dist-es/checksum/ChecksumStream.browser.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -11380,8 +11138,10 @@ var init_ChecksumStream_browser = __esm({
     ReadableStreamRef = typeof ReadableStream === "function" ? ReadableStream : function() {
     };
     ChecksumStream = class extends ReadableStreamRef {
+      static {
+        __name(this, "ChecksumStream");
+      }
     };
-    __name(ChecksumStream, "ChecksumStream");
   }
 });
 
@@ -11389,7 +11149,6 @@ var init_ChecksumStream_browser = __esm({
 var isReadableStream;
 var init_stream_type_check = __esm({
   "node_modules/@smithy/util-stream/dist-es/stream-type-check.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -11402,7 +11161,6 @@ var init_stream_type_check = __esm({
 var createChecksumStream;
 var init_createChecksumStream_browser = __esm({
   "node_modules/@smithy/util-stream/dist-es/checksum/createChecksumStream.browser.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -11448,12 +11206,14 @@ var init_createChecksumStream_browser = __esm({
 var ByteArrayCollector;
 var init_ByteArrayCollector = __esm({
   "node_modules/@smithy/util-stream/dist-es/ByteArrayCollector.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
     init_performance2();
     ByteArrayCollector = class {
+      static {
+        __name(this, "ByteArrayCollector");
+      }
       allocByteArray;
       byteLength = 0;
       byteArrays = [];
@@ -11485,7 +11245,6 @@ var init_ByteArrayCollector = __esm({
         this.byteLength = 0;
       }
     };
-    __name(ByteArrayCollector, "ByteArrayCollector");
   }
 });
 
@@ -11583,7 +11342,6 @@ function modeOf(chunk, allowBuffer = true) {
 var createBufferedReadable;
 var init_createBufferedReadableStream = __esm({
   "node_modules/@smithy/util-stream/dist-es/createBufferedReadableStream.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -11602,7 +11360,6 @@ var init_createBufferedReadableStream = __esm({
 var getAwsChunkedEncodingStream;
 var init_getAwsChunkedEncodingStream_browser = __esm({
   "node_modules/@smithy/util-stream/dist-es/getAwsChunkedEncodingStream.browser.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -11670,7 +11427,6 @@ async function headStream(stream, bytes) {
 }
 var init_headStream_browser = __esm({
   "node_modules/@smithy/util-stream/dist-es/headStream.browser.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -11683,7 +11439,6 @@ var init_headStream_browser = __esm({
 var escapeUri, hexEncode;
 var init_escape_uri = __esm({
   "node_modules/@smithy/util-uri-escape/dist-es/escape-uri.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -11696,7 +11451,6 @@ var init_escape_uri = __esm({
 // node_modules/@smithy/util-uri-escape/dist-es/escape-uri-path.js
 var init_escape_uri_path = __esm({
   "node_modules/@smithy/util-uri-escape/dist-es/escape-uri-path.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -11707,7 +11461,6 @@ var init_escape_uri_path = __esm({
 // node_modules/@smithy/util-uri-escape/dist-es/index.js
 var init_dist_es8 = __esm({
   "node_modules/@smithy/util-uri-escape/dist-es/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -11739,7 +11492,6 @@ function buildQueryString(query) {
 }
 var init_dist_es9 = __esm({
   "node_modules/@smithy/querystring-builder/dist-es/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -11755,7 +11507,6 @@ function createRequest(url, requestOptions) {
 }
 var init_create_request = __esm({
   "node_modules/@smithy/fetch-http-handler/dist-es/create-request.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -11778,7 +11529,6 @@ function requestTimeout(timeoutInMs = 0) {
 }
 var init_request_timeout = __esm({
   "node_modules/@smithy/fetch-http-handler/dist-es/request-timeout.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -11791,7 +11541,6 @@ var init_request_timeout = __esm({
 var keepAliveSupport, FetchHttpHandler;
 var init_fetch_http_handler = __esm({
   "node_modules/@smithy/fetch-http-handler/dist-es/fetch-http-handler.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -11803,14 +11552,17 @@ var init_fetch_http_handler = __esm({
     keepAliveSupport = {
       supported: void 0
     };
-    FetchHttpHandler = class {
+    FetchHttpHandler = class _FetchHttpHandler {
+      static {
+        __name(this, "FetchHttpHandler");
+      }
       config;
       configProvider;
       static create(instanceOrOptions) {
         if (typeof instanceOrOptions?.handle === "function") {
           return instanceOrOptions;
         }
-        return new FetchHttpHandler(instanceOrOptions);
+        return new _FetchHttpHandler(instanceOrOptions);
       }
       constructor(options) {
         if (typeof options === "function") {
@@ -11936,7 +11688,6 @@ var init_fetch_http_handler = __esm({
         return this.config ?? {};
       }
     };
-    __name(FetchHttpHandler, "FetchHttpHandler");
   }
 });
 
@@ -11987,7 +11738,6 @@ function readToBase64(blob) {
 var streamCollector;
 var init_stream_collector = __esm({
   "node_modules/@smithy/fetch-http-handler/dist-es/stream-collector.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -12011,7 +11761,6 @@ var init_stream_collector = __esm({
 // node_modules/@smithy/fetch-http-handler/dist-es/index.js
 var init_dist_es10 = __esm({
   "node_modules/@smithy/fetch-http-handler/dist-es/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -12047,7 +11796,6 @@ function toHex(bytes) {
 var SHORT_TO_HEX, HEX_TO_SHORT;
 var init_dist_es11 = __esm({
   "node_modules/@smithy/util-hex-encoding/dist-es/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -12071,7 +11819,6 @@ var init_dist_es11 = __esm({
 var ERR_MSG_STREAM_HAS_BEEN_TRANSFORMED, sdkStreamMixin, isBlobInstance;
 var init_sdk_stream_mixin_browser = __esm({
   "node_modules/@smithy/util-stream/dist-es/sdk-stream-mixin.browser.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -12103,7 +11850,7 @@ var init_sdk_stream_mixin_browser = __esm({
       }, "blobToWebStream");
       return Object.assign(stream, {
         transformToByteArray,
-        transformToString: async (encoding) => {
+        transformToString: /* @__PURE__ */ __name(async (encoding) => {
           const buf = await transformToByteArray();
           if (encoding === "base64") {
             return toBase64(buf);
@@ -12116,8 +11863,8 @@ var init_sdk_stream_mixin_browser = __esm({
           } else {
             throw new Error("TextDecoder is not available, please make sure polyfill is provided.");
           }
-        },
-        transformToWebStream: () => {
+        }, "transformToString"),
+        transformToWebStream: /* @__PURE__ */ __name(() => {
           if (transformed) {
             throw new Error(ERR_MSG_STREAM_HAS_BEEN_TRANSFORMED);
           }
@@ -12129,7 +11876,7 @@ var init_sdk_stream_mixin_browser = __esm({
           } else {
             throw new Error(`Cannot transform payload to web stream, got ${stream}`);
           }
-        }
+        }, "transformToWebStream")
       });
     }, "sdkStreamMixin");
     isBlobInstance = /* @__PURE__ */ __name((stream) => typeof Blob === "function" && stream instanceof Blob, "isBlobInstance");
@@ -12146,7 +11893,6 @@ async function splitStream(stream) {
 }
 var init_splitStream_browser = __esm({
   "node_modules/@smithy/util-stream/dist-es/splitStream.browser.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -12158,7 +11904,6 @@ var init_splitStream_browser = __esm({
 // node_modules/@smithy/util-stream/dist-es/index.js
 var init_dist_es12 = __esm({
   "node_modules/@smithy/util-stream/dist-es/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -12179,7 +11924,6 @@ var init_dist_es12 = __esm({
 var collectBody;
 var init_collect_stream_body = __esm({
   "node_modules/@smithy/core/dist-es/submodules/protocols/collect-stream-body.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -12206,7 +11950,6 @@ function extendedEncodeURIComponent(str) {
 }
 var init_extended_encode_uri_component = __esm({
   "node_modules/@smithy/core/dist-es/submodules/protocols/extended-encode-uri-component.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -12219,7 +11962,6 @@ var init_extended_encode_uri_component = __esm({
 var deref;
 var init_deref = __esm({
   "node_modules/@smithy/core/dist-es/submodules/schema/deref.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -12237,7 +11979,6 @@ var init_deref = __esm({
 var operation;
 var init_operation = __esm({
   "node_modules/@smithy/core/dist-es/submodules/schema/schemas/operation.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -12256,7 +11997,6 @@ var init_operation = __esm({
 var schemaDeserializationMiddleware, findHeader;
 var init_schemaDeserializationMiddleware = __esm({
   "node_modules/@smithy/core/dist-es/submodules/schema/middleware/schemaDeserializationMiddleware.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -12329,7 +12069,6 @@ var init_schemaDeserializationMiddleware = __esm({
 var schemaSerializationMiddleware;
 var init_schemaSerializationMiddleware = __esm({
   "node_modules/@smithy/core/dist-es/submodules/schema/middleware/schemaSerializationMiddleware.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -12356,17 +12095,16 @@ var init_schemaSerializationMiddleware = __esm({
 // node_modules/@smithy/core/dist-es/submodules/schema/middleware/getSchemaSerdePlugin.js
 function getSchemaSerdePlugin(config2) {
   return {
-    applyToStack: (commandStack) => {
+    applyToStack: /* @__PURE__ */ __name((commandStack) => {
       commandStack.add(schemaSerializationMiddleware(config2), serializerMiddlewareOption2);
       commandStack.add(schemaDeserializationMiddleware(config2), deserializerMiddlewareOption);
       config2.protocol.setSerdeContext(config2);
-    }
+    }, "applyToStack")
   };
 }
 var deserializerMiddlewareOption, serializerMiddlewareOption2;
 var init_getSchemaSerdePlugin = __esm({
   "node_modules/@smithy/core/dist-es/submodules/schema/middleware/getSchemaSerdePlugin.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -12393,12 +12131,14 @@ var init_getSchemaSerdePlugin = __esm({
 var Schema;
 var init_Schema = __esm({
   "node_modules/@smithy/core/dist-es/submodules/schema/schemas/Schema.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
     init_performance2();
     Schema = class {
+      static {
+        __name(this, "Schema");
+      }
       name;
       namespace;
       traits;
@@ -12418,118 +12158,117 @@ var init_Schema = __esm({
         return this.namespace + "#" + this.name;
       }
     };
-    __name(Schema, "Schema");
   }
 });
 
 // node_modules/@smithy/core/dist-es/submodules/schema/schemas/ListSchema.js
-var _ListSchema, ListSchema;
+var ListSchema;
 var init_ListSchema = __esm({
   "node_modules/@smithy/core/dist-es/submodules/schema/schemas/ListSchema.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
     init_performance2();
     init_Schema();
-    _ListSchema = class extends Schema {
+    ListSchema = class _ListSchema extends Schema {
+      static {
+        __name(this, "ListSchema");
+      }
+      static symbol = Symbol.for("@smithy/lis");
       name;
       traits;
       valueSchema;
       symbol = _ListSchema.symbol;
     };
-    ListSchema = _ListSchema;
-    __name(ListSchema, "ListSchema");
-    __publicField(ListSchema, "symbol", Symbol.for("@smithy/lis"));
   }
 });
 
 // node_modules/@smithy/core/dist-es/submodules/schema/schemas/MapSchema.js
-var _MapSchema, MapSchema;
+var MapSchema;
 var init_MapSchema = __esm({
   "node_modules/@smithy/core/dist-es/submodules/schema/schemas/MapSchema.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
     init_performance2();
     init_Schema();
-    _MapSchema = class extends Schema {
+    MapSchema = class _MapSchema extends Schema {
+      static {
+        __name(this, "MapSchema");
+      }
+      static symbol = Symbol.for("@smithy/map");
       name;
       traits;
       keySchema;
       valueSchema;
       symbol = _MapSchema.symbol;
     };
-    MapSchema = _MapSchema;
-    __name(MapSchema, "MapSchema");
-    __publicField(MapSchema, "symbol", Symbol.for("@smithy/map"));
   }
 });
 
 // node_modules/@smithy/core/dist-es/submodules/schema/schemas/OperationSchema.js
-var _OperationSchema, OperationSchema;
+var OperationSchema;
 var init_OperationSchema = __esm({
   "node_modules/@smithy/core/dist-es/submodules/schema/schemas/OperationSchema.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
     init_performance2();
     init_Schema();
-    _OperationSchema = class extends Schema {
+    OperationSchema = class _OperationSchema extends Schema {
+      static {
+        __name(this, "OperationSchema");
+      }
+      static symbol = Symbol.for("@smithy/ope");
       name;
       traits;
       input;
       output;
       symbol = _OperationSchema.symbol;
     };
-    OperationSchema = _OperationSchema;
-    __name(OperationSchema, "OperationSchema");
-    __publicField(OperationSchema, "symbol", Symbol.for("@smithy/ope"));
   }
 });
 
 // node_modules/@smithy/core/dist-es/submodules/schema/schemas/StructureSchema.js
-var _StructureSchema, StructureSchema;
+var StructureSchema;
 var init_StructureSchema = __esm({
   "node_modules/@smithy/core/dist-es/submodules/schema/schemas/StructureSchema.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
     init_performance2();
     init_Schema();
-    _StructureSchema = class extends Schema {
+    StructureSchema = class _StructureSchema extends Schema {
+      static {
+        __name(this, "StructureSchema");
+      }
+      static symbol = Symbol.for("@smithy/str");
       name;
       traits;
       memberNames;
       memberList;
       symbol = _StructureSchema.symbol;
     };
-    StructureSchema = _StructureSchema;
-    __name(StructureSchema, "StructureSchema");
-    __publicField(StructureSchema, "symbol", Symbol.for("@smithy/str"));
   }
 });
 
 // node_modules/@smithy/core/dist-es/submodules/schema/schemas/ErrorSchema.js
-var _ErrorSchema, ErrorSchema;
+var ErrorSchema;
 var init_ErrorSchema = __esm({
   "node_modules/@smithy/core/dist-es/submodules/schema/schemas/ErrorSchema.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
     init_performance2();
     init_StructureSchema();
-    _ErrorSchema = class extends StructureSchema {
+    ErrorSchema = class _ErrorSchema extends StructureSchema {
+      static {
+        __name(this, "ErrorSchema");
+      }
+      static symbol = Symbol.for("@smithy/err");
       ctor;
       symbol = _ErrorSchema.symbol;
     };
-    ErrorSchema = _ErrorSchema;
-    __name(ErrorSchema, "ErrorSchema");
-    __publicField(ErrorSchema, "symbol", Symbol.for("@smithy/err"));
   }
 });
 
@@ -12558,7 +12297,6 @@ function translateTraits(indicator) {
 }
 var init_translateTraits = __esm({
   "node_modules/@smithy/core/dist-es/submodules/schema/schemas/translateTraits.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -12578,19 +12316,22 @@ function member(memberSchema, memberName) {
   const internalCtorAccess = NormalizedSchema;
   return new internalCtorAccess(memberSchema, memberName);
 }
-var _NormalizedSchema, NormalizedSchema, isMemberSchema, isStaticSchema;
+var NormalizedSchema, isMemberSchema, isStaticSchema;
 var init_NormalizedSchema = __esm({
   "node_modules/@smithy/core/dist-es/submodules/schema/schemas/NormalizedSchema.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
     init_performance2();
     init_deref();
     init_translateTraits();
-    _NormalizedSchema = class {
+    NormalizedSchema = class _NormalizedSchema {
+      static {
+        __name(this, "NormalizedSchema");
+      }
       ref;
       memberName;
+      static symbol = Symbol.for("@smithy/nor");
       symbol = _NormalizedSchema.symbol;
       name;
       schema;
@@ -12598,12 +12339,12 @@ var init_NormalizedSchema = __esm({
       traits;
       memberTraits;
       normalizedTraits;
-      constructor(ref, memberName) {
-        this.ref = ref;
+      constructor(ref2, memberName) {
+        this.ref = ref2;
         this.memberName = memberName;
         const traitStack = [];
-        let _ref = ref;
-        let schema = ref;
+        let _ref = ref2;
+        let schema = ref2;
         this._isMemberSchema = false;
         while (isMemberSchema(_ref)) {
           traitStack.push(_ref[1]);
@@ -12648,8 +12389,8 @@ var init_NormalizedSchema = __esm({
         }
         return isPrototype;
       }
-      static of(ref) {
-        const sc = deref(ref);
+      static of(ref2) {
+        const sc = deref(ref2);
         if (sc instanceof _NormalizedSchema) {
           return sc;
         }
@@ -12659,7 +12400,7 @@ var init_NormalizedSchema = __esm({
             Object.assign(ns.getMergedTraits(), translateTraits(traits));
             return ns;
           }
-          throw new Error(`@smithy/core/schema - may not init unwrapped member schema=${JSON.stringify(ref, null, 2)}.`);
+          throw new Error(`@smithy/core/schema - may not init unwrapped member schema=${JSON.stringify(ref2, null, 2)}.`);
         }
         return new _NormalizedSchema(sc);
       }
@@ -12806,9 +12547,6 @@ var init_NormalizedSchema = __esm({
         }
       }
     };
-    NormalizedSchema = _NormalizedSchema;
-    __name(NormalizedSchema, "NormalizedSchema");
-    __publicField(NormalizedSchema, "symbol", Symbol.for("@smithy/nor"));
     __name(member, "member");
     isMemberSchema = /* @__PURE__ */ __name((sc) => Array.isArray(sc) && sc.length === 2, "isMemberSchema");
     isStaticSchema = /* @__PURE__ */ __name((sc) => Array.isArray(sc) && sc.length >= 5, "isStaticSchema");
@@ -12816,31 +12554,30 @@ var init_NormalizedSchema = __esm({
 });
 
 // node_modules/@smithy/core/dist-es/submodules/schema/schemas/SimpleSchema.js
-var _SimpleSchema, SimpleSchema;
+var SimpleSchema;
 var init_SimpleSchema = __esm({
   "node_modules/@smithy/core/dist-es/submodules/schema/schemas/SimpleSchema.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
     init_performance2();
     init_Schema();
-    _SimpleSchema = class extends Schema {
+    SimpleSchema = class _SimpleSchema extends Schema {
+      static {
+        __name(this, "SimpleSchema");
+      }
+      static symbol = Symbol.for("@smithy/sim");
       name;
       schemaRef;
       traits;
       symbol = _SimpleSchema.symbol;
     };
-    SimpleSchema = _SimpleSchema;
-    __name(SimpleSchema, "SimpleSchema");
-    __publicField(SimpleSchema, "symbol", Symbol.for("@smithy/sim"));
   }
 });
 
 // node_modules/@smithy/core/dist-es/submodules/schema/schemas/sentinels.js
 var init_sentinels2 = __esm({
   "node_modules/@smithy/core/dist-es/submodules/schema/schemas/sentinels.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -12849,18 +12586,21 @@ var init_sentinels2 = __esm({
 });
 
 // node_modules/@smithy/core/dist-es/submodules/schema/TypeRegistry.js
-var _TypeRegistry, TypeRegistry;
+var TypeRegistry;
 var init_TypeRegistry = __esm({
   "node_modules/@smithy/core/dist-es/submodules/schema/TypeRegistry.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
     init_performance2();
-    _TypeRegistry = class {
+    TypeRegistry = class _TypeRegistry {
+      static {
+        __name(this, "TypeRegistry");
+      }
       namespace;
       schemas;
       exceptions;
+      static registries = /* @__PURE__ */ new Map();
       constructor(namespace, schemas = /* @__PURE__ */ new Map(), exceptions = /* @__PURE__ */ new Map()) {
         this.namespace = namespace;
         this.schemas = schemas;
@@ -12921,16 +12661,12 @@ var init_TypeRegistry = __esm({
         return this.namespace + "#" + shapeId;
       }
     };
-    TypeRegistry = _TypeRegistry;
-    __name(TypeRegistry, "TypeRegistry");
-    __publicField(TypeRegistry, "registries", /* @__PURE__ */ new Map());
   }
 });
 
 // node_modules/@smithy/core/dist-es/submodules/schema/index.js
 var init_schema2 = __esm({
   "node_modules/@smithy/core/dist-es/submodules/schema/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -12955,7 +12691,6 @@ var init_schema2 = __esm({
 // node_modules/@smithy/core/dist-es/submodules/serde/copyDocumentWithTransform.js
 var init_copyDocumentWithTransform = __esm({
   "node_modules/@smithy/core/dist-es/submodules/serde/copyDocumentWithTransform.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -12967,7 +12702,6 @@ var init_copyDocumentWithTransform = __esm({
 var expectNumber, MAX_FLOAT, expectFloat32, expectLong, expectShort, expectByte, expectSizedInt, castInt, strictParseFloat32, NUMBER_REGEX, parseNumber, strictParseShort, strictParseByte, stackTraceWarning, logger;
 var init_parse_utils = __esm({
   "node_modules/@smithy/core/dist-es/submodules/serde/parse-utils.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -13081,7 +12815,6 @@ function dateToUtcString(date2) {
 var DAYS, MONTHS, RFC3339, RFC3339_WITH_OFFSET, IMF_FIXDATE, RFC_850_DATE, ASC_TIME, parseRfc7231DateTime, buildDate, parseTwoDigitYear, FIFTY_YEARS_IN_MILLIS, adjustRfc850Year, parseMonthByShortName, DAYS_IN_MONTH, validateDayOfMonth, isLeapYear, parseDateValue, parseMilliseconds, stripLeadingZeroes;
 var init_date_utils = __esm({
   "node_modules/@smithy/core/dist-es/submodules/serde/date-utils.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -13194,7 +12927,6 @@ var init_date_utils = __esm({
 var randomUUID;
 var init_randomUUID_browser = __esm({
   "node_modules/@smithy/uuid/dist-es/randomUUID.browser.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -13207,7 +12939,6 @@ var init_randomUUID_browser = __esm({
 var decimalToHex, v4;
 var init_v4 = __esm({
   "node_modules/@smithy/uuid/dist-es/v4.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -13230,7 +12961,6 @@ var init_v4 = __esm({
 // node_modules/@smithy/uuid/dist-es/index.js
 var init_dist_es13 = __esm({
   "node_modules/@smithy/uuid/dist-es/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -13242,7 +12972,6 @@ var init_dist_es13 = __esm({
 // node_modules/@smithy/core/dist-es/submodules/serde/generateIdempotencyToken.js
 var init_generateIdempotencyToken = __esm({
   "node_modules/@smithy/core/dist-es/submodules/serde/generateIdempotencyToken.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -13255,7 +12984,6 @@ var init_generateIdempotencyToken = __esm({
 var LazyJsonString;
 var init_lazy_json = __esm({
   "node_modules/@smithy/core/dist-es/submodules/serde/lazy-json.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -13295,7 +13023,6 @@ function quoteHeader(part) {
 }
 var init_quote_header = __esm({
   "node_modules/@smithy/core/dist-es/submodules/serde/quote-header.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -13314,7 +13041,6 @@ function range(v2, min, max) {
 var ddd, mmm, time3, date, year2, RFC3339_WITH_OFFSET2, IMF_FIXDATE2, RFC_850_DATE2, ASC_TIME2, months, _parseEpochTimestamp, _parseRfc3339DateTimeWithOffset, _parseRfc7231DateTime;
 var init_schema_date_utils = __esm({
   "node_modules/@smithy/core/dist-es/submodules/serde/schema-serde-lib/schema-date-utils.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -13369,8 +13095,8 @@ var init_schema_date_utils = __esm({
       const date2 = new Date(Date.UTC(Number(yearStr), Number(monthStr) - 1, Number(dayStr), Number(hours), Number(minutes), Number(seconds), Number(ms) ? Math.round(parseFloat(`0.${ms}`) * 1e3) : 0));
       date2.setUTCFullYear(Number(yearStr));
       if (offsetStr.toUpperCase() != "Z") {
-        const [, sign3, offsetH, offsetM] = /([+-])(\d\d):(\d\d)/.exec(offsetStr) || [void 0, "+", 0, 0];
-        const scalar = sign3 === "-" ? 1 : -1;
+        const [, sign2, offsetH, offsetM] = /([+-])(\d\d):(\d\d)/.exec(offsetStr) || [void 0, "+", 0, 0];
+        const scalar = sign2 === "-" ? 1 : -1;
         date2.setTime(date2.getTime() + scalar * (Number(offsetH) * 60 * 60 * 1e3 + Number(offsetM) * 60 * 1e3));
       }
       return date2;
@@ -13443,7 +13169,6 @@ function splitEvery(value, delimiter, numDelimiters) {
 }
 var init_split_every = __esm({
   "node_modules/@smithy/core/dist-es/submodules/serde/split-every.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -13456,7 +13181,6 @@ var init_split_every = __esm({
 var splitHeader;
 var init_split_header = __esm({
   "node_modules/@smithy/core/dist-es/submodules/serde/split-header.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -13505,13 +13229,15 @@ var init_split_header = __esm({
 var format, NumericValue;
 var init_NumericValue = __esm({
   "node_modules/@smithy/core/dist-es/submodules/serde/value/NumericValue.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
     init_performance2();
     format = /^-?\d*(\.\d+)?$/;
-    NumericValue = class {
+    NumericValue = class _NumericValue {
+      static {
+        __name(this, "NumericValue");
+      }
       string;
       type;
       constructor(string, type) {
@@ -13529,17 +13255,15 @@ var init_NumericValue = __esm({
           return false;
         }
         const _nv = object;
-        return NumericValue.prototype.isPrototypeOf(object) || _nv.type === "bigDecimal" && format.test(_nv.string);
+        return _NumericValue.prototype.isPrototypeOf(object) || _nv.type === "bigDecimal" && format.test(_nv.string);
       }
     };
-    __name(NumericValue, "NumericValue");
   }
 });
 
 // node_modules/@smithy/core/dist-es/submodules/serde/index.js
 var init_serde2 = __esm({
   "node_modules/@smithy/core/dist-es/submodules/serde/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -13561,18 +13285,19 @@ var init_serde2 = __esm({
 var SerdeContext;
 var init_SerdeContext = __esm({
   "node_modules/@smithy/core/dist-es/submodules/protocols/SerdeContext.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
     init_performance2();
     SerdeContext = class {
+      static {
+        __name(this, "SerdeContext");
+      }
       serdeContext;
       setSerdeContext(serdeContext) {
         this.serdeContext = serdeContext;
       }
     };
-    __name(SerdeContext, "SerdeContext");
   }
 });
 
@@ -13580,13 +13305,15 @@ var init_SerdeContext = __esm({
 var EventStreamSerde;
 var init_EventStreamSerde = __esm({
   "node_modules/@smithy/core/dist-es/submodules/event-streams/EventStreamSerde.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
     init_performance2();
     init_dist_es6();
     EventStreamSerde = class {
+      static {
+        __name(this, "EventStreamSerde");
+      }
       marshaller;
       serializer;
       deserializer;
@@ -13813,7 +13540,6 @@ var init_EventStreamSerde = __esm({
         };
       }
     };
-    __name(EventStreamSerde, "EventStreamSerde");
   }
 });
 
@@ -13824,7 +13550,6 @@ __export(event_streams_exports, {
 });
 var init_event_streams = __esm({
   "node_modules/@smithy/core/dist-es/submodules/event-streams/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -13837,7 +13562,6 @@ var init_event_streams = __esm({
 var HttpProtocol;
 var init_HttpProtocol = __esm({
   "node_modules/@smithy/core/dist-es/submodules/protocols/HttpProtocol.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -13846,6 +13570,9 @@ var init_HttpProtocol = __esm({
     init_dist_es2();
     init_SerdeContext();
     HttpProtocol = class extends SerdeContext {
+      static {
+        __name(this, "HttpProtocol");
+      }
       options;
       constructor(options) {
         super();
@@ -13948,6 +13675,11 @@ var init_HttpProtocol = __esm({
         throw new Error(`@smithy/core/protocols - ${this.constructor.name} getDefaultContentType() implementation missing.`);
       }
       async deserializeHttpMessage(schema, context2, response, arg4, arg5) {
+        void schema;
+        void context2;
+        void response;
+        void arg4;
+        void arg5;
         return [];
       }
       getEventStreamMarshaller() {
@@ -13958,7 +13690,6 @@ var init_HttpProtocol = __esm({
         return context2.eventStreamMarshaller;
       }
     };
-    __name(HttpProtocol, "HttpProtocol");
   }
 });
 
@@ -13966,7 +13697,6 @@ var init_HttpProtocol = __esm({
 var HttpBindingProtocol;
 var init_HttpBindingProtocol = __esm({
   "node_modules/@smithy/core/dist-es/submodules/protocols/HttpBindingProtocol.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -13979,6 +13709,9 @@ var init_HttpBindingProtocol = __esm({
     init_extended_encode_uri_component();
     init_HttpProtocol();
     HttpBindingProtocol = class extends HttpProtocol {
+      static {
+        __name(this, "HttpBindingProtocol");
+      }
       async serializeRequest(operationSchema, _input, context2) {
         const input = {
           ..._input ?? {}
@@ -14216,14 +13949,12 @@ var init_HttpBindingProtocol = __esm({
         return nonHttpBindingMembers;
       }
     };
-    __name(HttpBindingProtocol, "HttpBindingProtocol");
   }
 });
 
 // node_modules/@smithy/core/dist-es/submodules/protocols/RpcProtocol.js
 var init_RpcProtocol = __esm({
   "node_modules/@smithy/core/dist-es/submodules/protocols/RpcProtocol.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -14234,7 +13965,6 @@ var init_RpcProtocol = __esm({
 // node_modules/@smithy/core/dist-es/submodules/protocols/resolve-path.js
 var init_resolve_path = __esm({
   "node_modules/@smithy/core/dist-es/submodules/protocols/resolve-path.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -14245,7 +13975,6 @@ var init_resolve_path = __esm({
 // node_modules/@smithy/core/dist-es/submodules/protocols/requestBuilder.js
 var init_requestBuilder = __esm({
   "node_modules/@smithy/core/dist-es/submodules/protocols/requestBuilder.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -14266,7 +13995,6 @@ function determineTimestampFormat(ns, settings) {
 }
 var init_determineTimestampFormat = __esm({
   "node_modules/@smithy/core/dist-es/submodules/protocols/serde/determineTimestampFormat.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -14279,7 +14007,6 @@ var init_determineTimestampFormat = __esm({
 var FromStringShapeDeserializer;
 var init_FromStringShapeDeserializer = __esm({
   "node_modules/@smithy/core/dist-es/submodules/protocols/serde/FromStringShapeDeserializer.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -14291,6 +14018,9 @@ var init_FromStringShapeDeserializer = __esm({
     init_SerdeContext();
     init_determineTimestampFormat();
     FromStringShapeDeserializer = class extends SerdeContext {
+      static {
+        __name(this, "FromStringShapeDeserializer");
+      }
       settings;
       constructor(settings) {
         super();
@@ -14350,7 +14080,6 @@ var init_FromStringShapeDeserializer = __esm({
         return (this.serdeContext?.utf8Encoder ?? toUtf8)((this.serdeContext?.base64Decoder ?? fromBase64)(base64String));
       }
     };
-    __name(FromStringShapeDeserializer, "FromStringShapeDeserializer");
   }
 });
 
@@ -14358,7 +14087,6 @@ var init_FromStringShapeDeserializer = __esm({
 var HttpInterceptingShapeDeserializer;
 var init_HttpInterceptingShapeDeserializer = __esm({
   "node_modules/@smithy/core/dist-es/submodules/protocols/serde/HttpInterceptingShapeDeserializer.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -14368,6 +14096,9 @@ var init_HttpInterceptingShapeDeserializer = __esm({
     init_SerdeContext();
     init_FromStringShapeDeserializer();
     HttpInterceptingShapeDeserializer = class extends SerdeContext {
+      static {
+        __name(this, "HttpInterceptingShapeDeserializer");
+      }
       codecDeserializer;
       stringDeserializer;
       constructor(codecDeserializer, codecSettings) {
@@ -14404,7 +14135,6 @@ var init_HttpInterceptingShapeDeserializer = __esm({
         return this.codecDeserializer.read(ns, data);
       }
     };
-    __name(HttpInterceptingShapeDeserializer, "HttpInterceptingShapeDeserializer");
   }
 });
 
@@ -14412,7 +14142,6 @@ var init_HttpInterceptingShapeDeserializer = __esm({
 var ToStringShapeSerializer;
 var init_ToStringShapeSerializer = __esm({
   "node_modules/@smithy/core/dist-es/submodules/protocols/serde/ToStringShapeSerializer.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -14423,6 +14152,9 @@ var init_ToStringShapeSerializer = __esm({
     init_SerdeContext();
     init_determineTimestampFormat();
     ToStringShapeSerializer = class extends SerdeContext {
+      static {
+        __name(this, "ToStringShapeSerializer");
+      }
       settings;
       stringBuffer = "";
       constructor(settings) {
@@ -14507,7 +14239,6 @@ var init_ToStringShapeSerializer = __esm({
         return buffer;
       }
     };
-    __name(ToStringShapeSerializer, "ToStringShapeSerializer");
   }
 });
 
@@ -14515,7 +14246,6 @@ var init_ToStringShapeSerializer = __esm({
 var HttpInterceptingShapeSerializer;
 var init_HttpInterceptingShapeSerializer = __esm({
   "node_modules/@smithy/core/dist-es/submodules/protocols/serde/HttpInterceptingShapeSerializer.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -14523,6 +14253,9 @@ var init_HttpInterceptingShapeSerializer = __esm({
     init_schema2();
     init_ToStringShapeSerializer();
     HttpInterceptingShapeSerializer = class {
+      static {
+        __name(this, "HttpInterceptingShapeSerializer");
+      }
       codecSerializer;
       stringSerializer;
       buffer;
@@ -14553,14 +14286,12 @@ var init_HttpInterceptingShapeSerializer = __esm({
         return this.codecSerializer.flush();
       }
     };
-    __name(HttpInterceptingShapeSerializer, "HttpInterceptingShapeSerializer");
   }
 });
 
 // node_modules/@smithy/core/dist-es/submodules/protocols/index.js
 var init_protocols = __esm({
   "node_modules/@smithy/core/dist-es/submodules/protocols/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -14584,7 +14315,6 @@ var init_protocols = __esm({
 // node_modules/@smithy/core/dist-es/request-builder/requestBuilder.js
 var init_requestBuilder2 = __esm({
   "node_modules/@smithy/core/dist-es/request-builder/requestBuilder.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -14605,7 +14335,6 @@ function setFeature2(context2, feature, value) {
 }
 var init_setFeature2 = __esm({
   "node_modules/@smithy/core/dist-es/setFeature.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -14618,12 +14347,14 @@ var init_setFeature2 = __esm({
 var DefaultIdentityProviderConfig;
 var init_DefaultIdentityProviderConfig = __esm({
   "node_modules/@smithy/core/dist-es/util-identity-and-auth/DefaultIdentityProviderConfig.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
     init_performance2();
     DefaultIdentityProviderConfig = class {
+      static {
+        __name(this, "DefaultIdentityProviderConfig");
+      }
       authSchemes = /* @__PURE__ */ new Map();
       constructor(config2) {
         for (const [key, value] of Object.entries(config2)) {
@@ -14636,14 +14367,12 @@ var init_DefaultIdentityProviderConfig = __esm({
         return this.authSchemes.get(schemeId);
       }
     };
-    __name(DefaultIdentityProviderConfig, "DefaultIdentityProviderConfig");
   }
 });
 
 // node_modules/@smithy/core/dist-es/util-identity-and-auth/httpAuthSchemes/httpApiKeyAuth.js
 var init_httpApiKeyAuth = __esm({
   "node_modules/@smithy/core/dist-es/util-identity-and-auth/httpAuthSchemes/httpApiKeyAuth.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -14654,7 +14383,6 @@ var init_httpApiKeyAuth = __esm({
 // node_modules/@smithy/core/dist-es/util-identity-and-auth/httpAuthSchemes/httpBearerAuth.js
 var init_httpBearerAuth = __esm({
   "node_modules/@smithy/core/dist-es/util-identity-and-auth/httpAuthSchemes/httpBearerAuth.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -14665,7 +14393,6 @@ var init_httpBearerAuth = __esm({
 // node_modules/@smithy/core/dist-es/util-identity-and-auth/httpAuthSchemes/noAuth.js
 var init_noAuth = __esm({
   "node_modules/@smithy/core/dist-es/util-identity-and-auth/httpAuthSchemes/noAuth.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -14676,7 +14403,6 @@ var init_noAuth = __esm({
 // node_modules/@smithy/core/dist-es/util-identity-and-auth/httpAuthSchemes/index.js
 var init_httpAuthSchemes = __esm({
   "node_modules/@smithy/core/dist-es/util-identity-and-auth/httpAuthSchemes/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -14691,7 +14417,6 @@ var init_httpAuthSchemes = __esm({
 var createIsIdentityExpiredFunction, EXPIRATION_MS, isIdentityExpired, doesIdentityRequireRefresh, memoizeIdentityProvider;
 var init_memoizeIdentityProvider = __esm({
   "node_modules/@smithy/core/dist-es/util-identity-and-auth/memoizeIdentityProvider.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -14756,7 +14481,6 @@ var init_memoizeIdentityProvider = __esm({
 // node_modules/@smithy/core/dist-es/util-identity-and-auth/index.js
 var init_util_identity_and_auth = __esm({
   "node_modules/@smithy/core/dist-es/util-identity-and-auth/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -14770,7 +14494,6 @@ var init_util_identity_and_auth = __esm({
 // node_modules/@smithy/core/dist-es/index.js
 var init_dist_es14 = __esm({
   "node_modules/@smithy/core/dist-es/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -14789,7 +14512,6 @@ var init_dist_es14 = __esm({
 // node_modules/@smithy/property-provider/dist-es/ProviderError.js
 var init_ProviderError = __esm({
   "node_modules/@smithy/property-provider/dist-es/ProviderError.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -14800,7 +14522,6 @@ var init_ProviderError = __esm({
 // node_modules/@smithy/property-provider/dist-es/CredentialsProviderError.js
 var init_CredentialsProviderError = __esm({
   "node_modules/@smithy/property-provider/dist-es/CredentialsProviderError.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -14811,7 +14532,6 @@ var init_CredentialsProviderError = __esm({
 // node_modules/@smithy/property-provider/dist-es/TokenProviderError.js
 var init_TokenProviderError = __esm({
   "node_modules/@smithy/property-provider/dist-es/TokenProviderError.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -14822,7 +14542,6 @@ var init_TokenProviderError = __esm({
 // node_modules/@smithy/property-provider/dist-es/chain.js
 var init_chain = __esm({
   "node_modules/@smithy/property-provider/dist-es/chain.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -14833,7 +14552,6 @@ var init_chain = __esm({
 // node_modules/@smithy/property-provider/dist-es/fromStatic.js
 var init_fromStatic = __esm({
   "node_modules/@smithy/property-provider/dist-es/fromStatic.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -14845,7 +14563,6 @@ var init_fromStatic = __esm({
 var memoize;
 var init_memoize = __esm({
   "node_modules/@smithy/property-provider/dist-es/memoize.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -14900,7 +14617,6 @@ var init_memoize = __esm({
 // node_modules/@smithy/property-provider/dist-es/index.js
 var init_dist_es15 = __esm({
   "node_modules/@smithy/property-provider/dist-es/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -14918,7 +14634,6 @@ var init_dist_es15 = __esm({
 var resolveAwsSdkSigV4AConfig;
 var init_resolveAwsSdkSigV4AConfig = __esm({
   "node_modules/@aws-sdk/core/dist-es/submodules/httpAuthSchemes/aws_sdk/resolveAwsSdkSigV4AConfig.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -14935,7 +14650,6 @@ var init_resolveAwsSdkSigV4AConfig = __esm({
 var ALGORITHM_QUERY_PARAM, CREDENTIAL_QUERY_PARAM, AMZ_DATE_QUERY_PARAM, SIGNED_HEADERS_QUERY_PARAM, EXPIRES_QUERY_PARAM, SIGNATURE_QUERY_PARAM, TOKEN_QUERY_PARAM, AUTH_HEADER, AMZ_DATE_HEADER, DATE_HEADER, GENERATED_HEADERS, SIGNATURE_HEADER, SHA256_HEADER, TOKEN_HEADER, ALWAYS_UNSIGNABLE_HEADERS, PROXY_HEADER_PATTERN, SEC_HEADER_PATTERN, ALGORITHM_IDENTIFIER, EVENT_ALGORITHM_IDENTIFIER, UNSIGNED_PAYLOAD, MAX_CACHE_SIZE, KEY_TYPE_IDENTIFIER, MAX_PRESIGNED_TTL;
 var init_constants3 = __esm({
   "node_modules/@smithy/signature-v4/dist-es/constants.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -14986,7 +14700,6 @@ var init_constants3 = __esm({
 var signingKeyCache, cacheQueue, createScope, getSigningKey, hmac;
 var init_credentialDerivation = __esm({
   "node_modules/@smithy/signature-v4/dist-es/credentialDerivation.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -15014,9 +14727,9 @@ var init_credentialDerivation = __esm({
       return signingKeyCache[cacheKey] = key;
     }, "getSigningKey");
     hmac = /* @__PURE__ */ __name((ctor, secret, data) => {
-      const hash3 = new ctor(secret);
-      hash3.update(toUint8Array(data));
-      return hash3.digest();
+      const hash2 = new ctor(secret);
+      hash2.update(toUint8Array(data));
+      return hash2.digest();
     }, "hmac");
   }
 });
@@ -15025,7 +14738,6 @@ var init_credentialDerivation = __esm({
 var getCanonicalHeaders;
 var init_getCanonicalHeaders = __esm({
   "node_modules/@smithy/signature-v4/dist-es/getCanonicalHeaders.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -15054,7 +14766,6 @@ var init_getCanonicalHeaders = __esm({
 var isArrayBuffer;
 var init_dist_es16 = __esm({
   "node_modules/@smithy/is-array-buffer/dist-es/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -15067,7 +14778,6 @@ var init_dist_es16 = __esm({
 var getPayloadHash;
 var init_getPayloadHash = __esm({
   "node_modules/@smithy/signature-v4/dist-es/getPayloadHash.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -15108,7 +14818,6 @@ function negate(bytes) {
 var HeaderFormatter, HEADER_VALUE_TYPE, UUID_PATTERN, Int64;
 var init_HeaderFormatter = __esm({
   "node_modules/@smithy/signature-v4/dist-es/HeaderFormatter.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -15116,6 +14825,9 @@ var init_HeaderFormatter = __esm({
     init_dist_es11();
     init_dist_es6();
     HeaderFormatter = class {
+      static {
+        __name(this, "HeaderFormatter");
+      }
       format(headers) {
         const chunks = [];
         for (const headerName of Object.keys(headers)) {
@@ -15182,7 +14894,6 @@ var init_HeaderFormatter = __esm({
         }
       }
     };
-    __name(HeaderFormatter, "HeaderFormatter");
     (function(HEADER_VALUE_TYPE3) {
       HEADER_VALUE_TYPE3[HEADER_VALUE_TYPE3["boolTrue"] = 0] = "boolTrue";
       HEADER_VALUE_TYPE3[HEADER_VALUE_TYPE3["boolFalse"] = 1] = "boolFalse";
@@ -15196,7 +14907,10 @@ var init_HeaderFormatter = __esm({
       HEADER_VALUE_TYPE3[HEADER_VALUE_TYPE3["uuid"] = 9] = "uuid";
     })(HEADER_VALUE_TYPE || (HEADER_VALUE_TYPE = {}));
     UUID_PATTERN = /^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/;
-    Int64 = class {
+    Int64 = class _Int64 {
+      static {
+        __name(this, "Int64");
+      }
       bytes;
       constructor(bytes) {
         this.bytes = bytes;
@@ -15215,7 +14929,7 @@ var init_HeaderFormatter = __esm({
         if (number < 0) {
           negate(bytes);
         }
-        return new Int64(bytes);
+        return new _Int64(bytes);
       }
       valueOf() {
         const bytes = this.bytes.slice(0);
@@ -15229,7 +14943,6 @@ var init_HeaderFormatter = __esm({
         return String(this.valueOf());
       }
     };
-    __name(Int64, "Int64");
     __name(negate, "negate");
   }
 });
@@ -15238,7 +14951,6 @@ var init_HeaderFormatter = __esm({
 var hasHeader;
 var init_headerUtil = __esm({
   "node_modules/@smithy/signature-v4/dist-es/headerUtil.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -15259,7 +14971,6 @@ var init_headerUtil = __esm({
 var moveHeadersToQuery;
 var init_moveHeadersToQuery = __esm({
   "node_modules/@smithy/signature-v4/dist-es/moveHeadersToQuery.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -15287,7 +14998,6 @@ var init_moveHeadersToQuery = __esm({
 var prepareRequest;
 var init_prepareRequest = __esm({
   "node_modules/@smithy/signature-v4/dist-es/prepareRequest.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -15310,7 +15020,6 @@ var init_prepareRequest = __esm({
 var getCanonicalQuery;
 var init_getCanonicalQuery = __esm({
   "node_modules/@smithy/signature-v4/dist-es/getCanonicalQuery.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -15342,7 +15051,6 @@ var init_getCanonicalQuery = __esm({
 var iso8601, toDate;
 var init_utilDate = __esm({
   "node_modules/@smithy/signature-v4/dist-es/utilDate.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -15367,7 +15075,6 @@ var init_utilDate = __esm({
 var SignatureV4Base;
 var init_SignatureV4Base = __esm({
   "node_modules/@smithy/signature-v4/dist-es/SignatureV4Base.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -15379,6 +15086,9 @@ var init_SignatureV4Base = __esm({
     init_getCanonicalQuery();
     init_utilDate();
     SignatureV4Base = class {
+      static {
+        __name(this, "SignatureV4Base");
+      }
       service;
       regionProvider;
       credentialProvider;
@@ -15404,9 +15114,9 @@ ${sortedHeaders.join(";")}
 ${payloadHash}`;
       }
       async createStringToSign(longDate, credentialScope, canonicalRequest, algorithmIdentifier) {
-        const hash3 = new this.sha256();
-        hash3.update(toUint8Array(canonicalRequest));
-        const hashedRequest = await hash3.digest();
+        const hash2 = new this.sha256();
+        hash2.update(toUint8Array(canonicalRequest));
+        const hashedRequest = await hash2.digest();
         return `${algorithmIdentifier}
 ${longDate}
 ${credentialScope}
@@ -15448,7 +15158,6 @@ ${toHex(hashedRequest)}`;
         return Object.keys(headers).sort().join(";");
       }
     };
-    __name(SignatureV4Base, "SignatureV4Base");
   }
 });
 
@@ -15456,7 +15165,6 @@ ${toHex(hashedRequest)}`;
 var SignatureV4;
 var init_SignatureV4 = __esm({
   "node_modules/@smithy/signature-v4/dist-es/SignatureV4.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -15473,6 +15181,9 @@ var init_SignatureV4 = __esm({
     init_prepareRequest();
     init_SignatureV4Base();
     SignatureV4 = class extends SignatureV4Base {
+      static {
+        __name(this, "SignatureV4");
+      }
       headerFormatter = new HeaderFormatter();
       constructor({ applyChecksum, credentials, region, service, sha256, uriEscapePath = true }) {
         super({
@@ -15523,9 +15234,9 @@ var init_SignatureV4 = __esm({
         const { shortDate, longDate } = this.formatDate(signingDate);
         const scope = createScope(shortDate, region, signingService ?? this.service);
         const hashedPayload = await getPayloadHash({ headers: {}, body: payload }, this.sha256);
-        const hash3 = new this.sha256();
-        hash3.update(headers);
-        const hashedHeaders = toHex(await hash3.digest());
+        const hash2 = new this.sha256();
+        hash2.update(headers);
+        const hashedHeaders = toHex(await hash2.digest());
         const stringToSign = [
           EVENT_ALGORITHM_IDENTIFIER,
           longDate,
@@ -15555,9 +15266,9 @@ var init_SignatureV4 = __esm({
         this.validateResolvedCredentials(credentials);
         const region = signingRegion ?? await this.regionProvider();
         const { shortDate } = this.formatDate(signingDate);
-        const hash3 = new this.sha256(await this.getSigningKey(credentials, region, shortDate, signingService));
-        hash3.update(toUint8Array(stringToSign));
-        return toHex(await hash3.digest());
+        const hash2 = new this.sha256(await this.getSigningKey(credentials, region, shortDate, signingService));
+        hash2.update(toUint8Array(stringToSign));
+        return toHex(await hash2.digest());
       }
       async signRequest(requestToSign, { signingDate = /* @__PURE__ */ new Date(), signableHeaders, unsignableHeaders, signingRegion, signingService } = {}) {
         const credentials = await this.credentialProvider();
@@ -15581,15 +15292,14 @@ var init_SignatureV4 = __esm({
       }
       async getSignature(longDate, credentialScope, keyPromise, canonicalRequest) {
         const stringToSign = await this.createStringToSign(longDate, credentialScope, canonicalRequest, ALGORITHM_IDENTIFIER);
-        const hash3 = new this.sha256(await keyPromise);
-        hash3.update(toUint8Array(stringToSign));
-        return toHex(await hash3.digest());
+        const hash2 = new this.sha256(await keyPromise);
+        hash2.update(toUint8Array(stringToSign));
+        return toHex(await hash2.digest());
       }
       getSigningKey(credentials, region, shortDate, service) {
         return getSigningKey(this.sha256, credentials, shortDate, region, service || this.service);
       }
     };
-    __name(SignatureV4, "SignatureV4");
   }
 });
 
@@ -15597,7 +15307,6 @@ var init_SignatureV4 = __esm({
 var signatureV4aContainer;
 var init_signature_v4a_container = __esm({
   "node_modules/@smithy/signature-v4/dist-es/signature-v4a-container.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -15611,7 +15320,6 @@ var init_signature_v4a_container = __esm({
 // node_modules/@smithy/signature-v4/dist-es/index.js
 var init_dist_es17 = __esm({
   "node_modules/@smithy/signature-v4/dist-es/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -15658,7 +15366,6 @@ function bindCallerConfig(config2, credentialsProvider) {
 var resolveAwsSdkSigV4Config;
 var init_resolveAwsSdkSigV4Config = __esm({
   "node_modules/@aws-sdk/core/dist-es/submodules/httpAuthSchemes/aws_sdk/resolveAwsSdkSigV4Config.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -15762,7 +15469,6 @@ var init_resolveAwsSdkSigV4Config = __esm({
 // node_modules/@aws-sdk/core/dist-es/submodules/httpAuthSchemes/aws_sdk/index.js
 var init_aws_sdk = __esm({
   "node_modules/@aws-sdk/core/dist-es/submodules/httpAuthSchemes/aws_sdk/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -15778,7 +15484,6 @@ var init_aws_sdk = __esm({
 // node_modules/@aws-sdk/core/dist-es/submodules/httpAuthSchemes/index.js
 var init_httpAuthSchemes2 = __esm({
   "node_modules/@aws-sdk/core/dist-es/submodules/httpAuthSchemes/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -15792,7 +15497,6 @@ var init_httpAuthSchemes2 = __esm({
 var TEXT_ENCODER, calculateBodyLength;
 var init_calculateBodyLength = __esm({
   "node_modules/@smithy/util-body-length-browser/dist-es/calculateBodyLength.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -15827,7 +15531,6 @@ var init_calculateBodyLength = __esm({
 // node_modules/@smithy/util-body-length-browser/dist-es/index.js
 var init_dist_es18 = __esm({
   "node_modules/@smithy/util-body-length-browser/dist-es/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -15840,7 +15543,6 @@ var init_dist_es18 = __esm({
 var getAllAliases, getMiddlewareNameWithAliases, constructStack, stepWeights, priorityWeights;
 var init_MiddlewareStack = __esm({
   "node_modules/@smithy/middleware-stack/dist-es/MiddlewareStack.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -15978,7 +15680,7 @@ var init_MiddlewareStack = __esm({
         return mainChain;
       }, "getMiddlewareList");
       const stack = {
-        add: (middleware, options = {}) => {
+        add: /* @__PURE__ */ __name((middleware, options = {}) => {
           const { name: name2, override, aliases: _aliases } = options;
           const entry = {
             step: "initialize",
@@ -16008,8 +15710,8 @@ var init_MiddlewareStack = __esm({
             }
           }
           absoluteEntries.push(entry);
-        },
-        addRelativeTo: (middleware, options) => {
+        }, "add"),
+        addRelativeTo: /* @__PURE__ */ __name((middleware, options) => {
           const { name: name2, override, aliases: _aliases } = options;
           const entry = {
             middleware,
@@ -16037,18 +15739,18 @@ var init_MiddlewareStack = __esm({
             }
           }
           relativeEntries.push(entry);
-        },
-        clone: () => cloneTo(constructStack()),
-        use: (plugin) => {
+        }, "addRelativeTo"),
+        clone: /* @__PURE__ */ __name(() => cloneTo(constructStack()), "clone"),
+        use: /* @__PURE__ */ __name((plugin) => {
           plugin.applyToStack(stack);
-        },
-        remove: (toRemove) => {
+        }, "use"),
+        remove: /* @__PURE__ */ __name((toRemove) => {
           if (typeof toRemove === "string")
             return removeByName(toRemove);
           else
             return removeByReference(toRemove);
-        },
-        removeByTag: (toRemove) => {
+        }, "remove"),
+        removeByTag: /* @__PURE__ */ __name((toRemove) => {
           let isRemoved = false;
           const filterCb = /* @__PURE__ */ __name((entry) => {
             const { tags, name: name2, aliases: _aliases } = entry;
@@ -16065,26 +15767,26 @@ var init_MiddlewareStack = __esm({
           absoluteEntries = absoluteEntries.filter(filterCb);
           relativeEntries = relativeEntries.filter(filterCb);
           return isRemoved;
-        },
-        concat: (from) => {
+        }, "removeByTag"),
+        concat: /* @__PURE__ */ __name((from) => {
           const cloned = cloneTo(constructStack());
           cloned.use(from);
           cloned.identifyOnResolve(identifyOnResolve || cloned.identifyOnResolve() || (from.identifyOnResolve?.() ?? false));
           return cloned;
-        },
+        }, "concat"),
         applyToStack: cloneTo,
-        identify: () => {
+        identify: /* @__PURE__ */ __name(() => {
           return getMiddlewareList(true).map((mw) => {
             const step = mw.step ?? mw.relation + " " + mw.toMiddleware;
             return getMiddlewareNameWithAliases(mw.name, mw.aliases) + " - " + step;
           });
-        },
+        }, "identify"),
         identifyOnResolve(toggle) {
           if (typeof toggle === "boolean")
             identifyOnResolve = toggle;
           return identifyOnResolve;
         },
-        resolve: (handler, context2) => {
+        resolve: /* @__PURE__ */ __name((handler, context2) => {
           for (const middleware of getMiddlewareList().map((entry) => entry.middleware).reverse()) {
             handler = middleware(handler, context2);
           }
@@ -16092,7 +15794,7 @@ var init_MiddlewareStack = __esm({
             console.log(stack.identify());
           }
           return handler;
-        }
+        }, "resolve")
       };
       return stack;
     }, "constructStack");
@@ -16114,7 +15816,6 @@ var init_MiddlewareStack = __esm({
 // node_modules/@smithy/middleware-stack/dist-es/index.js
 var init_dist_es19 = __esm({
   "node_modules/@smithy/middleware-stack/dist-es/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -16127,13 +15828,15 @@ var init_dist_es19 = __esm({
 var Client;
 var init_client3 = __esm({
   "node_modules/@smithy/smithy-client/dist-es/client.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
     init_performance2();
     init_dist_es19();
     Client = class {
+      static {
+        __name(this, "Client");
+      }
       config;
       middlewareStack = constructStack();
       initConfig;
@@ -16173,14 +15876,12 @@ var init_client3 = __esm({
         delete this.handlers;
       }
     };
-    __name(Client, "Client");
   }
 });
 
 // node_modules/@smithy/smithy-client/dist-es/collect-stream-body.js
 var init_collect_stream_body2 = __esm({
   "node_modules/@smithy/smithy-client/dist-es/collect-stream-body.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -16222,7 +15923,6 @@ function schemaLogFilter(schema, data) {
 var SENSITIVE_STRING;
 var init_schemaLogFilter = __esm({
   "node_modules/@smithy/smithy-client/dist-es/schemaLogFilter.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -16237,7 +15937,6 @@ var init_schemaLogFilter = __esm({
 var Command, ClassBuilder;
 var init_command2 = __esm({
   "node_modules/@smithy/smithy-client/dist-es/command.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -16246,6 +15945,9 @@ var init_command2 = __esm({
     init_dist_es();
     init_schemaLogFilter();
     Command = class {
+      static {
+        __name(this, "Command");
+      }
       middlewareStack = constructStack();
       schema;
       static classBuilder() {
@@ -16273,12 +15975,14 @@ var init_command2 = __esm({
         return stack.resolve((request) => requestHandler.handle(request.request, options || {}), handlerExecutionContext);
       }
     };
-    __name(Command, "Command");
     ClassBuilder = class {
-      _init = () => {
-      };
+      static {
+        __name(this, "ClassBuilder");
+      }
+      _init = /* @__PURE__ */ __name(() => {
+      }, "_init");
       _ep = {};
-      _middlewareFn = () => [];
+      _middlewareFn = /* @__PURE__ */ __name(() => [], "_middlewareFn");
       _commandName = "";
       _clientName = "";
       _additionalContext = {};
@@ -16337,7 +16041,10 @@ var init_command2 = __esm({
       build() {
         const closure = this;
         let CommandRef;
-        return CommandRef = /* @__PURE__ */ __name(class extends Command {
+        return CommandRef = class extends Command {
+          static {
+            __name(this, "CommandRef");
+          }
           input;
           static getEndpointParameterInstructions() {
             return closure._ep;
@@ -16365,17 +16072,15 @@ var init_command2 = __esm({
           }
           serialize = closure._serializer;
           deserialize = closure._deserializer;
-        }, "CommandRef");
+        };
       }
     };
-    __name(ClassBuilder, "ClassBuilder");
   }
 });
 
 // node_modules/@smithy/smithy-client/dist-es/constants.js
 var init_constants4 = __esm({
   "node_modules/@smithy/smithy-client/dist-es/constants.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -16387,7 +16092,6 @@ var init_constants4 = __esm({
 var createAggregatedClient;
 var init_create_aggregated_client = __esm({
   "node_modules/@smithy/smithy-client/dist-es/create-aggregated-client.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -16418,12 +16122,14 @@ var init_create_aggregated_client = __esm({
 var ServiceException, decorateServiceException;
 var init_exceptions = __esm({
   "node_modules/@smithy/smithy-client/dist-es/exceptions.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
     init_performance2();
-    ServiceException = class extends Error {
+    ServiceException = class _ServiceException extends Error {
+      static {
+        __name(this, "ServiceException");
+      }
       $fault;
       $response;
       $retryable;
@@ -16439,16 +16145,16 @@ var init_exceptions = __esm({
         if (!value)
           return false;
         const candidate = value;
-        return ServiceException.prototype.isPrototypeOf(candidate) || Boolean(candidate.$fault) && Boolean(candidate.$metadata) && (candidate.$fault === "client" || candidate.$fault === "server");
+        return _ServiceException.prototype.isPrototypeOf(candidate) || Boolean(candidate.$fault) && Boolean(candidate.$metadata) && (candidate.$fault === "client" || candidate.$fault === "server");
       }
       static [Symbol.hasInstance](instance) {
         if (!instance)
           return false;
         const candidate = instance;
-        if (this === ServiceException) {
-          return ServiceException.isInstance(instance);
+        if (this === _ServiceException) {
+          return _ServiceException.isInstance(instance);
         }
-        if (ServiceException.isInstance(instance)) {
+        if (_ServiceException.isInstance(instance)) {
           if (candidate.name && this.name) {
             return this.prototype.isPrototypeOf(instance) || candidate.name === this.name;
           }
@@ -16457,7 +16163,6 @@ var init_exceptions = __esm({
         return false;
       }
     };
-    __name(ServiceException, "ServiceException");
     decorateServiceException = /* @__PURE__ */ __name((exception, additions = {}) => {
       Object.entries(additions).filter(([, v2]) => v2 !== void 0).forEach(([k2, v2]) => {
         if (exception[k2] == void 0 || exception[k2] === "") {
@@ -16475,7 +16180,6 @@ var init_exceptions = __esm({
 // node_modules/@smithy/smithy-client/dist-es/default-error-handler.js
 var init_default_error_handler = __esm({
   "node_modules/@smithy/smithy-client/dist-es/default-error-handler.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -16487,7 +16191,6 @@ var init_default_error_handler = __esm({
 var loadConfigsForDefaultMode;
 var init_defaults_mode = __esm({
   "node_modules/@smithy/smithy-client/dist-es/defaults-mode.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -16524,7 +16227,6 @@ var init_defaults_mode = __esm({
 // node_modules/@smithy/smithy-client/dist-es/emitWarningIfUnsupportedVersion.js
 var init_emitWarningIfUnsupportedVersion2 = __esm({
   "node_modules/@smithy/smithy-client/dist-es/emitWarningIfUnsupportedVersion.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -16535,7 +16237,6 @@ var init_emitWarningIfUnsupportedVersion2 = __esm({
 // node_modules/@smithy/smithy-client/dist-es/extended-encode-uri-component.js
 var init_extended_encode_uri_component2 = __esm({
   "node_modules/@smithy/smithy-client/dist-es/extended-encode-uri-component.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -16547,7 +16248,6 @@ var init_extended_encode_uri_component2 = __esm({
 var getChecksumConfiguration, resolveChecksumRuntimeConfig;
 var init_checksum3 = __esm({
   "node_modules/@smithy/smithy-client/dist-es/extensions/checksum.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -16561,8 +16261,8 @@ var init_checksum3 = __esm({
           continue;
         }
         checksumAlgorithms.push({
-          algorithmId: () => algorithmId,
-          checksumConstructor: () => runtimeConfig[algorithmId]
+          algorithmId: /* @__PURE__ */ __name(() => algorithmId, "algorithmId"),
+          checksumConstructor: /* @__PURE__ */ __name(() => runtimeConfig[algorithmId], "checksumConstructor")
         });
       }
       return {
@@ -16588,7 +16288,6 @@ var init_checksum3 = __esm({
 var getRetryConfiguration, resolveRetryRuntimeConfig;
 var init_retry2 = __esm({
   "node_modules/@smithy/smithy-client/dist-es/extensions/retry.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -16615,7 +16314,6 @@ var init_retry2 = __esm({
 var getDefaultExtensionConfiguration, resolveDefaultRuntimeConfig;
 var init_defaultExtensionConfiguration2 = __esm({
   "node_modules/@smithy/smithy-client/dist-es/extensions/defaultExtensionConfiguration.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -16634,7 +16332,6 @@ var init_defaultExtensionConfiguration2 = __esm({
 // node_modules/@smithy/smithy-client/dist-es/extensions/index.js
 var init_extensions3 = __esm({
   "node_modules/@smithy/smithy-client/dist-es/extensions/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -16646,7 +16343,6 @@ var init_extensions3 = __esm({
 // node_modules/@smithy/smithy-client/dist-es/get-array-if-single-item.js
 var init_get_array_if_single_item = __esm({
   "node_modules/@smithy/smithy-client/dist-es/get-array-if-single-item.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -16658,7 +16354,6 @@ var init_get_array_if_single_item = __esm({
 var getValueFromTextNode;
 var init_get_value_from_text_node = __esm({
   "node_modules/@smithy/smithy-client/dist-es/get-value-from-text-node.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -16680,7 +16375,6 @@ var init_get_value_from_text_node = __esm({
 // node_modules/@smithy/smithy-client/dist-es/is-serializable-header-value.js
 var init_is_serializable_header_value = __esm({
   "node_modules/@smithy/smithy-client/dist-es/is-serializable-header-value.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -16692,12 +16386,14 @@ var init_is_serializable_header_value = __esm({
 var NoOpLogger;
 var init_NoOpLogger = __esm({
   "node_modules/@smithy/smithy-client/dist-es/NoOpLogger.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
     init_performance2();
     NoOpLogger = class {
+      static {
+        __name(this, "NoOpLogger");
+      }
       trace() {
       }
       debug() {
@@ -16709,14 +16405,12 @@ var init_NoOpLogger = __esm({
       error() {
       }
     };
-    __name(NoOpLogger, "NoOpLogger");
   }
 });
 
 // node_modules/@smithy/smithy-client/dist-es/object-mapping.js
 var init_object_mapping = __esm({
   "node_modules/@smithy/smithy-client/dist-es/object-mapping.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -16727,7 +16421,6 @@ var init_object_mapping = __esm({
 // node_modules/@smithy/smithy-client/dist-es/resolve-path.js
 var init_resolve_path2 = __esm({
   "node_modules/@smithy/smithy-client/dist-es/resolve-path.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -16738,7 +16431,6 @@ var init_resolve_path2 = __esm({
 // node_modules/@smithy/smithy-client/dist-es/ser-utils.js
 var init_ser_utils = __esm({
   "node_modules/@smithy/smithy-client/dist-es/ser-utils.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -16749,7 +16441,6 @@ var init_ser_utils = __esm({
 // node_modules/@smithy/smithy-client/dist-es/serde-json.js
 var init_serde_json = __esm({
   "node_modules/@smithy/smithy-client/dist-es/serde-json.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -16760,7 +16451,6 @@ var init_serde_json = __esm({
 // node_modules/@smithy/smithy-client/dist-es/index.js
 var init_dist_es20 = __esm({
   "node_modules/@smithy/smithy-client/dist-es/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -16792,7 +16482,6 @@ var init_dist_es20 = __esm({
 var ProtocolLib;
 var init_ProtocolLib = __esm({
   "node_modules/@aws-sdk/core/dist-es/submodules/protocols/ProtocolLib.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -16800,6 +16489,9 @@ var init_ProtocolLib = __esm({
     init_schema2();
     init_dist_es20();
     ProtocolLib = class {
+      static {
+        __name(this, "ProtocolLib");
+      }
       queryCompat;
       constructor(queryCompat = false) {
         this.queryCompat = queryCompat;
@@ -16897,14 +16589,12 @@ var init_ProtocolLib = __esm({
         }
       }
     };
-    __name(ProtocolLib, "ProtocolLib");
   }
 });
 
 // node_modules/@aws-sdk/core/dist-es/submodules/protocols/cbor/AwsSmithyRpcV2CborProtocol.js
 var init_AwsSmithyRpcV2CborProtocol = __esm({
   "node_modules/@aws-sdk/core/dist-es/submodules/protocols/cbor/AwsSmithyRpcV2CborProtocol.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -16915,7 +16605,6 @@ var init_AwsSmithyRpcV2CborProtocol = __esm({
 // node_modules/@aws-sdk/core/dist-es/submodules/protocols/coercing-serializers.js
 var init_coercing_serializers = __esm({
   "node_modules/@aws-sdk/core/dist-es/submodules/protocols/coercing-serializers.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -16927,18 +16616,19 @@ var init_coercing_serializers = __esm({
 var SerdeContextConfig;
 var init_ConfigurableSerdeContext = __esm({
   "node_modules/@aws-sdk/core/dist-es/submodules/protocols/ConfigurableSerdeContext.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
     init_performance2();
     SerdeContextConfig = class {
+      static {
+        __name(this, "SerdeContextConfig");
+      }
       serdeContext;
       setSerdeContext(serdeContext) {
         this.serdeContext = serdeContext;
       }
     };
-    __name(SerdeContextConfig, "SerdeContextConfig");
   }
 });
 
@@ -16959,7 +16649,6 @@ function* serializingStructIterator(ns, sourceObject) {
 }
 var init_structIterator = __esm({
   "node_modules/@aws-sdk/core/dist-es/submodules/protocols/structIterator.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -16972,7 +16661,6 @@ var init_structIterator = __esm({
 // node_modules/@aws-sdk/core/dist-es/submodules/protocols/json/parseJsonBody.js
 var init_parseJsonBody = __esm({
   "node_modules/@aws-sdk/core/dist-es/submodules/protocols/json/parseJsonBody.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -16983,7 +16671,6 @@ var init_parseJsonBody = __esm({
 // node_modules/@aws-sdk/core/dist-es/submodules/protocols/json/JsonShapeDeserializer.js
 var init_JsonShapeDeserializer = __esm({
   "node_modules/@aws-sdk/core/dist-es/submodules/protocols/json/JsonShapeDeserializer.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -16994,7 +16681,6 @@ var init_JsonShapeDeserializer = __esm({
 // node_modules/@aws-sdk/core/dist-es/submodules/protocols/json/JsonShapeSerializer.js
 var init_JsonShapeSerializer = __esm({
   "node_modules/@aws-sdk/core/dist-es/submodules/protocols/json/JsonShapeSerializer.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -17005,7 +16691,6 @@ var init_JsonShapeSerializer = __esm({
 // node_modules/@aws-sdk/core/dist-es/submodules/protocols/json/JsonCodec.js
 var init_JsonCodec = __esm({
   "node_modules/@aws-sdk/core/dist-es/submodules/protocols/json/JsonCodec.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -17016,7 +16701,6 @@ var init_JsonCodec = __esm({
 // node_modules/@aws-sdk/core/dist-es/submodules/protocols/json/AwsJsonRpcProtocol.js
 var init_AwsJsonRpcProtocol = __esm({
   "node_modules/@aws-sdk/core/dist-es/submodules/protocols/json/AwsJsonRpcProtocol.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -17027,7 +16711,6 @@ var init_AwsJsonRpcProtocol = __esm({
 // node_modules/@aws-sdk/core/dist-es/submodules/protocols/json/AwsJson1_0Protocol.js
 var init_AwsJson1_0Protocol = __esm({
   "node_modules/@aws-sdk/core/dist-es/submodules/protocols/json/AwsJson1_0Protocol.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -17038,7 +16721,6 @@ var init_AwsJson1_0Protocol = __esm({
 // node_modules/@aws-sdk/core/dist-es/submodules/protocols/json/AwsJson1_1Protocol.js
 var init_AwsJson1_1Protocol = __esm({
   "node_modules/@aws-sdk/core/dist-es/submodules/protocols/json/AwsJson1_1Protocol.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -17049,7 +16731,6 @@ var init_AwsJson1_1Protocol = __esm({
 // node_modules/@aws-sdk/core/dist-es/submodules/protocols/json/AwsRestJsonProtocol.js
 var init_AwsRestJsonProtocol = __esm({
   "node_modules/@aws-sdk/core/dist-es/submodules/protocols/json/AwsRestJsonProtocol.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -17060,7 +16741,6 @@ var init_AwsRestJsonProtocol = __esm({
 // node_modules/@aws-sdk/core/dist-es/submodules/protocols/json/awsExpectUnion.js
 var init_awsExpectUnion = __esm({
   "node_modules/@aws-sdk/core/dist-es/submodules/protocols/json/awsExpectUnion.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -17074,7 +16754,6 @@ function escapeAttribute(value) {
 }
 var init_escape_attribute = __esm({
   "node_modules/@aws-sdk/xml-builder/dist-es/escape-attribute.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -17089,7 +16768,6 @@ function escapeElement(value) {
 }
 var init_escape_element = __esm({
   "node_modules/@aws-sdk/xml-builder/dist-es/escape-element.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -17102,13 +16780,15 @@ var init_escape_element = __esm({
 var XmlText;
 var init_XmlText = __esm({
   "node_modules/@aws-sdk/xml-builder/dist-es/XmlText.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
     init_performance2();
     init_escape_element();
     XmlText = class {
+      static {
+        __name(this, "XmlText");
+      }
       value;
       constructor(value) {
         this.value = value;
@@ -17117,7 +16797,6 @@ var init_XmlText = __esm({
         return escapeElement("" + this.value);
       }
     };
-    __name(XmlText, "XmlText");
   }
 });
 
@@ -17125,19 +16804,21 @@ var init_XmlText = __esm({
 var XmlNode;
 var init_XmlNode = __esm({
   "node_modules/@aws-sdk/xml-builder/dist-es/XmlNode.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
     init_performance2();
     init_escape_attribute();
     init_XmlText();
-    XmlNode = class {
+    XmlNode = class _XmlNode {
+      static {
+        __name(this, "XmlNode");
+      }
       name;
       children;
       attributes = {};
       static of(name2, childText, withName) {
-        const node = new XmlNode(name2);
+        const node = new _XmlNode(name2);
         if (childText !== void 0) {
           node.addChildNode(new XmlText(childText));
         }
@@ -17182,7 +16863,7 @@ var init_XmlNode = __esm({
       }
       cc(input, field, withName = field) {
         if (input[field] != null) {
-          const node = XmlNode.of(field, input[field]).withName(withName);
+          const node = _XmlNode.of(field, input[field]).withName(withName);
           this.c(node);
         }
       }
@@ -17198,7 +16879,7 @@ var init_XmlNode = __esm({
       lc(input, listName, memberName, valueProvider) {
         if (input[listName] != null) {
           const nodes = valueProvider();
-          const containerNode = new XmlNode(memberName);
+          const containerNode = new _XmlNode(memberName);
           nodes.map((node) => {
             containerNode.c(node);
           });
@@ -17218,7 +16899,6 @@ var init_XmlNode = __esm({
         return xmlText += !hasChildren ? "/>" : `>${this.children.map((c2) => c2.toString()).join("")}</${this.name}>`;
       }
     };
-    __name(XmlNode, "XmlNode");
   }
 });
 
@@ -17279,7 +16959,6 @@ function parseXML(xmlString) {
 var parser;
 var init_xml_parser_browser = __esm({
   "node_modules/@aws-sdk/xml-builder/dist-es/xml-parser.browser.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -17291,7 +16970,6 @@ var init_xml_parser_browser = __esm({
 // node_modules/@aws-sdk/xml-builder/dist-es/index.js
 var init_dist_es21 = __esm({
   "node_modules/@aws-sdk/xml-builder/dist-es/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -17306,7 +16984,6 @@ var init_dist_es21 = __esm({
 var XmlShapeDeserializer;
 var init_XmlShapeDeserializer = __esm({
   "node_modules/@aws-sdk/core/dist-es/submodules/protocols/xml/XmlShapeDeserializer.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -17318,6 +16995,9 @@ var init_XmlShapeDeserializer = __esm({
     init_dist_es6();
     init_ConfigurableSerdeContext();
     XmlShapeDeserializer = class extends SerdeContextConfig {
+      static {
+        __name(this, "XmlShapeDeserializer");
+      }
       settings;
       stringDeserializer;
       constructor(settings) {
@@ -17447,14 +17127,12 @@ var init_XmlShapeDeserializer = __esm({
         return {};
       }
     };
-    __name(XmlShapeDeserializer, "XmlShapeDeserializer");
   }
 });
 
 // node_modules/@aws-sdk/core/dist-es/submodules/protocols/query/AwsQueryProtocol.js
 var init_AwsQueryProtocol = __esm({
   "node_modules/@aws-sdk/core/dist-es/submodules/protocols/query/AwsQueryProtocol.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -17465,7 +17143,6 @@ var init_AwsQueryProtocol = __esm({
 // node_modules/@aws-sdk/core/dist-es/submodules/protocols/query/AwsEc2QueryProtocol.js
 var init_AwsEc2QueryProtocol = __esm({
   "node_modules/@aws-sdk/core/dist-es/submodules/protocols/query/AwsEc2QueryProtocol.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -17477,7 +17154,6 @@ var init_AwsEc2QueryProtocol = __esm({
 var loadRestXmlErrorCode;
 var init_parseXmlBody = __esm({
   "node_modules/@aws-sdk/core/dist-es/submodules/protocols/xml/parseXmlBody.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -17500,7 +17176,6 @@ var init_parseXmlBody = __esm({
 var XmlShapeSerializer;
 var init_XmlShapeSerializer = __esm({
   "node_modules/@aws-sdk/core/dist-es/submodules/protocols/xml/XmlShapeSerializer.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -17514,6 +17189,9 @@ var init_XmlShapeSerializer = __esm({
     init_ConfigurableSerdeContext();
     init_structIterator();
     XmlShapeSerializer = class extends SerdeContextConfig {
+      static {
+        __name(this, "XmlShapeSerializer");
+      }
       settings;
       stringBuffer;
       byteBuffer;
@@ -17762,7 +17440,6 @@ var init_XmlShapeSerializer = __esm({
         return [void 0, void 0];
       }
     };
-    __name(XmlShapeSerializer, "XmlShapeSerializer");
   }
 });
 
@@ -17770,7 +17447,6 @@ var init_XmlShapeSerializer = __esm({
 var XmlCodec;
 var init_XmlCodec = __esm({
   "node_modules/@aws-sdk/core/dist-es/submodules/protocols/xml/XmlCodec.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -17779,6 +17455,9 @@ var init_XmlCodec = __esm({
     init_XmlShapeDeserializer();
     init_XmlShapeSerializer();
     XmlCodec = class extends SerdeContextConfig {
+      static {
+        __name(this, "XmlCodec");
+      }
       settings;
       constructor(settings) {
         super();
@@ -17795,7 +17474,6 @@ var init_XmlCodec = __esm({
         return deserializer;
       }
     };
-    __name(XmlCodec, "XmlCodec");
   }
 });
 
@@ -17803,7 +17481,6 @@ var init_XmlCodec = __esm({
 var AwsRestXmlProtocol;
 var init_AwsRestXmlProtocol = __esm({
   "node_modules/@aws-sdk/core/dist-es/submodules/protocols/xml/AwsRestXmlProtocol.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -17814,6 +17491,9 @@ var init_AwsRestXmlProtocol = __esm({
     init_parseXmlBody();
     init_XmlCodec();
     AwsRestXmlProtocol = class extends HttpBindingProtocol {
+      static {
+        __name(this, "AwsRestXmlProtocol");
+      }
       codec;
       serializer;
       deserializer;
@@ -17881,14 +17561,12 @@ var init_AwsRestXmlProtocol = __esm({
         return "application/xml";
       }
     };
-    __name(AwsRestXmlProtocol, "AwsRestXmlProtocol");
   }
 });
 
 // node_modules/@aws-sdk/core/dist-es/submodules/protocols/index.js
 var init_protocols2 = __esm({
   "node_modules/@aws-sdk/core/dist-es/submodules/protocols/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -17917,7 +17595,6 @@ var init_protocols2 = __esm({
 // node_modules/@aws-sdk/core/dist-es/index.js
 var init_dist_es22 = __esm({
   "node_modules/@aws-sdk/core/dist-es/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -17932,7 +17609,6 @@ var init_dist_es22 = __esm({
 var CLIENT_SUPPORTED_ALGORITHMS, PRIORITY_ORDER_ALGORITHMS;
 var init_types2 = __esm({
   "node_modules/@aws-sdk/middleware-flexible-checksums/dist-es/types.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -17959,7 +17635,6 @@ var init_types2 = __esm({
 var getChecksumAlgorithmForRequest;
 var init_getChecksumAlgorithmForRequest = __esm({
   "node_modules/@aws-sdk/middleware-flexible-checksums/dist-es/getChecksumAlgorithmForRequest.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -17986,7 +17661,6 @@ var init_getChecksumAlgorithmForRequest = __esm({
 var getChecksumLocationName;
 var init_getChecksumLocationName = __esm({
   "node_modules/@aws-sdk/middleware-flexible-checksums/dist-es/getChecksumLocationName.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -18000,7 +17674,6 @@ var init_getChecksumLocationName = __esm({
 var hasHeader2;
 var init_hasHeader = __esm({
   "node_modules/@aws-sdk/middleware-flexible-checksums/dist-es/hasHeader.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -18021,7 +17694,6 @@ var init_hasHeader = __esm({
 var hasHeaderWithPrefix;
 var init_hasHeaderWithPrefix = __esm({
   "node_modules/@aws-sdk/middleware-flexible-checksums/dist-es/hasHeaderWithPrefix.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -18042,7 +17714,6 @@ var init_hasHeaderWithPrefix = __esm({
 var isStreaming;
 var init_isStreaming = __esm({
   "node_modules/@aws-sdk/middleware-flexible-checksums/dist-es/isStreaming.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -18085,11 +17756,10 @@ function __awaiter(thisArg, _arguments, P2, generator) {
   });
 }
 function __generator(thisArg, body) {
-  var _ = { label: 0, sent: function() {
-    if (t2[0] & 1)
-      throw t2[1];
+  var _ = { label: 0, sent: /* @__PURE__ */ __name(function() {
+    if (t2[0] & 1) throw t2[1];
     return t2[1];
-  }, trys: [], ops: [] }, f2, y2, t2, g2 = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype);
+  }, "sent"), trys: [], ops: [] }, f2, y2, t2, g2 = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype);
   return g2.next = verb(0), g2["throw"] = verb(1), g2["return"] = verb(2), typeof Symbol === "function" && (g2[Symbol.iterator] = function() {
     return this;
   }), g2;
@@ -18100,85 +17770,75 @@ function __generator(thisArg, body) {
   }
   __name(verb, "verb");
   function step(op) {
-    if (f2)
-      throw new TypeError("Generator is already executing.");
-    while (g2 && (g2 = 0, op[0] && (_ = 0)), _)
-      try {
-        if (f2 = 1, y2 && (t2 = op[0] & 2 ? y2["return"] : op[0] ? y2["throw"] || ((t2 = y2["return"]) && t2.call(y2), 0) : y2.next) && !(t2 = t2.call(y2, op[1])).done)
-          return t2;
-        if (y2 = 0, t2)
-          op = [op[0] & 2, t2.value];
-        switch (op[0]) {
-          case 0:
-          case 1:
+    if (f2) throw new TypeError("Generator is already executing.");
+    while (g2 && (g2 = 0, op[0] && (_ = 0)), _) try {
+      if (f2 = 1, y2 && (t2 = op[0] & 2 ? y2["return"] : op[0] ? y2["throw"] || ((t2 = y2["return"]) && t2.call(y2), 0) : y2.next) && !(t2 = t2.call(y2, op[1])).done) return t2;
+      if (y2 = 0, t2) op = [op[0] & 2, t2.value];
+      switch (op[0]) {
+        case 0:
+        case 1:
+          t2 = op;
+          break;
+        case 4:
+          _.label++;
+          return { value: op[1], done: false };
+        case 5:
+          _.label++;
+          y2 = op[1];
+          op = [0];
+          continue;
+        case 7:
+          op = _.ops.pop();
+          _.trys.pop();
+          continue;
+        default:
+          if (!(t2 = _.trys, t2 = t2.length > 0 && t2[t2.length - 1]) && (op[0] === 6 || op[0] === 2)) {
+            _ = 0;
+            continue;
+          }
+          if (op[0] === 3 && (!t2 || op[1] > t2[0] && op[1] < t2[3])) {
+            _.label = op[1];
+            break;
+          }
+          if (op[0] === 6 && _.label < t2[1]) {
+            _.label = t2[1];
             t2 = op;
             break;
-          case 4:
-            _.label++;
-            return { value: op[1], done: false };
-          case 5:
-            _.label++;
-            y2 = op[1];
-            op = [0];
-            continue;
-          case 7:
-            op = _.ops.pop();
-            _.trys.pop();
-            continue;
-          default:
-            if (!(t2 = _.trys, t2 = t2.length > 0 && t2[t2.length - 1]) && (op[0] === 6 || op[0] === 2)) {
-              _ = 0;
-              continue;
-            }
-            if (op[0] === 3 && (!t2 || op[1] > t2[0] && op[1] < t2[3])) {
-              _.label = op[1];
-              break;
-            }
-            if (op[0] === 6 && _.label < t2[1]) {
-              _.label = t2[1];
-              t2 = op;
-              break;
-            }
-            if (t2 && _.label < t2[2]) {
-              _.label = t2[2];
-              _.ops.push(op);
-              break;
-            }
-            if (t2[2])
-              _.ops.pop();
-            _.trys.pop();
-            continue;
-        }
-        op = body.call(thisArg, _);
-      } catch (e2) {
-        op = [6, e2];
-        y2 = 0;
-      } finally {
-        f2 = t2 = 0;
+          }
+          if (t2 && _.label < t2[2]) {
+            _.label = t2[2];
+            _.ops.push(op);
+            break;
+          }
+          if (t2[2]) _.ops.pop();
+          _.trys.pop();
+          continue;
       }
-    if (op[0] & 5)
-      throw op[1];
+      op = body.call(thisArg, _);
+    } catch (e2) {
+      op = [6, e2];
+      y2 = 0;
+    } finally {
+      f2 = t2 = 0;
+    }
+    if (op[0] & 5) throw op[1];
     return { value: op[0] ? op[1] : void 0, done: true };
   }
   __name(step, "step");
 }
 function __values(o2) {
   var s2 = typeof Symbol === "function" && Symbol.iterator, m2 = s2 && o2[s2], i2 = 0;
-  if (m2)
-    return m2.call(o2);
-  if (o2 && typeof o2.length === "number")
-    return {
-      next: function() {
-        if (o2 && i2 >= o2.length)
-          o2 = void 0;
-        return { value: o2 && o2[i2++], done: !o2 };
-      }
-    };
+  if (m2) return m2.call(o2);
+  if (o2 && typeof o2.length === "number") return {
+    next: /* @__PURE__ */ __name(function() {
+      if (o2 && i2 >= o2.length) o2 = void 0;
+      return { value: o2 && o2[i2++], done: !o2 };
+    }, "next")
+  };
   throw new TypeError(s2 ? "Object is not iterable." : "Symbol.iterator is not defined.");
 }
 var init_tslib_es6 = __esm({
   "node_modules/tslib/tslib.es6.mjs"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -18193,7 +17853,6 @@ var init_tslib_es6 = __esm({
 var fromUtf82;
 var init_fromUtf8_browser2 = __esm({
   "node_modules/@aws-crypto/util/node_modules/@smithy/util-utf8/dist-es/fromUtf8.browser.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -18205,7 +17864,6 @@ var init_fromUtf8_browser2 = __esm({
 // node_modules/@aws-crypto/util/node_modules/@smithy/util-utf8/dist-es/toUint8Array.js
 var init_toUint8Array2 = __esm({
   "node_modules/@aws-crypto/util/node_modules/@smithy/util-utf8/dist-es/toUint8Array.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -18217,7 +17875,6 @@ var init_toUint8Array2 = __esm({
 // node_modules/@aws-crypto/util/node_modules/@smithy/util-utf8/dist-es/toUtf8.browser.js
 var init_toUtf8_browser2 = __esm({
   "node_modules/@aws-crypto/util/node_modules/@smithy/util-utf8/dist-es/toUtf8.browser.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -18228,7 +17885,6 @@ var init_toUtf8_browser2 = __esm({
 // node_modules/@aws-crypto/util/node_modules/@smithy/util-utf8/dist-es/index.js
 var init_dist_es23 = __esm({
   "node_modules/@aws-crypto/util/node_modules/@smithy/util-utf8/dist-es/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -18254,7 +17910,6 @@ function convertToBuffer(data) {
 var fromUtf83;
 var init_convertToBuffer = __esm({
   "node_modules/@aws-crypto/util/build/module/convertToBuffer.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -18276,7 +17931,6 @@ function isEmptyData(data) {
 }
 var init_isEmptyData = __esm({
   "node_modules/@aws-crypto/util/build/module/isEmptyData.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -18296,7 +17950,6 @@ function numToUint8(num) {
 }
 var init_numToUint8 = __esm({
   "node_modules/@aws-crypto/util/build/module/numToUint8.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -18320,7 +17973,6 @@ function uint32ArrayFrom(a_lookUpTable2) {
 }
 var init_uint32ArrayFrom = __esm({
   "node_modules/@aws-crypto/util/build/module/uint32ArrayFrom.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -18332,7 +17984,6 @@ var init_uint32ArrayFrom = __esm({
 // node_modules/@aws-crypto/util/build/module/index.js
 var init_module = __esm({
   "node_modules/@aws-crypto/util/build/module/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -18348,7 +17999,6 @@ var init_module = __esm({
 var AwsCrc32c;
 var init_aws_crc32c = __esm({
   "node_modules/@aws-crypto/crc32c/build/module/aws_crc32c.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -18357,7 +18007,7 @@ var init_aws_crc32c = __esm({
     init_module();
     init_module2();
     AwsCrc32c = /** @class */
-    function() {
+    (function() {
       function AwsCrc32c2() {
         this.crc32c = new Crc32c();
       }
@@ -18378,7 +18028,7 @@ var init_aws_crc32c = __esm({
         this.crc32c = new Crc32c();
       };
       return AwsCrc32c2;
-    }();
+    })();
   }
 });
 
@@ -18386,7 +18036,6 @@ var init_aws_crc32c = __esm({
 var Crc32c, a_lookupTable, lookupTable;
 var init_module2 = __esm({
   "node_modules/@aws-crypto/crc32c/build/module/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -18395,7 +18044,7 @@ var init_module2 = __esm({
     init_module();
     init_aws_crc32c();
     Crc32c = /** @class */
-    function() {
+    (function() {
       function Crc32c2() {
         this.checksum = 4294967295;
       }
@@ -18411,11 +18060,9 @@ var init_module2 = __esm({
           e_1 = { error: e_1_1 };
         } finally {
           try {
-            if (data_1_1 && !data_1_1.done && (_a = data_1.return))
-              _a.call(data_1);
+            if (data_1_1 && !data_1_1.done && (_a = data_1.return)) _a.call(data_1);
           } finally {
-            if (e_1)
-              throw e_1.error;
+            if (e_1) throw e_1.error;
           }
         }
         return this;
@@ -18424,7 +18071,7 @@ var init_module2 = __esm({
         return (this.checksum ^ 4294967295) >>> 0;
       };
       return Crc32c2;
-    }();
+    })();
     a_lookupTable = [
       0,
       4067132163,
@@ -18691,7 +18338,6 @@ var init_module2 = __esm({
 var AwsCrc32;
 var init_aws_crc32 = __esm({
   "node_modules/@aws-crypto/crc32/build/module/aws_crc32.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -18700,7 +18346,7 @@ var init_aws_crc32 = __esm({
     init_module();
     init_module3();
     AwsCrc32 = /** @class */
-    function() {
+    (function() {
       function AwsCrc322() {
         this.crc32 = new Crc32();
       }
@@ -18721,7 +18367,7 @@ var init_aws_crc32 = __esm({
         this.crc32 = new Crc32();
       };
       return AwsCrc322;
-    }();
+    })();
   }
 });
 
@@ -18729,7 +18375,6 @@ var init_aws_crc32 = __esm({
 var Crc32, a_lookUpTable, lookupTable2;
 var init_module3 = __esm({
   "node_modules/@aws-crypto/crc32/build/module/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -18738,7 +18383,7 @@ var init_module3 = __esm({
     init_module();
     init_aws_crc32();
     Crc32 = /** @class */
-    function() {
+    (function() {
       function Crc322() {
         this.checksum = 4294967295;
       }
@@ -18754,11 +18399,9 @@ var init_module3 = __esm({
           e_1 = { error: e_1_1 };
         } finally {
           try {
-            if (data_1_1 && !data_1_1.done && (_a = data_1.return))
-              _a.call(data_1);
+            if (data_1_1 && !data_1_1.done && (_a = data_1.return)) _a.call(data_1);
           } finally {
-            if (e_1)
-              throw e_1.error;
+            if (e_1) throw e_1.error;
           }
         }
         return this;
@@ -18767,7 +18410,7 @@ var init_module3 = __esm({
         return (this.checksum ^ 4294967295) >>> 0;
       };
       return Crc322;
-    }();
+    })();
     a_lookUpTable = [
       0,
       1996959894,
@@ -19034,7 +18677,6 @@ var init_module3 = __esm({
 var getCrc32ChecksumAlgorithmFunction;
 var init_getCrc32ChecksumAlgorithmFunction_browser = __esm({
   "node_modules/@aws-sdk/middleware-flexible-checksums/dist-es/getCrc32ChecksumAlgorithmFunction.browser.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -19048,7 +18690,6 @@ var init_getCrc32ChecksumAlgorithmFunction_browser = __esm({
 var selectChecksumAlgorithmFunction;
 var init_selectChecksumAlgorithmFunction = __esm({
   "node_modules/@aws-sdk/middleware-flexible-checksums/dist-es/selectChecksumAlgorithmFunction.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -19087,16 +18728,15 @@ For more information please go to https://github.com/aws/aws-sdk-js-v3#functiona
 var stringHasher;
 var init_stringHasher = __esm({
   "node_modules/@aws-sdk/middleware-flexible-checksums/dist-es/stringHasher.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
     init_performance2();
     init_dist_es6();
     stringHasher = /* @__PURE__ */ __name((checksumAlgorithmFn, body) => {
-      const hash3 = new checksumAlgorithmFn();
-      hash3.update(toUint8Array(body || ""));
-      return hash3.digest();
+      const hash2 = new checksumAlgorithmFn();
+      hash2.update(toUint8Array(body || ""));
+      return hash2.digest();
     }, "stringHasher");
   }
 });
@@ -19105,7 +18745,6 @@ var init_stringHasher = __esm({
 var flexibleChecksumsMiddlewareOptions, flexibleChecksumsMiddleware;
 var init_flexibleChecksumsMiddleware = __esm({
   "node_modules/@aws-sdk/middleware-flexible-checksums/dist-es/flexibleChecksumsMiddleware.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -19219,7 +18858,6 @@ var init_flexibleChecksumsMiddleware = __esm({
 var flexibleChecksumsInputMiddlewareOptions, flexibleChecksumsInputMiddleware;
 var init_flexibleChecksumsInputMiddleware = __esm({
   "node_modules/@aws-sdk/middleware-flexible-checksums/dist-es/flexibleChecksumsInputMiddleware.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -19268,7 +18906,6 @@ var init_flexibleChecksumsInputMiddleware = __esm({
 var getChecksumAlgorithmListForResponse;
 var init_getChecksumAlgorithmListForResponse = __esm({
   "node_modules/@aws-sdk/middleware-flexible-checksums/dist-es/getChecksumAlgorithmListForResponse.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -19291,7 +18928,6 @@ var init_getChecksumAlgorithmListForResponse = __esm({
 var isChecksumWithPartNumber;
 var init_isChecksumWithPartNumber = __esm({
   "node_modules/@aws-sdk/middleware-flexible-checksums/dist-es/isChecksumWithPartNumber.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -19316,7 +18952,6 @@ var init_isChecksumWithPartNumber = __esm({
 var getChecksum;
 var init_getChecksum = __esm({
   "node_modules/@aws-sdk/middleware-flexible-checksums/dist-es/getChecksum.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -19330,7 +18965,6 @@ var init_getChecksum = __esm({
 var validateChecksumFromResponse;
 var init_validateChecksumFromResponse = __esm({
   "node_modules/@aws-sdk/middleware-flexible-checksums/dist-es/validateChecksumFromResponse.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -19385,7 +19019,6 @@ var init_validateChecksumFromResponse = __esm({
 var flexibleChecksumsResponseMiddlewareOptions, flexibleChecksumsResponseMiddleware;
 var init_flexibleChecksumsResponseMiddleware = __esm({
   "node_modules/@aws-sdk/middleware-flexible-checksums/dist-es/flexibleChecksumsResponseMiddleware.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -19435,7 +19068,6 @@ var init_flexibleChecksumsResponseMiddleware = __esm({
 var getFlexibleChecksumsPlugin;
 var init_getFlexibleChecksumsPlugin = __esm({
   "node_modules/@aws-sdk/middleware-flexible-checksums/dist-es/getFlexibleChecksumsPlugin.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -19444,11 +19076,11 @@ var init_getFlexibleChecksumsPlugin = __esm({
     init_flexibleChecksumsMiddleware();
     init_flexibleChecksumsResponseMiddleware();
     getFlexibleChecksumsPlugin = /* @__PURE__ */ __name((config2, middlewareConfig) => ({
-      applyToStack: (clientStack) => {
+      applyToStack: /* @__PURE__ */ __name((clientStack) => {
         clientStack.add(flexibleChecksumsMiddleware(config2, middlewareConfig), flexibleChecksumsMiddlewareOptions);
         clientStack.addRelativeTo(flexibleChecksumsInputMiddleware(config2, middlewareConfig), flexibleChecksumsInputMiddlewareOptions);
         clientStack.addRelativeTo(flexibleChecksumsResponseMiddleware(config2, middlewareConfig), flexibleChecksumsResponseMiddlewareOptions);
-      }
+      }, "applyToStack")
     }), "getFlexibleChecksumsPlugin");
   }
 });
@@ -19457,7 +19089,6 @@ var init_getFlexibleChecksumsPlugin = __esm({
 var resolveFlexibleChecksumsConfig;
 var init_resolveFlexibleChecksumsConfig = __esm({
   "node_modules/@aws-sdk/middleware-flexible-checksums/dist-es/resolveFlexibleChecksumsConfig.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -19478,7 +19109,6 @@ var init_resolveFlexibleChecksumsConfig = __esm({
 // node_modules/@aws-sdk/middleware-flexible-checksums/dist-es/index.js
 var init_dist_es24 = __esm({
   "node_modules/@aws-sdk/middleware-flexible-checksums/dist-es/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -19500,7 +19130,6 @@ function resolveHostHeaderConfig(input) {
 var hostHeaderMiddleware, hostHeaderMiddlewareOptions, getHostHeaderPlugin;
 var init_dist_es25 = __esm({
   "node_modules/@aws-sdk/middleware-host-header/dist-es/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -19531,9 +19160,9 @@ var init_dist_es25 = __esm({
       override: true
     };
     getHostHeaderPlugin = /* @__PURE__ */ __name((options) => ({
-      applyToStack: (clientStack) => {
+      applyToStack: /* @__PURE__ */ __name((clientStack) => {
         clientStack.add(hostHeaderMiddleware(options), hostHeaderMiddlewareOptions);
-      }
+      }, "applyToStack")
     }), "getHostHeaderPlugin");
   }
 });
@@ -19542,7 +19171,6 @@ var init_dist_es25 = __esm({
 var loggerMiddleware, loggerMiddlewareOptions, getLoggerPlugin;
 var init_loggerMiddleware = __esm({
   "node_modules/@aws-sdk/middleware-logger/dist-es/loggerMiddleware.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -19584,9 +19212,9 @@ var init_loggerMiddleware = __esm({
       override: true
     };
     getLoggerPlugin = /* @__PURE__ */ __name((options) => ({
-      applyToStack: (clientStack) => {
+      applyToStack: /* @__PURE__ */ __name((clientStack) => {
         clientStack.add(loggerMiddleware(), loggerMiddlewareOptions);
-      }
+      }, "applyToStack")
     }), "getLoggerPlugin");
   }
 });
@@ -19594,7 +19222,6 @@ var init_loggerMiddleware = __esm({
 // node_modules/@aws-sdk/middleware-logger/dist-es/index.js
 var init_dist_es26 = __esm({
   "node_modules/@aws-sdk/middleware-logger/dist-es/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -19607,7 +19234,6 @@ var init_dist_es26 = __esm({
 var recursionDetectionMiddlewareOptions;
 var init_configuration = __esm({
   "node_modules/@aws-sdk/middleware-recursion-detection/dist-es/configuration.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -19626,7 +19252,6 @@ var init_configuration = __esm({
 var recursionDetectionMiddleware;
 var init_recursionDetectionMiddleware_browser = __esm({
   "node_modules/@aws-sdk/middleware-recursion-detection/dist-es/recursionDetectionMiddleware.browser.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -19639,7 +19264,6 @@ var init_recursionDetectionMiddleware_browser = __esm({
 var getRecursionDetectionPlugin;
 var init_getRecursionDetectionPlugin = __esm({
   "node_modules/@aws-sdk/middleware-recursion-detection/dist-es/getRecursionDetectionPlugin.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -19647,9 +19271,9 @@ var init_getRecursionDetectionPlugin = __esm({
     init_configuration();
     init_recursionDetectionMiddleware_browser();
     getRecursionDetectionPlugin = /* @__PURE__ */ __name((options) => ({
-      applyToStack: (clientStack) => {
+      applyToStack: /* @__PURE__ */ __name((clientStack) => {
         clientStack.add(recursionDetectionMiddleware(), recursionDetectionMiddlewareOptions);
-      }
+      }, "applyToStack")
     }), "getRecursionDetectionPlugin");
   }
 });
@@ -19657,7 +19281,6 @@ var init_getRecursionDetectionPlugin = __esm({
 // node_modules/@aws-sdk/middleware-recursion-detection/dist-es/index.js
 var init_dist_es27 = __esm({
   "node_modules/@aws-sdk/middleware-recursion-detection/dist-es/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -19687,7 +19310,6 @@ function checkContentLengthHeader() {
 var CONTENT_LENGTH_HEADER, DECODED_CONTENT_LENGTH_HEADER, checkContentLengthHeaderMiddlewareOptions, getCheckContentLengthHeaderPlugin;
 var init_check_content_length_header = __esm({
   "node_modules/@aws-sdk/middleware-sdk-s3/dist-es/check-content-length-header.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -19704,9 +19326,9 @@ var init_check_content_length_header = __esm({
       override: true
     };
     getCheckContentLengthHeaderPlugin = /* @__PURE__ */ __name((unused) => ({
-      applyToStack: (clientStack) => {
+      applyToStack: /* @__PURE__ */ __name((clientStack) => {
         clientStack.add(checkContentLengthHeader(), checkContentLengthHeaderMiddlewareOptions);
-      }
+      }, "applyToStack")
     }), "getCheckContentLengthHeaderPlugin");
   }
 });
@@ -19715,7 +19337,6 @@ var init_check_content_length_header = __esm({
 var regionRedirectEndpointMiddleware, regionRedirectEndpointMiddlewareOptions;
 var init_region_redirect_endpoint_middleware = __esm({
   "node_modules/@aws-sdk/middleware-sdk-s3/dist-es/region-redirect-endpoint-middleware.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -19729,9 +19350,9 @@ var init_region_redirect_endpoint_middleware = __esm({
         if (context2.__s3RegionRedirect) {
           Object.defineProperty(config2, "region", {
             writable: false,
-            value: async () => {
+            value: /* @__PURE__ */ __name(async () => {
               return context2.__s3RegionRedirect;
-            }
+            }, "value")
           });
           unlock = /* @__PURE__ */ __name(() => Object.defineProperty(config2, "region", {
             writable: true,
@@ -19794,7 +19415,6 @@ function regionRedirectMiddleware(clientConfig) {
 var regionRedirectMiddlewareOptions, getRegionRedirectMiddlewarePlugin;
 var init_region_redirect_middleware = __esm({
   "node_modules/@aws-sdk/middleware-sdk-s3/dist-es/region-redirect-middleware.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -19808,10 +19428,10 @@ var init_region_redirect_middleware = __esm({
       override: true
     };
     getRegionRedirectMiddlewarePlugin = /* @__PURE__ */ __name((clientConfig) => ({
-      applyToStack: (clientStack) => {
+      applyToStack: /* @__PURE__ */ __name((clientStack) => {
         clientStack.add(regionRedirectMiddleware(clientConfig), regionRedirectMiddlewareOptions);
         clientStack.addRelativeTo(regionRedirectEndpointMiddleware(clientConfig), regionRedirectEndpointMiddlewareOptions);
-      }
+      }, "applyToStack")
     }), "getRegionRedirectMiddlewarePlugin");
   }
 });
@@ -19820,7 +19440,6 @@ var init_region_redirect_middleware = __esm({
 var s3ExpiresMiddleware, s3ExpiresMiddlewareOptions, getS3ExpiresMiddlewarePlugin;
 var init_s3_expires_middleware = __esm({
   "node_modules/@aws-sdk/middleware-sdk-s3/dist-es/s3-expires-middleware.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -19853,25 +19472,28 @@ var init_s3_expires_middleware = __esm({
       toMiddleware: "deserializerMiddleware"
     };
     getS3ExpiresMiddlewarePlugin = /* @__PURE__ */ __name((clientConfig) => ({
-      applyToStack: (clientStack) => {
+      applyToStack: /* @__PURE__ */ __name((clientStack) => {
         clientStack.addRelativeTo(s3ExpiresMiddleware(clientConfig), s3ExpiresMiddlewareOptions);
-      }
+      }, "applyToStack")
     }), "getS3ExpiresMiddlewarePlugin");
   }
 });
 
 // node_modules/@aws-sdk/middleware-sdk-s3/dist-es/s3-express/classes/S3ExpressIdentityCache.js
-var _S3ExpressIdentityCache, S3ExpressIdentityCache;
+var S3ExpressIdentityCache;
 var init_S3ExpressIdentityCache = __esm({
   "node_modules/@aws-sdk/middleware-sdk-s3/dist-es/s3-express/classes/S3ExpressIdentityCache.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
     init_performance2();
-    _S3ExpressIdentityCache = class {
+    S3ExpressIdentityCache = class _S3ExpressIdentityCache {
+      static {
+        __name(this, "S3ExpressIdentityCache");
+      }
       data;
       lastPurgeTime = Date.now();
+      static EXPIRED_CREDENTIAL_PURGE_INTERVAL_MS = 3e4;
       constructor(data = {}) {
         this.data = data;
       }
@@ -19907,9 +19529,6 @@ var init_S3ExpressIdentityCache = __esm({
         }
       }
     };
-    S3ExpressIdentityCache = _S3ExpressIdentityCache;
-    __name(S3ExpressIdentityCache, "S3ExpressIdentityCache");
-    __publicField(S3ExpressIdentityCache, "EXPIRED_CREDENTIAL_PURGE_INTERVAL_MS", 3e4);
   }
 });
 
@@ -19917,12 +19536,14 @@ var init_S3ExpressIdentityCache = __esm({
 var S3ExpressIdentityCacheEntry;
 var init_S3ExpressIdentityCacheEntry = __esm({
   "node_modules/@aws-sdk/middleware-sdk-s3/dist-es/s3-express/classes/S3ExpressIdentityCacheEntry.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
     init_performance2();
     S3ExpressIdentityCacheEntry = class {
+      static {
+        __name(this, "S3ExpressIdentityCacheEntry");
+      }
       _identity;
       isRefreshing;
       accessed;
@@ -19936,24 +19557,26 @@ var init_S3ExpressIdentityCacheEntry = __esm({
         return this._identity;
       }
     };
-    __name(S3ExpressIdentityCacheEntry, "S3ExpressIdentityCacheEntry");
   }
 });
 
 // node_modules/@aws-sdk/middleware-sdk-s3/dist-es/s3-express/classes/S3ExpressIdentityProviderImpl.js
-var _S3ExpressIdentityProviderImpl, S3ExpressIdentityProviderImpl;
+var S3ExpressIdentityProviderImpl;
 var init_S3ExpressIdentityProviderImpl = __esm({
   "node_modules/@aws-sdk/middleware-sdk-s3/dist-es/s3-express/classes/S3ExpressIdentityProviderImpl.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
     init_performance2();
     init_S3ExpressIdentityCache();
     init_S3ExpressIdentityCacheEntry();
-    _S3ExpressIdentityProviderImpl = class {
+    S3ExpressIdentityProviderImpl = class _S3ExpressIdentityProviderImpl {
+      static {
+        __name(this, "S3ExpressIdentityProviderImpl");
+      }
       createSessionFn;
       cache;
+      static REFRESH_WINDOW_MS = 6e4;
       constructor(createSessionFn, cache2 = new S3ExpressIdentityCache()) {
         this.createSessionFn = createSessionFn;
         this.cache = cache2;
@@ -19997,9 +19620,6 @@ var init_S3ExpressIdentityProviderImpl = __esm({
         return identity;
       }
     };
-    S3ExpressIdentityProviderImpl = _S3ExpressIdentityProviderImpl;
-    __name(S3ExpressIdentityProviderImpl, "S3ExpressIdentityProviderImpl");
-    __publicField(S3ExpressIdentityProviderImpl, "REFRESH_WINDOW_MS", 6e4);
   }
 });
 
@@ -20007,7 +19627,6 @@ var init_S3ExpressIdentityProviderImpl = __esm({
 var S3_EXPRESS_BUCKET_TYPE, S3_EXPRESS_BACKEND, S3_EXPRESS_AUTH_SCHEME, SESSION_TOKEN_QUERY_PARAM, SESSION_TOKEN_HEADER;
 var init_constants5 = __esm({
   "node_modules/@aws-sdk/middleware-sdk-s3/dist-es/s3-express/constants.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -20044,7 +19663,6 @@ function setSingleOverride(privateAccess, credentialsWithoutSessionToken) {
 var SignatureV4S3Express;
 var init_SignatureV4S3Express = __esm({
   "node_modules/@aws-sdk/middleware-sdk-s3/dist-es/s3-express/classes/SignatureV4S3Express.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -20052,6 +19670,9 @@ var init_SignatureV4S3Express = __esm({
     init_dist_es17();
     init_constants5();
     SignatureV4S3Express = class extends SignatureV4 {
+      static {
+        __name(this, "SignatureV4S3Express");
+      }
       async signWithCredentials(requestToSign, credentials, options) {
         const credentialsWithoutSessionToken = getCredentialsWithoutSessionToken(credentials);
         requestToSign.headers[SESSION_TOKEN_HEADER] = credentials.sessionToken;
@@ -20070,7 +19691,6 @@ var init_SignatureV4S3Express = __esm({
         return this.presign(requestToSign, options);
       }
     };
-    __name(SignatureV4S3Express, "SignatureV4S3Express");
     __name(getCredentialsWithoutSessionToken, "getCredentialsWithoutSessionToken");
     __name(setSingleOverride, "setSingleOverride");
   }
@@ -20080,7 +19700,6 @@ var init_SignatureV4S3Express = __esm({
 var s3ExpressMiddleware, s3ExpressMiddlewareOptions, getS3ExpressPlugin;
 var init_s3ExpressMiddleware = __esm({
   "node_modules/@aws-sdk/middleware-sdk-s3/dist-es/s3-express/functions/s3ExpressMiddleware.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -20121,9 +19740,9 @@ var init_s3ExpressMiddleware = __esm({
       override: true
     };
     getS3ExpressPlugin = /* @__PURE__ */ __name((options) => ({
-      applyToStack: (clientStack) => {
+      applyToStack: /* @__PURE__ */ __name((clientStack) => {
         clientStack.add(s3ExpressMiddleware(options), s3ExpressMiddlewareOptions);
-      }
+      }, "applyToStack")
     }), "getS3ExpressPlugin");
   }
 });
@@ -20132,7 +19751,6 @@ var init_s3ExpressMiddleware = __esm({
 var signS3Express;
 var init_signS3Express = __esm({
   "node_modules/@aws-sdk/middleware-sdk-s3/dist-es/s3-express/functions/signS3Express.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -20151,7 +19769,6 @@ var init_signS3Express = __esm({
 var defaultErrorHandler2, defaultSuccessHandler2, s3ExpressHttpSigningMiddleware, getS3ExpressHttpSigningPlugin;
 var init_s3ExpressHttpSigningMiddleware = __esm({
   "node_modules/@aws-sdk/middleware-sdk-s3/dist-es/s3-express/functions/s3ExpressHttpSigningMiddleware.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -20189,9 +19806,9 @@ var init_s3ExpressHttpSigningMiddleware = __esm({
       return output;
     }, "s3ExpressHttpSigningMiddleware");
     getS3ExpressHttpSigningPlugin = /* @__PURE__ */ __name((config2) => ({
-      applyToStack: (clientStack) => {
+      applyToStack: /* @__PURE__ */ __name((clientStack) => {
         clientStack.addRelativeTo(s3ExpressHttpSigningMiddleware(config2), httpSigningMiddlewareOptions);
-      }
+      }, "applyToStack")
     }), "getS3ExpressHttpSigningPlugin");
   }
 });
@@ -20199,7 +19816,6 @@ var init_s3ExpressHttpSigningMiddleware = __esm({
 // node_modules/@aws-sdk/middleware-sdk-s3/dist-es/s3-express/index.js
 var init_s3_express = __esm({
   "node_modules/@aws-sdk/middleware-sdk-s3/dist-es/s3-express/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -20215,7 +19831,6 @@ var init_s3_express = __esm({
 var resolveS3Config;
 var init_s3Configuration = __esm({
   "node_modules/@aws-sdk/middleware-sdk-s3/dist-es/s3Configuration.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -20243,7 +19858,6 @@ var init_s3Configuration = __esm({
 var THROW_IF_EMPTY_BODY, MAX_BYTES_TO_INSPECT, throw200ExceptionsMiddleware, collectBody2, throw200ExceptionsMiddlewareOptions, getThrow200ExceptionsPlugin;
 var init_throw_200_exceptions = __esm({
   "node_modules/@aws-sdk/middleware-sdk-s3/dist-es/throw-200-exceptions.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -20277,9 +19891,9 @@ var init_throw_200_exceptions = __esm({
       }
       response.body = body;
       const bodyBytes = await collectBody2(bodyCopy, {
-        streamCollector: async (stream) => {
+        streamCollector: /* @__PURE__ */ __name(async (stream) => {
           return headStream(stream, MAX_BYTES_TO_INSPECT);
-        }
+        }, "streamCollector")
       });
       if (typeof bodyCopy?.destroy === "function") {
         bodyCopy.destroy();
@@ -20309,9 +19923,9 @@ var init_throw_200_exceptions = __esm({
       override: true
     };
     getThrow200ExceptionsPlugin = /* @__PURE__ */ __name((config2) => ({
-      applyToStack: (clientStack) => {
+      applyToStack: /* @__PURE__ */ __name((clientStack) => {
         clientStack.addRelativeTo(throw200ExceptionsMiddleware(config2), throw200ExceptionsMiddlewareOptions);
-      }
+      }, "applyToStack")
     }), "getThrow200ExceptionsPlugin");
   }
 });
@@ -20320,7 +19934,6 @@ var init_throw_200_exceptions = __esm({
 var validate2;
 var init_dist_es28 = __esm({
   "node_modules/@aws-sdk/util-arn-parser/dist-es/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -20361,7 +19974,6 @@ function bucketEndpointMiddleware(options) {
 var bucketEndpointMiddlewareOptions;
 var init_bucket_endpoint_middleware = __esm({
   "node_modules/@aws-sdk/middleware-sdk-s3/dist-es/bucket-endpoint-middleware.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -20391,7 +20003,6 @@ function validateBucketNameMiddleware({ bucketEndpoint }) {
 var validateBucketNameMiddlewareOptions, getValidateBucketNamePlugin;
 var init_validate_bucket_name = __esm({
   "node_modules/@aws-sdk/middleware-sdk-s3/dist-es/validate-bucket-name.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -20406,10 +20017,10 @@ var init_validate_bucket_name = __esm({
       override: true
     };
     getValidateBucketNamePlugin = /* @__PURE__ */ __name((options) => ({
-      applyToStack: (clientStack) => {
+      applyToStack: /* @__PURE__ */ __name((clientStack) => {
         clientStack.add(validateBucketNameMiddleware(options), validateBucketNameMiddlewareOptions);
         clientStack.addRelativeTo(bucketEndpointMiddleware(options), bucketEndpointMiddlewareOptions);
-      }
+      }, "applyToStack")
     }), "getValidateBucketNamePlugin");
   }
 });
@@ -20417,7 +20028,6 @@ var init_validate_bucket_name = __esm({
 // node_modules/@aws-sdk/middleware-sdk-s3/dist-es/index.js
 var init_dist_es29 = __esm({
   "node_modules/@aws-sdk/middleware-sdk-s3/dist-es/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -20445,7 +20055,7 @@ function resolveUserAgentConfig(input) {
   const { customUserAgent } = input;
   return Object.assign(input, {
     customUserAgent: typeof customUserAgent === "string" ? [[customUserAgent]] : customUserAgent,
-    userAgentAppId: async () => {
+    userAgentAppId: /* @__PURE__ */ __name(async () => {
       const appId = await normalizedAppIdProvider();
       if (!isValidUserAgentAppId(appId)) {
         const logger2 = input.logger?.constructor?.name === "NoOpLogger" || !input.logger ? console : input.logger;
@@ -20456,13 +20066,12 @@ function resolveUserAgentConfig(input) {
         }
       }
       return appId;
-    }
+    }, "userAgentAppId")
   });
 }
 var DEFAULT_UA_APP_ID;
 var init_configurations = __esm({
   "node_modules/@aws-sdk/middleware-user-agent/dist-es/configurations.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -20478,12 +20087,14 @@ var init_configurations = __esm({
 var EndpointCache;
 var init_EndpointCache = __esm({
   "node_modules/@smithy/util-endpoints/dist-es/cache/EndpointCache.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
     init_performance2();
     EndpointCache = class {
+      static {
+        __name(this, "EndpointCache");
+      }
       capacity;
       data = /* @__PURE__ */ new Map();
       parameters = [];
@@ -20533,7 +20144,6 @@ var init_EndpointCache = __esm({
         return buffer;
       }
     };
-    __name(EndpointCache, "EndpointCache");
   }
 });
 
@@ -20541,7 +20151,6 @@ var init_EndpointCache = __esm({
 var IP_V4_REGEX, isIpAddress;
 var init_isIpAddress = __esm({
   "node_modules/@smithy/util-endpoints/dist-es/lib/isIpAddress.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -20555,7 +20164,6 @@ var init_isIpAddress = __esm({
 var VALID_HOST_LABEL_REGEX, isValidHostLabel;
 var init_isValidHostLabel = __esm({
   "node_modules/@smithy/util-endpoints/dist-es/lib/isValidHostLabel.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -20580,7 +20188,6 @@ var init_isValidHostLabel = __esm({
 var customEndpointFunctions;
 var init_customEndpointFunctions = __esm({
   "node_modules/@smithy/util-endpoints/dist-es/utils/customEndpointFunctions.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -20593,7 +20200,6 @@ var init_customEndpointFunctions = __esm({
 var debugId;
 var init_debugId = __esm({
   "node_modules/@smithy/util-endpoints/dist-es/debug/debugId.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -20617,7 +20223,6 @@ function toDebugString(input) {
 }
 var init_toDebugString = __esm({
   "node_modules/@smithy/util-endpoints/dist-es/debug/toDebugString.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -20629,7 +20234,6 @@ var init_toDebugString = __esm({
 // node_modules/@smithy/util-endpoints/dist-es/debug/index.js
 var init_debug = __esm({
   "node_modules/@smithy/util-endpoints/dist-es/debug/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -20643,25 +20247,25 @@ var init_debug = __esm({
 var EndpointError;
 var init_EndpointError = __esm({
   "node_modules/@smithy/util-endpoints/dist-es/types/EndpointError.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
     init_performance2();
     EndpointError = class extends Error {
+      static {
+        __name(this, "EndpointError");
+      }
       constructor(message2) {
         super(message2);
         this.name = "EndpointError";
       }
     };
-    __name(EndpointError, "EndpointError");
   }
 });
 
 // node_modules/@smithy/util-endpoints/dist-es/types/EndpointFunctions.js
 var init_EndpointFunctions = __esm({
   "node_modules/@smithy/util-endpoints/dist-es/types/EndpointFunctions.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -20672,7 +20276,6 @@ var init_EndpointFunctions = __esm({
 // node_modules/@smithy/util-endpoints/dist-es/types/EndpointRuleObject.js
 var init_EndpointRuleObject2 = __esm({
   "node_modules/@smithy/util-endpoints/dist-es/types/EndpointRuleObject.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -20683,7 +20286,6 @@ var init_EndpointRuleObject2 = __esm({
 // node_modules/@smithy/util-endpoints/dist-es/types/ErrorRuleObject.js
 var init_ErrorRuleObject2 = __esm({
   "node_modules/@smithy/util-endpoints/dist-es/types/ErrorRuleObject.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -20694,7 +20296,6 @@ var init_ErrorRuleObject2 = __esm({
 // node_modules/@smithy/util-endpoints/dist-es/types/RuleSetObject.js
 var init_RuleSetObject2 = __esm({
   "node_modules/@smithy/util-endpoints/dist-es/types/RuleSetObject.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -20705,7 +20306,6 @@ var init_RuleSetObject2 = __esm({
 // node_modules/@smithy/util-endpoints/dist-es/types/TreeRuleObject.js
 var init_TreeRuleObject2 = __esm({
   "node_modules/@smithy/util-endpoints/dist-es/types/TreeRuleObject.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -20716,7 +20316,6 @@ var init_TreeRuleObject2 = __esm({
 // node_modules/@smithy/util-endpoints/dist-es/types/shared.js
 var init_shared2 = __esm({
   "node_modules/@smithy/util-endpoints/dist-es/types/shared.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -20727,7 +20326,6 @@ var init_shared2 = __esm({
 // node_modules/@smithy/util-endpoints/dist-es/types/index.js
 var init_types3 = __esm({
   "node_modules/@smithy/util-endpoints/dist-es/types/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -20746,7 +20344,6 @@ var init_types3 = __esm({
 var booleanEquals;
 var init_booleanEquals = __esm({
   "node_modules/@smithy/util-endpoints/dist-es/lib/booleanEquals.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -20759,7 +20356,6 @@ var init_booleanEquals = __esm({
 var getAttrPathList;
 var init_getAttrPathList = __esm({
   "node_modules/@smithy/util-endpoints/dist-es/lib/getAttrPathList.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -20795,7 +20391,6 @@ var init_getAttrPathList = __esm({
 var getAttr;
 var init_getAttr = __esm({
   "node_modules/@smithy/util-endpoints/dist-es/lib/getAttr.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -20817,7 +20412,6 @@ var init_getAttr = __esm({
 var isSet;
 var init_isSet = __esm({
   "node_modules/@smithy/util-endpoints/dist-es/lib/isSet.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -20830,7 +20424,6 @@ var init_isSet = __esm({
 var not;
 var init_not = __esm({
   "node_modules/@smithy/util-endpoints/dist-es/lib/not.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -20843,7 +20436,6 @@ var init_not = __esm({
 var DEFAULT_PORTS, parseURL;
 var init_parseURL = __esm({
   "node_modules/@smithy/util-endpoints/dist-es/lib/parseURL.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -20902,7 +20494,6 @@ var init_parseURL = __esm({
 var stringEquals;
 var init_stringEquals = __esm({
   "node_modules/@smithy/util-endpoints/dist-es/lib/stringEquals.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -20915,7 +20506,6 @@ var init_stringEquals = __esm({
 var substring;
 var init_substring = __esm({
   "node_modules/@smithy/util-endpoints/dist-es/lib/substring.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -20936,7 +20526,6 @@ var init_substring = __esm({
 var uriEncode;
 var init_uriEncode = __esm({
   "node_modules/@smithy/util-endpoints/dist-es/lib/uriEncode.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -20948,7 +20537,6 @@ var init_uriEncode = __esm({
 // node_modules/@smithy/util-endpoints/dist-es/lib/index.js
 var init_lib = __esm({
   "node_modules/@smithy/util-endpoints/dist-es/lib/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -20969,7 +20557,6 @@ var init_lib = __esm({
 var endpointFunctions;
 var init_endpointFunctions = __esm({
   "node_modules/@smithy/util-endpoints/dist-es/utils/endpointFunctions.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -20993,7 +20580,6 @@ var init_endpointFunctions = __esm({
 var evaluateTemplate;
 var init_evaluateTemplate = __esm({
   "node_modules/@smithy/util-endpoints/dist-es/utils/evaluateTemplate.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -21040,17 +20626,16 @@ var init_evaluateTemplate = __esm({
 var getReferenceValue;
 var init_getReferenceValue = __esm({
   "node_modules/@smithy/util-endpoints/dist-es/utils/getReferenceValue.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
     init_performance2();
-    getReferenceValue = /* @__PURE__ */ __name(({ ref }, options) => {
+    getReferenceValue = /* @__PURE__ */ __name(({ ref: ref2 }, options) => {
       const referenceRecord = {
         ...options.endpointParams,
         ...options.referenceRecord
       };
-      return referenceRecord[ref];
+      return referenceRecord[ref2];
     }, "getReferenceValue");
   }
 });
@@ -21059,7 +20644,6 @@ var init_getReferenceValue = __esm({
 var evaluateExpression, callFunction, group3;
 var init_evaluateExpression = __esm({
   "node_modules/@smithy/util-endpoints/dist-es/utils/evaluateExpression.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -21097,7 +20681,6 @@ var init_evaluateExpression = __esm({
 // node_modules/@smithy/util-endpoints/dist-es/utils/callFunction.js
 var init_callFunction = __esm({
   "node_modules/@smithy/util-endpoints/dist-es/utils/callFunction.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -21110,7 +20693,6 @@ var init_callFunction = __esm({
 var evaluateCondition;
 var init_evaluateCondition = __esm({
   "node_modules/@smithy/util-endpoints/dist-es/utils/evaluateCondition.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -21136,7 +20718,6 @@ var init_evaluateCondition = __esm({
 var evaluateConditions;
 var init_evaluateConditions = __esm({
   "node_modules/@smithy/util-endpoints/dist-es/utils/evaluateConditions.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -21170,7 +20751,6 @@ var init_evaluateConditions = __esm({
 var getEndpointHeaders;
 var init_getEndpointHeaders = __esm({
   "node_modules/@smithy/util-endpoints/dist-es/utils/getEndpointHeaders.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -21194,7 +20774,6 @@ var init_getEndpointHeaders = __esm({
 var getEndpointProperties, getEndpointProperty, group4;
 var init_getEndpointProperties = __esm({
   "node_modules/@smithy/util-endpoints/dist-es/utils/getEndpointProperties.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -21234,7 +20813,6 @@ var init_getEndpointProperties = __esm({
 var getEndpointUrl;
 var init_getEndpointUrl = __esm({
   "node_modules/@smithy/util-endpoints/dist-es/utils/getEndpointUrl.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -21260,7 +20838,6 @@ var init_getEndpointUrl = __esm({
 var evaluateEndpointRule;
 var init_evaluateEndpointRule = __esm({
   "node_modules/@smithy/util-endpoints/dist-es/utils/evaluateEndpointRule.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -21299,7 +20876,6 @@ var init_evaluateEndpointRule = __esm({
 var evaluateErrorRule;
 var init_evaluateErrorRule = __esm({
   "node_modules/@smithy/util-endpoints/dist-es/utils/evaluateErrorRule.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -21325,7 +20901,6 @@ var init_evaluateErrorRule = __esm({
 var evaluateRules, evaluateTreeRule, group5;
 var init_evaluateRules = __esm({
   "node_modules/@smithy/util-endpoints/dist-es/utils/evaluateRules.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -21375,7 +20950,6 @@ var init_evaluateRules = __esm({
 // node_modules/@smithy/util-endpoints/dist-es/utils/index.js
 var init_utils3 = __esm({
   "node_modules/@smithy/util-endpoints/dist-es/utils/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -21389,7 +20963,6 @@ var init_utils3 = __esm({
 var resolveEndpoint;
 var init_resolveEndpoint = __esm({
   "node_modules/@smithy/util-endpoints/dist-es/resolveEndpoint.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -21423,7 +20996,6 @@ var init_resolveEndpoint = __esm({
 // node_modules/@smithy/util-endpoints/dist-es/index.js
 var init_dist_es30 = __esm({
   "node_modules/@smithy/util-endpoints/dist-es/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -21440,7 +21012,6 @@ var init_dist_es30 = __esm({
 // node_modules/@aws-sdk/util-endpoints/dist-es/lib/isIpAddress.js
 var init_isIpAddress2 = __esm({
   "node_modules/@aws-sdk/util-endpoints/dist-es/lib/isIpAddress.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -21453,7 +21024,6 @@ var init_isIpAddress2 = __esm({
 var isVirtualHostableS3Bucket;
 var init_isVirtualHostableS3Bucket = __esm({
   "node_modules/@aws-sdk/util-endpoints/dist-es/lib/aws/isVirtualHostableS3Bucket.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -21490,7 +21060,6 @@ var init_isVirtualHostableS3Bucket = __esm({
 var ARN_DELIMITER, RESOURCE_DELIMITER, parseArn;
 var init_parseArn = __esm({
   "node_modules/@aws-sdk/util-endpoints/dist-es/lib/aws/parseArn.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -21794,7 +21363,6 @@ var init_partitions = __esm({
 var selectedPartitionsInfo, selectedUserAgentPrefix, partition, getUserAgentPrefix;
 var init_partition = __esm({
   "node_modules/@aws-sdk/util-endpoints/dist-es/lib/aws/partition.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -21839,7 +21407,6 @@ var init_partition = __esm({
 var awsEndpointFunctions;
 var init_aws = __esm({
   "node_modules/@aws-sdk/util-endpoints/dist-es/aws.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -21881,7 +21448,6 @@ function parseQueryString(querystring) {
 }
 var init_dist_es31 = __esm({
   "node_modules/@smithy/querystring-parser/dist-es/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -21894,7 +21460,6 @@ var init_dist_es31 = __esm({
 var parseUrl;
 var init_dist_es32 = __esm({
   "node_modules/@smithy/url-parser/dist-es/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -21923,7 +21488,6 @@ var init_dist_es32 = __esm({
 // node_modules/@aws-sdk/util-endpoints/dist-es/resolveDefaultAwsRegionalEndpointsConfig.js
 var init_resolveDefaultAwsRegionalEndpointsConfig = __esm({
   "node_modules/@aws-sdk/util-endpoints/dist-es/resolveDefaultAwsRegionalEndpointsConfig.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -21934,7 +21498,6 @@ var init_resolveDefaultAwsRegionalEndpointsConfig = __esm({
 // node_modules/@aws-sdk/util-endpoints/dist-es/resolveEndpoint.js
 var init_resolveEndpoint2 = __esm({
   "node_modules/@aws-sdk/util-endpoints/dist-es/resolveEndpoint.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -21945,7 +21508,6 @@ var init_resolveEndpoint2 = __esm({
 // node_modules/@aws-sdk/util-endpoints/dist-es/types/EndpointError.js
 var init_EndpointError2 = __esm({
   "node_modules/@aws-sdk/util-endpoints/dist-es/types/EndpointError.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -21956,7 +21518,6 @@ var init_EndpointError2 = __esm({
 // node_modules/@aws-sdk/util-endpoints/dist-es/types/EndpointRuleObject.js
 var init_EndpointRuleObject3 = __esm({
   "node_modules/@aws-sdk/util-endpoints/dist-es/types/EndpointRuleObject.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -21967,7 +21528,6 @@ var init_EndpointRuleObject3 = __esm({
 // node_modules/@aws-sdk/util-endpoints/dist-es/types/ErrorRuleObject.js
 var init_ErrorRuleObject3 = __esm({
   "node_modules/@aws-sdk/util-endpoints/dist-es/types/ErrorRuleObject.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -21978,7 +21538,6 @@ var init_ErrorRuleObject3 = __esm({
 // node_modules/@aws-sdk/util-endpoints/dist-es/types/RuleSetObject.js
 var init_RuleSetObject3 = __esm({
   "node_modules/@aws-sdk/util-endpoints/dist-es/types/RuleSetObject.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -21989,7 +21548,6 @@ var init_RuleSetObject3 = __esm({
 // node_modules/@aws-sdk/util-endpoints/dist-es/types/TreeRuleObject.js
 var init_TreeRuleObject3 = __esm({
   "node_modules/@aws-sdk/util-endpoints/dist-es/types/TreeRuleObject.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -22000,7 +21558,6 @@ var init_TreeRuleObject3 = __esm({
 // node_modules/@aws-sdk/util-endpoints/dist-es/types/shared.js
 var init_shared3 = __esm({
   "node_modules/@aws-sdk/util-endpoints/dist-es/types/shared.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -22011,7 +21568,6 @@ var init_shared3 = __esm({
 // node_modules/@aws-sdk/util-endpoints/dist-es/types/index.js
 var init_types4 = __esm({
   "node_modules/@aws-sdk/util-endpoints/dist-es/types/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -22028,7 +21584,6 @@ var init_types4 = __esm({
 // node_modules/@aws-sdk/util-endpoints/dist-es/index.js
 var init_dist_es33 = __esm({
   "node_modules/@aws-sdk/util-endpoints/dist-es/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -22091,7 +21646,6 @@ async function checkFeatures(context2, config2, args) {
 var ACCOUNT_ID_ENDPOINT_REGEX;
 var init_check_features = __esm({
   "node_modules/@aws-sdk/middleware-user-agent/dist-es/check-features.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -22106,7 +21660,6 @@ var init_check_features = __esm({
 var USER_AGENT, X_AMZ_USER_AGENT, SPACE, UA_NAME_SEPARATOR, UA_NAME_ESCAPE_REGEX, UA_VALUE_ESCAPE_REGEX, UA_ESCAPE_CHAR;
 var init_constants6 = __esm({
   "node_modules/@aws-sdk/middleware-user-agent/dist-es/constants.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -22141,7 +21694,6 @@ function encodeFeatures(features2) {
 var BYTE_LIMIT;
 var init_encode_features = __esm({
   "node_modules/@aws-sdk/middleware-user-agent/dist-es/encode-features.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -22155,7 +21707,6 @@ var init_encode_features = __esm({
 var userAgentMiddleware, escapeUserAgent, getUserAgentMiddlewareOptions, getUserAgentPlugin;
 var init_user_agent_middleware = __esm({
   "node_modules/@aws-sdk/middleware-user-agent/dist-es/user-agent-middleware.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -22228,9 +21779,9 @@ var init_user_agent_middleware = __esm({
       override: true
     };
     getUserAgentPlugin = /* @__PURE__ */ __name((config2) => ({
-      applyToStack: (clientStack) => {
+      applyToStack: /* @__PURE__ */ __name((clientStack) => {
         clientStack.add(userAgentMiddleware(config2), getUserAgentMiddlewareOptions);
-      }
+      }, "applyToStack")
     }), "getUserAgentPlugin");
   }
 });
@@ -22238,7 +21789,6 @@ var init_user_agent_middleware = __esm({
 // node_modules/@aws-sdk/middleware-user-agent/dist-es/index.js
 var init_dist_es34 = __esm({
   "node_modules/@aws-sdk/middleware-user-agent/dist-es/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -22252,7 +21802,6 @@ var init_dist_es34 = __esm({
 var DEFAULT_USE_DUALSTACK_ENDPOINT;
 var init_NodeUseDualstackEndpointConfigOptions = __esm({
   "node_modules/@smithy/config-resolver/dist-es/endpointsConfig/NodeUseDualstackEndpointConfigOptions.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -22265,7 +21814,6 @@ var init_NodeUseDualstackEndpointConfigOptions = __esm({
 var DEFAULT_USE_FIPS_ENDPOINT;
 var init_NodeUseFipsEndpointConfigOptions = __esm({
   "node_modules/@smithy/config-resolver/dist-es/endpointsConfig/NodeUseFipsEndpointConfigOptions.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -22277,7 +21825,6 @@ var init_NodeUseFipsEndpointConfigOptions = __esm({
 // node_modules/@smithy/config-resolver/dist-es/endpointsConfig/resolveCustomEndpointsConfig.js
 var init_resolveCustomEndpointsConfig = __esm({
   "node_modules/@smithy/config-resolver/dist-es/endpointsConfig/resolveCustomEndpointsConfig.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -22288,7 +21835,6 @@ var init_resolveCustomEndpointsConfig = __esm({
 // node_modules/@smithy/config-resolver/dist-es/endpointsConfig/resolveEndpointsConfig.js
 var init_resolveEndpointsConfig = __esm({
   "node_modules/@smithy/config-resolver/dist-es/endpointsConfig/resolveEndpointsConfig.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -22299,7 +21845,6 @@ var init_resolveEndpointsConfig = __esm({
 // node_modules/@smithy/config-resolver/dist-es/endpointsConfig/index.js
 var init_endpointsConfig = __esm({
   "node_modules/@smithy/config-resolver/dist-es/endpointsConfig/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -22314,7 +21859,6 @@ var init_endpointsConfig = __esm({
 // node_modules/@smithy/config-resolver/dist-es/regionConfig/config.js
 var init_config2 = __esm({
   "node_modules/@smithy/config-resolver/dist-es/regionConfig/config.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -22326,7 +21870,6 @@ var init_config2 = __esm({
 var validRegions, checkRegion;
 var init_checkRegion = __esm({
   "node_modules/@smithy/config-resolver/dist-es/regionConfig/checkRegion.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -22351,7 +21894,6 @@ var init_checkRegion = __esm({
 var isFipsRegion;
 var init_isFipsRegion = __esm({
   "node_modules/@smithy/config-resolver/dist-es/regionConfig/isFipsRegion.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -22364,7 +21906,6 @@ var init_isFipsRegion = __esm({
 var getRealRegion;
 var init_getRealRegion = __esm({
   "node_modules/@smithy/config-resolver/dist-es/regionConfig/getRealRegion.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -22378,7 +21919,6 @@ var init_getRealRegion = __esm({
 var resolveRegionConfig;
 var init_resolveRegionConfig = __esm({
   "node_modules/@smithy/config-resolver/dist-es/regionConfig/resolveRegionConfig.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -22392,19 +21932,19 @@ var init_resolveRegionConfig = __esm({
         throw new Error("Region is missing");
       }
       return Object.assign(input, {
-        region: async () => {
+        region: /* @__PURE__ */ __name(async () => {
           const providedRegion = typeof region === "function" ? await region() : region;
           const realRegion = getRealRegion(providedRegion);
           checkRegion(realRegion);
           return realRegion;
-        },
-        useFipsEndpoint: async () => {
+        }, "region"),
+        useFipsEndpoint: /* @__PURE__ */ __name(async () => {
           const providedRegion = typeof region === "string" ? region : await region();
           if (isFipsRegion(providedRegion)) {
             return true;
           }
           return typeof useFipsEndpoint !== "function" ? Promise.resolve(!!useFipsEndpoint) : useFipsEndpoint();
-        }
+        }, "useFipsEndpoint")
       });
     }, "resolveRegionConfig");
   }
@@ -22413,7 +21953,6 @@ var init_resolveRegionConfig = __esm({
 // node_modules/@smithy/config-resolver/dist-es/regionConfig/index.js
 var init_regionConfig = __esm({
   "node_modules/@smithy/config-resolver/dist-es/regionConfig/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -22426,7 +21965,6 @@ var init_regionConfig = __esm({
 // node_modules/@smithy/config-resolver/dist-es/regionInfo/PartitionHash.js
 var init_PartitionHash = __esm({
   "node_modules/@smithy/config-resolver/dist-es/regionInfo/PartitionHash.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -22437,7 +21975,6 @@ var init_PartitionHash = __esm({
 // node_modules/@smithy/config-resolver/dist-es/regionInfo/RegionHash.js
 var init_RegionHash = __esm({
   "node_modules/@smithy/config-resolver/dist-es/regionInfo/RegionHash.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -22448,7 +21985,6 @@ var init_RegionHash = __esm({
 // node_modules/@smithy/config-resolver/dist-es/regionInfo/getRegionInfo.js
 var init_getRegionInfo = __esm({
   "node_modules/@smithy/config-resolver/dist-es/regionInfo/getRegionInfo.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -22459,7 +21995,6 @@ var init_getRegionInfo = __esm({
 // node_modules/@smithy/config-resolver/dist-es/regionInfo/index.js
 var init_regionInfo = __esm({
   "node_modules/@smithy/config-resolver/dist-es/regionInfo/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -22473,7 +22008,6 @@ var init_regionInfo = __esm({
 // node_modules/@smithy/config-resolver/dist-es/index.js
 var init_dist_es35 = __esm({
   "node_modules/@smithy/config-resolver/dist-es/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -22488,7 +22022,6 @@ var init_dist_es35 = __esm({
 var resolveEventStreamSerdeConfig;
 var init_EventStreamSerdeConfig = __esm({
   "node_modules/@smithy/eventstream-serde-config-resolver/dist-es/EventStreamSerdeConfig.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -22502,7 +22035,6 @@ var init_EventStreamSerdeConfig = __esm({
 // node_modules/@smithy/eventstream-serde-config-resolver/dist-es/index.js
 var init_dist_es36 = __esm({
   "node_modules/@smithy/eventstream-serde-config-resolver/dist-es/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -22537,7 +22069,6 @@ function contentLengthMiddleware(bodyLengthChecker) {
 var CONTENT_LENGTH_HEADER2, contentLengthMiddlewareOptions, getContentLengthPlugin;
 var init_dist_es37 = __esm({
   "node_modules/@smithy/middleware-content-length/dist-es/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -22552,9 +22083,9 @@ var init_dist_es37 = __esm({
       override: true
     };
     getContentLengthPlugin = /* @__PURE__ */ __name((options) => ({
-      applyToStack: (clientStack) => {
+      applyToStack: /* @__PURE__ */ __name((clientStack) => {
         clientStack.add(contentLengthMiddleware(options.bodyLengthChecker), contentLengthMiddlewareOptions);
-      }
+      }, "applyToStack")
     }), "getContentLengthPlugin");
   }
 });
@@ -22563,7 +22094,6 @@ var init_dist_es37 = __esm({
 var resolveParamsForS3, DOMAIN_PATTERN, IP_ADDRESS_PATTERN, DOTS_PATTERN, isDnsCompatibleBucketName, isArnBucketName;
 var init_s3 = __esm({
   "node_modules/@smithy/middleware-endpoint/dist-es/service-customizations/s3.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -22605,7 +22135,6 @@ var init_s3 = __esm({
 // node_modules/@smithy/middleware-endpoint/dist-es/service-customizations/index.js
 var init_service_customizations = __esm({
   "node_modules/@smithy/middleware-endpoint/dist-es/service-customizations/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -22618,7 +22147,6 @@ var init_service_customizations = __esm({
 var createConfigValueProvider;
 var init_createConfigValueProvider = __esm({
   "node_modules/@smithy/middleware-endpoint/dist-es/adaptors/createConfigValueProvider.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -22672,7 +22200,6 @@ var init_createConfigValueProvider = __esm({
 var getEndpointFromConfig;
 var init_getEndpointFromConfig_browser = __esm({
   "node_modules/@smithy/middleware-endpoint/dist-es/adaptors/getEndpointFromConfig.browser.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -22685,7 +22212,6 @@ var init_getEndpointFromConfig_browser = __esm({
 var toEndpointV1;
 var init_toEndpointV1 = __esm({
   "node_modules/@smithy/middleware-endpoint/dist-es/adaptors/toEndpointV1.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -22707,7 +22233,6 @@ var init_toEndpointV1 = __esm({
 var getEndpointFromInstructions, resolveParams;
 var init_getEndpointFromInstructions = __esm({
   "node_modules/@smithy/middleware-endpoint/dist-es/adaptors/getEndpointFromInstructions.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -22772,7 +22297,6 @@ var init_getEndpointFromInstructions = __esm({
 // node_modules/@smithy/middleware-endpoint/dist-es/adaptors/index.js
 var init_adaptors = __esm({
   "node_modules/@smithy/middleware-endpoint/dist-es/adaptors/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -22786,7 +22310,6 @@ var init_adaptors = __esm({
 var endpointMiddleware;
 var init_endpointMiddleware = __esm({
   "node_modules/@smithy/middleware-endpoint/dist-es/endpointMiddleware.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -22834,7 +22357,6 @@ var init_endpointMiddleware = __esm({
 var endpointMiddlewareOptions, getEndpointPlugin;
 var init_getEndpointPlugin = __esm({
   "node_modules/@smithy/middleware-endpoint/dist-es/getEndpointPlugin.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -22850,12 +22372,12 @@ var init_getEndpointPlugin = __esm({
       toMiddleware: serializerMiddlewareOption.name
     };
     getEndpointPlugin = /* @__PURE__ */ __name((config2, instructions) => ({
-      applyToStack: (clientStack) => {
+      applyToStack: /* @__PURE__ */ __name((clientStack) => {
         clientStack.addRelativeTo(endpointMiddleware({
           config: config2,
           instructions
         }), endpointMiddlewareOptions);
-      }
+      }, "applyToStack")
     }), "getEndpointPlugin");
   }
 });
@@ -22864,7 +22386,6 @@ var init_getEndpointPlugin = __esm({
 var resolveEndpointConfig;
 var init_resolveEndpointConfig = __esm({
   "node_modules/@smithy/middleware-endpoint/dist-es/resolveEndpointConfig.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -22899,7 +22420,6 @@ var init_resolveEndpointConfig = __esm({
 // node_modules/@smithy/middleware-endpoint/dist-es/resolveEndpointRequiredConfig.js
 var init_resolveEndpointRequiredConfig = __esm({
   "node_modules/@smithy/middleware-endpoint/dist-es/resolveEndpointRequiredConfig.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -22910,7 +22430,6 @@ var init_resolveEndpointRequiredConfig = __esm({
 // node_modules/@smithy/middleware-endpoint/dist-es/types.js
 var init_types5 = __esm({
   "node_modules/@smithy/middleware-endpoint/dist-es/types.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -22921,7 +22440,6 @@ var init_types5 = __esm({
 // node_modules/@smithy/middleware-endpoint/dist-es/index.js
 var init_dist_es38 = __esm({
   "node_modules/@smithy/middleware-endpoint/dist-es/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -22939,7 +22457,6 @@ var init_dist_es38 = __esm({
 var RETRY_MODES, DEFAULT_MAX_ATTEMPTS, DEFAULT_RETRY_MODE;
 var init_config3 = __esm({
   "node_modules/@smithy/util-retry/dist-es/config.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -22957,7 +22474,6 @@ var init_config3 = __esm({
 var THROTTLING_ERROR_CODES, TRANSIENT_ERROR_CODES, TRANSIENT_ERROR_STATUS_CODES, NODEJS_TIMEOUT_ERROR_CODES, NODEJS_NETWORK_ERROR_CODES;
 var init_constants7 = __esm({
   "node_modules/@smithy/service-error-classification/dist-es/constants.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -22989,7 +22505,6 @@ var init_constants7 = __esm({
 var isRetryableByTrait, isClockSkewCorrectedError, isBrowserNetworkError, isThrottlingError, isTransientError, isServerError;
 var init_dist_es39 = __esm({
   "node_modules/@smithy/service-error-classification/dist-es/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -23027,16 +22542,19 @@ var init_dist_es39 = __esm({
 });
 
 // node_modules/@smithy/util-retry/dist-es/DefaultRateLimiter.js
-var _DefaultRateLimiter, DefaultRateLimiter;
+var DefaultRateLimiter;
 var init_DefaultRateLimiter = __esm({
   "node_modules/@smithy/util-retry/dist-es/DefaultRateLimiter.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
     init_performance2();
     init_dist_es39();
-    _DefaultRateLimiter = class {
+    DefaultRateLimiter = class _DefaultRateLimiter {
+      static {
+        __name(this, "DefaultRateLimiter");
+      }
+      static setTimeoutFn = setTimeout;
       beta;
       minCapacity;
       minFillRate;
@@ -23142,9 +22660,6 @@ var init_DefaultRateLimiter = __esm({
         return parseFloat(num.toFixed(8));
       }
     };
-    DefaultRateLimiter = _DefaultRateLimiter;
-    __name(DefaultRateLimiter, "DefaultRateLimiter");
-    __publicField(DefaultRateLimiter, "setTimeoutFn", setTimeout);
   }
 });
 
@@ -23152,7 +22667,6 @@ var init_DefaultRateLimiter = __esm({
 var DEFAULT_RETRY_DELAY_BASE, MAXIMUM_RETRY_DELAY, THROTTLING_RETRY_DELAY_BASE, INITIAL_RETRY_TOKENS, RETRY_COST, TIMEOUT_RETRY_COST, NO_RETRY_INCREMENT, INVOCATION_ID_HEADER, REQUEST_HEADER;
 var init_constants8 = __esm({
   "node_modules/@smithy/util-retry/dist-es/constants.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -23173,7 +22687,6 @@ var init_constants8 = __esm({
 var getDefaultRetryBackoffStrategy;
 var init_defaultRetryBackoffStrategy = __esm({
   "node_modules/@smithy/util-retry/dist-es/defaultRetryBackoffStrategy.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -23199,7 +22712,6 @@ var init_defaultRetryBackoffStrategy = __esm({
 var createDefaultRetryToken;
 var init_defaultRetryToken = __esm({
   "node_modules/@smithy/util-retry/dist-es/defaultRetryToken.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -23222,7 +22734,6 @@ var init_defaultRetryToken = __esm({
 var StandardRetryStrategy;
 var init_StandardRetryStrategy = __esm({
   "node_modules/@smithy/util-retry/dist-es/StandardRetryStrategy.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -23232,6 +22743,9 @@ var init_StandardRetryStrategy = __esm({
     init_defaultRetryBackoffStrategy();
     init_defaultRetryToken();
     StandardRetryStrategy = class {
+      static {
+        __name(this, "StandardRetryStrategy");
+      }
       maxAttempts;
       mode = RETRY_MODES.STANDARD;
       capacity = INITIAL_RETRY_TOKENS;
@@ -23289,7 +22803,6 @@ var init_StandardRetryStrategy = __esm({
         return errorType === "THROTTLING" || errorType === "TRANSIENT";
       }
     };
-    __name(StandardRetryStrategy, "StandardRetryStrategy");
   }
 });
 
@@ -23297,7 +22810,6 @@ var init_StandardRetryStrategy = __esm({
 var AdaptiveRetryStrategy;
 var init_AdaptiveRetryStrategy = __esm({
   "node_modules/@smithy/util-retry/dist-es/AdaptiveRetryStrategy.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -23306,6 +22818,9 @@ var init_AdaptiveRetryStrategy = __esm({
     init_DefaultRateLimiter();
     init_StandardRetryStrategy();
     AdaptiveRetryStrategy = class {
+      static {
+        __name(this, "AdaptiveRetryStrategy");
+      }
       maxAttemptsProvider;
       rateLimiter;
       standardRetryStrategy;
@@ -23329,14 +22844,12 @@ var init_AdaptiveRetryStrategy = __esm({
         this.standardRetryStrategy.recordSuccess(token);
       }
     };
-    __name(AdaptiveRetryStrategy, "AdaptiveRetryStrategy");
   }
 });
 
 // node_modules/@smithy/util-retry/dist-es/ConfiguredRetryStrategy.js
 var init_ConfiguredRetryStrategy = __esm({
   "node_modules/@smithy/util-retry/dist-es/ConfiguredRetryStrategy.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -23347,7 +22860,6 @@ var init_ConfiguredRetryStrategy = __esm({
 // node_modules/@smithy/util-retry/dist-es/types.js
 var init_types6 = __esm({
   "node_modules/@smithy/util-retry/dist-es/types.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -23358,7 +22870,6 @@ var init_types6 = __esm({
 // node_modules/@smithy/util-retry/dist-es/index.js
 var init_dist_es40 = __esm({
   "node_modules/@smithy/util-retry/dist-es/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -23376,7 +22887,6 @@ var init_dist_es40 = __esm({
 // node_modules/@smithy/middleware-retry/dist-es/delayDecider.js
 var init_delayDecider = __esm({
   "node_modules/@smithy/middleware-retry/dist-es/delayDecider.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -23387,7 +22897,6 @@ var init_delayDecider = __esm({
 // node_modules/@smithy/middleware-retry/dist-es/retryDecider.js
 var init_retryDecider = __esm({
   "node_modules/@smithy/middleware-retry/dist-es/retryDecider.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -23399,7 +22908,6 @@ var init_retryDecider = __esm({
 var asSdkError;
 var init_util2 = __esm({
   "node_modules/@smithy/middleware-retry/dist-es/util.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -23419,7 +22927,6 @@ var init_util2 = __esm({
 // node_modules/@smithy/middleware-retry/dist-es/StandardRetryStrategy.js
 var init_StandardRetryStrategy2 = __esm({
   "node_modules/@smithy/middleware-retry/dist-es/StandardRetryStrategy.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -23430,7 +22937,6 @@ var init_StandardRetryStrategy2 = __esm({
 // node_modules/@smithy/middleware-retry/dist-es/AdaptiveRetryStrategy.js
 var init_AdaptiveRetryStrategy2 = __esm({
   "node_modules/@smithy/middleware-retry/dist-es/AdaptiveRetryStrategy.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -23442,7 +22948,6 @@ var init_AdaptiveRetryStrategy2 = __esm({
 var resolveRetryConfig;
 var init_configurations2 = __esm({
   "node_modules/@smithy/middleware-retry/dist-es/configurations.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -23454,7 +22959,7 @@ var init_configurations2 = __esm({
       const maxAttempts = normalizeProvider(_maxAttempts ?? DEFAULT_MAX_ATTEMPTS);
       return Object.assign(input, {
         maxAttempts,
-        retryStrategy: async () => {
+        retryStrategy: /* @__PURE__ */ __name(async () => {
           if (retryStrategy) {
             return retryStrategy;
           }
@@ -23463,7 +22968,7 @@ var init_configurations2 = __esm({
             return new AdaptiveRetryStrategy(maxAttempts);
           }
           return new StandardRetryStrategy(maxAttempts);
-        }
+        }, "retryStrategy")
       });
     }, "resolveRetryConfig");
   }
@@ -23472,7 +22977,6 @@ var init_configurations2 = __esm({
 // node_modules/@smithy/middleware-retry/dist-es/omitRetryHeadersMiddleware.js
 var init_omitRetryHeadersMiddleware = __esm({
   "node_modules/@smithy/middleware-retry/dist-es/omitRetryHeadersMiddleware.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -23484,7 +22988,6 @@ var init_omitRetryHeadersMiddleware = __esm({
 var isStreamingPayload;
 var init_isStreamingPayload_browser = __esm({
   "node_modules/@smithy/middleware-retry/dist-es/isStreamingPayload/isStreamingPayload.browser.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -23497,7 +23000,6 @@ var init_isStreamingPayload_browser = __esm({
 var retryMiddleware, isRetryStrategyV2, getRetryErrorInfo, getRetryErrorType, retryMiddlewareOptions, getRetryPlugin, getRetryAfterHint;
 var init_retryMiddleware = __esm({
   "node_modules/@smithy/middleware-retry/dist-es/retryMiddleware.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -23592,9 +23094,9 @@ var init_retryMiddleware = __esm({
       override: true
     };
     getRetryPlugin = /* @__PURE__ */ __name((options) => ({
-      applyToStack: (clientStack) => {
+      applyToStack: /* @__PURE__ */ __name((clientStack) => {
         clientStack.add(retryMiddleware(options), retryMiddlewareOptions);
-      }
+      }, "applyToStack")
     }), "getRetryPlugin");
     getRetryAfterHint = /* @__PURE__ */ __name((response) => {
       if (!HttpResponse.isInstance(response))
@@ -23615,7 +23117,6 @@ var init_retryMiddleware = __esm({
 // node_modules/@smithy/middleware-retry/dist-es/index.js
 var init_dist_es41 = __esm({
   "node_modules/@smithy/middleware-retry/dist-es/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -23634,7 +23135,6 @@ var init_dist_es41 = __esm({
 var signatureV4CrtContainer;
 var init_signature_v4_crt_container = __esm({
   "node_modules/@aws-sdk/signature-v4-multi-region/dist-es/signature-v4-crt-container.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -23649,7 +23149,6 @@ var init_signature_v4_crt_container = __esm({
 var SignatureV4MultiRegion;
 var init_SignatureV4MultiRegion = __esm({
   "node_modules/@aws-sdk/signature-v4-multi-region/dist-es/SignatureV4MultiRegion.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -23658,6 +23157,9 @@ var init_SignatureV4MultiRegion = __esm({
     init_dist_es17();
     init_signature_v4_crt_container();
     SignatureV4MultiRegion = class {
+      static {
+        __name(this, "SignatureV4MultiRegion");
+      }
       sigv4aSigner;
       sigv4Signer;
       signerOptions;
@@ -23741,14 +23243,12 @@ var init_SignatureV4MultiRegion = __esm({
         return this.sigv4aSigner;
       }
     };
-    __name(SignatureV4MultiRegion, "SignatureV4MultiRegion");
   }
 });
 
 // node_modules/@aws-sdk/signature-v4-multi-region/dist-es/index.js
 var init_dist_es42 = __esm({
   "node_modules/@aws-sdk/signature-v4-multi-region/dist-es/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -23762,7 +23262,6 @@ var init_dist_es42 = __esm({
 var cs, ct, cu, cv, cw, cx, cy, cz, cA, cB, cC, cD, cE, cF, cG, cH, cI, a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z, aa, ab, ac, ad, ae, af, ag, ah, ai, aj, ak, al, am, an, ao, ap, aq, ar, as, at, au, av, aw, ax, ay, az, aA, aB, aC, aD, aE, aF, aG, aH, aI, aJ, aK, aL, aM, aN, aO, aP, aQ, aR, aS, aT, aU, aV, aW, aX, aY, aZ, ba, bb, bc, bd, be, bf, bg, bh, bi, bj, bk, bl, bm, bn, bo, bp, bq, br, bs, bt, bu, bv, bw, bx, by, bz, bA, bB, bC, bD, bE, bF, bG, bH, bI, bJ, bK, bL, bM, bN, bO, bP, bQ, bR, bS, bT, bU, bV, bW, bX, bY, bZ, ca, cb, cc, cd, ce, cf, cg, ch, ci, cj, ck, cl, cm, cn, co, cp, cq, cr, _data, ruleSet;
 var init_ruleset = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/endpoint/ruleset.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -23967,7 +23466,6 @@ var init_ruleset = __esm({
 var cache, defaultEndpointResolver;
 var init_endpointResolver = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/endpoint/endpointResolver.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -24012,12 +23510,12 @@ function createAwsAuthSigv4HttpAuthOption(authParameters) {
       name: "s3",
       region: authParameters.region
     },
-    propertiesExtractor: (config2, context2) => ({
+    propertiesExtractor: /* @__PURE__ */ __name((config2, context2) => ({
       signingProperties: {
         config: config2,
         context: context2
       }
-    })
+    }), "propertiesExtractor")
   };
 }
 function createAwsAuthSigv4aHttpAuthOption(authParameters) {
@@ -24027,18 +23525,17 @@ function createAwsAuthSigv4aHttpAuthOption(authParameters) {
       name: "s3",
       region: authParameters.region
     },
-    propertiesExtractor: (config2, context2) => ({
+    propertiesExtractor: /* @__PURE__ */ __name((config2, context2) => ({
       signingProperties: {
         config: config2,
         context: context2
       }
-    })
+    }), "propertiesExtractor")
   };
 }
 var createEndpointRuleSetHttpAuthSchemeParametersProvider, _defaultS3HttpAuthSchemeParametersProvider, defaultS3HttpAuthSchemeParametersProvider, createEndpointRuleSetHttpAuthSchemeProvider, _defaultS3HttpAuthSchemeProvider, defaultS3HttpAuthSchemeProvider, resolveHttpAuthSchemeConfig;
 var init_httpAuthSchemeProvider = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/auth/httpAuthSchemeProvider.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -24141,7 +23638,6 @@ var init_httpAuthSchemeProvider = __esm({
 var resolveClientEndpointParameters, commonParams;
 var init_EndpointParameters = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/endpoint/EndpointParameters.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -24176,19 +23672,20 @@ var init_EndpointParameters = __esm({
 var S3ServiceException;
 var init_S3ServiceException = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/models/S3ServiceException.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
     init_performance2();
     init_dist_es20();
-    S3ServiceException = class extends ServiceException {
+    S3ServiceException = class _S3ServiceException extends ServiceException {
+      static {
+        __name(this, "S3ServiceException");
+      }
       constructor(options) {
         super(options);
-        Object.setPrototypeOf(this, S3ServiceException.prototype);
+        Object.setPrototypeOf(this, _S3ServiceException.prototype);
       }
     };
-    __name(S3ServiceException, "S3ServiceException");
   }
 });
 
@@ -24196,13 +23693,15 @@ var init_S3ServiceException = __esm({
 var NoSuchUpload, ObjectNotInActiveTierError, BucketAlreadyExists, BucketAlreadyOwnedByYou, NoSuchBucket, InvalidObjectState, NoSuchKey, NotFound, EncryptionTypeMismatch, InvalidRequest, InvalidWriteOffset, TooManyParts, IdempotencyParameterMismatch, ObjectAlreadyInActiveTierError;
 var init_errors = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/models/errors.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
     init_performance2();
     init_S3ServiceException();
-    NoSuchUpload = class extends S3ServiceException {
+    NoSuchUpload = class _NoSuchUpload extends S3ServiceException {
+      static {
+        __name(this, "NoSuchUpload");
+      }
       name = "NoSuchUpload";
       $fault = "client";
       constructor(opts) {
@@ -24211,11 +23710,13 @@ var init_errors = __esm({
           $fault: "client",
           ...opts
         });
-        Object.setPrototypeOf(this, NoSuchUpload.prototype);
+        Object.setPrototypeOf(this, _NoSuchUpload.prototype);
       }
     };
-    __name(NoSuchUpload, "NoSuchUpload");
-    ObjectNotInActiveTierError = class extends S3ServiceException {
+    ObjectNotInActiveTierError = class _ObjectNotInActiveTierError extends S3ServiceException {
+      static {
+        __name(this, "ObjectNotInActiveTierError");
+      }
       name = "ObjectNotInActiveTierError";
       $fault = "client";
       constructor(opts) {
@@ -24224,11 +23725,13 @@ var init_errors = __esm({
           $fault: "client",
           ...opts
         });
-        Object.setPrototypeOf(this, ObjectNotInActiveTierError.prototype);
+        Object.setPrototypeOf(this, _ObjectNotInActiveTierError.prototype);
       }
     };
-    __name(ObjectNotInActiveTierError, "ObjectNotInActiveTierError");
-    BucketAlreadyExists = class extends S3ServiceException {
+    BucketAlreadyExists = class _BucketAlreadyExists extends S3ServiceException {
+      static {
+        __name(this, "BucketAlreadyExists");
+      }
       name = "BucketAlreadyExists";
       $fault = "client";
       constructor(opts) {
@@ -24237,11 +23740,13 @@ var init_errors = __esm({
           $fault: "client",
           ...opts
         });
-        Object.setPrototypeOf(this, BucketAlreadyExists.prototype);
+        Object.setPrototypeOf(this, _BucketAlreadyExists.prototype);
       }
     };
-    __name(BucketAlreadyExists, "BucketAlreadyExists");
-    BucketAlreadyOwnedByYou = class extends S3ServiceException {
+    BucketAlreadyOwnedByYou = class _BucketAlreadyOwnedByYou extends S3ServiceException {
+      static {
+        __name(this, "BucketAlreadyOwnedByYou");
+      }
       name = "BucketAlreadyOwnedByYou";
       $fault = "client";
       constructor(opts) {
@@ -24250,11 +23755,13 @@ var init_errors = __esm({
           $fault: "client",
           ...opts
         });
-        Object.setPrototypeOf(this, BucketAlreadyOwnedByYou.prototype);
+        Object.setPrototypeOf(this, _BucketAlreadyOwnedByYou.prototype);
       }
     };
-    __name(BucketAlreadyOwnedByYou, "BucketAlreadyOwnedByYou");
-    NoSuchBucket = class extends S3ServiceException {
+    NoSuchBucket = class _NoSuchBucket extends S3ServiceException {
+      static {
+        __name(this, "NoSuchBucket");
+      }
       name = "NoSuchBucket";
       $fault = "client";
       constructor(opts) {
@@ -24263,11 +23770,13 @@ var init_errors = __esm({
           $fault: "client",
           ...opts
         });
-        Object.setPrototypeOf(this, NoSuchBucket.prototype);
+        Object.setPrototypeOf(this, _NoSuchBucket.prototype);
       }
     };
-    __name(NoSuchBucket, "NoSuchBucket");
-    InvalidObjectState = class extends S3ServiceException {
+    InvalidObjectState = class _InvalidObjectState extends S3ServiceException {
+      static {
+        __name(this, "InvalidObjectState");
+      }
       name = "InvalidObjectState";
       $fault = "client";
       StorageClass;
@@ -24278,13 +23787,15 @@ var init_errors = __esm({
           $fault: "client",
           ...opts
         });
-        Object.setPrototypeOf(this, InvalidObjectState.prototype);
+        Object.setPrototypeOf(this, _InvalidObjectState.prototype);
         this.StorageClass = opts.StorageClass;
         this.AccessTier = opts.AccessTier;
       }
     };
-    __name(InvalidObjectState, "InvalidObjectState");
-    NoSuchKey = class extends S3ServiceException {
+    NoSuchKey = class _NoSuchKey extends S3ServiceException {
+      static {
+        __name(this, "NoSuchKey");
+      }
       name = "NoSuchKey";
       $fault = "client";
       constructor(opts) {
@@ -24293,11 +23804,13 @@ var init_errors = __esm({
           $fault: "client",
           ...opts
         });
-        Object.setPrototypeOf(this, NoSuchKey.prototype);
+        Object.setPrototypeOf(this, _NoSuchKey.prototype);
       }
     };
-    __name(NoSuchKey, "NoSuchKey");
-    NotFound = class extends S3ServiceException {
+    NotFound = class _NotFound extends S3ServiceException {
+      static {
+        __name(this, "NotFound");
+      }
       name = "NotFound";
       $fault = "client";
       constructor(opts) {
@@ -24306,11 +23819,13 @@ var init_errors = __esm({
           $fault: "client",
           ...opts
         });
-        Object.setPrototypeOf(this, NotFound.prototype);
+        Object.setPrototypeOf(this, _NotFound.prototype);
       }
     };
-    __name(NotFound, "NotFound");
-    EncryptionTypeMismatch = class extends S3ServiceException {
+    EncryptionTypeMismatch = class _EncryptionTypeMismatch extends S3ServiceException {
+      static {
+        __name(this, "EncryptionTypeMismatch");
+      }
       name = "EncryptionTypeMismatch";
       $fault = "client";
       constructor(opts) {
@@ -24319,11 +23834,13 @@ var init_errors = __esm({
           $fault: "client",
           ...opts
         });
-        Object.setPrototypeOf(this, EncryptionTypeMismatch.prototype);
+        Object.setPrototypeOf(this, _EncryptionTypeMismatch.prototype);
       }
     };
-    __name(EncryptionTypeMismatch, "EncryptionTypeMismatch");
-    InvalidRequest = class extends S3ServiceException {
+    InvalidRequest = class _InvalidRequest extends S3ServiceException {
+      static {
+        __name(this, "InvalidRequest");
+      }
       name = "InvalidRequest";
       $fault = "client";
       constructor(opts) {
@@ -24332,11 +23849,13 @@ var init_errors = __esm({
           $fault: "client",
           ...opts
         });
-        Object.setPrototypeOf(this, InvalidRequest.prototype);
+        Object.setPrototypeOf(this, _InvalidRequest.prototype);
       }
     };
-    __name(InvalidRequest, "InvalidRequest");
-    InvalidWriteOffset = class extends S3ServiceException {
+    InvalidWriteOffset = class _InvalidWriteOffset extends S3ServiceException {
+      static {
+        __name(this, "InvalidWriteOffset");
+      }
       name = "InvalidWriteOffset";
       $fault = "client";
       constructor(opts) {
@@ -24345,11 +23864,13 @@ var init_errors = __esm({
           $fault: "client",
           ...opts
         });
-        Object.setPrototypeOf(this, InvalidWriteOffset.prototype);
+        Object.setPrototypeOf(this, _InvalidWriteOffset.prototype);
       }
     };
-    __name(InvalidWriteOffset, "InvalidWriteOffset");
-    TooManyParts = class extends S3ServiceException {
+    TooManyParts = class _TooManyParts extends S3ServiceException {
+      static {
+        __name(this, "TooManyParts");
+      }
       name = "TooManyParts";
       $fault = "client";
       constructor(opts) {
@@ -24358,11 +23879,13 @@ var init_errors = __esm({
           $fault: "client",
           ...opts
         });
-        Object.setPrototypeOf(this, TooManyParts.prototype);
+        Object.setPrototypeOf(this, _TooManyParts.prototype);
       }
     };
-    __name(TooManyParts, "TooManyParts");
-    IdempotencyParameterMismatch = class extends S3ServiceException {
+    IdempotencyParameterMismatch = class _IdempotencyParameterMismatch extends S3ServiceException {
+      static {
+        __name(this, "IdempotencyParameterMismatch");
+      }
       name = "IdempotencyParameterMismatch";
       $fault = "client";
       constructor(opts) {
@@ -24371,11 +23894,13 @@ var init_errors = __esm({
           $fault: "client",
           ...opts
         });
-        Object.setPrototypeOf(this, IdempotencyParameterMismatch.prototype);
+        Object.setPrototypeOf(this, _IdempotencyParameterMismatch.prototype);
       }
     };
-    __name(IdempotencyParameterMismatch, "IdempotencyParameterMismatch");
-    ObjectAlreadyInActiveTierError = class extends S3ServiceException {
+    ObjectAlreadyInActiveTierError = class _ObjectAlreadyInActiveTierError extends S3ServiceException {
+      static {
+        __name(this, "ObjectAlreadyInActiveTierError");
+      }
       name = "ObjectAlreadyInActiveTierError";
       $fault = "client";
       constructor(opts) {
@@ -24384,10 +23909,9 @@ var init_errors = __esm({
           $fault: "client",
           ...opts
         });
-        Object.setPrototypeOf(this, ObjectAlreadyInActiveTierError.prototype);
+        Object.setPrototypeOf(this, _ObjectAlreadyInActiveTierError.prototype);
       }
     };
-    __name(ObjectAlreadyInActiveTierError, "ObjectAlreadyInActiveTierError");
   }
 });
 
@@ -24395,7 +23919,6 @@ var init_errors = __esm({
 var _A, _AAO, _AC, _ACL, _ACL_, _ACLn, _ACP, _ACT, _ACn, _AD, _AED, _AF, _AH, _AHl, _AI, _AIMU, _AKI, _AM, _AMU, _AMUO, _AMUR, _AMl, _AO, _AOl, _APA, _APAc, _AQRD, _AR, _ARI, _AS, _ASBD, _ASSEBD, _ASr, _AT, _An, _B, _BA, _BAE, _BAI, _BAOBY, _BET, _BGR, _BI, _BKE, _BLC, _BLN, _BLS, _BLT, _BN, _BP, _BPA, _BPP, _BR, _BRy, _BS, _Bo, _Bu, _C, _CA, _CACL, _CB, _CBC, _CBMC, _CBMCR, _CBMTC, _CBMTCR, _CBO, _CBR, _CC, _CCRC, _CCRCC, _CCRCNVME, _CC_, _CD, _CD_, _CDo, _CE, _CE_, _CEo, _CF, _CFC, _CL, _CL_, _CL__, _CLo, _CM, _CMD, _CMU, _CMUO, _CMUOr, _CMUR, _CMURo, _CMURr, _CMUo, _CMUr, _CMh, _CO, _COO, _COR, _CORSC, _CORSR, _CORSRu, _CORo, _CP, _CPL, _CPLo, _CPR, _CPo, _CPom, _CR, _CRSBA, _CR_, _CS, _CSHA, _CSHAh, _CSIM, _CSIMS, _CSINM, _CSIUS, _CSO, _CSR, _CSRo, _CSRr, _CSSSECA, _CSSSECK, _CSSSECKMD, _CSV, _CSVI, _CSVIn, _CSVO, _CSo, _CSr, _CT, _CT_, _CTl, _CTo, _CTom, _CTon, _Co, _Cod, _Com, _Con, _Cont, _Cr, _D, _DAI, _DB, _DBAC, _DBACR, _DBC, _DBCR, _DBE, _DBER, _DBIC, _DBICR, _DBITC, _DBITCR, _DBL, _DBLR, _DBMC, _DBMCR, _DBMCRe, _DBMCe, _DBMTC, _DBMTCR, _DBOC, _DBOCR, _DBP, _DBPR, _DBR, _DBRR, _DBRe, _DBT, _DBTR, _DBW, _DBWR, _DE, _DIM, _DIMS, _DINM, _DIUS, _DM, _DME, _DMR, _DMVI, _DMe, _DN, _DO, _DOO, _DOOe, _DOR, _DORe, _DOT, _DOTO, _DOTR, _DOe, _DOel, _DOele, _DPAB, _DPABR, _DR, _DRe, _DRel, _DRes, _Da, _De, _Del, _Deli, _Des, _Desc, _Det, _E, _EA, _EBC, _EBO, _EC, _ECr, _ED, _EDr, _EE, _EH, _EHx, _EM, _EODM, _EOR, _ES, _ESBO, _ET, _ETL, _ETM, _ETa, _ETn, _ETv, _ETx, _En, _Ena, _End, _Er, _Err, _Ev, _Eve, _Ex, _Exp, _F, _FD, _FHI, _FO, _FR, _FRL, _FRi, _Fi, _Fo, _Fr, _G, _GBA, _GBAC, _GBACO, _GBACOe, _GBACR, _GBACRe, _GBACe, _GBAO, _GBAOe, _GBAR, _GBARe, _GBAe, _GBC, _GBCO, _GBCR, _GBE, _GBEO, _GBER, _GBIC, _GBICO, _GBICR, _GBITC, _GBITCO, _GBITCR, _GBL, _GBLC, _GBLCO, _GBLCR, _GBLO, _GBLOe, _GBLR, _GBLRe, _GBLe, _GBMC, _GBMCO, _GBMCOe, _GBMCR, _GBMCRe, _GBMCRet, _GBMCe, _GBMTC, _GBMTCO, _GBMTCR, _GBMTCRe, _GBNC, _GBNCR, _GBOC, _GBOCO, _GBOCR, _GBP, _GBPO, _GBPR, _GBPS, _GBPSO, _GBPSR, _GBR, _GBRO, _GBRP, _GBRPO, _GBRPR, _GBRR, _GBT, _GBTO, _GBTR, _GBV, _GBVO, _GBVR, _GBW, _GBWO, _GBWR, _GFC, _GJP, _GO, _GOA, _GOAO, _GOAOe, _GOAP, _GOAR, _GOARe, _GOARet, _GOAe, _GOLC, _GOLCO, _GOLCR, _GOLH, _GOLHO, _GOLHR, _GOO, _GOR, _GORO, _GORR, _GORe, _GOT, _GOTO, _GOTOe, _GOTR, _GOTRe, _GOTe, _GPAB, _GPABO, _GPABR, _GR, _GRACP, _GW, _GWACP, _Gr, _Gra, _HB, _HBO, _HBR, _HECRE, _HN, _HO, _HOO, _HOR, _HRC, _I, _IC, _ICL, _ID, _IDn, _IDnv, _IE, _IEn, _IF, _IL, _IM, _IMIT, _IMLMT, _IMS, _IMS_, _IMSf, _IMUR, _IM_, _INM, _INM_, _IOF, _IOS, _IOV, _IP, _IPA, _IPM, _IR, _IRIP, _IS, _ISBD, _ISn, _IT, _ITAO, _ITC, _ITCL, _ITCR, _ITCU, _ITCn, _ITF, _IUS, _IUS_, _IWO, _In, _Ini, _JSON, _JSONI, _JSONO, _JTC, _JTCR, _JTCU, _K, _KC, _KI, _KKA, _KM, _KMSC, _KMSKI, _KMSMKID, _KPE, _L, _LAMBR, _LAMDBR, _LB, _LBAC, _LBACO, _LBACR, _LBACRi, _LBIC, _LBICO, _LBICR, _LBITC, _LBITCO, _LBITCR, _LBMC, _LBMCO, _LBMCR, _LBO, _LBR, _LBRi, _LC, _LCi, _LDB, _LDBO, _LDBR, _LE, _LEi, _LFA, _LFC, _LFCL, _LFCa, _LH, _LI, _LICR, _LM, _LMCR, _LMT, _LMU, _LMUO, _LMUR, _LMURi, _LM_, _LO, _LOO, _LOR, _LOV, _LOVO, _LOVOi, _LOVR, _LOVRi, _LOVi, _LP, _LPO, _LPR, _LPRi, _LR, _LRAO, _LRF, _LRi, _LVR, _M, _MAO, _MAS, _MB, _MC, _MCL, _MCR, _MCe, _MD, _MDB, _MDf, _ME, _MF, _MFA, _MFAD, _MK, _MM, _MOS, _MP, _MTC, _MTCR, _MTEC, _MU, _MUL, _MUa, _Ma, _Me, _Mes, _Mi, _Mo, _N, _NC, _NCF, _NCT, _ND, _NF, _NKM, _NM, _NNV, _NPNM, _NSB, _NSK, _NSU, _NUIM, _NVE, _NVIM, _NVT, _NVTL, _NVTo, _O, _OA, _OAIATE, _OC, _OCR, _OCRw, _OF, _OI, _OIL, _OL, _OLC, _OLE, _OLEFB, _OLLH, _OLLHS, _OLM, _OLR, _OLRUD, _OLRb, _OLb, _ONIATE, _OO, _OOA, _OP, _OPb, _OS, _OSGT, _OSLT, _OSV, _OSu, _OV, _OVL, _Ob, _Obj, _P, _PABC, _PBA, _PBAC, _PBACR, _PBACRu, _PBACu, _PBAR, _PBARu, _PBAu, _PBC, _PBCR, _PBE, _PBER, _PBIC, _PBICR, _PBITC, _PBITCR, _PBL, _PBLC, _PBLCO, _PBLCR, _PBLR, _PBMC, _PBMCR, _PBNC, _PBNCR, _PBOC, _PBOCR, _PBP, _PBPR, _PBR, _PBRP, _PBRPR, _PBRR, _PBT, _PBTR, _PBV, _PBVR, _PBW, _PBWR, _PC, _PDS, _PE, _PI, _PL, _PN, _PNM, _PO, _POA, _POAO, _POAR, _POLC, _POLCO, _POLCR, _POLH, _POLHO, _POLHR, _POO, _POR, _PORO, _PORR, _PORu, _POT, _POTO, _POTR, _PP, _PPAB, _PPABR, _PS, _Pa, _Par, _Parq, _Pay, _Payl, _Pe, _Po, _Pr, _Pri, _Pro, _Q, _QA, _QC, _QCL, _QCu, _QCue, _QEC, _QF, _Qu, _R, _RART, _RC, _RCC, _RCD, _RCE, _RCL, _RCT, _RCe, _RD, _RE, _RED, _REe, _REec, _RKKID, _RKPW, _RKW, _RM, _RO, _ROO, _ROOe, _ROP, _ROR, _RORe, _ROe, _RP, _RPB, _RPC, _RPe, _RR, _RRAO, _RRF, _RRe, _RRep, _RReq, _RRes, _RRo, _RS, _RSe, _RSen, _RT, _RTV, _RTe, _RUD, _Ra, _Re, _Rec, _Red, _Ret, _Ro, _Ru, _S, _SA, _SAK, _SAs, _SB, _SBD, _SC, _SCA, _SCADE, _SCV, _SCe, _SCt, _SDV, _SE, _SIM, _SIMS, _SINM, _SIUS, _SK, _SKEO, _SKF, _SKe, _SL, _SM, _SOC, _SOCES, _SOCO, _SOCR, _SP, _SPi, _SR, _SS, _SSC, _SSE, _SSEA, _SSEBD, _SSEC, _SSECA, _SSECK, _SSECKMD, _SSEKMS, _SSEKMSEC, _SSEKMSKI, _SSER, _SSERe, _SSES, _ST, _STD, _STDR, _S_, _Sc, _Si, _St, _Sta, _Su, _T, _TA, _TAo, _TB, _TBA, _TBT, _TC, _TCL, _TCo, _TCop, _TD, _TDMOS, _TG, _TGa, _TL, _TLr, _TMP, _TN, _TNa, _TOKF, _TP, _TPC, _TS, _TSa, _Ta, _Tag, _Ti, _Tie, _Tier, _Tim, _To, _Top, _Tr, _Tra, _Ty, _U, _UBMITC, _UBMITCR, _UBMJTC, _UBMJTCR, _UI, _UIM, _UM, _UP, _UPC, _UPCO, _UPCR, _UPO, _UPR, _URI, _Up, _V, _VC, _VI, _VIM, _Ve, _Ver, _WC, _WGOR, _WGORR, _WOB, _WRL, _Y, _ar, _br, _c, _ct, _d, _e, _eP, _en, _et, _fo, _h, _hE, _hH, _hL, _hP, _hPH, _hQ, _hi, _i, _iT, _km, _m, _mb, _mdb, _mk, _mp, _mu, _p, _pN, _pnm, _rcc, _rcd, _rce, _rcl, _rct, _re, _s, _sa, _sm, _uI, _uim, _vI, _vim, _x, _xA, _xF, _xN, _xNm, _xaa, _xaad, _xaapa, _xaari, _xaas, _xaba, _xabgr, _xabln, _xablt, _xabole, _xabolt, _xabr, _xaca, _xacc, _xacc_, _xacc__, _xacm, _xacrsba, _xacs, _xacs_, _xacs__, _xacsim, _xacsims, _xacsinm, _xacsius, _xacsm, _xacsr, _xacssseca, _xacssseck, _xacssseckM, _xacsvi, _xact, _xact_, _xadm, _xae, _xaebo, _xafec, _xafem, _xafhCC, _xafhCD, _xafhCE, _xafhCL, _xafhCR, _xafhCT, _xafhE, _xafhE_, _xafhLM, _xafhar, _xafhxacc, _xafhxacc_, _xafhxacc__, _xafhxacs, _xafhxacs_, _xafhxadm, _xafhxae, _xafhxamm, _xafhxampc, _xafhxaollh, _xafhxaolm, _xafhxaolrud, _xafhxar, _xafhxarc, _xafhxars, _xafhxasc, _xafhxasse, _xafhxasseakki, _xafhxassebke, _xafhxasseca, _xafhxasseckM, _xafhxatc, _xafhxavi, _xafs, _xagfc, _xagr, _xagra, _xagw, _xagwa, _xaimit, _xaimlmt, _xaims, _xam, _xam_, _xamd, _xamm, _xamos, _xamp, _xampc, _xaoa, _xaollh, _xaolm, _xaolrud, _xaoo, _xaooa, _xaos, _xapnm, _xar, _xarc, _xarop, _xarp, _xarr, _xars, _xars_, _xarsim, _xarsims, _xarsinm, _xarsius, _xart, _xasc, _xasca, _xasdv, _xasebo, _xasse, _xasseakki, _xassebke, _xassec, _xasseca, _xasseck, _xasseckM, _xat, _xatc, _xatd, _xatdmos, _xavi, _xawob, _xawrl, _xs, n0, CopySourceSSECustomerKey, SessionCredentialValue, SSECustomerKey, SSEKMSEncryptionContext, SSEKMSKeyId, StreamingBlob, AbacStatus, AbortIncompleteMultipartUpload, AbortMultipartUploadOutput, AbortMultipartUploadRequest, AccelerateConfiguration, AccessControlPolicy, AccessControlTranslation, AnalyticsAndOperator, AnalyticsConfiguration, AnalyticsExportDestination, AnalyticsS3BucketDestination, BlockedEncryptionTypes, Bucket, BucketAlreadyExists2, BucketAlreadyOwnedByYou2, BucketInfo, BucketLifecycleConfiguration, BucketLoggingStatus, Checksum, CommonPrefix, CompletedMultipartUpload, CompletedPart, CompleteMultipartUploadOutput, CompleteMultipartUploadRequest, Condition, ContinuationEvent, CopyObjectOutput, CopyObjectRequest, CopyObjectResult, CopyPartResult, CORSConfiguration, CORSRule, CreateBucketConfiguration, CreateBucketMetadataConfigurationRequest, CreateBucketMetadataTableConfigurationRequest, CreateBucketOutput, CreateBucketRequest, CreateMultipartUploadOutput, CreateMultipartUploadRequest, CreateSessionOutput, CreateSessionRequest, CSVInput, CSVOutput, DefaultRetention, Delete, DeleteBucketAnalyticsConfigurationRequest, DeleteBucketCorsRequest, DeleteBucketEncryptionRequest, DeleteBucketIntelligentTieringConfigurationRequest, DeleteBucketInventoryConfigurationRequest, DeleteBucketLifecycleRequest, DeleteBucketMetadataConfigurationRequest, DeleteBucketMetadataTableConfigurationRequest, DeleteBucketMetricsConfigurationRequest, DeleteBucketOwnershipControlsRequest, DeleteBucketPolicyRequest, DeleteBucketReplicationRequest, DeleteBucketRequest, DeleteBucketTaggingRequest, DeleteBucketWebsiteRequest, DeletedObject, DeleteMarkerEntry, DeleteMarkerReplication, DeleteObjectOutput, DeleteObjectRequest, DeleteObjectsOutput, DeleteObjectsRequest, DeleteObjectTaggingOutput, DeleteObjectTaggingRequest, DeletePublicAccessBlockRequest, Destination, DestinationResult, Encryption, EncryptionConfiguration, EncryptionTypeMismatch2, EndEvent, _Error, ErrorDetails, ErrorDocument, EventBridgeConfiguration, ExistingObjectReplication, FilterRule, GetBucketAbacOutput, GetBucketAbacRequest, GetBucketAccelerateConfigurationOutput, GetBucketAccelerateConfigurationRequest, GetBucketAclOutput, GetBucketAclRequest, GetBucketAnalyticsConfigurationOutput, GetBucketAnalyticsConfigurationRequest, GetBucketCorsOutput, GetBucketCorsRequest, GetBucketEncryptionOutput, GetBucketEncryptionRequest, GetBucketIntelligentTieringConfigurationOutput, GetBucketIntelligentTieringConfigurationRequest, GetBucketInventoryConfigurationOutput, GetBucketInventoryConfigurationRequest, GetBucketLifecycleConfigurationOutput, GetBucketLifecycleConfigurationRequest, GetBucketLocationOutput, GetBucketLocationRequest, GetBucketLoggingOutput, GetBucketLoggingRequest, GetBucketMetadataConfigurationOutput, GetBucketMetadataConfigurationRequest, GetBucketMetadataConfigurationResult, GetBucketMetadataTableConfigurationOutput, GetBucketMetadataTableConfigurationRequest, GetBucketMetadataTableConfigurationResult, GetBucketMetricsConfigurationOutput, GetBucketMetricsConfigurationRequest, GetBucketNotificationConfigurationRequest, GetBucketOwnershipControlsOutput, GetBucketOwnershipControlsRequest, GetBucketPolicyOutput, GetBucketPolicyRequest, GetBucketPolicyStatusOutput, GetBucketPolicyStatusRequest, GetBucketReplicationOutput, GetBucketReplicationRequest, GetBucketRequestPaymentOutput, GetBucketRequestPaymentRequest, GetBucketTaggingOutput, GetBucketTaggingRequest, GetBucketVersioningOutput, GetBucketVersioningRequest, GetBucketWebsiteOutput, GetBucketWebsiteRequest, GetObjectAclOutput, GetObjectAclRequest, GetObjectAttributesOutput, GetObjectAttributesParts, GetObjectAttributesRequest, GetObjectLegalHoldOutput, GetObjectLegalHoldRequest, GetObjectLockConfigurationOutput, GetObjectLockConfigurationRequest, GetObjectOutput, GetObjectRequest, GetObjectRetentionOutput, GetObjectRetentionRequest, GetObjectTaggingOutput, GetObjectTaggingRequest, GetObjectTorrentOutput, GetObjectTorrentRequest, GetPublicAccessBlockOutput, GetPublicAccessBlockRequest, GlacierJobParameters, Grant, Grantee, HeadBucketOutput, HeadBucketRequest, HeadObjectOutput, HeadObjectRequest, IdempotencyParameterMismatch2, IndexDocument, Initiator, InputSerialization, IntelligentTieringAndOperator, IntelligentTieringConfiguration, IntelligentTieringFilter, InvalidObjectState2, InvalidRequest2, InvalidWriteOffset2, InventoryConfiguration, InventoryDestination, InventoryEncryption, InventoryFilter, InventoryS3BucketDestination, InventorySchedule, InventoryTableConfiguration, InventoryTableConfigurationResult, InventoryTableConfigurationUpdates, JournalTableConfiguration, JournalTableConfigurationResult, JournalTableConfigurationUpdates, JSONInput, JSONOutput, LambdaFunctionConfiguration, LifecycleExpiration, LifecycleRule, LifecycleRuleAndOperator, LifecycleRuleFilter, ListBucketAnalyticsConfigurationsOutput, ListBucketAnalyticsConfigurationsRequest, ListBucketIntelligentTieringConfigurationsOutput, ListBucketIntelligentTieringConfigurationsRequest, ListBucketInventoryConfigurationsOutput, ListBucketInventoryConfigurationsRequest, ListBucketMetricsConfigurationsOutput, ListBucketMetricsConfigurationsRequest, ListBucketsOutput, ListBucketsRequest, ListDirectoryBucketsOutput, ListDirectoryBucketsRequest, ListMultipartUploadsOutput, ListMultipartUploadsRequest, ListObjectsOutput, ListObjectsRequest, ListObjectsV2Output, ListObjectsV2Request, ListObjectVersionsOutput, ListObjectVersionsRequest, ListPartsOutput, ListPartsRequest, LocationInfo, LoggingEnabled, MetadataConfiguration, MetadataConfigurationResult, MetadataEntry, MetadataTableConfiguration, MetadataTableConfigurationResult, MetadataTableEncryptionConfiguration, Metrics, MetricsAndOperator, MetricsConfiguration, MultipartUpload, NoncurrentVersionExpiration, NoncurrentVersionTransition, NoSuchBucket2, NoSuchKey2, NoSuchUpload2, NotFound2, NotificationConfiguration, NotificationConfigurationFilter, _Object, ObjectAlreadyInActiveTierError2, ObjectIdentifier, ObjectLockConfiguration, ObjectLockLegalHold, ObjectLockRetention, ObjectLockRule, ObjectNotInActiveTierError2, ObjectPart, ObjectVersion, OutputLocation, OutputSerialization, Owner, OwnershipControls, OwnershipControlsRule, ParquetInput, Part, PartitionedPrefix, PolicyStatus, Progress, ProgressEvent, PublicAccessBlockConfiguration, PutBucketAbacRequest, PutBucketAccelerateConfigurationRequest, PutBucketAclRequest, PutBucketAnalyticsConfigurationRequest, PutBucketCorsRequest, PutBucketEncryptionRequest, PutBucketIntelligentTieringConfigurationRequest, PutBucketInventoryConfigurationRequest, PutBucketLifecycleConfigurationOutput, PutBucketLifecycleConfigurationRequest, PutBucketLoggingRequest, PutBucketMetricsConfigurationRequest, PutBucketNotificationConfigurationRequest, PutBucketOwnershipControlsRequest, PutBucketPolicyRequest, PutBucketReplicationRequest, PutBucketRequestPaymentRequest, PutBucketTaggingRequest, PutBucketVersioningRequest, PutBucketWebsiteRequest, PutObjectAclOutput, PutObjectAclRequest, PutObjectLegalHoldOutput, PutObjectLegalHoldRequest, PutObjectLockConfigurationOutput, PutObjectLockConfigurationRequest, PutObjectOutput, PutObjectRequest, PutObjectRetentionOutput, PutObjectRetentionRequest, PutObjectTaggingOutput, PutObjectTaggingRequest, PutPublicAccessBlockRequest, QueueConfiguration, RecordExpiration, RecordsEvent, Redirect, RedirectAllRequestsTo, RenameObjectOutput, RenameObjectRequest, ReplicaModifications, ReplicationConfiguration, ReplicationRule, ReplicationRuleAndOperator, ReplicationRuleFilter, ReplicationTime, ReplicationTimeValue, RequestPaymentConfiguration, RequestProgress, RestoreObjectOutput, RestoreObjectRequest, RestoreRequest, RestoreStatus, RoutingRule, S3KeyFilter, S3Location, S3TablesDestination, S3TablesDestinationResult, ScanRange, SelectObjectContentOutput, SelectObjectContentRequest, SelectParameters, ServerSideEncryptionByDefault, ServerSideEncryptionConfiguration, ServerSideEncryptionRule, SessionCredentials, SimplePrefix, SourceSelectionCriteria, SSEKMS, SseKmsEncryptedObjects, SSES3, Stats, StatsEvent, StorageClassAnalysis, StorageClassAnalysisDataExport, Tag, Tagging, TargetGrant, TargetObjectKeyFormat, Tiering, TooManyParts2, TopicConfiguration, Transition, UpdateBucketMetadataInventoryTableConfigurationRequest, UpdateBucketMetadataJournalTableConfigurationRequest, UploadPartCopyOutput, UploadPartCopyRequest, UploadPartOutput, UploadPartRequest, VersioningConfiguration, WebsiteConfiguration, WriteGetObjectResponseRequest, __Unit, S3ServiceException2, AllowedHeaders, AllowedMethods, AllowedOrigins, AnalyticsConfigurationList, Buckets, ChecksumAlgorithmList, CommonPrefixList, CompletedPartList, CORSRules, DeletedObjects, DeleteMarkers, EncryptionTypeList, Errors, EventList, ExposeHeaders, FilterRuleList, Grants, IntelligentTieringConfigurationList, InventoryConfigurationList, InventoryOptionalFields, LambdaFunctionConfigurationList, LifecycleRules, MetricsConfigurationList, MultipartUploadList, NoncurrentVersionTransitionList, ObjectAttributesList, ObjectIdentifierList, ObjectList, ObjectVersionList, OptionalObjectAttributesList, OwnershipControlsRules, Parts, PartsList, QueueConfigurationList, ReplicationRules, RoutingRules, ServerSideEncryptionRules, TagSet, TargetGrants, TieringList, TopicConfigurationList, TransitionList, UserMetadata, Metadata, AnalyticsFilter, MetricsFilter, SelectObjectContentEventStream, AbortMultipartUpload, CompleteMultipartUpload, CopyObject, CreateBucket, CreateBucketMetadataConfiguration, CreateBucketMetadataTableConfiguration, CreateMultipartUpload, CreateSession, DeleteBucket, DeleteBucketAnalyticsConfiguration, DeleteBucketCors, DeleteBucketEncryption, DeleteBucketIntelligentTieringConfiguration, DeleteBucketInventoryConfiguration, DeleteBucketLifecycle, DeleteBucketMetadataConfiguration, DeleteBucketMetadataTableConfiguration, DeleteBucketMetricsConfiguration, DeleteBucketOwnershipControls, DeleteBucketPolicy, DeleteBucketReplication, DeleteBucketTagging, DeleteBucketWebsite, DeleteObject, DeleteObjects, DeleteObjectTagging, DeletePublicAccessBlock, GetBucketAbac, GetBucketAccelerateConfiguration, GetBucketAcl, GetBucketAnalyticsConfiguration, GetBucketCors, GetBucketEncryption, GetBucketIntelligentTieringConfiguration, GetBucketInventoryConfiguration, GetBucketLifecycleConfiguration, GetBucketLocation, GetBucketLogging, GetBucketMetadataConfiguration, GetBucketMetadataTableConfiguration, GetBucketMetricsConfiguration, GetBucketNotificationConfiguration, GetBucketOwnershipControls, GetBucketPolicy, GetBucketPolicyStatus, GetBucketReplication, GetBucketRequestPayment, GetBucketTagging, GetBucketVersioning, GetBucketWebsite, GetObject, GetObjectAcl, GetObjectAttributes, GetObjectLegalHold, GetObjectLockConfiguration, GetObjectRetention, GetObjectTagging, GetObjectTorrent, GetPublicAccessBlock, HeadBucket, HeadObject, ListBucketAnalyticsConfigurations, ListBucketIntelligentTieringConfigurations, ListBucketInventoryConfigurations, ListBucketMetricsConfigurations, ListBuckets, ListDirectoryBuckets, ListMultipartUploads, ListObjects, ListObjectsV2, ListObjectVersions, ListParts, PutBucketAbac, PutBucketAccelerateConfiguration, PutBucketAcl, PutBucketAnalyticsConfiguration, PutBucketCors, PutBucketEncryption, PutBucketIntelligentTieringConfiguration, PutBucketInventoryConfiguration, PutBucketLifecycleConfiguration, PutBucketLogging, PutBucketMetricsConfiguration, PutBucketNotificationConfiguration, PutBucketOwnershipControls, PutBucketPolicy, PutBucketReplication, PutBucketRequestPayment, PutBucketTagging, PutBucketVersioning, PutBucketWebsite, PutObject, PutObjectAcl, PutObjectLegalHold, PutObjectLockConfiguration, PutObjectRetention, PutObjectTagging, PutPublicAccessBlock, RenameObject, RestoreObject, SelectObjectContent, UpdateBucketMetadataInventoryTableConfiguration, UpdateBucketMetadataJournalTableConfiguration, UploadPart, UploadPartCopy, WriteGetObjectResponse;
 var init_schemas_0 = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/schemas/schemas_0.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -34796,7 +34319,6 @@ var init_schemas_0 = __esm({
 var CreateSessionCommand;
 var init_CreateSessionCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/CreateSessionCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -34813,8 +34335,10 @@ var init_CreateSessionCommand = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions()), getThrow200ExceptionsPlugin(config2)];
     }).s("AmazonS3", "CreateSession", {}).n("S3Client", "CreateSessionCommand").sc(CreateSession).build() {
+      static {
+        __name(this, "CreateSessionCommand");
+      }
     };
-    __name(CreateSessionCommand, "CreateSessionCommand");
   }
 });
 
@@ -34953,7 +34477,6 @@ var init_package = __esm({
 var fromUtf84;
 var init_fromUtf8_browser3 = __esm({
   "node_modules/@aws-crypto/sha1-browser/node_modules/@smithy/util-utf8/dist-es/fromUtf8.browser.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -34965,7 +34488,6 @@ var init_fromUtf8_browser3 = __esm({
 // node_modules/@aws-crypto/sha1-browser/node_modules/@smithy/util-utf8/dist-es/toUint8Array.js
 var init_toUint8Array3 = __esm({
   "node_modules/@aws-crypto/sha1-browser/node_modules/@smithy/util-utf8/dist-es/toUint8Array.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -34977,7 +34499,6 @@ var init_toUint8Array3 = __esm({
 // node_modules/@aws-crypto/sha1-browser/node_modules/@smithy/util-utf8/dist-es/toUtf8.browser.js
 var init_toUtf8_browser3 = __esm({
   "node_modules/@aws-crypto/sha1-browser/node_modules/@smithy/util-utf8/dist-es/toUtf8.browser.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -34988,7 +34509,6 @@ var init_toUtf8_browser3 = __esm({
 // node_modules/@aws-crypto/sha1-browser/node_modules/@smithy/util-utf8/dist-es/index.js
 var init_dist_es43 = __esm({
   "node_modules/@aws-crypto/sha1-browser/node_modules/@smithy/util-utf8/dist-es/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -35008,7 +34528,6 @@ function isEmptyData2(data) {
 }
 var init_isEmptyData2 = __esm({
   "node_modules/@aws-crypto/sha1-browser/build/module/isEmptyData.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -35021,7 +34540,6 @@ var init_isEmptyData2 = __esm({
 var SHA_1_HASH, SHA_1_HMAC_ALGO, EMPTY_DATA_SHA_1;
 var init_constants9 = __esm({
   "node_modules/@aws-crypto/sha1-browser/build/module/constants.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -35068,7 +34586,6 @@ function locateWindow() {
 var fallbackWindow;
 var init_dist_es44 = __esm({
   "node_modules/@aws-sdk/util-locate-window/dist-es/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -35091,7 +34608,6 @@ function convertToBuffer2(data) {
 var Sha1;
 var init_webCryptoSha1 = __esm({
   "node_modules/@aws-crypto/sha1-browser/build/module/webCryptoSha1.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -35101,7 +34617,7 @@ var init_webCryptoSha1 = __esm({
     init_constants9();
     init_dist_es44();
     Sha1 = /** @class */
-    function() {
+    (function() {
       function Sha13(secret) {
         this.toHash = new Uint8Array(0);
         if (secret !== void 0) {
@@ -35145,7 +34661,7 @@ var init_webCryptoSha1 = __esm({
         this.toHash = new Uint8Array(0);
       };
       return Sha13;
-    }();
+    })();
     __name(convertToBuffer2, "convertToBuffer");
   }
 });
@@ -35153,27 +34669,26 @@ var init_webCryptoSha1 = __esm({
 // node_modules/@aws-crypto/supports-web-crypto/build/module/supportsWebCrypto.js
 function supportsWebCrypto(window2) {
   if (supportsSecureRandom(window2) && typeof window2.crypto.subtle === "object") {
-    var subtle3 = window2.crypto.subtle;
-    return supportsSubtleCrypto(subtle3);
+    var subtle = window2.crypto.subtle;
+    return supportsSubtleCrypto(subtle);
   }
   return false;
 }
 function supportsSecureRandom(window2) {
   if (typeof window2 === "object" && typeof window2.crypto === "object") {
-    var getRandomValues2 = window2.crypto.getRandomValues;
-    return typeof getRandomValues2 === "function";
+    var getRandomValues = window2.crypto.getRandomValues;
+    return typeof getRandomValues === "function";
   }
   return false;
 }
-function supportsSubtleCrypto(subtle3) {
-  return subtle3 && subtleCryptoMethods.every(function(methodName) {
-    return typeof subtle3[methodName] === "function";
+function supportsSubtleCrypto(subtle) {
+  return subtle && subtleCryptoMethods.every(function(methodName) {
+    return typeof subtle[methodName] === "function";
   });
 }
 var subtleCryptoMethods;
 var init_supportsWebCrypto = __esm({
   "node_modules/@aws-crypto/supports-web-crypto/build/module/supportsWebCrypto.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -35197,7 +34712,6 @@ var init_supportsWebCrypto = __esm({
 // node_modules/@aws-crypto/supports-web-crypto/build/module/index.js
 var init_module4 = __esm({
   "node_modules/@aws-crypto/supports-web-crypto/build/module/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -35210,7 +34724,6 @@ var init_module4 = __esm({
 var Sha12;
 var init_crossPlatformSha1 = __esm({
   "node_modules/@aws-crypto/sha1-browser/build/module/crossPlatformSha1.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -35220,7 +34733,7 @@ var init_crossPlatformSha1 = __esm({
     init_dist_es44();
     init_module();
     Sha12 = /** @class */
-    function() {
+    (function() {
       function Sha13(secret) {
         if (supportsWebCrypto(locateWindow())) {
           this.hash = new Sha1(secret);
@@ -35239,14 +34752,13 @@ var init_crossPlatformSha1 = __esm({
         this.hash.reset();
       };
       return Sha13;
-    }();
+    })();
   }
 });
 
 // node_modules/@aws-crypto/sha1-browser/build/module/index.js
 var init_module5 = __esm({
   "node_modules/@aws-crypto/sha1-browser/build/module/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -35260,7 +34772,6 @@ var init_module5 = __esm({
 var SHA_256_HASH, SHA_256_HMAC_ALGO, EMPTY_DATA_SHA_256;
 var init_constants10 = __esm({
   "node_modules/@aws-crypto/sha256-browser/build/module/constants.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -35311,7 +34822,6 @@ var init_constants10 = __esm({
 var Sha256;
 var init_webCryptoSha256 = __esm({
   "node_modules/@aws-crypto/sha256-browser/build/module/webCryptoSha256.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -35320,7 +34830,7 @@ var init_webCryptoSha256 = __esm({
     init_constants10();
     init_dist_es44();
     Sha256 = /** @class */
-    function() {
+    (function() {
       function Sha2564(secret) {
         this.toHash = new Uint8Array(0);
         this.secret = secret;
@@ -35367,7 +34877,7 @@ var init_webCryptoSha256 = __esm({
         }
       };
       return Sha2564;
-    }();
+    })();
   }
 });
 
@@ -35375,7 +34885,6 @@ var init_webCryptoSha256 = __esm({
 var BLOCK_SIZE, DIGEST_LENGTH, KEY, INIT, MAX_HASHABLE_LENGTH;
 var init_constants11 = __esm({
   "node_modules/@aws-crypto/sha256-js/build/module/constants.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -35466,14 +34975,13 @@ var init_constants11 = __esm({
 var RawSha256;
 var init_RawSha256 = __esm({
   "node_modules/@aws-crypto/sha256-js/build/module/RawSha256.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
     init_performance2();
     init_constants11();
     RawSha256 = /** @class */
-    function() {
+    (function() {
       function RawSha2562() {
         this.state = Int32Array.from(INIT);
         this.temp = new Int32Array(64);
@@ -35566,7 +35074,7 @@ var init_RawSha256 = __esm({
         state[7] += state7;
       };
       return RawSha2562;
-    }();
+    })();
   }
 });
 
@@ -35585,7 +35093,6 @@ function bufferFromSecret(secret) {
 var Sha2562;
 var init_jsSha256 = __esm({
   "node_modules/@aws-crypto/sha256-js/build/module/jsSha256.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -35595,7 +35102,7 @@ var init_jsSha256 = __esm({
     init_RawSha256();
     init_module();
     Sha2562 = /** @class */
-    function() {
+    (function() {
       function Sha2564(secret) {
         this.secret = secret;
         this.hash = new RawSha256();
@@ -35650,7 +35157,7 @@ var init_jsSha256 = __esm({
         }
       };
       return Sha2564;
-    }();
+    })();
     __name(bufferFromSecret, "bufferFromSecret");
   }
 });
@@ -35658,7 +35165,6 @@ var init_jsSha256 = __esm({
 // node_modules/@aws-crypto/sha256-js/build/module/index.js
 var init_module6 = __esm({
   "node_modules/@aws-crypto/sha256-js/build/module/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -35671,7 +35177,6 @@ var init_module6 = __esm({
 var Sha2563;
 var init_crossPlatformSha256 = __esm({
   "node_modules/@aws-crypto/sha256-browser/build/module/crossPlatformSha256.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -35682,7 +35187,7 @@ var init_crossPlatformSha256 = __esm({
     init_dist_es44();
     init_module();
     Sha2563 = /** @class */
-    function() {
+    (function() {
       function Sha2564(secret) {
         if (supportsWebCrypto(locateWindow())) {
           this.hash = new Sha256(secret);
@@ -35701,14 +35206,13 @@ var init_crossPlatformSha256 = __esm({
         this.hash.reset();
       };
       return Sha2564;
-    }();
+    })();
   }
 });
 
 // node_modules/@aws-crypto/sha256-browser/build/module/index.js
 var init_module7 = __esm({
   "node_modules/@aws-crypto/sha256-browser/build/module/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -35722,7 +35226,6 @@ var init_module7 = __esm({
 var createDefaultUserAgentProvider, fallback;
 var init_dist_es45 = __esm({
   "node_modules/@aws-sdk/util-user-agent-browser/dist-es/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -35795,13 +35298,15 @@ function negate2(bytes) {
 var Int642;
 var init_Int64 = __esm({
   "node_modules/@smithy/eventstream-codec/dist-es/Int64.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
     init_performance2();
     init_dist_es11();
-    Int642 = class {
+    Int642 = class _Int64 {
+      static {
+        __name(this, "Int64");
+      }
       bytes;
       constructor(bytes) {
         this.bytes = bytes;
@@ -35820,7 +35325,7 @@ var init_Int64 = __esm({
         if (number < 0) {
           negate2(bytes);
         }
-        return new Int642(bytes);
+        return new _Int64(bytes);
       }
       valueOf() {
         const bytes = this.bytes.slice(0);
@@ -35834,7 +35339,6 @@ var init_Int64 = __esm({
         return String(this.valueOf());
       }
     };
-    __name(Int642, "Int64");
     __name(negate2, "negate");
   }
 });
@@ -35843,7 +35347,6 @@ var init_Int64 = __esm({
 var HeaderMarshaller, HEADER_VALUE_TYPE2, BOOLEAN_TAG, BYTE_TAG, SHORT_TAG, INT_TAG, LONG_TAG, BINARY_TAG, STRING_TAG, TIMESTAMP_TAG, UUID_TAG, UUID_PATTERN2;
 var init_HeaderMarshaller = __esm({
   "node_modules/@smithy/eventstream-codec/dist-es/HeaderMarshaller.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -35851,6 +35354,9 @@ var init_HeaderMarshaller = __esm({
     init_dist_es11();
     init_Int64();
     HeaderMarshaller = class {
+      static {
+        __name(this, "HeaderMarshaller");
+      }
       toUtf8;
       fromUtf8;
       constructor(toUtf82, fromUtf85) {
@@ -36009,7 +35515,6 @@ var init_HeaderMarshaller = __esm({
         return out;
       }
     };
-    __name(HeaderMarshaller, "HeaderMarshaller");
     (function(HEADER_VALUE_TYPE3) {
       HEADER_VALUE_TYPE3[HEADER_VALUE_TYPE3["boolTrue"] = 0] = "boolTrue";
       HEADER_VALUE_TYPE3[HEADER_VALUE_TYPE3["boolFalse"] = 1] = "boolFalse";
@@ -36064,7 +35569,6 @@ function splitMessage({ byteLength, byteOffset, buffer }) {
 var PRELUDE_MEMBER_LENGTH, PRELUDE_LENGTH, CHECKSUM_LENGTH, MINIMUM_MESSAGE_LENGTH;
 var init_splitMessage = __esm({
   "node_modules/@smithy/eventstream-codec/dist-es/splitMessage.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -36082,7 +35586,6 @@ var init_splitMessage = __esm({
 var EventStreamCodec;
 var init_EventStreamCodec = __esm({
   "node_modules/@smithy/eventstream-codec/dist-es/EventStreamCodec.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -36091,6 +35594,9 @@ var init_EventStreamCodec = __esm({
     init_HeaderMarshaller();
     init_splitMessage();
     EventStreamCodec = class {
+      static {
+        __name(this, "EventStreamCodec");
+      }
       headerMarshaller;
       messageBuffer;
       isEndOfStream;
@@ -36152,14 +35658,12 @@ var init_EventStreamCodec = __esm({
         return this.headerMarshaller.format(rawHeaders);
       }
     };
-    __name(EventStreamCodec, "EventStreamCodec");
   }
 });
 
 // node_modules/@smithy/eventstream-codec/dist-es/Message.js
 var init_Message = __esm({
   "node_modules/@smithy/eventstream-codec/dist-es/Message.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -36171,12 +35675,14 @@ var init_Message = __esm({
 var MessageDecoderStream;
 var init_MessageDecoderStream = __esm({
   "node_modules/@smithy/eventstream-codec/dist-es/MessageDecoderStream.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
     init_performance2();
     MessageDecoderStream = class {
+      static {
+        __name(this, "MessageDecoderStream");
+      }
       options;
       constructor(options) {
         this.options = options;
@@ -36191,7 +35697,6 @@ var init_MessageDecoderStream = __esm({
         }
       }
     };
-    __name(MessageDecoderStream, "MessageDecoderStream");
   }
 });
 
@@ -36199,12 +35704,14 @@ var init_MessageDecoderStream = __esm({
 var MessageEncoderStream;
 var init_MessageEncoderStream = __esm({
   "node_modules/@smithy/eventstream-codec/dist-es/MessageEncoderStream.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
     init_performance2();
     MessageEncoderStream = class {
+      static {
+        __name(this, "MessageEncoderStream");
+      }
       options;
       constructor(options) {
         this.options = options;
@@ -36222,7 +35729,6 @@ var init_MessageEncoderStream = __esm({
         }
       }
     };
-    __name(MessageEncoderStream, "MessageEncoderStream");
   }
 });
 
@@ -36230,12 +35736,14 @@ var init_MessageEncoderStream = __esm({
 var SmithyMessageDecoderStream;
 var init_SmithyMessageDecoderStream = __esm({
   "node_modules/@smithy/eventstream-codec/dist-es/SmithyMessageDecoderStream.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
     init_performance2();
     SmithyMessageDecoderStream = class {
+      static {
+        __name(this, "SmithyMessageDecoderStream");
+      }
       options;
       constructor(options) {
         this.options = options;
@@ -36252,7 +35760,6 @@ var init_SmithyMessageDecoderStream = __esm({
         }
       }
     };
-    __name(SmithyMessageDecoderStream, "SmithyMessageDecoderStream");
   }
 });
 
@@ -36260,12 +35767,14 @@ var init_SmithyMessageDecoderStream = __esm({
 var SmithyMessageEncoderStream;
 var init_SmithyMessageEncoderStream = __esm({
   "node_modules/@smithy/eventstream-codec/dist-es/SmithyMessageEncoderStream.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
     init_performance2();
     SmithyMessageEncoderStream = class {
+      static {
+        __name(this, "SmithyMessageEncoderStream");
+      }
       options;
       constructor(options) {
         this.options = options;
@@ -36280,14 +35789,12 @@ var init_SmithyMessageEncoderStream = __esm({
         }
       }
     };
-    __name(SmithyMessageEncoderStream, "SmithyMessageEncoderStream");
   }
 });
 
 // node_modules/@smithy/eventstream-codec/dist-es/index.js
 var init_dist_es46 = __esm({
   "node_modules/@smithy/eventstream-codec/dist-es/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -36370,7 +35877,6 @@ function getChunkedStream(source) {
 }
 var init_getChunkedStream = __esm({
   "node_modules/@smithy/eventstream-serde-universal/dist-es/getChunkedStream.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -36412,7 +35918,6 @@ function getMessageUnmarshaller(deserializer, toUtf82) {
 }
 var init_getUnmarshalledStream = __esm({
   "node_modules/@smithy/eventstream-serde-universal/dist-es/getUnmarshalledStream.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -36425,7 +35930,6 @@ var init_getUnmarshalledStream = __esm({
 var EventStreamMarshaller;
 var init_EventStreamMarshaller = __esm({
   "node_modules/@smithy/eventstream-serde-universal/dist-es/EventStreamMarshaller.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -36434,6 +35938,9 @@ var init_EventStreamMarshaller = __esm({
     init_getChunkedStream();
     init_getUnmarshalledStream();
     EventStreamMarshaller = class {
+      static {
+        __name(this, "EventStreamMarshaller");
+      }
       eventStreamCodec;
       utfEncoder;
       constructor({ utf8Encoder, utf8Decoder }) {
@@ -36455,14 +35962,12 @@ var init_EventStreamMarshaller = __esm({
         });
       }
     };
-    __name(EventStreamMarshaller, "EventStreamMarshaller");
   }
 });
 
 // node_modules/@smithy/eventstream-serde-universal/dist-es/provider.js
 var init_provider = __esm({
   "node_modules/@smithy/eventstream-serde-universal/dist-es/provider.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -36473,7 +35978,6 @@ var init_provider = __esm({
 // node_modules/@smithy/eventstream-serde-universal/dist-es/index.js
 var init_dist_es47 = __esm({
   "node_modules/@smithy/eventstream-serde-universal/dist-es/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -36487,7 +35991,6 @@ var init_dist_es47 = __esm({
 var readableStreamtoIterable, iterableToReadableStream;
 var init_utils4 = __esm({
   "node_modules/@smithy/eventstream-serde-browser/dist-es/utils.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -36526,7 +36029,6 @@ var init_utils4 = __esm({
 var EventStreamMarshaller2, isReadableStream2;
 var init_EventStreamMarshaller2 = __esm({
   "node_modules/@smithy/eventstream-serde-browser/dist-es/EventStreamMarshaller.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -36534,6 +36036,9 @@ var init_EventStreamMarshaller2 = __esm({
     init_dist_es47();
     init_utils4();
     EventStreamMarshaller2 = class {
+      static {
+        __name(this, "EventStreamMarshaller");
+      }
       universalMarshaller;
       constructor({ utf8Encoder, utf8Decoder }) {
         this.universalMarshaller = new EventStreamMarshaller({
@@ -36550,7 +36055,6 @@ var init_EventStreamMarshaller2 = __esm({
         return typeof ReadableStream === "function" ? iterableToReadableStream(serialziedIterable) : serialziedIterable;
       }
     };
-    __name(EventStreamMarshaller2, "EventStreamMarshaller");
     isReadableStream2 = /* @__PURE__ */ __name((body) => typeof ReadableStream === "function" && body instanceof ReadableStream, "isReadableStream");
   }
 });
@@ -36559,7 +36063,6 @@ var init_EventStreamMarshaller2 = __esm({
 var eventStreamSerdeProvider;
 var init_provider2 = __esm({
   "node_modules/@smithy/eventstream-serde-browser/dist-es/provider.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -36572,7 +36075,6 @@ var init_provider2 = __esm({
 // node_modules/@smithy/eventstream-serde-browser/dist-es/index.js
 var init_dist_es48 = __esm({
   "node_modules/@smithy/eventstream-serde-browser/dist-es/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -36595,7 +36097,6 @@ async function blobReader(blob, onChunk, chunkSize = 1024 * 1024) {
 }
 var init_dist_es49 = __esm({
   "node_modules/@smithy/chunked-blob-reader/dist-es/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -36608,18 +36109,17 @@ var init_dist_es49 = __esm({
 var blobHasher;
 var init_dist_es50 = __esm({
   "node_modules/@smithy/hash-blob-browser/dist-es/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
     init_performance2();
     init_dist_es49();
     blobHasher = /* @__PURE__ */ __name(async function blobHasher2(hashCtor, blob) {
-      const hash3 = new hashCtor();
+      const hash2 = new hashCtor();
       await blobReader(blob, (chunk) => {
-        hash3.update(chunk);
+        hash2.update(chunk);
       });
-      return hash3.digest();
+      return hash2.digest();
     }, "blobHasher");
   }
 });
@@ -36627,7 +36127,6 @@ var init_dist_es50 = __esm({
 // node_modules/@smithy/invalid-dependency/dist-es/invalidFunction.js
 var init_invalidFunction = __esm({
   "node_modules/@smithy/invalid-dependency/dist-es/invalidFunction.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -36639,7 +36138,6 @@ var init_invalidFunction = __esm({
 var invalidProvider;
 var init_invalidProvider = __esm({
   "node_modules/@smithy/invalid-dependency/dist-es/invalidProvider.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -36651,7 +36149,6 @@ var init_invalidProvider = __esm({
 // node_modules/@smithy/invalid-dependency/dist-es/index.js
 var init_dist_es51 = __esm({
   "node_modules/@smithy/invalid-dependency/dist-es/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -36665,7 +36162,6 @@ var init_dist_es51 = __esm({
 var BLOCK_SIZE2, DIGEST_LENGTH2, INIT2;
 var init_constants12 = __esm({
   "node_modules/@smithy/md5-js/dist-es/constants.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -36711,7 +36207,6 @@ function convertToBuffer3(data) {
 var Md5;
 var init_dist_es52 = __esm({
   "node_modules/@smithy/md5-js/dist-es/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -36719,6 +36214,9 @@ var init_dist_es52 = __esm({
     init_dist_es6();
     init_constants12();
     Md5 = class {
+      static {
+        __name(this, "Md5");
+      }
       state;
       buffer;
       bufferLength;
@@ -36852,7 +36350,6 @@ var init_dist_es52 = __esm({
         this.finished = false;
       }
     };
-    __name(Md5, "Md5");
     __name(cmn, "cmn");
     __name(ff, "ff");
     __name(gg, "gg");
@@ -36867,7 +36364,6 @@ var init_dist_es52 = __esm({
 var getRuntimeConfig;
 var init_runtimeConfig_shared = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/runtimeConfig.shared.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -36895,12 +36391,12 @@ var init_runtimeConfig_shared = __esm({
         httpAuthSchemes: config2?.httpAuthSchemes ?? [
           {
             schemeId: "aws.auth#sigv4",
-            identityProvider: (ipc) => ipc.getIdentityProvider("aws.auth#sigv4"),
+            identityProvider: /* @__PURE__ */ __name((ipc) => ipc.getIdentityProvider("aws.auth#sigv4"), "identityProvider"),
             signer: new AwsSdkSigV4Signer()
           },
           {
             schemeId: "aws.auth#sigv4a",
-            identityProvider: (ipc) => ipc.getIdentityProvider("aws.auth#sigv4a"),
+            identityProvider: /* @__PURE__ */ __name((ipc) => ipc.getIdentityProvider("aws.auth#sigv4a"), "identityProvider"),
             signer: new AwsSdkSigV4ASigner()
           }
         ],
@@ -36926,7 +36422,6 @@ var init_runtimeConfig_shared = __esm({
 var DEFAULTS_MODE_OPTIONS;
 var init_constants13 = __esm({
   "node_modules/@smithy/util-defaults-mode-browser/dist-es/constants.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -36939,7 +36434,6 @@ var init_constants13 = __esm({
 var resolveDefaultsModeConfig, useMobileConfiguration;
 var init_resolveDefaultsModeConfig = __esm({
   "node_modules/@smithy/util-defaults-mode-browser/dist-es/resolveDefaultsModeConfig.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -36980,7 +36474,6 @@ var init_resolveDefaultsModeConfig = __esm({
 // node_modules/@smithy/util-defaults-mode-browser/dist-es/index.js
 var init_dist_es53 = __esm({
   "node_modules/@smithy/util-defaults-mode-browser/dist-es/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -36993,7 +36486,6 @@ var init_dist_es53 = __esm({
 var getRuntimeConfig2;
 var init_runtimeConfig_browser = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/runtimeConfig.browser.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -37046,7 +36538,6 @@ var init_runtimeConfig_browser = __esm({
 var getAwsRegionExtensionConfiguration, resolveAwsRegionExtensionConfiguration;
 var init_extensions4 = __esm({
   "node_modules/@aws-sdk/region-config-resolver/dist-es/extensions/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -37072,7 +36563,6 @@ var init_extensions4 = __esm({
 // node_modules/@aws-sdk/region-config-resolver/dist-es/regionConfig/awsRegionConfig.js
 var init_awsRegionConfig = __esm({
   "node_modules/@aws-sdk/region-config-resolver/dist-es/regionConfig/awsRegionConfig.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -37083,7 +36573,6 @@ var init_awsRegionConfig = __esm({
 // node_modules/@aws-sdk/region-config-resolver/dist-es/regionConfig/stsRegionDefaultResolver.browser.js
 var init_stsRegionDefaultResolver_browser = __esm({
   "node_modules/@aws-sdk/region-config-resolver/dist-es/regionConfig/stsRegionDefaultResolver.browser.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -37094,7 +36583,6 @@ var init_stsRegionDefaultResolver_browser = __esm({
 // node_modules/@aws-sdk/region-config-resolver/dist-es/index.js
 var init_dist_es54 = __esm({
   "node_modules/@aws-sdk/region-config-resolver/dist-es/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -37109,7 +36597,6 @@ var init_dist_es54 = __esm({
 var getHttpAuthExtensionConfiguration, resolveHttpAuthRuntimeConfig;
 var init_httpAuthExtensionConfiguration = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/auth/httpAuthExtensionConfiguration.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -37158,7 +36645,6 @@ var init_httpAuthExtensionConfiguration = __esm({
 var resolveRuntimeExtensions;
 var init_runtimeExtensions = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/runtimeExtensions.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -37179,7 +36665,6 @@ var init_runtimeExtensions = __esm({
 var S3Client;
 var init_S3Client = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/S3Client.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -37205,6 +36690,9 @@ var init_S3Client = __esm({
     init_runtimeConfig_browser();
     init_runtimeExtensions();
     S3Client = class extends Client {
+      static {
+        __name(this, "S3Client");
+      }
       config;
       constructor(...[configuration]) {
         const _config_0 = getRuntimeConfig2(configuration || {});
@@ -37231,10 +36719,10 @@ var init_S3Client = __esm({
         this.middlewareStack.use(getRecursionDetectionPlugin(this.config));
         this.middlewareStack.use(getHttpAuthSchemeEndpointRuleSetPlugin(this.config, {
           httpAuthSchemeParametersProvider: defaultS3HttpAuthSchemeParametersProvider,
-          identityProviderConfigProvider: async (config2) => new DefaultIdentityProviderConfig({
+          identityProviderConfigProvider: /* @__PURE__ */ __name(async (config2) => new DefaultIdentityProviderConfig({
             "aws.auth#sigv4": config2.credentials,
             "aws.auth#sigv4a": config2.credentials
-          })
+          }), "identityProviderConfigProvider")
         }));
         this.middlewareStack.use(getHttpSigningPlugin(this.config));
         this.middlewareStack.use(getValidateBucketNamePlugin(this.config));
@@ -37247,7 +36735,6 @@ var init_S3Client = __esm({
         super.destroy();
       }
     };
-    __name(S3Client, "S3Client");
   }
 });
 
@@ -37255,7 +36742,6 @@ var init_S3Client = __esm({
 var AbortMultipartUploadCommand;
 var init_AbortMultipartUploadCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/AbortMultipartUploadCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -37272,8 +36758,10 @@ var init_AbortMultipartUploadCommand = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions()), getThrow200ExceptionsPlugin(config2)];
     }).s("AmazonS3", "AbortMultipartUpload", {}).n("S3Client", "AbortMultipartUploadCommand").sc(AbortMultipartUpload).build() {
+      static {
+        __name(this, "AbortMultipartUploadCommand");
+      }
     };
-    __name(AbortMultipartUploadCommand, "AbortMultipartUploadCommand");
   }
 });
 
@@ -37306,9 +36794,9 @@ function ssecMiddleware(options) {
           valueForHash = ArrayBuffer.isView(value) ? new Uint8Array(value.buffer, value.byteOffset, value.byteLength) : new Uint8Array(value);
           input[prop.target] = options.base64Encoder(valueForHash);
         }
-        const hash3 = new options.md5();
-        hash3.update(valueForHash);
-        input[prop.hash] = options.base64Encoder(await hash3.digest());
+        const hash2 = new options.md5();
+        hash2.update(valueForHash);
+        input[prop.hash] = options.base64Encoder(await hash2.digest());
       }
     }
     return next({
@@ -37331,7 +36819,6 @@ function isValidBase64EncodedSSECustomerKey(str, options) {
 var ssecMiddlewareOptions, getSsecPlugin;
 var init_dist_es55 = __esm({
   "node_modules/@aws-sdk/middleware-ssec/dist-es/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -37344,9 +36831,9 @@ var init_dist_es55 = __esm({
       override: true
     };
     getSsecPlugin = /* @__PURE__ */ __name((config2) => ({
-      applyToStack: (clientStack) => {
+      applyToStack: /* @__PURE__ */ __name((clientStack) => {
         clientStack.add(ssecMiddleware(config2), ssecMiddlewareOptions);
-      }
+      }, "applyToStack")
     }), "getSsecPlugin");
     __name(isValidBase64EncodedSSECustomerKey, "isValidBase64EncodedSSECustomerKey");
   }
@@ -37356,7 +36843,6 @@ var init_dist_es55 = __esm({
 var CompleteMultipartUploadCommand;
 var init_CompleteMultipartUploadCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/CompleteMultipartUploadCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -37378,8 +36864,10 @@ var init_CompleteMultipartUploadCommand = __esm({
         getSsecPlugin(config2)
       ];
     }).s("AmazonS3", "CompleteMultipartUpload", {}).n("S3Client", "CompleteMultipartUploadCommand").sc(CompleteMultipartUpload).build() {
+      static {
+        __name(this, "CompleteMultipartUploadCommand");
+      }
     };
-    __name(CompleteMultipartUploadCommand, "CompleteMultipartUploadCommand");
   }
 });
 
@@ -37387,7 +36875,6 @@ var init_CompleteMultipartUploadCommand = __esm({
 var CopyObjectCommand;
 var init_CopyObjectCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/CopyObjectCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -37411,8 +36898,10 @@ var init_CopyObjectCommand = __esm({
         getSsecPlugin(config2)
       ];
     }).s("AmazonS3", "CopyObject", {}).n("S3Client", "CopyObjectCommand").sc(CopyObject).build() {
+      static {
+        __name(this, "CopyObjectCommand");
+      }
     };
-    __name(CopyObjectCommand, "CopyObjectCommand");
   }
 });
 
@@ -37433,7 +36922,6 @@ function locationConstraintMiddleware(options) {
 var locationConstraintMiddlewareOptions, getLocationConstraintPlugin;
 var init_dist_es56 = __esm({
   "node_modules/@aws-sdk/middleware-location-constraint/dist-es/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -37446,9 +36934,9 @@ var init_dist_es56 = __esm({
       override: true
     };
     getLocationConstraintPlugin = /* @__PURE__ */ __name((config2) => ({
-      applyToStack: (clientStack) => {
+      applyToStack: /* @__PURE__ */ __name((clientStack) => {
         clientStack.add(locationConstraintMiddleware(config2), locationConstraintMiddlewareOptions);
-      }
+      }, "applyToStack")
     }), "getLocationConstraintPlugin");
   }
 });
@@ -37457,7 +36945,6 @@ var init_dist_es56 = __esm({
 var CreateBucketCommand;
 var init_CreateBucketCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/CreateBucketCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -37480,8 +36967,10 @@ var init_CreateBucketCommand = __esm({
         getLocationConstraintPlugin(config2)
       ];
     }).s("AmazonS3", "CreateBucket", {}).n("S3Client", "CreateBucketCommand").sc(CreateBucket).build() {
+      static {
+        __name(this, "CreateBucketCommand");
+      }
     };
-    __name(CreateBucketCommand, "CreateBucketCommand");
   }
 });
 
@@ -37489,7 +36978,6 @@ var init_CreateBucketCommand = __esm({
 var CreateBucketMetadataConfigurationCommand;
 var init_CreateBucketMetadataConfigurationCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/CreateBucketMetadataConfigurationCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -37512,8 +37000,10 @@ var init_CreateBucketMetadataConfigurationCommand = __esm({
         })
       ];
     }).s("AmazonS3", "CreateBucketMetadataConfiguration", {}).n("S3Client", "CreateBucketMetadataConfigurationCommand").sc(CreateBucketMetadataConfiguration).build() {
+      static {
+        __name(this, "CreateBucketMetadataConfigurationCommand");
+      }
     };
-    __name(CreateBucketMetadataConfigurationCommand, "CreateBucketMetadataConfigurationCommand");
   }
 });
 
@@ -37521,7 +37011,6 @@ var init_CreateBucketMetadataConfigurationCommand = __esm({
 var CreateBucketMetadataTableConfigurationCommand;
 var init_CreateBucketMetadataTableConfigurationCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/CreateBucketMetadataTableConfigurationCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -37544,8 +37033,10 @@ var init_CreateBucketMetadataTableConfigurationCommand = __esm({
         })
       ];
     }).s("AmazonS3", "CreateBucketMetadataTableConfiguration", {}).n("S3Client", "CreateBucketMetadataTableConfigurationCommand").sc(CreateBucketMetadataTableConfiguration).build() {
+      static {
+        __name(this, "CreateBucketMetadataTableConfigurationCommand");
+      }
     };
-    __name(CreateBucketMetadataTableConfigurationCommand, "CreateBucketMetadataTableConfigurationCommand");
   }
 });
 
@@ -37553,7 +37044,6 @@ var init_CreateBucketMetadataTableConfigurationCommand = __esm({
 var CreateMultipartUploadCommand;
 var init_CreateMultipartUploadCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/CreateMultipartUploadCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -37575,8 +37065,10 @@ var init_CreateMultipartUploadCommand = __esm({
         getSsecPlugin(config2)
       ];
     }).s("AmazonS3", "CreateMultipartUpload", {}).n("S3Client", "CreateMultipartUploadCommand").sc(CreateMultipartUpload).build() {
+      static {
+        __name(this, "CreateMultipartUploadCommand");
+      }
     };
-    __name(CreateMultipartUploadCommand, "CreateMultipartUploadCommand");
   }
 });
 
@@ -37584,7 +37076,6 @@ var init_CreateMultipartUploadCommand = __esm({
 var DeleteBucketAnalyticsConfigurationCommand;
 var init_DeleteBucketAnalyticsConfigurationCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/DeleteBucketAnalyticsConfigurationCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -37600,8 +37091,10 @@ var init_DeleteBucketAnalyticsConfigurationCommand = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions())];
     }).s("AmazonS3", "DeleteBucketAnalyticsConfiguration", {}).n("S3Client", "DeleteBucketAnalyticsConfigurationCommand").sc(DeleteBucketAnalyticsConfiguration).build() {
+      static {
+        __name(this, "DeleteBucketAnalyticsConfigurationCommand");
+      }
     };
-    __name(DeleteBucketAnalyticsConfigurationCommand, "DeleteBucketAnalyticsConfigurationCommand");
   }
 });
 
@@ -37609,7 +37102,6 @@ var init_DeleteBucketAnalyticsConfigurationCommand = __esm({
 var DeleteBucketCommand;
 var init_DeleteBucketCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/DeleteBucketCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -37625,8 +37117,10 @@ var init_DeleteBucketCommand = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions())];
     }).s("AmazonS3", "DeleteBucket", {}).n("S3Client", "DeleteBucketCommand").sc(DeleteBucket).build() {
+      static {
+        __name(this, "DeleteBucketCommand");
+      }
     };
-    __name(DeleteBucketCommand, "DeleteBucketCommand");
   }
 });
 
@@ -37634,7 +37128,6 @@ var init_DeleteBucketCommand = __esm({
 var DeleteBucketCorsCommand;
 var init_DeleteBucketCorsCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/DeleteBucketCorsCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -37650,8 +37143,10 @@ var init_DeleteBucketCorsCommand = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions())];
     }).s("AmazonS3", "DeleteBucketCors", {}).n("S3Client", "DeleteBucketCorsCommand").sc(DeleteBucketCors).build() {
+      static {
+        __name(this, "DeleteBucketCorsCommand");
+      }
     };
-    __name(DeleteBucketCorsCommand, "DeleteBucketCorsCommand");
   }
 });
 
@@ -37659,7 +37154,6 @@ var init_DeleteBucketCorsCommand = __esm({
 var DeleteBucketEncryptionCommand;
 var init_DeleteBucketEncryptionCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/DeleteBucketEncryptionCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -37675,8 +37169,10 @@ var init_DeleteBucketEncryptionCommand = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions())];
     }).s("AmazonS3", "DeleteBucketEncryption", {}).n("S3Client", "DeleteBucketEncryptionCommand").sc(DeleteBucketEncryption).build() {
+      static {
+        __name(this, "DeleteBucketEncryptionCommand");
+      }
     };
-    __name(DeleteBucketEncryptionCommand, "DeleteBucketEncryptionCommand");
   }
 });
 
@@ -37684,7 +37180,6 @@ var init_DeleteBucketEncryptionCommand = __esm({
 var DeleteBucketIntelligentTieringConfigurationCommand;
 var init_DeleteBucketIntelligentTieringConfigurationCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/DeleteBucketIntelligentTieringConfigurationCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -37700,8 +37195,10 @@ var init_DeleteBucketIntelligentTieringConfigurationCommand = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions())];
     }).s("AmazonS3", "DeleteBucketIntelligentTieringConfiguration", {}).n("S3Client", "DeleteBucketIntelligentTieringConfigurationCommand").sc(DeleteBucketIntelligentTieringConfiguration).build() {
+      static {
+        __name(this, "DeleteBucketIntelligentTieringConfigurationCommand");
+      }
     };
-    __name(DeleteBucketIntelligentTieringConfigurationCommand, "DeleteBucketIntelligentTieringConfigurationCommand");
   }
 });
 
@@ -37709,7 +37206,6 @@ var init_DeleteBucketIntelligentTieringConfigurationCommand = __esm({
 var DeleteBucketInventoryConfigurationCommand;
 var init_DeleteBucketInventoryConfigurationCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/DeleteBucketInventoryConfigurationCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -37725,8 +37221,10 @@ var init_DeleteBucketInventoryConfigurationCommand = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions())];
     }).s("AmazonS3", "DeleteBucketInventoryConfiguration", {}).n("S3Client", "DeleteBucketInventoryConfigurationCommand").sc(DeleteBucketInventoryConfiguration).build() {
+      static {
+        __name(this, "DeleteBucketInventoryConfigurationCommand");
+      }
     };
-    __name(DeleteBucketInventoryConfigurationCommand, "DeleteBucketInventoryConfigurationCommand");
   }
 });
 
@@ -37734,7 +37232,6 @@ var init_DeleteBucketInventoryConfigurationCommand = __esm({
 var DeleteBucketLifecycleCommand;
 var init_DeleteBucketLifecycleCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/DeleteBucketLifecycleCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -37750,8 +37247,10 @@ var init_DeleteBucketLifecycleCommand = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions())];
     }).s("AmazonS3", "DeleteBucketLifecycle", {}).n("S3Client", "DeleteBucketLifecycleCommand").sc(DeleteBucketLifecycle).build() {
+      static {
+        __name(this, "DeleteBucketLifecycleCommand");
+      }
     };
-    __name(DeleteBucketLifecycleCommand, "DeleteBucketLifecycleCommand");
   }
 });
 
@@ -37759,7 +37258,6 @@ var init_DeleteBucketLifecycleCommand = __esm({
 var DeleteBucketMetadataConfigurationCommand;
 var init_DeleteBucketMetadataConfigurationCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/DeleteBucketMetadataConfigurationCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -37775,8 +37273,10 @@ var init_DeleteBucketMetadataConfigurationCommand = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions())];
     }).s("AmazonS3", "DeleteBucketMetadataConfiguration", {}).n("S3Client", "DeleteBucketMetadataConfigurationCommand").sc(DeleteBucketMetadataConfiguration).build() {
+      static {
+        __name(this, "DeleteBucketMetadataConfigurationCommand");
+      }
     };
-    __name(DeleteBucketMetadataConfigurationCommand, "DeleteBucketMetadataConfigurationCommand");
   }
 });
 
@@ -37784,7 +37284,6 @@ var init_DeleteBucketMetadataConfigurationCommand = __esm({
 var DeleteBucketMetadataTableConfigurationCommand;
 var init_DeleteBucketMetadataTableConfigurationCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/DeleteBucketMetadataTableConfigurationCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -37800,8 +37299,10 @@ var init_DeleteBucketMetadataTableConfigurationCommand = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions())];
     }).s("AmazonS3", "DeleteBucketMetadataTableConfiguration", {}).n("S3Client", "DeleteBucketMetadataTableConfigurationCommand").sc(DeleteBucketMetadataTableConfiguration).build() {
+      static {
+        __name(this, "DeleteBucketMetadataTableConfigurationCommand");
+      }
     };
-    __name(DeleteBucketMetadataTableConfigurationCommand, "DeleteBucketMetadataTableConfigurationCommand");
   }
 });
 
@@ -37809,7 +37310,6 @@ var init_DeleteBucketMetadataTableConfigurationCommand = __esm({
 var DeleteBucketMetricsConfigurationCommand;
 var init_DeleteBucketMetricsConfigurationCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/DeleteBucketMetricsConfigurationCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -37825,8 +37325,10 @@ var init_DeleteBucketMetricsConfigurationCommand = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions())];
     }).s("AmazonS3", "DeleteBucketMetricsConfiguration", {}).n("S3Client", "DeleteBucketMetricsConfigurationCommand").sc(DeleteBucketMetricsConfiguration).build() {
+      static {
+        __name(this, "DeleteBucketMetricsConfigurationCommand");
+      }
     };
-    __name(DeleteBucketMetricsConfigurationCommand, "DeleteBucketMetricsConfigurationCommand");
   }
 });
 
@@ -37834,7 +37336,6 @@ var init_DeleteBucketMetricsConfigurationCommand = __esm({
 var DeleteBucketOwnershipControlsCommand;
 var init_DeleteBucketOwnershipControlsCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/DeleteBucketOwnershipControlsCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -37850,8 +37351,10 @@ var init_DeleteBucketOwnershipControlsCommand = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions())];
     }).s("AmazonS3", "DeleteBucketOwnershipControls", {}).n("S3Client", "DeleteBucketOwnershipControlsCommand").sc(DeleteBucketOwnershipControls).build() {
+      static {
+        __name(this, "DeleteBucketOwnershipControlsCommand");
+      }
     };
-    __name(DeleteBucketOwnershipControlsCommand, "DeleteBucketOwnershipControlsCommand");
   }
 });
 
@@ -37859,7 +37362,6 @@ var init_DeleteBucketOwnershipControlsCommand = __esm({
 var DeleteBucketPolicyCommand;
 var init_DeleteBucketPolicyCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/DeleteBucketPolicyCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -37875,8 +37377,10 @@ var init_DeleteBucketPolicyCommand = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions())];
     }).s("AmazonS3", "DeleteBucketPolicy", {}).n("S3Client", "DeleteBucketPolicyCommand").sc(DeleteBucketPolicy).build() {
+      static {
+        __name(this, "DeleteBucketPolicyCommand");
+      }
     };
-    __name(DeleteBucketPolicyCommand, "DeleteBucketPolicyCommand");
   }
 });
 
@@ -37884,7 +37388,6 @@ var init_DeleteBucketPolicyCommand = __esm({
 var DeleteBucketReplicationCommand;
 var init_DeleteBucketReplicationCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/DeleteBucketReplicationCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -37900,8 +37403,10 @@ var init_DeleteBucketReplicationCommand = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions())];
     }).s("AmazonS3", "DeleteBucketReplication", {}).n("S3Client", "DeleteBucketReplicationCommand").sc(DeleteBucketReplication).build() {
+      static {
+        __name(this, "DeleteBucketReplicationCommand");
+      }
     };
-    __name(DeleteBucketReplicationCommand, "DeleteBucketReplicationCommand");
   }
 });
 
@@ -37909,7 +37414,6 @@ var init_DeleteBucketReplicationCommand = __esm({
 var DeleteBucketTaggingCommand;
 var init_DeleteBucketTaggingCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/DeleteBucketTaggingCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -37925,8 +37429,10 @@ var init_DeleteBucketTaggingCommand = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions())];
     }).s("AmazonS3", "DeleteBucketTagging", {}).n("S3Client", "DeleteBucketTaggingCommand").sc(DeleteBucketTagging).build() {
+      static {
+        __name(this, "DeleteBucketTaggingCommand");
+      }
     };
-    __name(DeleteBucketTaggingCommand, "DeleteBucketTaggingCommand");
   }
 });
 
@@ -37934,7 +37440,6 @@ var init_DeleteBucketTaggingCommand = __esm({
 var DeleteBucketWebsiteCommand;
 var init_DeleteBucketWebsiteCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/DeleteBucketWebsiteCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -37950,8 +37455,10 @@ var init_DeleteBucketWebsiteCommand = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions())];
     }).s("AmazonS3", "DeleteBucketWebsite", {}).n("S3Client", "DeleteBucketWebsiteCommand").sc(DeleteBucketWebsite).build() {
+      static {
+        __name(this, "DeleteBucketWebsiteCommand");
+      }
     };
-    __name(DeleteBucketWebsiteCommand, "DeleteBucketWebsiteCommand");
   }
 });
 
@@ -37959,7 +37466,6 @@ var init_DeleteBucketWebsiteCommand = __esm({
 var DeleteObjectCommand;
 var init_DeleteObjectCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/DeleteObjectCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -37976,8 +37482,10 @@ var init_DeleteObjectCommand = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions()), getThrow200ExceptionsPlugin(config2)];
     }).s("AmazonS3", "DeleteObject", {}).n("S3Client", "DeleteObjectCommand").sc(DeleteObject).build() {
+      static {
+        __name(this, "DeleteObjectCommand");
+      }
     };
-    __name(DeleteObjectCommand, "DeleteObjectCommand");
   }
 });
 
@@ -37985,7 +37493,6 @@ var init_DeleteObjectCommand = __esm({
 var DeleteObjectsCommand;
 var init_DeleteObjectsCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/DeleteObjectsCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -38009,8 +37516,10 @@ var init_DeleteObjectsCommand = __esm({
         getThrow200ExceptionsPlugin(config2)
       ];
     }).s("AmazonS3", "DeleteObjects", {}).n("S3Client", "DeleteObjectsCommand").sc(DeleteObjects).build() {
+      static {
+        __name(this, "DeleteObjectsCommand");
+      }
     };
-    __name(DeleteObjectsCommand, "DeleteObjectsCommand");
   }
 });
 
@@ -38018,7 +37527,6 @@ var init_DeleteObjectsCommand = __esm({
 var DeleteObjectTaggingCommand;
 var init_DeleteObjectTaggingCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/DeleteObjectTaggingCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -38034,8 +37542,10 @@ var init_DeleteObjectTaggingCommand = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions()), getThrow200ExceptionsPlugin(config2)];
     }).s("AmazonS3", "DeleteObjectTagging", {}).n("S3Client", "DeleteObjectTaggingCommand").sc(DeleteObjectTagging).build() {
+      static {
+        __name(this, "DeleteObjectTaggingCommand");
+      }
     };
-    __name(DeleteObjectTaggingCommand, "DeleteObjectTaggingCommand");
   }
 });
 
@@ -38043,7 +37553,6 @@ var init_DeleteObjectTaggingCommand = __esm({
 var DeletePublicAccessBlockCommand;
 var init_DeletePublicAccessBlockCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/DeletePublicAccessBlockCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -38059,8 +37568,10 @@ var init_DeletePublicAccessBlockCommand = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions())];
     }).s("AmazonS3", "DeletePublicAccessBlock", {}).n("S3Client", "DeletePublicAccessBlockCommand").sc(DeletePublicAccessBlock).build() {
+      static {
+        __name(this, "DeletePublicAccessBlockCommand");
+      }
     };
-    __name(DeletePublicAccessBlockCommand, "DeletePublicAccessBlockCommand");
   }
 });
 
@@ -38068,7 +37579,6 @@ var init_DeletePublicAccessBlockCommand = __esm({
 var GetBucketAbacCommand;
 var init_GetBucketAbacCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/GetBucketAbacCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -38084,8 +37594,10 @@ var init_GetBucketAbacCommand = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions()), getThrow200ExceptionsPlugin(config2)];
     }).s("AmazonS3", "GetBucketAbac", {}).n("S3Client", "GetBucketAbacCommand").sc(GetBucketAbac).build() {
+      static {
+        __name(this, "GetBucketAbacCommand");
+      }
     };
-    __name(GetBucketAbacCommand, "GetBucketAbacCommand");
   }
 });
 
@@ -38093,7 +37605,6 @@ var init_GetBucketAbacCommand = __esm({
 var GetBucketAccelerateConfigurationCommand;
 var init_GetBucketAccelerateConfigurationCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/GetBucketAccelerateConfigurationCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -38110,8 +37621,10 @@ var init_GetBucketAccelerateConfigurationCommand = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions()), getThrow200ExceptionsPlugin(config2)];
     }).s("AmazonS3", "GetBucketAccelerateConfiguration", {}).n("S3Client", "GetBucketAccelerateConfigurationCommand").sc(GetBucketAccelerateConfiguration).build() {
+      static {
+        __name(this, "GetBucketAccelerateConfigurationCommand");
+      }
     };
-    __name(GetBucketAccelerateConfigurationCommand, "GetBucketAccelerateConfigurationCommand");
   }
 });
 
@@ -38119,7 +37632,6 @@ var init_GetBucketAccelerateConfigurationCommand = __esm({
 var GetBucketAclCommand;
 var init_GetBucketAclCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/GetBucketAclCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -38136,8 +37648,10 @@ var init_GetBucketAclCommand = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions()), getThrow200ExceptionsPlugin(config2)];
     }).s("AmazonS3", "GetBucketAcl", {}).n("S3Client", "GetBucketAclCommand").sc(GetBucketAcl).build() {
+      static {
+        __name(this, "GetBucketAclCommand");
+      }
     };
-    __name(GetBucketAclCommand, "GetBucketAclCommand");
   }
 });
 
@@ -38145,7 +37659,6 @@ var init_GetBucketAclCommand = __esm({
 var GetBucketAnalyticsConfigurationCommand;
 var init_GetBucketAnalyticsConfigurationCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/GetBucketAnalyticsConfigurationCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -38162,8 +37675,10 @@ var init_GetBucketAnalyticsConfigurationCommand = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions()), getThrow200ExceptionsPlugin(config2)];
     }).s("AmazonS3", "GetBucketAnalyticsConfiguration", {}).n("S3Client", "GetBucketAnalyticsConfigurationCommand").sc(GetBucketAnalyticsConfiguration).build() {
+      static {
+        __name(this, "GetBucketAnalyticsConfigurationCommand");
+      }
     };
-    __name(GetBucketAnalyticsConfigurationCommand, "GetBucketAnalyticsConfigurationCommand");
   }
 });
 
@@ -38171,7 +37686,6 @@ var init_GetBucketAnalyticsConfigurationCommand = __esm({
 var GetBucketCorsCommand;
 var init_GetBucketCorsCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/GetBucketCorsCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -38188,8 +37702,10 @@ var init_GetBucketCorsCommand = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions()), getThrow200ExceptionsPlugin(config2)];
     }).s("AmazonS3", "GetBucketCors", {}).n("S3Client", "GetBucketCorsCommand").sc(GetBucketCors).build() {
+      static {
+        __name(this, "GetBucketCorsCommand");
+      }
     };
-    __name(GetBucketCorsCommand, "GetBucketCorsCommand");
   }
 });
 
@@ -38197,7 +37713,6 @@ var init_GetBucketCorsCommand = __esm({
 var GetBucketEncryptionCommand;
 var init_GetBucketEncryptionCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/GetBucketEncryptionCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -38214,8 +37729,10 @@ var init_GetBucketEncryptionCommand = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions()), getThrow200ExceptionsPlugin(config2)];
     }).s("AmazonS3", "GetBucketEncryption", {}).n("S3Client", "GetBucketEncryptionCommand").sc(GetBucketEncryption).build() {
+      static {
+        __name(this, "GetBucketEncryptionCommand");
+      }
     };
-    __name(GetBucketEncryptionCommand, "GetBucketEncryptionCommand");
   }
 });
 
@@ -38223,7 +37740,6 @@ var init_GetBucketEncryptionCommand = __esm({
 var GetBucketIntelligentTieringConfigurationCommand;
 var init_GetBucketIntelligentTieringConfigurationCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/GetBucketIntelligentTieringConfigurationCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -38240,8 +37756,10 @@ var init_GetBucketIntelligentTieringConfigurationCommand = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions()), getThrow200ExceptionsPlugin(config2)];
     }).s("AmazonS3", "GetBucketIntelligentTieringConfiguration", {}).n("S3Client", "GetBucketIntelligentTieringConfigurationCommand").sc(GetBucketIntelligentTieringConfiguration).build() {
+      static {
+        __name(this, "GetBucketIntelligentTieringConfigurationCommand");
+      }
     };
-    __name(GetBucketIntelligentTieringConfigurationCommand, "GetBucketIntelligentTieringConfigurationCommand");
   }
 });
 
@@ -38249,7 +37767,6 @@ var init_GetBucketIntelligentTieringConfigurationCommand = __esm({
 var GetBucketInventoryConfigurationCommand;
 var init_GetBucketInventoryConfigurationCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/GetBucketInventoryConfigurationCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -38266,8 +37783,10 @@ var init_GetBucketInventoryConfigurationCommand = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions()), getThrow200ExceptionsPlugin(config2)];
     }).s("AmazonS3", "GetBucketInventoryConfiguration", {}).n("S3Client", "GetBucketInventoryConfigurationCommand").sc(GetBucketInventoryConfiguration).build() {
+      static {
+        __name(this, "GetBucketInventoryConfigurationCommand");
+      }
     };
-    __name(GetBucketInventoryConfigurationCommand, "GetBucketInventoryConfigurationCommand");
   }
 });
 
@@ -38275,7 +37794,6 @@ var init_GetBucketInventoryConfigurationCommand = __esm({
 var GetBucketLifecycleConfigurationCommand;
 var init_GetBucketLifecycleConfigurationCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/GetBucketLifecycleConfigurationCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -38292,8 +37810,10 @@ var init_GetBucketLifecycleConfigurationCommand = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions()), getThrow200ExceptionsPlugin(config2)];
     }).s("AmazonS3", "GetBucketLifecycleConfiguration", {}).n("S3Client", "GetBucketLifecycleConfigurationCommand").sc(GetBucketLifecycleConfiguration).build() {
+      static {
+        __name(this, "GetBucketLifecycleConfigurationCommand");
+      }
     };
-    __name(GetBucketLifecycleConfigurationCommand, "GetBucketLifecycleConfigurationCommand");
   }
 });
 
@@ -38301,7 +37821,6 @@ var init_GetBucketLifecycleConfigurationCommand = __esm({
 var GetBucketLocationCommand;
 var init_GetBucketLocationCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/GetBucketLocationCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -38318,8 +37837,10 @@ var init_GetBucketLocationCommand = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions()), getThrow200ExceptionsPlugin(config2)];
     }).s("AmazonS3", "GetBucketLocation", {}).n("S3Client", "GetBucketLocationCommand").sc(GetBucketLocation).build() {
+      static {
+        __name(this, "GetBucketLocationCommand");
+      }
     };
-    __name(GetBucketLocationCommand, "GetBucketLocationCommand");
   }
 });
 
@@ -38327,7 +37848,6 @@ var init_GetBucketLocationCommand = __esm({
 var GetBucketLoggingCommand;
 var init_GetBucketLoggingCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/GetBucketLoggingCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -38344,8 +37864,10 @@ var init_GetBucketLoggingCommand = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions()), getThrow200ExceptionsPlugin(config2)];
     }).s("AmazonS3", "GetBucketLogging", {}).n("S3Client", "GetBucketLoggingCommand").sc(GetBucketLogging).build() {
+      static {
+        __name(this, "GetBucketLoggingCommand");
+      }
     };
-    __name(GetBucketLoggingCommand, "GetBucketLoggingCommand");
   }
 });
 
@@ -38353,7 +37875,6 @@ var init_GetBucketLoggingCommand = __esm({
 var GetBucketMetadataConfigurationCommand;
 var init_GetBucketMetadataConfigurationCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/GetBucketMetadataConfigurationCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -38370,8 +37891,10 @@ var init_GetBucketMetadataConfigurationCommand = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions()), getThrow200ExceptionsPlugin(config2)];
     }).s("AmazonS3", "GetBucketMetadataConfiguration", {}).n("S3Client", "GetBucketMetadataConfigurationCommand").sc(GetBucketMetadataConfiguration).build() {
+      static {
+        __name(this, "GetBucketMetadataConfigurationCommand");
+      }
     };
-    __name(GetBucketMetadataConfigurationCommand, "GetBucketMetadataConfigurationCommand");
   }
 });
 
@@ -38379,7 +37902,6 @@ var init_GetBucketMetadataConfigurationCommand = __esm({
 var GetBucketMetadataTableConfigurationCommand;
 var init_GetBucketMetadataTableConfigurationCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/GetBucketMetadataTableConfigurationCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -38396,8 +37918,10 @@ var init_GetBucketMetadataTableConfigurationCommand = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions()), getThrow200ExceptionsPlugin(config2)];
     }).s("AmazonS3", "GetBucketMetadataTableConfiguration", {}).n("S3Client", "GetBucketMetadataTableConfigurationCommand").sc(GetBucketMetadataTableConfiguration).build() {
+      static {
+        __name(this, "GetBucketMetadataTableConfigurationCommand");
+      }
     };
-    __name(GetBucketMetadataTableConfigurationCommand, "GetBucketMetadataTableConfigurationCommand");
   }
 });
 
@@ -38405,7 +37929,6 @@ var init_GetBucketMetadataTableConfigurationCommand = __esm({
 var GetBucketMetricsConfigurationCommand;
 var init_GetBucketMetricsConfigurationCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/GetBucketMetricsConfigurationCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -38422,8 +37945,10 @@ var init_GetBucketMetricsConfigurationCommand = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions()), getThrow200ExceptionsPlugin(config2)];
     }).s("AmazonS3", "GetBucketMetricsConfiguration", {}).n("S3Client", "GetBucketMetricsConfigurationCommand").sc(GetBucketMetricsConfiguration).build() {
+      static {
+        __name(this, "GetBucketMetricsConfigurationCommand");
+      }
     };
-    __name(GetBucketMetricsConfigurationCommand, "GetBucketMetricsConfigurationCommand");
   }
 });
 
@@ -38431,7 +37956,6 @@ var init_GetBucketMetricsConfigurationCommand = __esm({
 var GetBucketNotificationConfigurationCommand;
 var init_GetBucketNotificationConfigurationCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/GetBucketNotificationConfigurationCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -38448,8 +37972,10 @@ var init_GetBucketNotificationConfigurationCommand = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions()), getThrow200ExceptionsPlugin(config2)];
     }).s("AmazonS3", "GetBucketNotificationConfiguration", {}).n("S3Client", "GetBucketNotificationConfigurationCommand").sc(GetBucketNotificationConfiguration).build() {
+      static {
+        __name(this, "GetBucketNotificationConfigurationCommand");
+      }
     };
-    __name(GetBucketNotificationConfigurationCommand, "GetBucketNotificationConfigurationCommand");
   }
 });
 
@@ -38457,7 +37983,6 @@ var init_GetBucketNotificationConfigurationCommand = __esm({
 var GetBucketOwnershipControlsCommand;
 var init_GetBucketOwnershipControlsCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/GetBucketOwnershipControlsCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -38474,8 +37999,10 @@ var init_GetBucketOwnershipControlsCommand = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions()), getThrow200ExceptionsPlugin(config2)];
     }).s("AmazonS3", "GetBucketOwnershipControls", {}).n("S3Client", "GetBucketOwnershipControlsCommand").sc(GetBucketOwnershipControls).build() {
+      static {
+        __name(this, "GetBucketOwnershipControlsCommand");
+      }
     };
-    __name(GetBucketOwnershipControlsCommand, "GetBucketOwnershipControlsCommand");
   }
 });
 
@@ -38483,7 +38010,6 @@ var init_GetBucketOwnershipControlsCommand = __esm({
 var GetBucketPolicyCommand;
 var init_GetBucketPolicyCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/GetBucketPolicyCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -38500,8 +38026,10 @@ var init_GetBucketPolicyCommand = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions()), getThrow200ExceptionsPlugin(config2)];
     }).s("AmazonS3", "GetBucketPolicy", {}).n("S3Client", "GetBucketPolicyCommand").sc(GetBucketPolicy).build() {
+      static {
+        __name(this, "GetBucketPolicyCommand");
+      }
     };
-    __name(GetBucketPolicyCommand, "GetBucketPolicyCommand");
   }
 });
 
@@ -38509,7 +38037,6 @@ var init_GetBucketPolicyCommand = __esm({
 var GetBucketPolicyStatusCommand;
 var init_GetBucketPolicyStatusCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/GetBucketPolicyStatusCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -38526,8 +38053,10 @@ var init_GetBucketPolicyStatusCommand = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions()), getThrow200ExceptionsPlugin(config2)];
     }).s("AmazonS3", "GetBucketPolicyStatus", {}).n("S3Client", "GetBucketPolicyStatusCommand").sc(GetBucketPolicyStatus).build() {
+      static {
+        __name(this, "GetBucketPolicyStatusCommand");
+      }
     };
-    __name(GetBucketPolicyStatusCommand, "GetBucketPolicyStatusCommand");
   }
 });
 
@@ -38535,7 +38064,6 @@ var init_GetBucketPolicyStatusCommand = __esm({
 var GetBucketReplicationCommand;
 var init_GetBucketReplicationCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/GetBucketReplicationCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -38552,8 +38080,10 @@ var init_GetBucketReplicationCommand = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions()), getThrow200ExceptionsPlugin(config2)];
     }).s("AmazonS3", "GetBucketReplication", {}).n("S3Client", "GetBucketReplicationCommand").sc(GetBucketReplication).build() {
+      static {
+        __name(this, "GetBucketReplicationCommand");
+      }
     };
-    __name(GetBucketReplicationCommand, "GetBucketReplicationCommand");
   }
 });
 
@@ -38561,7 +38091,6 @@ var init_GetBucketReplicationCommand = __esm({
 var GetBucketRequestPaymentCommand;
 var init_GetBucketRequestPaymentCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/GetBucketRequestPaymentCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -38578,8 +38107,10 @@ var init_GetBucketRequestPaymentCommand = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions()), getThrow200ExceptionsPlugin(config2)];
     }).s("AmazonS3", "GetBucketRequestPayment", {}).n("S3Client", "GetBucketRequestPaymentCommand").sc(GetBucketRequestPayment).build() {
+      static {
+        __name(this, "GetBucketRequestPaymentCommand");
+      }
     };
-    __name(GetBucketRequestPaymentCommand, "GetBucketRequestPaymentCommand");
   }
 });
 
@@ -38587,7 +38118,6 @@ var init_GetBucketRequestPaymentCommand = __esm({
 var GetBucketTaggingCommand;
 var init_GetBucketTaggingCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/GetBucketTaggingCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -38604,8 +38134,10 @@ var init_GetBucketTaggingCommand = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions()), getThrow200ExceptionsPlugin(config2)];
     }).s("AmazonS3", "GetBucketTagging", {}).n("S3Client", "GetBucketTaggingCommand").sc(GetBucketTagging).build() {
+      static {
+        __name(this, "GetBucketTaggingCommand");
+      }
     };
-    __name(GetBucketTaggingCommand, "GetBucketTaggingCommand");
   }
 });
 
@@ -38613,7 +38145,6 @@ var init_GetBucketTaggingCommand = __esm({
 var GetBucketVersioningCommand;
 var init_GetBucketVersioningCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/GetBucketVersioningCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -38630,8 +38161,10 @@ var init_GetBucketVersioningCommand = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions()), getThrow200ExceptionsPlugin(config2)];
     }).s("AmazonS3", "GetBucketVersioning", {}).n("S3Client", "GetBucketVersioningCommand").sc(GetBucketVersioning).build() {
+      static {
+        __name(this, "GetBucketVersioningCommand");
+      }
     };
-    __name(GetBucketVersioningCommand, "GetBucketVersioningCommand");
   }
 });
 
@@ -38639,7 +38172,6 @@ var init_GetBucketVersioningCommand = __esm({
 var GetBucketWebsiteCommand;
 var init_GetBucketWebsiteCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/GetBucketWebsiteCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -38656,8 +38188,10 @@ var init_GetBucketWebsiteCommand = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions()), getThrow200ExceptionsPlugin(config2)];
     }).s("AmazonS3", "GetBucketWebsite", {}).n("S3Client", "GetBucketWebsiteCommand").sc(GetBucketWebsite).build() {
+      static {
+        __name(this, "GetBucketWebsiteCommand");
+      }
     };
-    __name(GetBucketWebsiteCommand, "GetBucketWebsiteCommand");
   }
 });
 
@@ -38665,7 +38199,6 @@ var init_GetBucketWebsiteCommand = __esm({
 var GetObjectAclCommand;
 var init_GetObjectAclCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/GetObjectAclCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -38682,8 +38215,10 @@ var init_GetObjectAclCommand = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions()), getThrow200ExceptionsPlugin(config2)];
     }).s("AmazonS3", "GetObjectAcl", {}).n("S3Client", "GetObjectAclCommand").sc(GetObjectAcl).build() {
+      static {
+        __name(this, "GetObjectAclCommand");
+      }
     };
-    __name(GetObjectAclCommand, "GetObjectAclCommand");
   }
 });
 
@@ -38691,7 +38226,6 @@ var init_GetObjectAclCommand = __esm({
 var GetObjectAttributesCommand;
 var init_GetObjectAttributesCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/GetObjectAttributesCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -38712,8 +38246,10 @@ var init_GetObjectAttributesCommand = __esm({
         getSsecPlugin(config2)
       ];
     }).s("AmazonS3", "GetObjectAttributes", {}).n("S3Client", "GetObjectAttributesCommand").sc(GetObjectAttributes).build() {
+      static {
+        __name(this, "GetObjectAttributesCommand");
+      }
     };
-    __name(GetObjectAttributesCommand, "GetObjectAttributesCommand");
   }
 });
 
@@ -38721,7 +38257,6 @@ var init_GetObjectAttributesCommand = __esm({
 var GetObjectCommand;
 var init_GetObjectCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/GetObjectCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -38749,8 +38284,10 @@ var init_GetObjectCommand = __esm({
         getS3ExpiresMiddlewarePlugin(config2)
       ];
     }).s("AmazonS3", "GetObject", {}).n("S3Client", "GetObjectCommand").sc(GetObject).build() {
+      static {
+        __name(this, "GetObjectCommand");
+      }
     };
-    __name(GetObjectCommand, "GetObjectCommand");
   }
 });
 
@@ -38758,7 +38295,6 @@ var init_GetObjectCommand = __esm({
 var GetObjectLegalHoldCommand;
 var init_GetObjectLegalHoldCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/GetObjectLegalHoldCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -38774,8 +38310,10 @@ var init_GetObjectLegalHoldCommand = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions()), getThrow200ExceptionsPlugin(config2)];
     }).s("AmazonS3", "GetObjectLegalHold", {}).n("S3Client", "GetObjectLegalHoldCommand").sc(GetObjectLegalHold).build() {
+      static {
+        __name(this, "GetObjectLegalHoldCommand");
+      }
     };
-    __name(GetObjectLegalHoldCommand, "GetObjectLegalHoldCommand");
   }
 });
 
@@ -38783,7 +38321,6 @@ var init_GetObjectLegalHoldCommand = __esm({
 var GetObjectLockConfigurationCommand;
 var init_GetObjectLockConfigurationCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/GetObjectLockConfigurationCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -38799,8 +38336,10 @@ var init_GetObjectLockConfigurationCommand = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions()), getThrow200ExceptionsPlugin(config2)];
     }).s("AmazonS3", "GetObjectLockConfiguration", {}).n("S3Client", "GetObjectLockConfigurationCommand").sc(GetObjectLockConfiguration).build() {
+      static {
+        __name(this, "GetObjectLockConfigurationCommand");
+      }
     };
-    __name(GetObjectLockConfigurationCommand, "GetObjectLockConfigurationCommand");
   }
 });
 
@@ -38808,7 +38347,6 @@ var init_GetObjectLockConfigurationCommand = __esm({
 var GetObjectRetentionCommand;
 var init_GetObjectRetentionCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/GetObjectRetentionCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -38824,8 +38362,10 @@ var init_GetObjectRetentionCommand = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions()), getThrow200ExceptionsPlugin(config2)];
     }).s("AmazonS3", "GetObjectRetention", {}).n("S3Client", "GetObjectRetentionCommand").sc(GetObjectRetention).build() {
+      static {
+        __name(this, "GetObjectRetentionCommand");
+      }
     };
-    __name(GetObjectRetentionCommand, "GetObjectRetentionCommand");
   }
 });
 
@@ -38833,7 +38373,6 @@ var init_GetObjectRetentionCommand = __esm({
 var GetObjectTaggingCommand;
 var init_GetObjectTaggingCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/GetObjectTaggingCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -38849,8 +38388,10 @@ var init_GetObjectTaggingCommand = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions()), getThrow200ExceptionsPlugin(config2)];
     }).s("AmazonS3", "GetObjectTagging", {}).n("S3Client", "GetObjectTaggingCommand").sc(GetObjectTagging).build() {
+      static {
+        __name(this, "GetObjectTaggingCommand");
+      }
     };
-    __name(GetObjectTaggingCommand, "GetObjectTaggingCommand");
   }
 });
 
@@ -38858,7 +38399,6 @@ var init_GetObjectTaggingCommand = __esm({
 var GetObjectTorrentCommand;
 var init_GetObjectTorrentCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/GetObjectTorrentCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -38873,8 +38413,10 @@ var init_GetObjectTorrentCommand = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions())];
     }).s("AmazonS3", "GetObjectTorrent", {}).n("S3Client", "GetObjectTorrentCommand").sc(GetObjectTorrent).build() {
+      static {
+        __name(this, "GetObjectTorrentCommand");
+      }
     };
-    __name(GetObjectTorrentCommand, "GetObjectTorrentCommand");
   }
 });
 
@@ -38882,7 +38424,6 @@ var init_GetObjectTorrentCommand = __esm({
 var GetPublicAccessBlockCommand;
 var init_GetPublicAccessBlockCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/GetPublicAccessBlockCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -38899,8 +38440,10 @@ var init_GetPublicAccessBlockCommand = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions()), getThrow200ExceptionsPlugin(config2)];
     }).s("AmazonS3", "GetPublicAccessBlock", {}).n("S3Client", "GetPublicAccessBlockCommand").sc(GetPublicAccessBlock).build() {
+      static {
+        __name(this, "GetPublicAccessBlockCommand");
+      }
     };
-    __name(GetPublicAccessBlockCommand, "GetPublicAccessBlockCommand");
   }
 });
 
@@ -38908,7 +38451,6 @@ var init_GetPublicAccessBlockCommand = __esm({
 var HeadBucketCommand;
 var init_HeadBucketCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/HeadBucketCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -38924,8 +38466,10 @@ var init_HeadBucketCommand = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions()), getThrow200ExceptionsPlugin(config2)];
     }).s("AmazonS3", "HeadBucket", {}).n("S3Client", "HeadBucketCommand").sc(HeadBucket).build() {
+      static {
+        __name(this, "HeadBucketCommand");
+      }
     };
-    __name(HeadBucketCommand, "HeadBucketCommand");
   }
 });
 
@@ -38933,7 +38477,6 @@ var init_HeadBucketCommand = __esm({
 var HeadObjectCommand;
 var init_HeadObjectCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/HeadObjectCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -38956,8 +38499,10 @@ var init_HeadObjectCommand = __esm({
         getS3ExpiresMiddlewarePlugin(config2)
       ];
     }).s("AmazonS3", "HeadObject", {}).n("S3Client", "HeadObjectCommand").sc(HeadObject).build() {
+      static {
+        __name(this, "HeadObjectCommand");
+      }
     };
-    __name(HeadObjectCommand, "HeadObjectCommand");
   }
 });
 
@@ -38965,7 +38510,6 @@ var init_HeadObjectCommand = __esm({
 var ListBucketAnalyticsConfigurationsCommand;
 var init_ListBucketAnalyticsConfigurationsCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/ListBucketAnalyticsConfigurationsCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -38982,8 +38526,10 @@ var init_ListBucketAnalyticsConfigurationsCommand = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions()), getThrow200ExceptionsPlugin(config2)];
     }).s("AmazonS3", "ListBucketAnalyticsConfigurations", {}).n("S3Client", "ListBucketAnalyticsConfigurationsCommand").sc(ListBucketAnalyticsConfigurations).build() {
+      static {
+        __name(this, "ListBucketAnalyticsConfigurationsCommand");
+      }
     };
-    __name(ListBucketAnalyticsConfigurationsCommand, "ListBucketAnalyticsConfigurationsCommand");
   }
 });
 
@@ -38991,7 +38537,6 @@ var init_ListBucketAnalyticsConfigurationsCommand = __esm({
 var ListBucketIntelligentTieringConfigurationsCommand;
 var init_ListBucketIntelligentTieringConfigurationsCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/ListBucketIntelligentTieringConfigurationsCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -39008,8 +38553,10 @@ var init_ListBucketIntelligentTieringConfigurationsCommand = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions()), getThrow200ExceptionsPlugin(config2)];
     }).s("AmazonS3", "ListBucketIntelligentTieringConfigurations", {}).n("S3Client", "ListBucketIntelligentTieringConfigurationsCommand").sc(ListBucketIntelligentTieringConfigurations).build() {
+      static {
+        __name(this, "ListBucketIntelligentTieringConfigurationsCommand");
+      }
     };
-    __name(ListBucketIntelligentTieringConfigurationsCommand, "ListBucketIntelligentTieringConfigurationsCommand");
   }
 });
 
@@ -39017,7 +38564,6 @@ var init_ListBucketIntelligentTieringConfigurationsCommand = __esm({
 var ListBucketInventoryConfigurationsCommand;
 var init_ListBucketInventoryConfigurationsCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/ListBucketInventoryConfigurationsCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -39034,8 +38580,10 @@ var init_ListBucketInventoryConfigurationsCommand = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions()), getThrow200ExceptionsPlugin(config2)];
     }).s("AmazonS3", "ListBucketInventoryConfigurations", {}).n("S3Client", "ListBucketInventoryConfigurationsCommand").sc(ListBucketInventoryConfigurations).build() {
+      static {
+        __name(this, "ListBucketInventoryConfigurationsCommand");
+      }
     };
-    __name(ListBucketInventoryConfigurationsCommand, "ListBucketInventoryConfigurationsCommand");
   }
 });
 
@@ -39043,7 +38591,6 @@ var init_ListBucketInventoryConfigurationsCommand = __esm({
 var ListBucketMetricsConfigurationsCommand;
 var init_ListBucketMetricsConfigurationsCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/ListBucketMetricsConfigurationsCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -39059,8 +38606,10 @@ var init_ListBucketMetricsConfigurationsCommand = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions()), getThrow200ExceptionsPlugin(config2)];
     }).s("AmazonS3", "ListBucketMetricsConfigurations", {}).n("S3Client", "ListBucketMetricsConfigurationsCommand").sc(ListBucketMetricsConfigurations).build() {
+      static {
+        __name(this, "ListBucketMetricsConfigurationsCommand");
+      }
     };
-    __name(ListBucketMetricsConfigurationsCommand, "ListBucketMetricsConfigurationsCommand");
   }
 });
 
@@ -39068,7 +38617,6 @@ var init_ListBucketMetricsConfigurationsCommand = __esm({
 var ListBucketsCommand;
 var init_ListBucketsCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/ListBucketsCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -39081,8 +38629,10 @@ var init_ListBucketsCommand = __esm({
     ListBucketsCommand = class extends Command.classBuilder().ep(commonParams).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions()), getThrow200ExceptionsPlugin(config2)];
     }).s("AmazonS3", "ListBuckets", {}).n("S3Client", "ListBucketsCommand").sc(ListBuckets).build() {
+      static {
+        __name(this, "ListBucketsCommand");
+      }
     };
-    __name(ListBucketsCommand, "ListBucketsCommand");
   }
 });
 
@@ -39090,7 +38640,6 @@ var init_ListBucketsCommand = __esm({
 var ListDirectoryBucketsCommand;
 var init_ListDirectoryBucketsCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/ListDirectoryBucketsCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -39106,8 +38655,10 @@ var init_ListDirectoryBucketsCommand = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions()), getThrow200ExceptionsPlugin(config2)];
     }).s("AmazonS3", "ListDirectoryBuckets", {}).n("S3Client", "ListDirectoryBucketsCommand").sc(ListDirectoryBuckets).build() {
+      static {
+        __name(this, "ListDirectoryBucketsCommand");
+      }
     };
-    __name(ListDirectoryBucketsCommand, "ListDirectoryBucketsCommand");
   }
 });
 
@@ -39115,7 +38666,6 @@ var init_ListDirectoryBucketsCommand = __esm({
 var ListMultipartUploadsCommand;
 var init_ListMultipartUploadsCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/ListMultipartUploadsCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -39132,8 +38682,10 @@ var init_ListMultipartUploadsCommand = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions()), getThrow200ExceptionsPlugin(config2)];
     }).s("AmazonS3", "ListMultipartUploads", {}).n("S3Client", "ListMultipartUploadsCommand").sc(ListMultipartUploads).build() {
+      static {
+        __name(this, "ListMultipartUploadsCommand");
+      }
     };
-    __name(ListMultipartUploadsCommand, "ListMultipartUploadsCommand");
   }
 });
 
@@ -39141,7 +38693,6 @@ var init_ListMultipartUploadsCommand = __esm({
 var ListObjectsCommand;
 var init_ListObjectsCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/ListObjectsCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -39158,8 +38709,10 @@ var init_ListObjectsCommand = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions()), getThrow200ExceptionsPlugin(config2)];
     }).s("AmazonS3", "ListObjects", {}).n("S3Client", "ListObjectsCommand").sc(ListObjects).build() {
+      static {
+        __name(this, "ListObjectsCommand");
+      }
     };
-    __name(ListObjectsCommand, "ListObjectsCommand");
   }
 });
 
@@ -39167,7 +38720,6 @@ var init_ListObjectsCommand = __esm({
 var ListObjectsV2Command;
 var init_ListObjectsV2Command = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/ListObjectsV2Command.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -39184,8 +38736,10 @@ var init_ListObjectsV2Command = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions()), getThrow200ExceptionsPlugin(config2)];
     }).s("AmazonS3", "ListObjectsV2", {}).n("S3Client", "ListObjectsV2Command").sc(ListObjectsV2).build() {
+      static {
+        __name(this, "ListObjectsV2Command");
+      }
     };
-    __name(ListObjectsV2Command, "ListObjectsV2Command");
   }
 });
 
@@ -39193,7 +38747,6 @@ var init_ListObjectsV2Command = __esm({
 var ListObjectVersionsCommand;
 var init_ListObjectVersionsCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/ListObjectVersionsCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -39210,8 +38763,10 @@ var init_ListObjectVersionsCommand = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions()), getThrow200ExceptionsPlugin(config2)];
     }).s("AmazonS3", "ListObjectVersions", {}).n("S3Client", "ListObjectVersionsCommand").sc(ListObjectVersions).build() {
+      static {
+        __name(this, "ListObjectVersionsCommand");
+      }
     };
-    __name(ListObjectVersionsCommand, "ListObjectVersionsCommand");
   }
 });
 
@@ -39219,7 +38774,6 @@ var init_ListObjectVersionsCommand = __esm({
 var ListPartsCommand;
 var init_ListPartsCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/ListPartsCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -39241,8 +38795,10 @@ var init_ListPartsCommand = __esm({
         getSsecPlugin(config2)
       ];
     }).s("AmazonS3", "ListParts", {}).n("S3Client", "ListPartsCommand").sc(ListParts).build() {
+      static {
+        __name(this, "ListPartsCommand");
+      }
     };
-    __name(ListPartsCommand, "ListPartsCommand");
   }
 });
 
@@ -39250,7 +38806,6 @@ var init_ListPartsCommand = __esm({
 var PutBucketAbacCommand;
 var init_PutBucketAbacCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/PutBucketAbacCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -39272,8 +38827,10 @@ var init_PutBucketAbacCommand = __esm({
         })
       ];
     }).s("AmazonS3", "PutBucketAbac", {}).n("S3Client", "PutBucketAbacCommand").sc(PutBucketAbac).build() {
+      static {
+        __name(this, "PutBucketAbacCommand");
+      }
     };
-    __name(PutBucketAbacCommand, "PutBucketAbacCommand");
   }
 });
 
@@ -39281,7 +38838,6 @@ var init_PutBucketAbacCommand = __esm({
 var PutBucketAccelerateConfigurationCommand;
 var init_PutBucketAccelerateConfigurationCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/PutBucketAccelerateConfigurationCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -39304,8 +38860,10 @@ var init_PutBucketAccelerateConfigurationCommand = __esm({
         })
       ];
     }).s("AmazonS3", "PutBucketAccelerateConfiguration", {}).n("S3Client", "PutBucketAccelerateConfigurationCommand").sc(PutBucketAccelerateConfiguration).build() {
+      static {
+        __name(this, "PutBucketAccelerateConfigurationCommand");
+      }
     };
-    __name(PutBucketAccelerateConfigurationCommand, "PutBucketAccelerateConfigurationCommand");
   }
 });
 
@@ -39313,7 +38871,6 @@ var init_PutBucketAccelerateConfigurationCommand = __esm({
 var PutBucketAclCommand;
 var init_PutBucketAclCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/PutBucketAclCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -39336,8 +38893,10 @@ var init_PutBucketAclCommand = __esm({
         })
       ];
     }).s("AmazonS3", "PutBucketAcl", {}).n("S3Client", "PutBucketAclCommand").sc(PutBucketAcl).build() {
+      static {
+        __name(this, "PutBucketAclCommand");
+      }
     };
-    __name(PutBucketAclCommand, "PutBucketAclCommand");
   }
 });
 
@@ -39345,7 +38904,6 @@ var init_PutBucketAclCommand = __esm({
 var PutBucketAnalyticsConfigurationCommand;
 var init_PutBucketAnalyticsConfigurationCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/PutBucketAnalyticsConfigurationCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -39361,8 +38919,10 @@ var init_PutBucketAnalyticsConfigurationCommand = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions())];
     }).s("AmazonS3", "PutBucketAnalyticsConfiguration", {}).n("S3Client", "PutBucketAnalyticsConfigurationCommand").sc(PutBucketAnalyticsConfiguration).build() {
+      static {
+        __name(this, "PutBucketAnalyticsConfigurationCommand");
+      }
     };
-    __name(PutBucketAnalyticsConfigurationCommand, "PutBucketAnalyticsConfigurationCommand");
   }
 });
 
@@ -39370,7 +38930,6 @@ var init_PutBucketAnalyticsConfigurationCommand = __esm({
 var PutBucketCorsCommand;
 var init_PutBucketCorsCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/PutBucketCorsCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -39393,8 +38952,10 @@ var init_PutBucketCorsCommand = __esm({
         })
       ];
     }).s("AmazonS3", "PutBucketCors", {}).n("S3Client", "PutBucketCorsCommand").sc(PutBucketCors).build() {
+      static {
+        __name(this, "PutBucketCorsCommand");
+      }
     };
-    __name(PutBucketCorsCommand, "PutBucketCorsCommand");
   }
 });
 
@@ -39402,7 +38963,6 @@ var init_PutBucketCorsCommand = __esm({
 var PutBucketEncryptionCommand;
 var init_PutBucketEncryptionCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/PutBucketEncryptionCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -39425,8 +38985,10 @@ var init_PutBucketEncryptionCommand = __esm({
         })
       ];
     }).s("AmazonS3", "PutBucketEncryption", {}).n("S3Client", "PutBucketEncryptionCommand").sc(PutBucketEncryption).build() {
+      static {
+        __name(this, "PutBucketEncryptionCommand");
+      }
     };
-    __name(PutBucketEncryptionCommand, "PutBucketEncryptionCommand");
   }
 });
 
@@ -39434,7 +38996,6 @@ var init_PutBucketEncryptionCommand = __esm({
 var PutBucketIntelligentTieringConfigurationCommand;
 var init_PutBucketIntelligentTieringConfigurationCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/PutBucketIntelligentTieringConfigurationCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -39450,8 +39011,10 @@ var init_PutBucketIntelligentTieringConfigurationCommand = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions())];
     }).s("AmazonS3", "PutBucketIntelligentTieringConfiguration", {}).n("S3Client", "PutBucketIntelligentTieringConfigurationCommand").sc(PutBucketIntelligentTieringConfiguration).build() {
+      static {
+        __name(this, "PutBucketIntelligentTieringConfigurationCommand");
+      }
     };
-    __name(PutBucketIntelligentTieringConfigurationCommand, "PutBucketIntelligentTieringConfigurationCommand");
   }
 });
 
@@ -39459,7 +39022,6 @@ var init_PutBucketIntelligentTieringConfigurationCommand = __esm({
 var PutBucketInventoryConfigurationCommand;
 var init_PutBucketInventoryConfigurationCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/PutBucketInventoryConfigurationCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -39475,8 +39037,10 @@ var init_PutBucketInventoryConfigurationCommand = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions())];
     }).s("AmazonS3", "PutBucketInventoryConfiguration", {}).n("S3Client", "PutBucketInventoryConfigurationCommand").sc(PutBucketInventoryConfiguration).build() {
+      static {
+        __name(this, "PutBucketInventoryConfigurationCommand");
+      }
     };
-    __name(PutBucketInventoryConfigurationCommand, "PutBucketInventoryConfigurationCommand");
   }
 });
 
@@ -39484,7 +39048,6 @@ var init_PutBucketInventoryConfigurationCommand = __esm({
 var PutBucketLifecycleConfigurationCommand;
 var init_PutBucketLifecycleConfigurationCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/PutBucketLifecycleConfigurationCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -39509,8 +39072,10 @@ var init_PutBucketLifecycleConfigurationCommand = __esm({
         getThrow200ExceptionsPlugin(config2)
       ];
     }).s("AmazonS3", "PutBucketLifecycleConfiguration", {}).n("S3Client", "PutBucketLifecycleConfigurationCommand").sc(PutBucketLifecycleConfiguration).build() {
+      static {
+        __name(this, "PutBucketLifecycleConfigurationCommand");
+      }
     };
-    __name(PutBucketLifecycleConfigurationCommand, "PutBucketLifecycleConfigurationCommand");
   }
 });
 
@@ -39518,7 +39083,6 @@ var init_PutBucketLifecycleConfigurationCommand = __esm({
 var PutBucketLoggingCommand;
 var init_PutBucketLoggingCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/PutBucketLoggingCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -39541,8 +39105,10 @@ var init_PutBucketLoggingCommand = __esm({
         })
       ];
     }).s("AmazonS3", "PutBucketLogging", {}).n("S3Client", "PutBucketLoggingCommand").sc(PutBucketLogging).build() {
+      static {
+        __name(this, "PutBucketLoggingCommand");
+      }
     };
-    __name(PutBucketLoggingCommand, "PutBucketLoggingCommand");
   }
 });
 
@@ -39550,7 +39116,6 @@ var init_PutBucketLoggingCommand = __esm({
 var PutBucketMetricsConfigurationCommand;
 var init_PutBucketMetricsConfigurationCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/PutBucketMetricsConfigurationCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -39566,8 +39131,10 @@ var init_PutBucketMetricsConfigurationCommand = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions())];
     }).s("AmazonS3", "PutBucketMetricsConfiguration", {}).n("S3Client", "PutBucketMetricsConfigurationCommand").sc(PutBucketMetricsConfiguration).build() {
+      static {
+        __name(this, "PutBucketMetricsConfigurationCommand");
+      }
     };
-    __name(PutBucketMetricsConfigurationCommand, "PutBucketMetricsConfigurationCommand");
   }
 });
 
@@ -39575,7 +39142,6 @@ var init_PutBucketMetricsConfigurationCommand = __esm({
 var PutBucketNotificationConfigurationCommand;
 var init_PutBucketNotificationConfigurationCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/PutBucketNotificationConfigurationCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -39591,8 +39157,10 @@ var init_PutBucketNotificationConfigurationCommand = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions())];
     }).s("AmazonS3", "PutBucketNotificationConfiguration", {}).n("S3Client", "PutBucketNotificationConfigurationCommand").sc(PutBucketNotificationConfiguration).build() {
+      static {
+        __name(this, "PutBucketNotificationConfigurationCommand");
+      }
     };
-    __name(PutBucketNotificationConfigurationCommand, "PutBucketNotificationConfigurationCommand");
   }
 });
 
@@ -39600,7 +39168,6 @@ var init_PutBucketNotificationConfigurationCommand = __esm({
 var PutBucketOwnershipControlsCommand;
 var init_PutBucketOwnershipControlsCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/PutBucketOwnershipControlsCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -39623,8 +39190,10 @@ var init_PutBucketOwnershipControlsCommand = __esm({
         })
       ];
     }).s("AmazonS3", "PutBucketOwnershipControls", {}).n("S3Client", "PutBucketOwnershipControlsCommand").sc(PutBucketOwnershipControls).build() {
+      static {
+        __name(this, "PutBucketOwnershipControlsCommand");
+      }
     };
-    __name(PutBucketOwnershipControlsCommand, "PutBucketOwnershipControlsCommand");
   }
 });
 
@@ -39632,7 +39201,6 @@ var init_PutBucketOwnershipControlsCommand = __esm({
 var PutBucketPolicyCommand;
 var init_PutBucketPolicyCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/PutBucketPolicyCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -39655,8 +39223,10 @@ var init_PutBucketPolicyCommand = __esm({
         })
       ];
     }).s("AmazonS3", "PutBucketPolicy", {}).n("S3Client", "PutBucketPolicyCommand").sc(PutBucketPolicy).build() {
+      static {
+        __name(this, "PutBucketPolicyCommand");
+      }
     };
-    __name(PutBucketPolicyCommand, "PutBucketPolicyCommand");
   }
 });
 
@@ -39664,7 +39234,6 @@ var init_PutBucketPolicyCommand = __esm({
 var PutBucketReplicationCommand;
 var init_PutBucketReplicationCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/PutBucketReplicationCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -39687,8 +39256,10 @@ var init_PutBucketReplicationCommand = __esm({
         })
       ];
     }).s("AmazonS3", "PutBucketReplication", {}).n("S3Client", "PutBucketReplicationCommand").sc(PutBucketReplication).build() {
+      static {
+        __name(this, "PutBucketReplicationCommand");
+      }
     };
-    __name(PutBucketReplicationCommand, "PutBucketReplicationCommand");
   }
 });
 
@@ -39696,7 +39267,6 @@ var init_PutBucketReplicationCommand = __esm({
 var PutBucketRequestPaymentCommand;
 var init_PutBucketRequestPaymentCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/PutBucketRequestPaymentCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -39719,8 +39289,10 @@ var init_PutBucketRequestPaymentCommand = __esm({
         })
       ];
     }).s("AmazonS3", "PutBucketRequestPayment", {}).n("S3Client", "PutBucketRequestPaymentCommand").sc(PutBucketRequestPayment).build() {
+      static {
+        __name(this, "PutBucketRequestPaymentCommand");
+      }
     };
-    __name(PutBucketRequestPaymentCommand, "PutBucketRequestPaymentCommand");
   }
 });
 
@@ -39728,7 +39300,6 @@ var init_PutBucketRequestPaymentCommand = __esm({
 var PutBucketTaggingCommand;
 var init_PutBucketTaggingCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/PutBucketTaggingCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -39751,8 +39322,10 @@ var init_PutBucketTaggingCommand = __esm({
         })
       ];
     }).s("AmazonS3", "PutBucketTagging", {}).n("S3Client", "PutBucketTaggingCommand").sc(PutBucketTagging).build() {
+      static {
+        __name(this, "PutBucketTaggingCommand");
+      }
     };
-    __name(PutBucketTaggingCommand, "PutBucketTaggingCommand");
   }
 });
 
@@ -39760,7 +39333,6 @@ var init_PutBucketTaggingCommand = __esm({
 var PutBucketVersioningCommand;
 var init_PutBucketVersioningCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/PutBucketVersioningCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -39783,8 +39355,10 @@ var init_PutBucketVersioningCommand = __esm({
         })
       ];
     }).s("AmazonS3", "PutBucketVersioning", {}).n("S3Client", "PutBucketVersioningCommand").sc(PutBucketVersioning).build() {
+      static {
+        __name(this, "PutBucketVersioningCommand");
+      }
     };
-    __name(PutBucketVersioningCommand, "PutBucketVersioningCommand");
   }
 });
 
@@ -39792,7 +39366,6 @@ var init_PutBucketVersioningCommand = __esm({
 var PutBucketWebsiteCommand;
 var init_PutBucketWebsiteCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/PutBucketWebsiteCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -39815,8 +39388,10 @@ var init_PutBucketWebsiteCommand = __esm({
         })
       ];
     }).s("AmazonS3", "PutBucketWebsite", {}).n("S3Client", "PutBucketWebsiteCommand").sc(PutBucketWebsite).build() {
+      static {
+        __name(this, "PutBucketWebsiteCommand");
+      }
     };
-    __name(PutBucketWebsiteCommand, "PutBucketWebsiteCommand");
   }
 });
 
@@ -39824,7 +39399,6 @@ var init_PutBucketWebsiteCommand = __esm({
 var PutObjectAclCommand;
 var init_PutObjectAclCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/PutObjectAclCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -39849,8 +39423,10 @@ var init_PutObjectAclCommand = __esm({
         getThrow200ExceptionsPlugin(config2)
       ];
     }).s("AmazonS3", "PutObjectAcl", {}).n("S3Client", "PutObjectAclCommand").sc(PutObjectAcl).build() {
+      static {
+        __name(this, "PutObjectAclCommand");
+      }
     };
-    __name(PutObjectAclCommand, "PutObjectAclCommand");
   }
 });
 
@@ -39858,7 +39434,6 @@ var init_PutObjectAclCommand = __esm({
 var PutObjectCommand;
 var init_PutObjectCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/PutObjectCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -39886,8 +39461,10 @@ var init_PutObjectCommand = __esm({
         getSsecPlugin(config2)
       ];
     }).s("AmazonS3", "PutObject", {}).n("S3Client", "PutObjectCommand").sc(PutObject).build() {
+      static {
+        __name(this, "PutObjectCommand");
+      }
     };
-    __name(PutObjectCommand, "PutObjectCommand");
   }
 });
 
@@ -39895,7 +39472,6 @@ var init_PutObjectCommand = __esm({
 var PutObjectLegalHoldCommand;
 var init_PutObjectLegalHoldCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/PutObjectLegalHoldCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -39919,8 +39495,10 @@ var init_PutObjectLegalHoldCommand = __esm({
         getThrow200ExceptionsPlugin(config2)
       ];
     }).s("AmazonS3", "PutObjectLegalHold", {}).n("S3Client", "PutObjectLegalHoldCommand").sc(PutObjectLegalHold).build() {
+      static {
+        __name(this, "PutObjectLegalHoldCommand");
+      }
     };
-    __name(PutObjectLegalHoldCommand, "PutObjectLegalHoldCommand");
   }
 });
 
@@ -39928,7 +39506,6 @@ var init_PutObjectLegalHoldCommand = __esm({
 var PutObjectLockConfigurationCommand;
 var init_PutObjectLockConfigurationCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/PutObjectLockConfigurationCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -39952,8 +39529,10 @@ var init_PutObjectLockConfigurationCommand = __esm({
         getThrow200ExceptionsPlugin(config2)
       ];
     }).s("AmazonS3", "PutObjectLockConfiguration", {}).n("S3Client", "PutObjectLockConfigurationCommand").sc(PutObjectLockConfiguration).build() {
+      static {
+        __name(this, "PutObjectLockConfigurationCommand");
+      }
     };
-    __name(PutObjectLockConfigurationCommand, "PutObjectLockConfigurationCommand");
   }
 });
 
@@ -39961,7 +39540,6 @@ var init_PutObjectLockConfigurationCommand = __esm({
 var PutObjectRetentionCommand;
 var init_PutObjectRetentionCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/PutObjectRetentionCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -39985,8 +39563,10 @@ var init_PutObjectRetentionCommand = __esm({
         getThrow200ExceptionsPlugin(config2)
       ];
     }).s("AmazonS3", "PutObjectRetention", {}).n("S3Client", "PutObjectRetentionCommand").sc(PutObjectRetention).build() {
+      static {
+        __name(this, "PutObjectRetentionCommand");
+      }
     };
-    __name(PutObjectRetentionCommand, "PutObjectRetentionCommand");
   }
 });
 
@@ -39994,7 +39574,6 @@ var init_PutObjectRetentionCommand = __esm({
 var PutObjectTaggingCommand;
 var init_PutObjectTaggingCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/PutObjectTaggingCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -40018,8 +39597,10 @@ var init_PutObjectTaggingCommand = __esm({
         getThrow200ExceptionsPlugin(config2)
       ];
     }).s("AmazonS3", "PutObjectTagging", {}).n("S3Client", "PutObjectTaggingCommand").sc(PutObjectTagging).build() {
+      static {
+        __name(this, "PutObjectTaggingCommand");
+      }
     };
-    __name(PutObjectTaggingCommand, "PutObjectTaggingCommand");
   }
 });
 
@@ -40027,7 +39608,6 @@ var init_PutObjectTaggingCommand = __esm({
 var PutPublicAccessBlockCommand;
 var init_PutPublicAccessBlockCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/PutPublicAccessBlockCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -40050,8 +39630,10 @@ var init_PutPublicAccessBlockCommand = __esm({
         })
       ];
     }).s("AmazonS3", "PutPublicAccessBlock", {}).n("S3Client", "PutPublicAccessBlockCommand").sc(PutPublicAccessBlock).build() {
+      static {
+        __name(this, "PutPublicAccessBlockCommand");
+      }
     };
-    __name(PutPublicAccessBlockCommand, "PutPublicAccessBlockCommand");
   }
 });
 
@@ -40059,7 +39641,6 @@ var init_PutPublicAccessBlockCommand = __esm({
 var RenameObjectCommand;
 var init_RenameObjectCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/RenameObjectCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -40076,8 +39657,10 @@ var init_RenameObjectCommand = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions()), getThrow200ExceptionsPlugin(config2)];
     }).s("AmazonS3", "RenameObject", {}).n("S3Client", "RenameObjectCommand").sc(RenameObject).build() {
+      static {
+        __name(this, "RenameObjectCommand");
+      }
     };
-    __name(RenameObjectCommand, "RenameObjectCommand");
   }
 });
 
@@ -40085,7 +39668,6 @@ var init_RenameObjectCommand = __esm({
 var RestoreObjectCommand;
 var init_RestoreObjectCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/RestoreObjectCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -40109,8 +39691,10 @@ var init_RestoreObjectCommand = __esm({
         getThrow200ExceptionsPlugin(config2)
       ];
     }).s("AmazonS3", "RestoreObject", {}).n("S3Client", "RestoreObjectCommand").sc(RestoreObject).build() {
+      static {
+        __name(this, "RestoreObjectCommand");
+      }
     };
-    __name(RestoreObjectCommand, "RestoreObjectCommand");
   }
 });
 
@@ -40118,7 +39702,6 @@ var init_RestoreObjectCommand = __esm({
 var SelectObjectContentCommand;
 var init_SelectObjectContentCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/SelectObjectContentCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -40143,8 +39726,10 @@ var init_SelectObjectContentCommand = __esm({
         output: true
       }
     }).n("S3Client", "SelectObjectContentCommand").sc(SelectObjectContent).build() {
+      static {
+        __name(this, "SelectObjectContentCommand");
+      }
     };
-    __name(SelectObjectContentCommand, "SelectObjectContentCommand");
   }
 });
 
@@ -40152,7 +39737,6 @@ var init_SelectObjectContentCommand = __esm({
 var UpdateBucketMetadataInventoryTableConfigurationCommand;
 var init_UpdateBucketMetadataInventoryTableConfigurationCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/UpdateBucketMetadataInventoryTableConfigurationCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -40175,8 +39759,10 @@ var init_UpdateBucketMetadataInventoryTableConfigurationCommand = __esm({
         })
       ];
     }).s("AmazonS3", "UpdateBucketMetadataInventoryTableConfiguration", {}).n("S3Client", "UpdateBucketMetadataInventoryTableConfigurationCommand").sc(UpdateBucketMetadataInventoryTableConfiguration).build() {
+      static {
+        __name(this, "UpdateBucketMetadataInventoryTableConfigurationCommand");
+      }
     };
-    __name(UpdateBucketMetadataInventoryTableConfigurationCommand, "UpdateBucketMetadataInventoryTableConfigurationCommand");
   }
 });
 
@@ -40184,7 +39770,6 @@ var init_UpdateBucketMetadataInventoryTableConfigurationCommand = __esm({
 var UpdateBucketMetadataJournalTableConfigurationCommand;
 var init_UpdateBucketMetadataJournalTableConfigurationCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/UpdateBucketMetadataJournalTableConfigurationCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -40207,8 +39792,10 @@ var init_UpdateBucketMetadataJournalTableConfigurationCommand = __esm({
         })
       ];
     }).s("AmazonS3", "UpdateBucketMetadataJournalTableConfiguration", {}).n("S3Client", "UpdateBucketMetadataJournalTableConfigurationCommand").sc(UpdateBucketMetadataJournalTableConfiguration).build() {
+      static {
+        __name(this, "UpdateBucketMetadataJournalTableConfigurationCommand");
+      }
     };
-    __name(UpdateBucketMetadataJournalTableConfigurationCommand, "UpdateBucketMetadataJournalTableConfigurationCommand");
   }
 });
 
@@ -40216,7 +39803,6 @@ var init_UpdateBucketMetadataJournalTableConfigurationCommand = __esm({
 var UploadPartCommand;
 var init_UploadPartCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/UploadPartCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -40243,8 +39829,10 @@ var init_UploadPartCommand = __esm({
         getSsecPlugin(config2)
       ];
     }).s("AmazonS3", "UploadPart", {}).n("S3Client", "UploadPartCommand").sc(UploadPart).build() {
+      static {
+        __name(this, "UploadPartCommand");
+      }
     };
-    __name(UploadPartCommand, "UploadPartCommand");
   }
 });
 
@@ -40252,7 +39840,6 @@ var init_UploadPartCommand = __esm({
 var UploadPartCopyCommand;
 var init_UploadPartCopyCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/UploadPartCopyCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -40274,8 +39861,10 @@ var init_UploadPartCopyCommand = __esm({
         getSsecPlugin(config2)
       ];
     }).s("AmazonS3", "UploadPartCopy", {}).n("S3Client", "UploadPartCopyCommand").sc(UploadPartCopy).build() {
+      static {
+        __name(this, "UploadPartCopyCommand");
+      }
     };
-    __name(UploadPartCopyCommand, "UploadPartCopyCommand");
   }
 });
 
@@ -40283,7 +39872,6 @@ var init_UploadPartCopyCommand = __esm({
 var WriteGetObjectResponseCommand;
 var init_WriteGetObjectResponseCommand = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/WriteGetObjectResponseCommand.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -40298,8 +39886,10 @@ var init_WriteGetObjectResponseCommand = __esm({
     }).m(function(Command2, cs2, config2, o2) {
       return [getEndpointPlugin(config2, Command2.getEndpointParameterInstructions())];
     }).s("AmazonS3", "WriteGetObjectResponse", {}).n("S3Client", "WriteGetObjectResponseCommand").sc(WriteGetObjectResponse).build() {
+      static {
+        __name(this, "WriteGetObjectResponseCommand");
+      }
     };
-    __name(WriteGetObjectResponseCommand, "WriteGetObjectResponseCommand");
   }
 });
 
@@ -40307,7 +39897,6 @@ var init_WriteGetObjectResponseCommand = __esm({
 var commands, S3;
 var init_S3 = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/S3.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -40529,8 +40118,10 @@ var init_S3 = __esm({
       WriteGetObjectResponseCommand
     };
     S3 = class extends S3Client {
+      static {
+        __name(this, "S3");
+      }
     };
-    __name(S3, "S3");
     createAggregatedClient(commands, S3);
   }
 });
@@ -40538,7 +40129,6 @@ var init_S3 = __esm({
 // node_modules/@aws-sdk/client-s3/dist-es/commands/index.js
 var init_commands = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/commands/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -40655,7 +40245,6 @@ var init_commands = __esm({
 // node_modules/@aws-sdk/client-s3/dist-es/pagination/Interfaces.js
 var init_Interfaces = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/pagination/Interfaces.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -40667,7 +40256,6 @@ var init_Interfaces = __esm({
 var paginateListBuckets;
 var init_ListBucketsPaginator = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/pagination/ListBucketsPaginator.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -40683,7 +40271,6 @@ var init_ListBucketsPaginator = __esm({
 var paginateListDirectoryBuckets;
 var init_ListDirectoryBucketsPaginator = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/pagination/ListDirectoryBucketsPaginator.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -40699,7 +40286,6 @@ var init_ListDirectoryBucketsPaginator = __esm({
 var paginateListObjectsV2;
 var init_ListObjectsV2Paginator = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/pagination/ListObjectsV2Paginator.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -40715,7 +40301,6 @@ var init_ListObjectsV2Paginator = __esm({
 var paginateListParts;
 var init_ListPartsPaginator = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/pagination/ListPartsPaginator.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -40730,7 +40315,6 @@ var init_ListPartsPaginator = __esm({
 // node_modules/@aws-sdk/client-s3/dist-es/pagination/index.js
 var init_pagination2 = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/pagination/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -40747,7 +40331,6 @@ var init_pagination2 = __esm({
 var getCircularReplacer;
 var init_circularReplacer = __esm({
   "node_modules/@smithy/util-waiter/dist-es/circularReplacer.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -40771,7 +40354,6 @@ var init_circularReplacer = __esm({
 var sleep;
 var init_sleep = __esm({
   "node_modules/@smithy/util-waiter/dist-es/utils/sleep.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -40786,7 +40368,6 @@ var init_sleep = __esm({
 var waiterServiceDefaults, WaiterState, checkExceptions;
 var init_waiter2 = __esm({
   "node_modules/@smithy/util-waiter/dist-es/waiter.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -40830,7 +40411,6 @@ var init_waiter2 = __esm({
 var exponentialBackoffWithJitter, randomInRange, runPolling, createMessageFromResponse;
 var init_poller = __esm({
   "node_modules/@smithy/util-waiter/dist-es/poller.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -40902,7 +40482,6 @@ var init_poller = __esm({
 var validateWaiterOptions;
 var init_validate = __esm({
   "node_modules/@smithy/util-waiter/dist-es/utils/validate.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -40926,7 +40505,6 @@ var init_validate = __esm({
 // node_modules/@smithy/util-waiter/dist-es/utils/index.js
 var init_utils5 = __esm({
   "node_modules/@smithy/util-waiter/dist-es/utils/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -40940,7 +40518,6 @@ var init_utils5 = __esm({
 var abortTimeout, createWaiter;
 var init_createWaiter = __esm({
   "node_modules/@smithy/util-waiter/dist-es/createWaiter.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -40998,7 +40575,6 @@ var init_createWaiter = __esm({
 // node_modules/@smithy/util-waiter/dist-es/index.js
 var init_dist_es57 = __esm({
   "node_modules/@smithy/util-waiter/dist-es/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -41012,7 +40588,6 @@ var init_dist_es57 = __esm({
 var checkState, waitForBucketExists, waitUntilBucketExists;
 var init_waitForBucketExists = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/waiters/waitForBucketExists.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -41049,7 +40624,6 @@ var init_waitForBucketExists = __esm({
 var checkState2, waitForBucketNotExists, waitUntilBucketNotExists;
 var init_waitForBucketNotExists = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/waiters/waitForBucketNotExists.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -41085,7 +40659,6 @@ var init_waitForBucketNotExists = __esm({
 var checkState3, waitForObjectExists, waitUntilObjectExists;
 var init_waitForObjectExists = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/waiters/waitForObjectExists.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -41122,7 +40695,6 @@ var init_waitForObjectExists = __esm({
 var checkState4, waitForObjectNotExists, waitUntilObjectNotExists;
 var init_waitForObjectNotExists = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/waiters/waitForObjectNotExists.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -41157,7 +40729,6 @@ var init_waitForObjectNotExists = __esm({
 // node_modules/@aws-sdk/client-s3/dist-es/waiters/index.js
 var init_waiters = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/waiters/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -41173,7 +40744,6 @@ var init_waiters = __esm({
 var BucketAbacStatus, RequestCharged, RequestPayer, BucketAccelerateStatus, Type, Permission, OwnerOverride, ChecksumType, ServerSideEncryption, ObjectCannedACL, ChecksumAlgorithm2, MetadataDirective, ObjectLockLegalHoldStatus, ObjectLockMode, StorageClass, TaggingDirective, BucketCannedACL, DataRedundancy, BucketType, LocationType, BucketLocationConstraint, ObjectOwnership, InventoryConfigurationState, TableSseAlgorithm, ExpirationState, SessionMode, AnalyticsS3ExportFileFormat, StorageClassAnalysisSchemaVersion, EncryptionType, IntelligentTieringStatus, IntelligentTieringAccessTier, InventoryFormat, InventoryIncludedObjectVersions, InventoryOptionalField, InventoryFrequency, TransitionStorageClass, ExpirationStatus, TransitionDefaultMinimumObjectSize, BucketLogsPermission, PartitionDateSource, S3TablesBucketType, Event, FilterRuleName, DeleteMarkerReplicationStatus, MetricsStatus, ReplicationTimeStatus, ExistingObjectReplicationStatus, ReplicaModificationsStatus, SseKmsEncryptedObjectsStatus, ReplicationRuleStatus, Payer, MFADeleteStatus, BucketVersioningStatus, Protocol, ReplicationStatus, ChecksumMode, ObjectAttributes, ObjectLockEnabled, ObjectLockRetentionMode, ArchiveStatus, EncodingType, ObjectStorageClass, OptionalObjectAttributes, ObjectVersionStorageClass, MFADelete, Tier, ExpressionType, CompressionType, FileHeaderInfo, JSONType, QuoteFields, RestoreRequestType;
 var init_enums = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/models/enums.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -41792,7 +41362,6 @@ __export(dist_es_exports, {
 });
 var init_dist_es58 = __esm({
   "node_modules/@aws-sdk/client-s3/dist-es/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -41839,7 +41408,6 @@ function formatUrl(request) {
 }
 var init_dist_es59 = __esm({
   "node_modules/@aws-sdk/util-format-url/dist-es/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -41852,7 +41420,6 @@ var init_dist_es59 = __esm({
 // node_modules/@aws-sdk/s3-request-presigner/node_modules/@aws-sdk/middleware-sdk-s3/dist-es/check-content-length-header.js
 var init_check_content_length_header2 = __esm({
   "node_modules/@aws-sdk/s3-request-presigner/node_modules/@aws-sdk/middleware-sdk-s3/dist-es/check-content-length-header.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -41863,7 +41430,6 @@ var init_check_content_length_header2 = __esm({
 // node_modules/@aws-sdk/s3-request-presigner/node_modules/@aws-sdk/middleware-sdk-s3/dist-es/region-redirect-endpoint-middleware.js
 var init_region_redirect_endpoint_middleware2 = __esm({
   "node_modules/@aws-sdk/s3-request-presigner/node_modules/@aws-sdk/middleware-sdk-s3/dist-es/region-redirect-endpoint-middleware.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -41874,7 +41440,6 @@ var init_region_redirect_endpoint_middleware2 = __esm({
 // node_modules/@aws-sdk/s3-request-presigner/node_modules/@aws-sdk/middleware-sdk-s3/dist-es/region-redirect-middleware.js
 var init_region_redirect_middleware2 = __esm({
   "node_modules/@aws-sdk/s3-request-presigner/node_modules/@aws-sdk/middleware-sdk-s3/dist-es/region-redirect-middleware.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -41885,7 +41450,6 @@ var init_region_redirect_middleware2 = __esm({
 // node_modules/@aws-sdk/s3-request-presigner/node_modules/@aws-sdk/middleware-sdk-s3/dist-es/s3-expires-middleware.js
 var init_s3_expires_middleware2 = __esm({
   "node_modules/@aws-sdk/s3-request-presigner/node_modules/@aws-sdk/middleware-sdk-s3/dist-es/s3-expires-middleware.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -41897,7 +41461,6 @@ var init_s3_expires_middleware2 = __esm({
 var SESSION_TOKEN_QUERY_PARAM2, SESSION_TOKEN_HEADER2;
 var init_constants14 = __esm({
   "node_modules/@aws-sdk/s3-request-presigner/node_modules/@aws-sdk/middleware-sdk-s3/dist-es/s3-express/constants.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -41931,7 +41494,6 @@ function setSingleOverride2(privateAccess, credentialsWithoutSessionToken) {
 var SignatureV4S3Express2;
 var init_SignatureV4S3Express2 = __esm({
   "node_modules/@aws-sdk/s3-request-presigner/node_modules/@aws-sdk/middleware-sdk-s3/dist-es/s3-express/classes/SignatureV4S3Express.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -41939,6 +41501,9 @@ var init_SignatureV4S3Express2 = __esm({
     init_dist_es17();
     init_constants14();
     SignatureV4S3Express2 = class extends SignatureV4 {
+      static {
+        __name(this, "SignatureV4S3Express");
+      }
       async signWithCredentials(requestToSign, credentials, options) {
         const credentialsWithoutSessionToken = getCredentialsWithoutSessionToken2(credentials);
         requestToSign.headers[SESSION_TOKEN_HEADER2] = credentials.sessionToken;
@@ -41957,7 +41522,6 @@ var init_SignatureV4S3Express2 = __esm({
         return this.presign(requestToSign, options);
       }
     };
-    __name(SignatureV4S3Express2, "SignatureV4S3Express");
     __name(getCredentialsWithoutSessionToken2, "getCredentialsWithoutSessionToken");
     __name(setSingleOverride2, "setSingleOverride");
   }
@@ -41966,7 +41530,6 @@ var init_SignatureV4S3Express2 = __esm({
 // node_modules/@aws-sdk/s3-request-presigner/node_modules/@aws-sdk/middleware-sdk-s3/dist-es/s3-express/index.js
 var init_s3_express2 = __esm({
   "node_modules/@aws-sdk/s3-request-presigner/node_modules/@aws-sdk/middleware-sdk-s3/dist-es/s3-express/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -41978,7 +41541,6 @@ var init_s3_express2 = __esm({
 // node_modules/@aws-sdk/s3-request-presigner/node_modules/@aws-sdk/middleware-sdk-s3/dist-es/s3Configuration.js
 var init_s3Configuration2 = __esm({
   "node_modules/@aws-sdk/s3-request-presigner/node_modules/@aws-sdk/middleware-sdk-s3/dist-es/s3Configuration.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -41989,7 +41551,6 @@ var init_s3Configuration2 = __esm({
 // node_modules/@aws-sdk/s3-request-presigner/node_modules/@aws-sdk/middleware-sdk-s3/dist-es/throw-200-exceptions.js
 var init_throw_200_exceptions2 = __esm({
   "node_modules/@aws-sdk/s3-request-presigner/node_modules/@aws-sdk/middleware-sdk-s3/dist-es/throw-200-exceptions.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -42000,7 +41561,6 @@ var init_throw_200_exceptions2 = __esm({
 // node_modules/@aws-sdk/s3-request-presigner/node_modules/@aws-sdk/middleware-sdk-s3/dist-es/validate-bucket-name.js
 var init_validate_bucket_name2 = __esm({
   "node_modules/@aws-sdk/s3-request-presigner/node_modules/@aws-sdk/middleware-sdk-s3/dist-es/validate-bucket-name.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -42011,7 +41571,6 @@ var init_validate_bucket_name2 = __esm({
 // node_modules/@aws-sdk/s3-request-presigner/node_modules/@aws-sdk/middleware-sdk-s3/dist-es/index.js
 var init_dist_es60 = __esm({
   "node_modules/@aws-sdk/s3-request-presigner/node_modules/@aws-sdk/middleware-sdk-s3/dist-es/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -42031,7 +41590,6 @@ var init_dist_es60 = __esm({
 var signatureV4CrtContainer2;
 var init_signature_v4_crt_container2 = __esm({
   "node_modules/@aws-sdk/s3-request-presigner/node_modules/@aws-sdk/signature-v4-multi-region/dist-es/signature-v4-crt-container.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -42046,7 +41604,6 @@ var init_signature_v4_crt_container2 = __esm({
 var SignatureV4MultiRegion2;
 var init_SignatureV4MultiRegion2 = __esm({
   "node_modules/@aws-sdk/s3-request-presigner/node_modules/@aws-sdk/signature-v4-multi-region/dist-es/SignatureV4MultiRegion.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -42055,6 +41612,9 @@ var init_SignatureV4MultiRegion2 = __esm({
     init_dist_es17();
     init_signature_v4_crt_container2();
     SignatureV4MultiRegion2 = class {
+      static {
+        __name(this, "SignatureV4MultiRegion");
+      }
       sigv4aSigner;
       sigv4Signer;
       signerOptions;
@@ -42138,14 +41698,12 @@ var init_SignatureV4MultiRegion2 = __esm({
         return this.sigv4aSigner;
       }
     };
-    __name(SignatureV4MultiRegion2, "SignatureV4MultiRegion");
   }
 });
 
 // node_modules/@aws-sdk/s3-request-presigner/node_modules/@aws-sdk/signature-v4-multi-region/dist-es/index.js
 var init_dist_es61 = __esm({
   "node_modules/@aws-sdk/s3-request-presigner/node_modules/@aws-sdk/signature-v4-multi-region/dist-es/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -42159,7 +41717,6 @@ var init_dist_es61 = __esm({
 var UNSIGNED_PAYLOAD2, SHA256_HEADER2;
 var init_constants15 = __esm({
   "node_modules/@aws-sdk/s3-request-presigner/dist-es/constants.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -42173,7 +41730,6 @@ var init_constants15 = __esm({
 var S3RequestPresigner;
 var init_presigner = __esm({
   "node_modules/@aws-sdk/s3-request-presigner/dist-es/presigner.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -42181,6 +41737,9 @@ var init_presigner = __esm({
     init_dist_es61();
     init_constants15();
     S3RequestPresigner = class {
+      static {
+        __name(this, "S3RequestPresigner");
+      }
       signer;
       constructor(options) {
         const resolvedOptions = {
@@ -42233,7 +41792,6 @@ var init_presigner = __esm({
         }
       }
     };
-    __name(S3RequestPresigner, "S3RequestPresigner");
   }
 });
 
@@ -42241,7 +41799,6 @@ var init_presigner = __esm({
 var getSignedUrl;
 var init_getSignedUrl = __esm({
   "node_modules/@aws-sdk/s3-request-presigner/dist-es/getSignedUrl.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -42264,7 +41821,7 @@ var init_getSignedUrl = __esm({
         s3Presigner = new S3RequestPresigner({
           ...client.config,
           signingName: authScheme?.signingName,
-          region: async () => region
+          region: /* @__PURE__ */ __name(async () => region, "region")
         });
       } else {
         s3Presigner = new S3RequestPresigner(client.config);
@@ -42315,7 +41872,6 @@ var init_getSignedUrl = __esm({
 // node_modules/@aws-sdk/s3-request-presigner/dist-es/index.js
 var init_dist_es62 = __esm({
   "node_modules/@aws-sdk/s3-request-presigner/dist-es/index.js"() {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -42348,16 +41904,15 @@ var R2_PATHS, FILE_SIZE_LIMITS, ALLOWED_FILE_TYPES;
 var init_r2_config = __esm({
   "src/lib/storage/r2-config.ts"() {
     "use strict";
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
     init_performance2();
     R2_PATHS = {
-      BOOKS: (bookId, filename) => `books/${bookId}/${filename}`,
-      COVERS: (filename) => `covers/${filename}`,
-      PROFILES: (filename) => `profiles/${filename}`,
-      BLOG_IMAGES: (filename) => `blog-images/${filename}`
+      BOOKS: /* @__PURE__ */ __name((bookId, filename) => `books/${bookId}/${filename}`, "BOOKS"),
+      COVERS: /* @__PURE__ */ __name((filename) => `covers/${filename}`, "COVERS"),
+      PROFILES: /* @__PURE__ */ __name((filename) => `profiles/${filename}`, "PROFILES"),
+      BLOG_IMAGES: /* @__PURE__ */ __name((filename) => `blog-images/${filename}`, "BLOG_IMAGES")
     };
     FILE_SIZE_LIMITS = {
       BOOK: 100 * 1024 * 1024,
@@ -42480,8 +42035,7 @@ async function uploadBatch(files) {
   return Promise.all(uploadPromises);
 }
 async function deleteBatch(fileKeys) {
-  if (fileKeys.length === 0)
-    return;
+  if (fileKeys.length === 0) return;
   const command = new DeleteObjectsCommand({
     Bucket: R2_BUCKET_NAME,
     Delete: {
@@ -42521,7 +42075,6 @@ var R2_ENDPOINT, R2_BUCKET_NAME, R2_PUBLIC_URL, r2Client;
 var init_cloudflare_r2 = __esm({
   "src/lib/cloudflare-r2.ts"() {
     "use strict";
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -42555,399 +42108,21 @@ var init_cloudflare_r2 = __esm({
   }
 });
 
-// node_modules/unenv/dist/runtime/node/internal/crypto/web.mjs
-var subtle;
-var init_web = __esm({
-  "node_modules/unenv/dist/runtime/node/internal/crypto/web.mjs"() {
-    init_strip_cf_connecting_ip_header();
-    init_modules_watch_stub();
-    init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
-    init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
-    init_performance2();
-    subtle = globalThis.crypto?.subtle;
-  }
-});
-
-// node_modules/unenv/dist/runtime/node/internal/crypto/node.mjs
-var webcrypto, createCipher, createDecipher, pseudoRandomBytes, createCipheriv, createDecipheriv, createECDH, createSign, createVerify, diffieHellman, getCipherInfo, privateDecrypt, privateEncrypt, publicDecrypt, publicEncrypt, sign2, verify2, hash, Cipher, Cipheriv, Decipher, Decipheriv, ECDH, Sign, Verify;
-var init_node = __esm({
-  "node_modules/unenv/dist/runtime/node/internal/crypto/node.mjs"() {
-    init_strip_cf_connecting_ip_header();
-    init_modules_watch_stub();
-    init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
-    init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
-    init_performance2();
-    init_utils();
-    webcrypto = new Proxy(globalThis.crypto, { get(_, key) {
-      if (key === "CryptoKey") {
-        return globalThis.CryptoKey;
-      }
-      if (typeof globalThis.crypto[key] === "function") {
-        return globalThis.crypto[key].bind(globalThis.crypto);
-      }
-      return globalThis.crypto[key];
-    } });
-    createCipher = /* @__PURE__ */ notImplemented("crypto.createCipher");
-    createDecipher = /* @__PURE__ */ notImplemented("crypto.createDecipher");
-    pseudoRandomBytes = /* @__PURE__ */ notImplemented("crypto.pseudoRandomBytes");
-    createCipheriv = /* @__PURE__ */ notImplemented("crypto.createCipheriv");
-    createDecipheriv = /* @__PURE__ */ notImplemented("crypto.createDecipheriv");
-    createECDH = /* @__PURE__ */ notImplemented("crypto.createECDH");
-    createSign = /* @__PURE__ */ notImplemented("crypto.createSign");
-    createVerify = /* @__PURE__ */ notImplemented("crypto.createVerify");
-    diffieHellman = /* @__PURE__ */ notImplemented("crypto.diffieHellman");
-    getCipherInfo = /* @__PURE__ */ notImplemented("crypto.getCipherInfo");
-    privateDecrypt = /* @__PURE__ */ notImplemented("crypto.privateDecrypt");
-    privateEncrypt = /* @__PURE__ */ notImplemented("crypto.privateEncrypt");
-    publicDecrypt = /* @__PURE__ */ notImplemented("crypto.publicDecrypt");
-    publicEncrypt = /* @__PURE__ */ notImplemented("crypto.publicEncrypt");
-    sign2 = /* @__PURE__ */ notImplemented("crypto.sign");
-    verify2 = /* @__PURE__ */ notImplemented("crypto.verify");
-    hash = /* @__PURE__ */ notImplemented("crypto.hash");
-    Cipher = /* @__PURE__ */ notImplementedClass("crypto.Cipher");
-    Cipheriv = /* @__PURE__ */ notImplementedClass(
-      "crypto.Cipheriv"
-      // @ts-expect-error not typed yet
-    );
-    Decipher = /* @__PURE__ */ notImplementedClass("crypto.Decipher");
-    Decipheriv = /* @__PURE__ */ notImplementedClass(
-      "crypto.Decipheriv"
-      // @ts-expect-error not typed yet
-    );
-    ECDH = /* @__PURE__ */ notImplementedClass("crypto.ECDH");
-    Sign = /* @__PURE__ */ notImplementedClass("crypto.Sign");
-    Verify = /* @__PURE__ */ notImplementedClass("crypto.Verify");
-  }
-});
-
-// node_modules/unenv/dist/runtime/node/internal/crypto/constants.mjs
-var SSL_OP_ALL, SSL_OP_ALLOW_NO_DHE_KEX, SSL_OP_ALLOW_UNSAFE_LEGACY_RENEGOTIATION, SSL_OP_CIPHER_SERVER_PREFERENCE, SSL_OP_CISCO_ANYCONNECT, SSL_OP_COOKIE_EXCHANGE, SSL_OP_CRYPTOPRO_TLSEXT_BUG, SSL_OP_DONT_INSERT_EMPTY_FRAGMENTS, SSL_OP_LEGACY_SERVER_CONNECT, SSL_OP_NO_COMPRESSION, SSL_OP_NO_ENCRYPT_THEN_MAC, SSL_OP_NO_QUERY_MTU, SSL_OP_NO_RENEGOTIATION, SSL_OP_NO_SESSION_RESUMPTION_ON_RENEGOTIATION, SSL_OP_NO_SSLv2, SSL_OP_NO_SSLv3, SSL_OP_NO_TICKET, SSL_OP_NO_TLSv1, SSL_OP_NO_TLSv1_1, SSL_OP_NO_TLSv1_2, SSL_OP_NO_TLSv1_3, SSL_OP_PRIORITIZE_CHACHA, SSL_OP_TLS_ROLLBACK_BUG, ENGINE_METHOD_RSA, ENGINE_METHOD_DSA, ENGINE_METHOD_DH, ENGINE_METHOD_RAND, ENGINE_METHOD_EC, ENGINE_METHOD_CIPHERS, ENGINE_METHOD_DIGESTS, ENGINE_METHOD_PKEY_METHS, ENGINE_METHOD_PKEY_ASN1_METHS, ENGINE_METHOD_ALL, ENGINE_METHOD_NONE, DH_CHECK_P_NOT_SAFE_PRIME, DH_CHECK_P_NOT_PRIME, DH_UNABLE_TO_CHECK_GENERATOR, DH_NOT_SUITABLE_GENERATOR, RSA_PKCS1_PADDING, RSA_NO_PADDING, RSA_PKCS1_OAEP_PADDING, RSA_X931_PADDING, RSA_PKCS1_PSS_PADDING, RSA_PSS_SALTLEN_DIGEST, RSA_PSS_SALTLEN_MAX_SIGN, RSA_PSS_SALTLEN_AUTO, POINT_CONVERSION_COMPRESSED, POINT_CONVERSION_UNCOMPRESSED, POINT_CONVERSION_HYBRID, defaultCoreCipherList, defaultCipherList, OPENSSL_VERSION_NUMBER, TLS1_VERSION, TLS1_1_VERSION, TLS1_2_VERSION, TLS1_3_VERSION;
-var init_constants16 = __esm({
-  "node_modules/unenv/dist/runtime/node/internal/crypto/constants.mjs"() {
-    init_strip_cf_connecting_ip_header();
-    init_modules_watch_stub();
-    init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
-    init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
-    init_performance2();
-    SSL_OP_ALL = 2147485776;
-    SSL_OP_ALLOW_NO_DHE_KEX = 1024;
-    SSL_OP_ALLOW_UNSAFE_LEGACY_RENEGOTIATION = 262144;
-    SSL_OP_CIPHER_SERVER_PREFERENCE = 4194304;
-    SSL_OP_CISCO_ANYCONNECT = 32768;
-    SSL_OP_COOKIE_EXCHANGE = 8192;
-    SSL_OP_CRYPTOPRO_TLSEXT_BUG = 2147483648;
-    SSL_OP_DONT_INSERT_EMPTY_FRAGMENTS = 2048;
-    SSL_OP_LEGACY_SERVER_CONNECT = 4;
-    SSL_OP_NO_COMPRESSION = 131072;
-    SSL_OP_NO_ENCRYPT_THEN_MAC = 524288;
-    SSL_OP_NO_QUERY_MTU = 4096;
-    SSL_OP_NO_RENEGOTIATION = 1073741824;
-    SSL_OP_NO_SESSION_RESUMPTION_ON_RENEGOTIATION = 65536;
-    SSL_OP_NO_SSLv2 = 0;
-    SSL_OP_NO_SSLv3 = 33554432;
-    SSL_OP_NO_TICKET = 16384;
-    SSL_OP_NO_TLSv1 = 67108864;
-    SSL_OP_NO_TLSv1_1 = 268435456;
-    SSL_OP_NO_TLSv1_2 = 134217728;
-    SSL_OP_NO_TLSv1_3 = 536870912;
-    SSL_OP_PRIORITIZE_CHACHA = 2097152;
-    SSL_OP_TLS_ROLLBACK_BUG = 8388608;
-    ENGINE_METHOD_RSA = 1;
-    ENGINE_METHOD_DSA = 2;
-    ENGINE_METHOD_DH = 4;
-    ENGINE_METHOD_RAND = 8;
-    ENGINE_METHOD_EC = 2048;
-    ENGINE_METHOD_CIPHERS = 64;
-    ENGINE_METHOD_DIGESTS = 128;
-    ENGINE_METHOD_PKEY_METHS = 512;
-    ENGINE_METHOD_PKEY_ASN1_METHS = 1024;
-    ENGINE_METHOD_ALL = 65535;
-    ENGINE_METHOD_NONE = 0;
-    DH_CHECK_P_NOT_SAFE_PRIME = 2;
-    DH_CHECK_P_NOT_PRIME = 1;
-    DH_UNABLE_TO_CHECK_GENERATOR = 4;
-    DH_NOT_SUITABLE_GENERATOR = 8;
-    RSA_PKCS1_PADDING = 1;
-    RSA_NO_PADDING = 3;
-    RSA_PKCS1_OAEP_PADDING = 4;
-    RSA_X931_PADDING = 5;
-    RSA_PKCS1_PSS_PADDING = 6;
-    RSA_PSS_SALTLEN_DIGEST = -1;
-    RSA_PSS_SALTLEN_MAX_SIGN = -2;
-    RSA_PSS_SALTLEN_AUTO = -2;
-    POINT_CONVERSION_COMPRESSED = 2;
-    POINT_CONVERSION_UNCOMPRESSED = 4;
-    POINT_CONVERSION_HYBRID = 6;
-    defaultCoreCipherList = "";
-    defaultCipherList = "";
-    OPENSSL_VERSION_NUMBER = 0;
-    TLS1_VERSION = 0;
-    TLS1_1_VERSION = 0;
-    TLS1_2_VERSION = 0;
-    TLS1_3_VERSION = 0;
-  }
-});
-
-// node_modules/unenv/dist/runtime/node/crypto.mjs
-var constants;
-var init_crypto2 = __esm({
-  "node_modules/unenv/dist/runtime/node/crypto.mjs"() {
-    init_strip_cf_connecting_ip_header();
-    init_modules_watch_stub();
-    init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
-    init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
-    init_performance2();
-    init_constants16();
-    init_web();
-    init_node();
-    constants = {
-      OPENSSL_VERSION_NUMBER,
-      SSL_OP_ALL,
-      SSL_OP_ALLOW_NO_DHE_KEX,
-      SSL_OP_ALLOW_UNSAFE_LEGACY_RENEGOTIATION,
-      SSL_OP_CIPHER_SERVER_PREFERENCE,
-      SSL_OP_CISCO_ANYCONNECT,
-      SSL_OP_COOKIE_EXCHANGE,
-      SSL_OP_CRYPTOPRO_TLSEXT_BUG,
-      SSL_OP_DONT_INSERT_EMPTY_FRAGMENTS,
-      SSL_OP_LEGACY_SERVER_CONNECT,
-      SSL_OP_NO_COMPRESSION,
-      SSL_OP_NO_ENCRYPT_THEN_MAC,
-      SSL_OP_NO_QUERY_MTU,
-      SSL_OP_NO_RENEGOTIATION,
-      SSL_OP_NO_SESSION_RESUMPTION_ON_RENEGOTIATION,
-      SSL_OP_NO_SSLv2,
-      SSL_OP_NO_SSLv3,
-      SSL_OP_NO_TICKET,
-      SSL_OP_NO_TLSv1,
-      SSL_OP_NO_TLSv1_1,
-      SSL_OP_NO_TLSv1_2,
-      SSL_OP_NO_TLSv1_3,
-      SSL_OP_PRIORITIZE_CHACHA,
-      SSL_OP_TLS_ROLLBACK_BUG,
-      ENGINE_METHOD_RSA,
-      ENGINE_METHOD_DSA,
-      ENGINE_METHOD_DH,
-      ENGINE_METHOD_RAND,
-      ENGINE_METHOD_EC,
-      ENGINE_METHOD_CIPHERS,
-      ENGINE_METHOD_DIGESTS,
-      ENGINE_METHOD_PKEY_METHS,
-      ENGINE_METHOD_PKEY_ASN1_METHS,
-      ENGINE_METHOD_ALL,
-      ENGINE_METHOD_NONE,
-      DH_CHECK_P_NOT_SAFE_PRIME,
-      DH_CHECK_P_NOT_PRIME,
-      DH_UNABLE_TO_CHECK_GENERATOR,
-      DH_NOT_SUITABLE_GENERATOR,
-      RSA_PKCS1_PADDING,
-      RSA_NO_PADDING,
-      RSA_PKCS1_OAEP_PADDING,
-      RSA_X931_PADDING,
-      RSA_PKCS1_PSS_PADDING,
-      RSA_PSS_SALTLEN_DIGEST,
-      RSA_PSS_SALTLEN_MAX_SIGN,
-      RSA_PSS_SALTLEN_AUTO,
-      defaultCoreCipherList,
-      TLS1_VERSION,
-      TLS1_1_VERSION,
-      TLS1_2_VERSION,
-      TLS1_3_VERSION,
-      POINT_CONVERSION_COMPRESSED,
-      POINT_CONVERSION_UNCOMPRESSED,
-      POINT_CONVERSION_HYBRID,
-      defaultCipherList
-    };
-  }
-});
-
-// node_modules/@cloudflare/unenv-preset/dist/runtime/node/crypto.mjs
-var workerdCrypto, Certificate, DiffieHellman, DiffieHellmanGroup, Hash, Hmac, KeyObject, X509Certificate, checkPrime, checkPrimeSync, createDiffieHellman, createDiffieHellmanGroup, createHash, createHmac, createPrivateKey, createPublicKey, createSecretKey, generateKey, generateKeyPair, generateKeyPairSync, generateKeySync, generatePrime, generatePrimeSync, getCiphers, getCurves, getDiffieHellman, getFips, getHashes, hkdf, hkdfSync, pbkdf2, pbkdf2Sync, randomBytes, randomFill, randomFillSync, randomInt, randomUUID2, scrypt, scryptSync, secureHeapUsed, setEngine, setFips, subtle2, timingSafeEqual, getRandomValues, webcrypto2, fips, crypto_default;
-var init_crypto3 = __esm({
-  "node_modules/@cloudflare/unenv-preset/dist/runtime/node/crypto.mjs"() {
-    init_strip_cf_connecting_ip_header();
-    init_modules_watch_stub();
-    init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
-    init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
-    init_performance2();
-    init_crypto2();
-    workerdCrypto = process.getBuiltinModule("node:crypto");
-    ({
-      Certificate,
-      DiffieHellman,
-      DiffieHellmanGroup,
-      Hash,
-      Hmac,
-      KeyObject,
-      X509Certificate,
-      checkPrime,
-      checkPrimeSync,
-      createDiffieHellman,
-      createDiffieHellmanGroup,
-      createHash,
-      createHmac,
-      createPrivateKey,
-      createPublicKey,
-      createSecretKey,
-      generateKey,
-      generateKeyPair,
-      generateKeyPairSync,
-      generateKeySync,
-      generatePrime,
-      generatePrimeSync,
-      getCiphers,
-      getCurves,
-      getDiffieHellman,
-      getFips,
-      getHashes,
-      hkdf,
-      hkdfSync,
-      pbkdf2,
-      pbkdf2Sync,
-      randomBytes,
-      randomFill,
-      randomFillSync,
-      randomInt,
-      randomUUID: randomUUID2,
-      scrypt,
-      scryptSync,
-      secureHeapUsed,
-      setEngine,
-      setFips,
-      subtle: subtle2,
-      timingSafeEqual
-    } = workerdCrypto);
-    getRandomValues = workerdCrypto.getRandomValues.bind(
-      workerdCrypto.webcrypto
-    );
-    webcrypto2 = {
-      // @ts-expect-error unenv has unknown type
-      CryptoKey: webcrypto.CryptoKey,
-      getRandomValues,
-      randomUUID: randomUUID2,
-      subtle: subtle2
-    };
-    fips = workerdCrypto.fips;
-    crypto_default = {
-      /**
-       * manually unroll unenv-polyfilled-symbols to make it tree-shakeable
-       */
-      Certificate,
-      Cipher,
-      Cipheriv,
-      Decipher,
-      Decipheriv,
-      ECDH,
-      Sign,
-      Verify,
-      X509Certificate,
-      // @ts-expect-error @types/node is out of date - this is a bug in typings
-      constants,
-      // @ts-expect-error unenv has unknown type
-      createCipheriv,
-      // @ts-expect-error unenv has unknown type
-      createDecipheriv,
-      // @ts-expect-error unenv has unknown type
-      createECDH,
-      // @ts-expect-error unenv has unknown type
-      createSign,
-      // @ts-expect-error unenv has unknown type
-      createVerify,
-      // @ts-expect-error unenv has unknown type
-      diffieHellman,
-      // @ts-expect-error unenv has unknown type
-      getCipherInfo,
-      // @ts-expect-error unenv has unknown type
-      hash,
-      // @ts-expect-error unenv has unknown type
-      privateDecrypt,
-      // @ts-expect-error unenv has unknown type
-      privateEncrypt,
-      // @ts-expect-error unenv has unknown type
-      publicDecrypt,
-      // @ts-expect-error unenv has unknown type
-      publicEncrypt,
-      scrypt,
-      scryptSync,
-      // @ts-expect-error unenv has unknown type
-      sign: sign2,
-      // @ts-expect-error unenv has unknown type
-      verify: verify2,
-      // default-only export from unenv
-      // @ts-expect-error unenv has unknown type
-      createCipher,
-      // @ts-expect-error unenv has unknown type
-      createDecipher,
-      // @ts-expect-error unenv has unknown type
-      pseudoRandomBytes,
-      /**
-       * manually unroll workerd-polyfilled-symbols to make it tree-shakeable
-       */
-      DiffieHellman,
-      DiffieHellmanGroup,
-      Hash,
-      Hmac,
-      KeyObject,
-      checkPrime,
-      checkPrimeSync,
-      createDiffieHellman,
-      createDiffieHellmanGroup,
-      createHash,
-      createHmac,
-      createPrivateKey,
-      createPublicKey,
-      createSecretKey,
-      generateKey,
-      generateKeyPair,
-      generateKeyPairSync,
-      generateKeySync,
-      generatePrime,
-      generatePrimeSync,
-      getCiphers,
-      getCurves,
-      getDiffieHellman,
-      getFips,
-      getHashes,
-      getRandomValues,
-      hkdf,
-      hkdfSync,
-      pbkdf2,
-      pbkdf2Sync,
-      randomBytes,
-      randomFill,
-      randomFillSync,
-      randomInt,
-      randomUUID: randomUUID2,
-      secureHeapUsed,
-      setEngine,
-      setFips,
-      subtle: subtle2,
-      timingSafeEqual,
-      // default-only export from workerd
-      fips,
-      // special-cased deep merged symbols
-      webcrypto: webcrypto2
-    };
-  }
-});
-
 // node-built-in-modules:crypto
+import libDefault from "crypto";
 var require_crypto = __commonJS({
   "node-built-in-modules:crypto"(exports, module) {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
     init_performance2();
-    init_crypto3();
-    module.exports = crypto_default;
+    module.exports = libDefault;
   }
 });
 
 // node_modules/bcryptjs/dist/bcrypt.js
 var require_bcrypt = __commonJS({
   "node_modules/bcryptjs/dist/bcrypt.js"(exports, module) {
-    init_strip_cf_connecting_ip_header();
     init_modules_watch_stub();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
     init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -43090,28 +42265,28 @@ var require_bcrypt = __commonJS({
         return wrong === 0;
       }
       __name(safeStringCompare, "safeStringCompare");
-      bcrypt2.compareSync = function(s2, hash3) {
-        if (typeof s2 !== "string" || typeof hash3 !== "string")
-          throw Error("Illegal arguments: " + typeof s2 + ", " + typeof hash3);
-        if (hash3.length !== 60)
+      bcrypt2.compareSync = function(s2, hash2) {
+        if (typeof s2 !== "string" || typeof hash2 !== "string")
+          throw Error("Illegal arguments: " + typeof s2 + ", " + typeof hash2);
+        if (hash2.length !== 60)
           return false;
-        return safeStringCompare(bcrypt2.hashSync(s2, hash3.substr(0, hash3.length - 31)), hash3);
+        return safeStringCompare(bcrypt2.hashSync(s2, hash2.substr(0, hash2.length - 31)), hash2);
       };
-      bcrypt2.compare = function(s2, hash3, callback, progressCallback) {
+      bcrypt2.compare = function(s2, hash2, callback, progressCallback) {
         function _async(callback2) {
-          if (typeof s2 !== "string" || typeof hash3 !== "string") {
-            nextTick2(callback2.bind(this, Error("Illegal arguments: " + typeof s2 + ", " + typeof hash3)));
+          if (typeof s2 !== "string" || typeof hash2 !== "string") {
+            nextTick2(callback2.bind(this, Error("Illegal arguments: " + typeof s2 + ", " + typeof hash2)));
             return;
           }
-          if (hash3.length !== 60) {
+          if (hash2.length !== 60) {
             nextTick2(callback2.bind(this, null, false));
             return;
           }
-          bcrypt2.hash(s2, hash3.substr(0, 29), function(err, comp) {
+          bcrypt2.hash(s2, hash2.substr(0, 29), function(err, comp) {
             if (err)
               callback2(err);
             else
-              callback2(null, safeStringCompare(comp, hash3));
+              callback2(null, safeStringCompare(comp, hash2));
           }, progressCallback);
         }
         __name(_async, "_async");
@@ -43130,24 +42305,23 @@ var require_bcrypt = __commonJS({
             });
           });
       };
-      bcrypt2.getRounds = function(hash3) {
-        if (typeof hash3 !== "string")
-          throw Error("Illegal arguments: " + typeof hash3);
-        return parseInt(hash3.split("$")[2], 10);
+      bcrypt2.getRounds = function(hash2) {
+        if (typeof hash2 !== "string")
+          throw Error("Illegal arguments: " + typeof hash2);
+        return parseInt(hash2.split("$")[2], 10);
       };
-      bcrypt2.getSalt = function(hash3) {
-        if (typeof hash3 !== "string")
-          throw Error("Illegal arguments: " + typeof hash3);
-        if (hash3.length !== 60)
-          throw Error("Illegal hash length: " + hash3.length + " != 60");
-        return hash3.substring(0, 29);
+      bcrypt2.getSalt = function(hash2) {
+        if (typeof hash2 !== "string")
+          throw Error("Illegal arguments: " + typeof hash2);
+        if (hash2.length !== 60)
+          throw Error("Illegal hash length: " + hash2.length + " != 60");
+        return hash2.substring(0, 29);
       };
       var nextTick2 = typeof process !== "undefined" && process && typeof process.nextTick === "function" ? typeof setImmediate === "function" ? setImmediate : process.nextTick : setTimeout;
       function stringToBytes(str) {
         var out = [], i2 = 0;
         utfx.encodeUTF16toUTF8(function() {
-          if (i2 >= str.length)
-            return null;
+          if (i2 >= str.length) return null;
           return str.charCodeAt(i2++);
         }, function(b2) {
           out.push(b2);
@@ -43353,7 +42527,7 @@ var require_bcrypt = __commonJS({
         return res;
       }
       __name(base64_decode, "base64_decode");
-      var utfx = function() {
+      var utfx = (function() {
         "use strict";
         var utfx2 = {};
         utfx2.MAX_CODEPOINT = 1114111;
@@ -43392,8 +42566,7 @@ var require_bcrypt = __commonJS({
               ((b2 = src()) === null || (c2 = src()) === null) && fail([a2, b2, c2]), dst((a2 & 15) << 12 | (b2 & 63) << 6 | c2 & 63);
             else if ((a2 & 248) === 240)
               ((b2 = src()) === null || (c2 = src()) === null || (d2 = src()) === null) && fail([a2, b2, c2, d2]), dst((a2 & 7) << 18 | (b2 & 63) << 12 | (c2 & 63) << 6 | d2 & 63);
-            else
-              throw RangeError("Illegal starting byte: " + a2);
+            else throw RangeError("Illegal starting byte: " + a2);
           }
         };
         utfx2.UTF16toUTF8 = function(src, dst) {
@@ -43412,8 +42585,7 @@ var require_bcrypt = __commonJS({
             }
             dst(c1);
           }
-          if (c2 !== null)
-            dst(c2);
+          if (c2 !== null) dst(c2);
         };
         utfx2.UTF8toUTF16 = function(src, dst) {
           var cp2 = null;
@@ -43457,7 +42629,7 @@ var require_bcrypt = __commonJS({
           return [n2, l2];
         };
         return utfx2;
-      }();
+      })();
       Date.now = Date.now || function() {
         return +/* @__PURE__ */ new Date();
       };
@@ -44779,29 +43951,25 @@ var require_bcrypt = __commonJS({
   }
 });
 
-// .wrangler/tmp/bundle-bwyUk4/middleware-loader.entry.ts
-init_strip_cf_connecting_ip_header();
+// .wrangler/tmp/bundle-3wz30e/middleware-loader.entry.ts
 init_modules_watch_stub();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
 init_performance2();
 
-// .wrangler/tmp/bundle-bwyUk4/middleware-insertion-facade.js
-init_strip_cf_connecting_ip_header();
+// .wrangler/tmp/bundle-3wz30e/middleware-insertion-facade.js
 init_modules_watch_stub();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
 init_performance2();
 
 // src/worker/index.ts
-init_strip_cf_connecting_ip_header();
 init_modules_watch_stub();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
 init_performance2();
 
 // src/worker/middleware/cors.ts
-init_strip_cf_connecting_ip_header();
 init_modules_watch_stub();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -44818,13 +43986,10 @@ function getCorsConfig(env2) {
 }
 __name(getCorsConfig, "getCorsConfig");
 function isOriginAllowed(origin, allowedOrigins) {
-  if (!origin)
-    return false;
-  if (origin.includes("localhost"))
-    return true;
+  if (!origin) return false;
+  if (origin.includes("localhost")) return true;
   return allowedOrigins.some((allowed) => {
-    if (allowed === "*")
-      return true;
+    if (allowed === "*") return true;
     return origin === allowed || origin.endsWith(allowed);
   });
 }
@@ -44873,7 +44038,6 @@ function addCorsHeaders(response, origin, config2) {
 __name(addCorsHeaders, "addCorsHeaders");
 
 // src/worker/utils/response.ts
-init_strip_cf_connecting_ip_header();
 init_modules_watch_stub();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -44907,6 +44071,7 @@ function errorResponse(message2, status = 400, code) {
 __name(errorResponse, "errorResponse");
 function paginatedResponse(data, total, page, limit) {
   const response = {
+    success: true,
     data,
     pagination: {
       page,
@@ -44915,7 +44080,12 @@ function paginatedResponse(data, total, page, limit) {
       totalPages: Math.ceil(total / limit)
     }
   };
-  return successResponse(response);
+  return new Response(JSON.stringify(response), {
+    status: 200,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
 }
 __name(paginatedResponse, "paginatedResponse");
 var HttpStatus = {
@@ -44954,7 +44124,6 @@ function getPaginationParams(searchParams) {
 __name(getPaginationParams, "getPaginationParams");
 
 // src/worker/handlers/books.ts
-init_strip_cf_connecting_ip_header();
 init_modules_watch_stub();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -44962,35 +44131,30 @@ init_performance2();
 init_d1_client();
 
 // src/worker/middleware/auth.ts
-init_strip_cf_connecting_ip_header();
 init_modules_watch_stub();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
 init_performance2();
 
 // node_modules/jose/dist/browser/index.js
-init_strip_cf_connecting_ip_header();
 init_modules_watch_stub();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
 init_performance2();
 
 // node_modules/jose/dist/browser/runtime/base64url.js
-init_strip_cf_connecting_ip_header();
 init_modules_watch_stub();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
 init_performance2();
 
 // node_modules/jose/dist/browser/lib/buffer_utils.js
-init_strip_cf_connecting_ip_header();
 init_modules_watch_stub();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
 init_performance2();
 
 // node_modules/jose/dist/browser/runtime/webcrypto.js
-init_strip_cf_connecting_ip_header();
 init_modules_watch_stub();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -45052,12 +44216,14 @@ var decode = /* @__PURE__ */ __name((input) => {
 }, "decode");
 
 // node_modules/jose/dist/browser/util/errors.js
-init_strip_cf_connecting_ip_header();
 init_modules_watch_stub();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
 init_performance2();
 var JOSEError = class extends Error {
+  static {
+    __name(this, "JOSEError");
+  }
   constructor(message2, options) {
     super(message2, options);
     this.code = "ERR_JOSE_GENERIC";
@@ -45065,9 +44231,11 @@ var JOSEError = class extends Error {
     Error.captureStackTrace?.(this, this.constructor);
   }
 };
-__name(JOSEError, "JOSEError");
 JOSEError.code = "ERR_JOSE_GENERIC";
 var JWTClaimValidationFailed = class extends JOSEError {
+  static {
+    __name(this, "JWTClaimValidationFailed");
+  }
   constructor(message2, payload, claim = "unspecified", reason = "unspecified") {
     super(message2, { cause: { claim, reason, payload } });
     this.code = "ERR_JWT_CLAIM_VALIDATION_FAILED";
@@ -45076,9 +44244,11 @@ var JWTClaimValidationFailed = class extends JOSEError {
     this.payload = payload;
   }
 };
-__name(JWTClaimValidationFailed, "JWTClaimValidationFailed");
 JWTClaimValidationFailed.code = "ERR_JWT_CLAIM_VALIDATION_FAILED";
 var JWTExpired = class extends JOSEError {
+  static {
+    __name(this, "JWTExpired");
+  }
   constructor(message2, payload, claim = "unspecified", reason = "unspecified") {
     super(message2, { cause: { claim, reason, payload } });
     this.code = "ERR_JWT_EXPIRED";
@@ -45087,107 +44257,129 @@ var JWTExpired = class extends JOSEError {
     this.payload = payload;
   }
 };
-__name(JWTExpired, "JWTExpired");
 JWTExpired.code = "ERR_JWT_EXPIRED";
 var JOSEAlgNotAllowed = class extends JOSEError {
+  static {
+    __name(this, "JOSEAlgNotAllowed");
+  }
   constructor() {
     super(...arguments);
     this.code = "ERR_JOSE_ALG_NOT_ALLOWED";
   }
 };
-__name(JOSEAlgNotAllowed, "JOSEAlgNotAllowed");
 JOSEAlgNotAllowed.code = "ERR_JOSE_ALG_NOT_ALLOWED";
 var JOSENotSupported = class extends JOSEError {
+  static {
+    __name(this, "JOSENotSupported");
+  }
   constructor() {
     super(...arguments);
     this.code = "ERR_JOSE_NOT_SUPPORTED";
   }
 };
-__name(JOSENotSupported, "JOSENotSupported");
 JOSENotSupported.code = "ERR_JOSE_NOT_SUPPORTED";
 var JWEDecryptionFailed = class extends JOSEError {
+  static {
+    __name(this, "JWEDecryptionFailed");
+  }
   constructor(message2 = "decryption operation failed", options) {
     super(message2, options);
     this.code = "ERR_JWE_DECRYPTION_FAILED";
   }
 };
-__name(JWEDecryptionFailed, "JWEDecryptionFailed");
 JWEDecryptionFailed.code = "ERR_JWE_DECRYPTION_FAILED";
 var JWEInvalid = class extends JOSEError {
+  static {
+    __name(this, "JWEInvalid");
+  }
   constructor() {
     super(...arguments);
     this.code = "ERR_JWE_INVALID";
   }
 };
-__name(JWEInvalid, "JWEInvalid");
 JWEInvalid.code = "ERR_JWE_INVALID";
 var JWSInvalid = class extends JOSEError {
+  static {
+    __name(this, "JWSInvalid");
+  }
   constructor() {
     super(...arguments);
     this.code = "ERR_JWS_INVALID";
   }
 };
-__name(JWSInvalid, "JWSInvalid");
 JWSInvalid.code = "ERR_JWS_INVALID";
 var JWTInvalid = class extends JOSEError {
+  static {
+    __name(this, "JWTInvalid");
+  }
   constructor() {
     super(...arguments);
     this.code = "ERR_JWT_INVALID";
   }
 };
-__name(JWTInvalid, "JWTInvalid");
 JWTInvalid.code = "ERR_JWT_INVALID";
 var JWKInvalid = class extends JOSEError {
+  static {
+    __name(this, "JWKInvalid");
+  }
   constructor() {
     super(...arguments);
     this.code = "ERR_JWK_INVALID";
   }
 };
-__name(JWKInvalid, "JWKInvalid");
 JWKInvalid.code = "ERR_JWK_INVALID";
 var JWKSInvalid = class extends JOSEError {
+  static {
+    __name(this, "JWKSInvalid");
+  }
   constructor() {
     super(...arguments);
     this.code = "ERR_JWKS_INVALID";
   }
 };
-__name(JWKSInvalid, "JWKSInvalid");
 JWKSInvalid.code = "ERR_JWKS_INVALID";
 var JWKSNoMatchingKey = class extends JOSEError {
+  static {
+    __name(this, "JWKSNoMatchingKey");
+  }
   constructor(message2 = "no applicable key found in the JSON Web Key Set", options) {
     super(message2, options);
     this.code = "ERR_JWKS_NO_MATCHING_KEY";
   }
 };
-__name(JWKSNoMatchingKey, "JWKSNoMatchingKey");
 JWKSNoMatchingKey.code = "ERR_JWKS_NO_MATCHING_KEY";
 var JWKSMultipleMatchingKeys = class extends JOSEError {
+  static {
+    __name(this, "JWKSMultipleMatchingKeys");
+  }
   constructor(message2 = "multiple matching keys found in the JSON Web Key Set", options) {
     super(message2, options);
     this.code = "ERR_JWKS_MULTIPLE_MATCHING_KEYS";
   }
 };
-__name(JWKSMultipleMatchingKeys, "JWKSMultipleMatchingKeys");
 JWKSMultipleMatchingKeys.code = "ERR_JWKS_MULTIPLE_MATCHING_KEYS";
 var JWKSTimeout = class extends JOSEError {
+  static {
+    __name(this, "JWKSTimeout");
+  }
   constructor(message2 = "request timed out", options) {
     super(message2, options);
     this.code = "ERR_JWKS_TIMEOUT";
   }
 };
-__name(JWKSTimeout, "JWKSTimeout");
 JWKSTimeout.code = "ERR_JWKS_TIMEOUT";
 var JWSSignatureVerificationFailed = class extends JOSEError {
+  static {
+    __name(this, "JWSSignatureVerificationFailed");
+  }
   constructor(message2 = "signature verification failed", options) {
     super(message2, options);
     this.code = "ERR_JWS_SIGNATURE_VERIFICATION_FAILED";
   }
 };
-__name(JWSSignatureVerificationFailed, "JWSSignatureVerificationFailed");
 JWSSignatureVerificationFailed.code = "ERR_JWS_SIGNATURE_VERIFICATION_FAILED";
 
 // node_modules/jose/dist/browser/lib/crypto_key.js
-init_strip_cf_connecting_ip_header();
 init_modules_watch_stub();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -45200,8 +44392,8 @@ function isAlgorithm(algorithm, name2) {
   return algorithm.name === name2;
 }
 __name(isAlgorithm, "isAlgorithm");
-function getHashLength(hash3) {
-  return parseInt(hash3.name.slice(4), 10);
+function getHashLength(hash2) {
+  return parseInt(hash2.name.slice(4), 10);
 }
 __name(getHashLength, "getHashLength");
 function getNamedCurve(alg) {
@@ -45297,7 +44489,6 @@ function checkSigCryptoKey(key, alg, ...usages) {
 __name(checkSigCryptoKey, "checkSigCryptoKey");
 
 // node_modules/jose/dist/browser/lib/invalid_key_input.js
-init_strip_cf_connecting_ip_header();
 init_modules_watch_stub();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -45333,7 +44524,6 @@ function withAlg(alg, actual, ...types2) {
 __name(withAlg, "withAlg");
 
 // node_modules/jose/dist/browser/runtime/is_key_like.js
-init_strip_cf_connecting_ip_header();
 init_modules_watch_stub();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -45347,7 +44537,6 @@ var is_key_like_default = /* @__PURE__ */ __name((key) => {
 var types = ["CryptoKey"];
 
 // node_modules/jose/dist/browser/lib/is_disjoint.js
-init_strip_cf_connecting_ip_header();
 init_modules_watch_stub();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -45376,7 +44565,6 @@ var isDisjoint = /* @__PURE__ */ __name((...headers) => {
 var is_disjoint_default = isDisjoint;
 
 // node_modules/jose/dist/browser/lib/is_object.js
-init_strip_cf_connecting_ip_header();
 init_modules_watch_stub();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -45401,7 +44589,6 @@ function isObject2(input) {
 __name(isObject2, "isObject");
 
 // node_modules/jose/dist/browser/runtime/check_key_length.js
-init_strip_cf_connecting_ip_header();
 init_modules_watch_stub();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -45416,14 +44603,12 @@ var check_key_length_default = /* @__PURE__ */ __name((alg, key) => {
 }, "default");
 
 // node_modules/jose/dist/browser/runtime/normalize_key.js
-init_strip_cf_connecting_ip_header();
 init_modules_watch_stub();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
 init_performance2();
 
 // node_modules/jose/dist/browser/lib/is_jwk.js
-init_strip_cf_connecting_ip_header();
 init_modules_watch_stub();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -45446,7 +44631,6 @@ function isSecretJWK(key) {
 __name(isSecretJWK, "isSecretJWK");
 
 // node_modules/jose/dist/browser/runtime/jwk_to_key.js
-init_strip_cf_connecting_ip_header();
 init_modules_watch_stub();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -45622,7 +44806,6 @@ var normalizePrivateKey = /* @__PURE__ */ __name((key, alg) => {
 var normalize_key_default = { normalizePublicKey, normalizePrivateKey };
 
 // node_modules/jose/dist/browser/key/import.js
-init_strip_cf_connecting_ip_header();
 init_modules_watch_stub();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -45652,7 +44835,6 @@ async function importJWK(jwk, alg) {
 __name(importJWK, "importJWK");
 
 // node_modules/jose/dist/browser/lib/check_key_type.js
-init_strip_cf_connecting_ip_header();
 init_modules_watch_stub();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -45730,7 +44912,6 @@ var check_key_type_default = checkKeyType.bind(void 0, false);
 var checkKeyTypeWithJwk = checkKeyType.bind(void 0, true);
 
 // node_modules/jose/dist/browser/lib/validate_crit.js
-init_strip_cf_connecting_ip_header();
 init_modules_watch_stub();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -45768,7 +44949,6 @@ __name(validateCrit, "validateCrit");
 var validate_crit_default = validateCrit;
 
 // node_modules/jose/dist/browser/lib/validate_algorithms.js
-init_strip_cf_connecting_ip_header();
 init_modules_watch_stub();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -45785,51 +44965,47 @@ var validateAlgorithms = /* @__PURE__ */ __name((option, algorithms) => {
 var validate_algorithms_default = validateAlgorithms;
 
 // node_modules/jose/dist/browser/jws/compact/verify.js
-init_strip_cf_connecting_ip_header();
 init_modules_watch_stub();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
 init_performance2();
 
 // node_modules/jose/dist/browser/jws/flattened/verify.js
-init_strip_cf_connecting_ip_header();
 init_modules_watch_stub();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
 init_performance2();
 
 // node_modules/jose/dist/browser/runtime/verify.js
-init_strip_cf_connecting_ip_header();
 init_modules_watch_stub();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
 init_performance2();
 
 // node_modules/jose/dist/browser/runtime/subtle_dsa.js
-init_strip_cf_connecting_ip_header();
 init_modules_watch_stub();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
 init_performance2();
 function subtleDsa(alg, algorithm) {
-  const hash3 = `SHA-${alg.slice(-3)}`;
+  const hash2 = `SHA-${alg.slice(-3)}`;
   switch (alg) {
     case "HS256":
     case "HS384":
     case "HS512":
-      return { hash: hash3, name: "HMAC" };
+      return { hash: hash2, name: "HMAC" };
     case "PS256":
     case "PS384":
     case "PS512":
-      return { hash: hash3, name: "RSA-PSS", saltLength: alg.slice(-3) >> 3 };
+      return { hash: hash2, name: "RSA-PSS", saltLength: alg.slice(-3) >> 3 };
     case "RS256":
     case "RS384":
     case "RS512":
-      return { hash: hash3, name: "RSASSA-PKCS1-v1_5" };
+      return { hash: hash2, name: "RSASSA-PKCS1-v1_5" };
     case "ES256":
     case "ES384":
     case "ES512":
-      return { hash: hash3, name: "ECDSA", namedCurve: algorithm.namedCurve };
+      return { hash: hash2, name: "ECDSA", namedCurve: algorithm.namedCurve };
     case "Ed25519":
       return { name: "Ed25519" };
     case "EdDSA":
@@ -45841,7 +45017,6 @@ function subtleDsa(alg, algorithm) {
 __name(subtleDsa, "subtleDsa");
 
 // node_modules/jose/dist/browser/runtime/get_sign_verify_key.js
-init_strip_cf_connecting_ip_header();
 init_modules_watch_stub();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -46009,21 +45184,18 @@ async function compactVerify(jws, key, options) {
 __name(compactVerify, "compactVerify");
 
 // node_modules/jose/dist/browser/jwt/verify.js
-init_strip_cf_connecting_ip_header();
 init_modules_watch_stub();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
 init_performance2();
 
 // node_modules/jose/dist/browser/lib/jwt_claims_set.js
-init_strip_cf_connecting_ip_header();
 init_modules_watch_stub();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
 init_performance2();
 
 // node_modules/jose/dist/browser/lib/epoch.js
-init_strip_cf_connecting_ip_header();
 init_modules_watch_stub();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -46031,7 +45203,6 @@ init_performance2();
 var epoch_default = /* @__PURE__ */ __name((date2) => Math.floor(date2.getTime() / 1e3), "default");
 
 // node_modules/jose/dist/browser/lib/secs.js
-init_strip_cf_connecting_ip_header();
 init_modules_watch_stub();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -46204,21 +45375,18 @@ async function jwtVerify(jwt, key, options) {
 __name(jwtVerify, "jwtVerify");
 
 // node_modules/jose/dist/browser/jws/compact/sign.js
-init_strip_cf_connecting_ip_header();
 init_modules_watch_stub();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
 init_performance2();
 
 // node_modules/jose/dist/browser/jws/flattened/sign.js
-init_strip_cf_connecting_ip_header();
 init_modules_watch_stub();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
 init_performance2();
 
 // node_modules/jose/dist/browser/runtime/sign.js
-init_strip_cf_connecting_ip_header();
 init_modules_watch_stub();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -46233,6 +45401,9 @@ var sign_default = sign;
 
 // node_modules/jose/dist/browser/jws/flattened/sign.js
 var FlattenedSign = class {
+  static {
+    __name(this, "FlattenedSign");
+  }
   constructor(payload) {
     if (!(payload instanceof Uint8Array)) {
       throw new TypeError("payload must be an instance of Uint8Array");
@@ -46305,10 +45476,12 @@ var FlattenedSign = class {
     return jws;
   }
 };
-__name(FlattenedSign, "FlattenedSign");
 
 // node_modules/jose/dist/browser/jws/compact/sign.js
 var CompactSign = class {
+  static {
+    __name(this, "CompactSign");
+  }
   constructor(payload) {
     this._flattened = new FlattenedSign(payload);
   }
@@ -46324,17 +45497,14 @@ var CompactSign = class {
     return `${jws.protected}.${jws.payload}.${jws.signature}`;
   }
 };
-__name(CompactSign, "CompactSign");
 
 // node_modules/jose/dist/browser/jwt/sign.js
-init_strip_cf_connecting_ip_header();
 init_modules_watch_stub();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
 init_performance2();
 
 // node_modules/jose/dist/browser/jwt/produce.js
-init_strip_cf_connecting_ip_header();
 init_modules_watch_stub();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -46347,6 +45517,9 @@ function validateInput(label, input) {
 }
 __name(validateInput, "validateInput");
 var ProduceJWT = class {
+  static {
+    __name(this, "ProduceJWT");
+  }
   constructor(payload = {}) {
     if (!isObject2(payload)) {
       throw new TypeError("JWT Claims Set MUST be an object");
@@ -46405,10 +45578,12 @@ var ProduceJWT = class {
     return this;
   }
 };
-__name(ProduceJWT, "ProduceJWT");
 
 // node_modules/jose/dist/browser/jwt/sign.js
 var SignJWT = class extends ProduceJWT {
+  static {
+    __name(this, "SignJWT");
+  }
   setProtectedHeader(protectedHeader) {
     this._protectedHeader = protectedHeader;
     return this;
@@ -46422,7 +45597,6 @@ var SignJWT = class extends ProduceJWT {
     return sig.sign(key, options);
   }
 };
-__name(SignJWT, "SignJWT");
 
 // src/worker/middleware/auth.ts
 async function authMiddleware(request, env2, next) {
@@ -46563,68 +45737,76 @@ async function listBooks(request, env2) {
     `author:${authorId}`,
     `featured:${featured}`
   );
-  return await withCache(env2.CACHE, cacheKey, CacheTTL.FIVE_MINUTES, async () => {
-    const prisma = createD1PrismaClient(env2.DB);
-    const where = {
-      isPublished: true
-    };
-    if (search) {
-      where.OR = [
-        { title: { contains: search } },
-        { description: { contains: search } }
-      ];
-    }
-    if (category) {
-      where.category = category;
-    }
-    if (authorId) {
-      where.authorId = authorId;
-    }
-    if (featured) {
-      where.isFeatured = true;
-    }
-    const total = await prisma.book.count({ where });
-    const orderBy = featured ? [{ featuredOrder: "asc" }, { publishedAt: "desc" }] : { publishedAt: "desc" };
-    const books = await prisma.book.findMany({
-      where,
-      include: {
-        author: {
-          include: {
-            user: {
-              select: { name: true }
-            }
+  const { getCached: getCached2, setCached: setCached2 } = await Promise.resolve().then(() => (init_cache(), cache_exports));
+  const cached = await getCached2(env2.CACHE, cacheKey);
+  if (cached) {
+    return paginatedResponse(cached.books, cached.total, page, limit);
+  }
+  const prisma = createD1PrismaClient(env2.DB);
+  const where = {
+    isPublished: true
+  };
+  if (search) {
+    where.OR = [
+      { title: { contains: search } },
+      { description: { contains: search } }
+    ];
+  }
+  if (category) {
+    where.category = category;
+  }
+  if (authorId) {
+    where.authorId = authorId;
+  }
+  if (featured) {
+    where.isFeatured = true;
+  }
+  const total = await prisma.book.count({ where });
+  const orderBy = featured ? [{ featuredOrder: "asc" }, { publishedAt: "desc" }] : { publishedAt: "desc" };
+  const books = await prisma.book.findMany({
+    where,
+    include: {
+      author: {
+        include: {
+          user: {
+            select: { name: true }
           }
         }
-      },
-      skip: (page - 1) * limit,
-      take: limit,
-      orderBy
-    });
-    return paginatedResponse(books, total, page, limit);
+      }
+    },
+    skip: (page - 1) * limit,
+    take: limit,
+    orderBy
   });
+  await setCached2(env2.CACHE, cacheKey, { books, total }, CacheTTL.FIVE_MINUTES);
+  return paginatedResponse(books, total, page, limit);
 }
 __name(listBooks, "listBooks");
 async function getBook(request, env2, bookId) {
   const cacheKey = generateCacheKey(CachePrefix.BOOK_DETAIL, bookId);
-  return await withCache(env2.CACHE, cacheKey, CacheTTL.TEN_MINUTES, async () => {
-    const prisma = createD1PrismaClient(env2.DB);
-    const book = await prisma.book.findUnique({
-      where: { id: bookId },
-      include: {
-        author: {
-          include: {
-            user: {
-              select: { name: true }
-            }
+  const { getCached: getCached2, setCached: setCached2 } = await Promise.resolve().then(() => (init_cache(), cache_exports));
+  const cached = await getCached2(env2.CACHE, cacheKey);
+  if (cached) {
+    return successResponse(cached);
+  }
+  const prisma = createD1PrismaClient(env2.DB);
+  const book = await prisma.book.findUnique({
+    where: { id: bookId },
+    include: {
+      author: {
+        include: {
+          user: {
+            select: { name: true }
           }
         }
       }
-    });
-    if (!book) {
-      return errorResponse("Book not found", HttpStatus.NOT_FOUND, ErrorCode.RESOURCE_NOT_FOUND);
     }
-    return successResponse(book);
   });
+  if (!book) {
+    return errorResponse("Book not found", HttpStatus.NOT_FOUND, ErrorCode.RESOURCE_NOT_FOUND);
+  }
+  await setCached2(env2.CACHE, cacheKey, book, CacheTTL.TEN_MINUTES);
+  return successResponse(book);
 }
 __name(getBook, "getBook");
 async function createBook(request, env2) {
@@ -46726,7 +45908,6 @@ async function deleteBook2(request, env2, bookId) {
 __name(deleteBook2, "deleteBook");
 
 // src/worker/handlers/upload.ts
-init_strip_cf_connecting_ip_header();
 init_modules_watch_stub();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -46869,14 +46050,13 @@ async function uploadImage2(request, env2) {
 __name(uploadImage2, "uploadImage");
 
 // src/worker/handlers/auth.ts
-init_strip_cf_connecting_ip_header();
 init_modules_watch_stub();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
 init_performance2();
 init_d1_client();
 var bcrypt = __toESM(require_bcrypt());
-init_crypto3();
+import { randomBytes } from "crypto";
 async function handleAuthRequest(request, env2, ctx) {
   const url = new URL(request.url);
   const path = url.pathname;
@@ -47064,7 +46244,6 @@ var worker_default = {
 };
 
 // node_modules/wrangler/templates/middleware/middleware-ensure-req-body-drained.ts
-init_strip_cf_connecting_ip_header();
 init_modules_watch_stub();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -47086,43 +46265,13 @@ var drainBody = /* @__PURE__ */ __name(async (request, env2, _ctx, middlewareCtx
 }, "drainBody");
 var middleware_ensure_req_body_drained_default = drainBody;
 
-// node_modules/wrangler/templates/middleware/middleware-miniflare3-json-error.ts
-init_strip_cf_connecting_ip_header();
-init_modules_watch_stub();
-init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
-init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
-init_performance2();
-function reduceError(e2) {
-  return {
-    name: e2?.name,
-    message: e2?.message ?? String(e2),
-    stack: e2?.stack,
-    cause: e2?.cause === void 0 ? void 0 : reduceError(e2.cause)
-  };
-}
-__name(reduceError, "reduceError");
-var jsonError = /* @__PURE__ */ __name(async (request, env2, _ctx, middlewareCtx) => {
-  try {
-    return await middlewareCtx.next(request, env2);
-  } catch (e2) {
-    const error3 = reduceError(e2);
-    return Response.json(error3, {
-      status: 500,
-      headers: { "MF-Experimental-Error-Stack": "true" }
-    });
-  }
-}, "jsonError");
-var middleware_miniflare3_json_error_default = jsonError;
-
-// .wrangler/tmp/bundle-bwyUk4/middleware-insertion-facade.js
+// .wrangler/tmp/bundle-3wz30e/middleware-insertion-facade.js
 var __INTERNAL_WRANGLER_MIDDLEWARE__ = [
-  middleware_ensure_req_body_drained_default,
-  middleware_miniflare3_json_error_default
+  middleware_ensure_req_body_drained_default
 ];
 var middleware_insertion_facade_default = worker_default;
 
 // node_modules/wrangler/templates/middleware/common.ts
-init_strip_cf_connecting_ip_header();
 init_modules_watch_stub();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_process();
 init_virtual_unenv_global_polyfill_cloudflare_unenv_preset_node_console();
@@ -47151,22 +46300,24 @@ function __facade_invoke__(request, env2, ctx, dispatch, finalMiddleware) {
 }
 __name(__facade_invoke__, "__facade_invoke__");
 
-// .wrangler/tmp/bundle-bwyUk4/middleware-loader.entry.ts
-var __Facade_ScheduledController__ = class {
+// .wrangler/tmp/bundle-3wz30e/middleware-loader.entry.ts
+var __Facade_ScheduledController__ = class ___Facade_ScheduledController__ {
   constructor(scheduledTime, cron, noRetry) {
     this.scheduledTime = scheduledTime;
     this.cron = cron;
     this.#noRetry = noRetry;
   }
+  static {
+    __name(this, "__Facade_ScheduledController__");
+  }
   #noRetry;
   noRetry() {
-    if (!(this instanceof __Facade_ScheduledController__)) {
+    if (!(this instanceof ___Facade_ScheduledController__)) {
       throw new TypeError("Illegal invocation");
     }
     this.#noRetry();
   }
 };
-__name(__Facade_ScheduledController__, "__Facade_ScheduledController__");
 function wrapExportedHandler(worker) {
   if (__INTERNAL_WRANGLER_MIDDLEWARE__ === void 0 || __INTERNAL_WRANGLER_MIDDLEWARE__.length === 0) {
     return worker;
@@ -47207,15 +46358,15 @@ function wrapWorkerEntrypoint(klass) {
     __facade_register__(middleware);
   }
   return class extends klass {
-    #fetchDispatcher = (request, env2, ctx) => {
+    #fetchDispatcher = /* @__PURE__ */ __name((request, env2, ctx) => {
       this.env = env2;
       this.ctx = ctx;
       if (super.fetch === void 0) {
         throw new Error("Entrypoint class does not define a fetch() function.");
       }
       return super.fetch(request);
-    };
-    #dispatcher = (type, init3) => {
+    }, "#fetchDispatcher");
+    #dispatcher = /* @__PURE__ */ __name((type, init3) => {
       if (type === "scheduled" && super.scheduled !== void 0) {
         const controller = new __Facade_ScheduledController__(
           Date.now(),
@@ -47225,7 +46376,7 @@ function wrapWorkerEntrypoint(klass) {
         );
         return super.scheduled(controller);
       }
-    };
+    }, "#dispatcher");
     fetch(request) {
       return __facade_invoke__(
         request,

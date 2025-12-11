@@ -8,9 +8,10 @@ export default async function Home() {
   
   try {
     const response = await fetchFeaturedBooks(4);
-    books = response.data;
+    books = response?.data || [];
   } catch (e) {
     console.error('Failed to fetch featured books:', e);
+    books = [];
   }
 
   return (

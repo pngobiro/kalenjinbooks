@@ -15,7 +15,13 @@ export default async function BookDetailPage({ params }: { params: Promise<{ id:
   }
 
   // Fetch related books (just fetch recent ones for now)
-  const { data: relatedBooks } = await fetchBooks({ limit: 3 });
+  let relatedBooks: any[] = [];
+  try {
+    const relatedResponse = await fetchBooks({ limit: 3 });
+    relatedBooks = relatedResponse?.data || [];
+  } catch (e) {
+    console.error('Failed to fetch related books:', e);
+  }
 
   if (!bookData) {
     return (
@@ -102,7 +108,7 @@ export default async function BookDetailPage({ params }: { params: Promise<{ id:
                 <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
                   <User size={18} className="text-primary" />
                 </div>
-                <span className="text-neutral-brown-700">by <strong>{bookData.author.user.name}</strong></span>
+                <span className="text-neutral-brown-700">by <strong>{bookData.author?.user?.name || 'Unknown Author'}</strong></span>
               </div>
               <div className="flex items-center gap-1">
                 <Star size={18} className="fill-accent-gold text-accent-gold" />
@@ -134,7 +140,7 @@ export default async function BookDetailPage({ params }: { params: Promise<{ id:
                     )}
                   </div>
                   <h3 className="font-bold text-neutral-brown-900 mb-1 truncate">{book.title}</h3>
-                  <p className="text-sm text-neutral-brown-600 mb-2">{book.author.user.name}</p>
+                  <p className="text-sm text-neutral-brown-600 mb-2">{book.author?.user?.name || 'Unknown Author'}</p>
                   <div className="flex items-center justify-between">
                     <span className="font-bold text-primary">KES {book.price}</span>
                     <div className="flex items-center gap-1">

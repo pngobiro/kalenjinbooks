@@ -66,6 +66,30 @@ function getApiBaseUrl() {
 }
 
 /**
+ * Fetch with timeout and retry
+ */
+async function fetchWithRetry(url: string, options: RequestInit = {}, retries = 2): Promise<Response> {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+
+    try {
+        const response = await fetch(url, {
+            ...options,
+            signal: controller.signal,
+        });
+        clearTimeout(timeout);
+        return response;
+    } catch (error) {
+        clearTimeout(timeout);
+        if (retries > 0) {
+            await new Promise(resolve => setTimeout(resolve, 500)); // Wait 500ms before retry
+            return fetchWithRetry(url, options, retries - 1);
+        }
+        throw error;
+    }
+}
+
+/**
  * Fetch all books with optional filtering
  */
 export async function fetchBooks(params?: {
@@ -88,13 +112,23 @@ export async function fetchBooks(params?: {
     const baseUrl = getApiBaseUrl();
     const url = `${baseUrl}/api/books${searchParams.toString() ? `?${searchParams}` : ''}`;
 
-    const response = await fetch(url);
+    const response = await fetchWithRetry(url, {
+        cache: 'no-store',
+        headers: {
+            'Accept': 'application/json',
+        },
+    });
 
     if (!response.ok) {
         throw new Error(`Failed to fetch books: ${response.statusText}`);
     }
 
-    return response.json();
+    const text = await response.text();
+    if (!text) {
+        throw new Error('Empty response from API');
+    }
+
+    return JSON.parse(text);
 }
 
 /**
@@ -109,7 +143,12 @@ export async function fetchFeaturedBooks(limit = 4): Promise<PaginatedResponse<B
  */
 export async function fetchBookById(id: string): Promise<ApiResponse<Book>> {
     const baseUrl = getApiBaseUrl();
-    const response = await fetch(`${baseUrl}/api/books/${id}`);
+    const response = await fetchWithRetry(`${baseUrl}/api/books/${id}`, {
+        cache: 'no-store',
+        headers: {
+            'Accept': 'application/json',
+        },
+    });
 
     if (!response.ok) {
         if (response.status === 404) {
@@ -118,7 +157,12 @@ export async function fetchBookById(id: string): Promise<ApiResponse<Book>> {
         throw new Error(`Failed to fetch book: ${response.statusText}`);
     }
 
-    return response.json();
+    const text = await response.text();
+    if (!text) {
+        throw new Error('Empty response from API');
+    }
+
+    return JSON.parse(text);
 }
 
 /**

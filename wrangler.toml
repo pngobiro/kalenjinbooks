@@ -7,12 +7,14 @@ compatibility_flags = ["nodejs_compat"]
 [[r2_buckets]]
 binding = "BOOKS_BUCKET"
 bucket_name = "kalenjin-books"
+preview_bucket_name = "kalenjin-books-preview"
 
 # D1 database binding
 [[d1_databases]]
 binding = "DB"
 database_name = "kalenjin-books-db"
-database_id = "20c23a0e-1b05-4aa7-a17f-2dc5a5e8f65c" # Will be filled after creating the database
+database_id = "20c23a0e-1b05-4aa7-a17f-2dc5a5e8f65c"
+preview_database_id = "108a37f4-17b4-43e3-8b4d-377353ff9430"
 
 # KV namespaces for caching and sessions
 [[kv_namespaces]]

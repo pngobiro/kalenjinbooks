@@ -4,7 +4,7 @@ import { Env, WorkerRequest } from '../types/env';
 import { createD1PrismaClient } from '../../lib/db/d1-client';
 import { authMiddleware, optionalAuthMiddleware, requireRole } from '../middleware/auth';
 import { errorResponse, successResponse, paginatedResponse, HttpStatus, ErrorCode, getPaginationParams, getQueryParams } from '../utils/response';
-import { withCache, CacheTTL, CachePrefix, generateCacheKey } from '../utils/cache';
+import { CacheTTL, CachePrefix, generateCacheKey } from '../utils/cache';
 
 /**
  * Handle books API requests
@@ -84,59 +84,67 @@ async function listBooks(request: WorkerRequest, env: Env): Promise<Response> {
     );
 
     // Try cache first
-    return await withCache(env.CACHE, cacheKey, CacheTTL.FIVE_MINUTES, async () => {
-        const prisma = createD1PrismaClient(env.DB);
+    const { getCached, setCached } = await import('../utils/cache');
+    const cached = await getCached<{ books: any[]; total: number }>(env.CACHE, cacheKey);
+    
+    if (cached) {
+        return paginatedResponse(cached.books, cached.total, page, limit);
+    }
 
-        // Build where clause
-        const where: any = {
-            isPublished: true,
-        };
+    const prisma = createD1PrismaClient(env.DB);
 
-        if (search) {
-            where.OR = [
-                { title: { contains: search } },
-                { description: { contains: search } },
-            ];
-        }
+    // Build where clause
+    const where: any = {
+        isPublished: true,
+    };
 
-        if (category) {
-            where.category = category;
-        }
+    if (search) {
+        where.OR = [
+            { title: { contains: search } },
+            { description: { contains: search } },
+        ];
+    }
 
-        if (authorId) {
-            where.authorId = authorId;
-        }
+    if (category) {
+        where.category = category;
+    }
 
-        if (featured) {
-            where.isFeatured = true;
-        }
+    if (authorId) {
+        where.authorId = authorId;
+    }
 
-        // Get total count
-        const total = await prisma.book.count({ where });
+    if (featured) {
+        where.isFeatured = true;
+    }
 
-        // Get books - order by featuredOrder if fetching featured books
-        const orderBy = featured 
-            ? [{ featuredOrder: 'asc' as const }, { publishedAt: 'desc' as const }]
-            : { publishedAt: 'desc' as const };
+    // Get total count
+    const total = await prisma.book.count({ where });
 
-        const books = await prisma.book.findMany({
-            where,
-            include: {
-                author: {
-                    include: {
-                        user: {
-                            select: { name: true },
-                        },
+    // Get books - order by featuredOrder if fetching featured books
+    const orderBy = featured 
+        ? [{ featuredOrder: 'asc' as const }, { publishedAt: 'desc' as const }]
+        : { publishedAt: 'desc' as const };
+
+    const books = await prisma.book.findMany({
+        where,
+        include: {
+            author: {
+                include: {
+                    user: {
+                        select: { name: true },
                     },
                 },
             },
-            skip: (page - 1) * limit,
-            take: limit,
-            orderBy,
-        });
-
-        return paginatedResponse(books, total, page, limit);
+        },
+        skip: (page - 1) * limit,
+        take: limit,
+        orderBy,
     });
+
+    // Cache the data (not the Response)
+    await setCached(env.CACHE, cacheKey, { books, total }, CacheTTL.FIVE_MINUTES);
+
+    return paginatedResponse(books, total, page, limit);
 }
 
 /**
@@ -145,28 +153,37 @@ async function listBooks(request: WorkerRequest, env: Env): Promise<Response> {
 async function getBook(request: WorkerRequest, env: Env, bookId: string): Promise<Response> {
     const cacheKey = generateCacheKey(CachePrefix.BOOK_DETAIL, bookId);
 
-    return await withCache(env.CACHE, cacheKey, CacheTTL.TEN_MINUTES, async () => {
-        const prisma = createD1PrismaClient(env.DB);
+    // Try cache first
+    const { getCached, setCached } = await import('../utils/cache');
+    const cached = await getCached<any>(env.CACHE, cacheKey);
+    
+    if (cached) {
+        return successResponse(cached);
+    }
 
-        const book = await prisma.book.findUnique({
-            where: { id: bookId },
-            include: {
-                author: {
-                    include: {
-                        user: {
-                            select: { name: true },
-                        },
+    const prisma = createD1PrismaClient(env.DB);
+
+    const book = await prisma.book.findUnique({
+        where: { id: bookId },
+        include: {
+            author: {
+                include: {
+                    user: {
+                        select: { name: true },
                     },
                 },
             },
-        });
-
-        if (!book) {
-            return errorResponse('Book not found', HttpStatus.NOT_FOUND, ErrorCode.RESOURCE_NOT_FOUND);
-        }
-
-        return successResponse(book);
+        },
     });
+
+    if (!book) {
+        return errorResponse('Book not found', HttpStatus.NOT_FOUND, ErrorCode.RESOURCE_NOT_FOUND);
+    }
+
+    // Cache the book data
+    await setCached(env.CACHE, cacheKey, book, CacheTTL.TEN_MINUTES);
+
+    return successResponse(book);
 }
 
 /**

@@ -51,7 +51,8 @@ export function paginatedResponse<T>(
     page: number,
     limit: number
 ): Response {
-    const response: PaginatedResponse<T> = {
+    const response = {
+        success: true,
         data,
         pagination: {
             page,
@@ -61,7 +62,12 @@ export function paginatedResponse<T>(
         },
     };
 
-    return successResponse(response);
+    return new Response(JSON.stringify(response), {
+        status: 200,
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
 }
 
 /**
