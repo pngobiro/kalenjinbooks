@@ -89,11 +89,15 @@ const topCountries = [
   { country: 'Other', flag: '🌍', sales: 13, percentage: 3 },
 ];
 
-type TimeRange = '7d' | '30d' | '90d' | '1y' | 'all';
+type TimeRange = '7d' | '30d' | '90d' | '1y' | 'all' | 'custom';
 
 export default function AuthorAnalyticsPage() {
   const [timeRange, setTimeRange] = useState<TimeRange>('30d');
   const [showTimeDropdown, setShowTimeDropdown] = useState(false);
+  const [showCustomPicker, setShowCustomPicker] = useState(false);
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+  const [customLabel, setCustomLabel] = useState('');
 
   const timeRangeLabels: Record<TimeRange, string> = {
     '7d': 'Last 7 days',
@@ -101,6 +105,18 @@ export default function AuthorAnalyticsPage() {
     '90d': 'Last 90 days',
     '1y': 'Last year',
     'all': 'All time',
+    'custom': customLabel || 'Custom Range',
+  };
+
+  const handleCustomDateApply = () => {
+    if (startDate && endDate) {
+      const start = new Date(startDate);
+      const end = new Date(endDate);
+      setCustomLabel(`${start.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - ${end.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`);
+      setTimeRange('custom');
+      setShowCustomPicker(false);
+      setShowTimeDropdown(false);
+    }
   };
 
   const maxRevenue = Math.max(...revenueByMonth.map(m => m.revenue));
@@ -149,13 +165,14 @@ export default function AuthorAnalyticsPage() {
               </button>
               
               {showTimeDropdown && (
-                <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-neutral-brown-100 py-2 z-10">
-                  {(Object.keys(timeRangeLabels) as TimeRange[]).map((range) => (
+                <div className="absolute right-0 mt-2 w-72 bg-white rounded-xl shadow-lg border border-neutral-brown-100 py-2 z-10">
+                  {(['7d', '30d', '90d', '1y', 'all'] as TimeRange[]).map((range) => (
                     <button
                       key={range}
                       onClick={() => {
                         setTimeRange(range);
                         setShowTimeDropdown(false);
+                        setShowCustomPicker(false);
                       }}
                       className={`w-full text-left px-4 py-2 hover:bg-neutral-cream transition-colors ${
                         timeRange === range ? 'text-primary font-medium' : 'text-neutral-brown-700'
@@ -164,6 +181,50 @@ export default function AuthorAnalyticsPage() {
                       {timeRangeLabels[range]}
                     </button>
                   ))}
+                  
+                  <div className="border-t border-neutral-brown-100 my-2" />
+                  
+                  <button
+                    onClick={() => setShowCustomPicker(!showCustomPicker)}
+                    className={`w-full text-left px-4 py-2 hover:bg-neutral-cream transition-colors flex items-center justify-between ${
+                      timeRange === 'custom' ? 'text-primary font-medium' : 'text-neutral-brown-700'
+                    }`}
+                  >
+                    <span>Custom Range</span>
+                    <ChevronDown size={16} className={`transition-transform ${showCustomPicker ? 'rotate-180' : ''}`} />
+                  </button>
+                  
+                  {showCustomPicker && (
+                    <div className="px-4 py-3 bg-neutral-cream/50">
+                      <div className="space-y-3">
+                        <div>
+                          <label className="block text-xs font-medium text-neutral-brown-600 mb-1">Start Date</label>
+                          <input
+                            type="date"
+                            value={startDate}
+                            onChange={(e) => setStartDate(e.target.value)}
+                            className="w-full px-3 py-2 border border-neutral-brown-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-medium text-neutral-brown-600 mb-1">End Date</label>
+                          <input
+                            type="date"
+                            value={endDate}
+                            onChange={(e) => setEndDate(e.target.value)}
+                            className="w-full px-3 py-2 border border-neutral-brown-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                          />
+                        </div>
+                        <button
+                          onClick={handleCustomDateApply}
+                          disabled={!startDate || !endDate}
+                          className="w-full bg-primary text-white py-2 rounded-lg text-sm font-medium hover:bg-primary-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          Apply Range
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
             </div>

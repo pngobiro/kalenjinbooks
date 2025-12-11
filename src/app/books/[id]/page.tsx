@@ -2,6 +2,7 @@ import { Star, Book, ArrowLeft, User, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import { fetchBookById, fetchBooks } from '@/lib/api/books';
 import BookPurchaseOptions from '@/components/BookPurchaseOptions';
+import ShareButtons from '@/components/ShareButtons';
 
 export default async function BookDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -103,18 +104,21 @@ export default async function BookDetailPage({ params }: { params: Promise<{ id:
               {bookData.title}
             </h1>
 
-            <div className="flex items-center gap-4 mb-6 pb-6 border-b border-neutral-brown-200">
-              <div className="flex items-center gap-2">
-                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                  <User size={18} className="text-primary" />
+            <div className="flex items-center justify-between gap-4 mb-6 pb-6 border-b border-neutral-brown-200">
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2">
+                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                    <User size={18} className="text-primary" />
+                  </div>
+                  <span className="text-neutral-brown-700">by <strong>{bookData.author?.user?.name || 'Unknown Author'}</strong></span>
                 </div>
-                <span className="text-neutral-brown-700">by <strong>{bookData.author?.user?.name || 'Unknown Author'}</strong></span>
+                <div className="flex items-center gap-1">
+                  <Star size={18} className="fill-accent-gold text-accent-gold" />
+                  <span className="font-bold">4.8</span>
+                  <span className="text-neutral-brown-500 text-sm">(12)</span>
+                </div>
               </div>
-              <div className="flex items-center gap-1">
-                <Star size={18} className="fill-accent-gold text-accent-gold" />
-                <span className="font-bold">4.8</span>
-                <span className="text-neutral-brown-500 text-sm">(12)</span>
-              </div>
+              <ShareButtons title={`${bookData.title} - KaleeReads`} />
             </div>
 
             <BookPurchaseOptions book={bookData} />
