@@ -25,6 +25,10 @@ export interface Env {
     PLATFORM_COMMISSION_PERCENTAGE: string;
     TIME_LIMITED_ACCESS_HOURS: string;
 
+    // Google OAuth
+    GOOGLE_CLIENT_ID: string;
+    GOOGLE_CLIENT_SECRET: string;
+
     // Optional M-Pesa
     MPESA_CONSUMER_KEY?: string;
     MPESA_CONSUMER_SECRET?: string;

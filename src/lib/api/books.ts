@@ -49,7 +49,10 @@ const WORKER_URL = 'https://kalenjin-books-worker.pngobiro.workers.dev';
 /**
  * Get the API base URL
  */
-function getApiBaseUrl() {
+/**
+ * Get the API base URL
+ */
+export function getApiBaseUrl() {
     // If we have a configured worker URL, use it
     if (process.env.NEXT_PUBLIC_WORKER_URL) {
         return process.env.NEXT_PUBLIC_WORKER_URL;
@@ -58,12 +61,12 @@ function getApiBaseUrl() {
     // Client-side detection - MUST check window first for client components
     if (typeof window !== 'undefined') {
         const hostname = window.location.hostname;
-        
+
         // Local development - use local worker
-        if (hostname === 'localhost' || hostname === '127.0.0.1') {
-            return 'http://127.0.0.1:8787';
-        }
-        
+        // if (hostname === 'localhost' || hostname === '127.0.0.1') {
+        //     return 'http://127.0.0.1:8787';
+        // }
+
         // Any other hostname (including tunnel, production) - use deployed worker
         return WORKER_URL;
     }
@@ -77,7 +80,7 @@ function getApiBaseUrl() {
 /**
  * Fetch with timeout and retry
  */
-async function fetchWithRetry(url: string, options: RequestInit = {}, retries = 2): Promise<Response> {
+export async function fetchWithRetry(url: string, options: RequestInit = {}, retries = 2): Promise<Response> {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 10000); // 10 second timeout
 

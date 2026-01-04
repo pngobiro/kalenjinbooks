@@ -8,6 +8,7 @@ import { handleBooksRequest } from './handlers/books';
 import { handleAuthorsRequest } from './handlers/authors';
 import { handleUploadRequest } from './handlers/upload';
 import { handleAuthRequest } from './handlers/auth';
+import { handleAdminRequest } from './handlers/admin';
 
 /**
  * Main Cloudflare Worker entry point
@@ -44,6 +45,10 @@ export default {
                     return handleAuthRequest(request as WorkerRequest, env, ctx);
                 }
 
+                if (path.startsWith('/api/admin')) {
+                    return handleAdminRequest(request as WorkerRequest, env, ctx);
+                }
+
                 // Health check endpoint
                 if (path === '/api/health') {
                     return successResponse({
@@ -58,10 +63,41 @@ export default {
             });
         } catch (error) {
             console.error('Worker error:', error);
-            return errorResponse(
+            const response = errorResponse(
                 'Internal Server Error',
                 HttpStatus.INTERNAL_SERVER_ERROR
             );
+
+            // Re-apply CORS headers to the error response
+            const cors = corsMiddleware(env);
+            const origin = request.headers.get('Origin');
+            const { getCorsConfig, isOriginAllowed, addCorsHeaders } = await import('./middleware/cors');
+            // This is a bit redundant but safe to ensure CORS is always there
+            const config = {
+                allowedOrigins: [
+                    'http://localhost:3000',
+                    'http://localhost:3001',
+                    'http://127.0.0.1:3000',
+                    'http://127.0.0.1:3001',
+                    'https://kalenjin-books.dspop.info',
+                    'https://kalenjinbooks.com',
+                ],
+                allowedMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+                allowedHeaders: ['Content-Type', 'Authorization'],
+                maxAge: 86400,
+            };
+
+            // Hand-rolling addCorsHeaders for simplicity in catch block if imports fail
+            const headers = new Headers(response.headers);
+            if (origin) {
+                headers.set('Access-Control-Allow-Origin', origin);
+                headers.set('Access-Control-Allow-Credentials', 'true');
+            }
+
+            return new Response(response.body, {
+                status: response.status,
+                headers
+            });
         }
     },
 

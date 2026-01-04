@@ -150,6 +150,15 @@ export async function generateToken(
 }
 
 /**
+ * Verify JWT token and return payload
+ */
+export async function verifyToken(token: string, env: Env): Promise<any> {
+    const secret = new TextEncoder().encode(env.NEXTAUTH_SECRET);
+    const { payload } = await jose.jwtVerify(token, secret);
+    return payload;
+}
+
+/**
  * Create session in KV
  */
 export async function createSession(

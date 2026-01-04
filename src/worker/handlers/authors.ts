@@ -19,6 +19,14 @@ export async function handleAuthorsRequest(
 
     console.log(`[AuthorsHandler] Path: ${path}, Method: ${method}`);
 
+    // GET /api/authors/me - Get current user's author profile
+    if (path === '/api/authors/me' && method === 'GET') {
+        const { authMiddleware: internalAuth } = await import('../middleware/auth');
+        return await internalAuth(request, env, async () => {
+            return await getMyAuthorProfile(request, env);
+        });
+    }
+
     // GET /api/authors - List authors
     if (path === '/api/authors' && method === 'GET') {
         return await listAuthors(request, env);
@@ -30,8 +38,97 @@ export async function handleAuthorsRequest(
         return await getAuthor(request, env, authorId);
     }
 
+    // POST /api/authors - Become a new author
+    if (path === '/api/authors' && method === 'POST') {
+        return await createAuthor(request, env);
+    }
+
     return errorResponse(`Not Found. Path: ${path}, Method: ${method}`, HttpStatus.NOT_FOUND);
 }
+
+/**
+ * Register as a new author
+ */
+async function createAuthor(request: WorkerRequest, env: Env): Promise<Response> {
+    try {
+        const authHeader = request.headers.get('Authorization');
+        if (!authHeader || !authHeader.startsWith('Bearer ')) {
+            return errorResponse('Authentication required', HttpStatus.UNAUTHORIZED, ErrorCode.AUTHENTICATION_REQUIRED);
+        }
+
+        const token = authHeader.substring(7);
+        const { verifyToken } = await import('../middleware/auth');
+        let payload;
+
+        try {
+            payload = await verifyToken(token, env);
+        } catch (e) {
+            return errorResponse('Invalid token', HttpStatus.UNAUTHORIZED, ErrorCode.AUTHENTICATION_REQUIRED);
+        }
+
+        const userId = payload.sub as string;
+        const prisma = createD1PrismaClient(env.DB);
+
+        // Check if author already exists
+        const existingAuthor = await prisma.author.findUnique({
+            where: { userId },
+        });
+
+        if (existingAuthor) {
+            return errorResponse('You are already an author', HttpStatus.CONFLICT, ErrorCode.RESOURCE_ALREADY_EXISTS);
+        }
+
+        const body = await request.json() as any;
+        const { bio, phoneNumber } = body;
+
+        // Transaction to update role and create author profile
+        const result = await prisma.$transaction(async (tx) => {
+            const author = await tx.author.create({
+                data: {
+                    userId,
+                    bio,
+                    phoneNumber,
+                    status: 'PENDING', // Default to pending approval
+                }
+            });
+
+            const user = await tx.user.update({
+                where: { id: userId },
+                data: { role: 'AUTHOR' } // Auto-upgrade role for now, or keep READER until approved? 
+                // Requirement says "IF IS NEW AUTHOR TO REGISTER FLOW". 
+                // Usually we let them access dashboard immediately but with "Pending" status.
+            });
+
+            return { author, user };
+        });
+
+        // Generate new token with updated role
+        const { generateToken } = await import('../middleware/auth');
+        const newToken = await generateToken(
+            { id: result.user.id, email: result.user.email, role: result.user.role },
+            env,
+            payload.jti as string // reuse session ID
+        );
+
+        return successResponse({
+            author: result.author,
+            user: {
+                id: result.user.id,
+                name: result.user.name,
+                email: result.user.email,
+                role: result.user.role,
+                image: result.user.image,
+                authorStatus: 'PENDING'
+            },
+            token: newToken
+        }, HttpStatus.CREATED);
+
+    } catch (error) {
+        console.error('Create author error:', error);
+        return errorResponse('Failed to create author profile', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+}
+
 
 /**
  * List authors with pagination
@@ -45,7 +142,7 @@ async function listAuthors(request: WorkerRequest, env: Env): Promise<Response> 
     // Try cache first
     const { getCached, setCached } = await import('../utils/cache');
     const cached = await getCached<{ authors: any[]; total: number }>(env.CACHE, cacheKey);
-    
+
     if (cached) {
         return paginatedResponse(cached.authors, cached.total, page, limit);
     }
@@ -77,8 +174,8 @@ async function listAuthors(request: WorkerRequest, env: Env): Promise<Response> 
         bio: author.bio,
         profileImage: author.profileImage,
         booksCount: author.books.length,
-        rating: author.books.length > 0 
-            ? author.books.reduce((sum, book) => sum + (book.rating || 0), 0) / author.books.length 
+        rating: author.books.length > 0
+            ? author.books.reduce((sum, book) => sum + (book.rating || 0), 0) / author.books.length
             : 0,
     }));
 
@@ -97,7 +194,7 @@ async function getAuthor(request: WorkerRequest, env: Env, authorId: string): Pr
     // Try cache first
     const { getCached, setCached } = await import('../utils/cache');
     const cached = await getCached<any>(env.CACHE, cacheKey);
-    
+
     if (cached) {
         return successResponse(cached);
     }
@@ -133,8 +230,8 @@ async function getAuthor(request: WorkerRequest, env: Env, authorId: string): Pr
         bio: author.bio,
         profileImage: author.profileImage,
         booksCount: author.books.length,
-        rating: author.books.length > 0 
-            ? author.books.reduce((sum, book) => sum + (book.rating || 0), 0) / author.books.length 
+        rating: author.books.length > 0
+            ? author.books.reduce((sum, book) => sum + (book.rating || 0), 0) / author.books.length
             : 0,
         books: author.books,
     };
@@ -143,4 +240,30 @@ async function getAuthor(request: WorkerRequest, env: Env, authorId: string): Pr
     await setCached(env.CACHE, cacheKey, transformedAuthor, CacheTTL.TEN_MINUTES);
 
     return successResponse(transformedAuthor);
+}
+/**
+ * Get current user's author profile
+ */
+async function getMyAuthorProfile(request: WorkerRequest, env: Env): Promise<Response> {
+    const userId = request.ctx?.user?.id;
+    if (!userId) {
+        return errorResponse('User not authenticated', HttpStatus.UNAUTHORIZED);
+    }
+
+    const prisma = createD1PrismaClient(env.DB);
+
+    const author = await prisma.author.findUnique({
+        where: { userId },
+        include: {
+            user: {
+                select: { name: true, email: true, image: true },
+            },
+        },
+    });
+
+    if (!author) {
+        return errorResponse('Author profile not found', HttpStatus.NOT_FOUND);
+    }
+
+    return successResponse(author);
 }

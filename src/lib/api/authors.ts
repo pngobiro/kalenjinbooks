@@ -39,25 +39,26 @@ function getApiBaseUrl() {
     if (process.env.NEXT_PUBLIC_WORKER_URL) {
         return process.env.NEXT_PUBLIC_WORKER_URL;
     }
-    
+
     // Client-side detection
     if (typeof window !== 'undefined') {
         const hostname = window.location.hostname;
-        
+
         // Local development
-        if (hostname === 'localhost' || hostname === '127.0.0.1') {
-            return 'http://127.0.0.1:8787';
-        }
-        
+        // Local development
+        // if (hostname === 'localhost' || hostname === '127.0.0.1') {
+        //    return 'http://127.0.0.1:8787';
+        // }
+
         // Production/demo
         return WORKER_URL;
     }
-    
+
     // Server-side
     if (process.env.NODE_ENV === 'development') {
         return 'http://127.0.0.1:8787';
     }
-    
+
     return WORKER_URL;
 }
 
@@ -120,7 +121,10 @@ export async function fetchAuthors(params?: {
 /**
  * Fetch a single author by ID
  */
-export async function fetchAuthorById(id: string): Promise<ApiResponse<Author>> {
+/**
+ * Get author details by ID
+ */
+export async function getAuthorById(id: string): Promise<ApiResponse<Author>> {
     const baseUrl = getApiBaseUrl();
     const response = await fetchWithRetry(`${baseUrl}/api/authors/${id}`, {
         cache: 'no-store',
@@ -141,3 +145,56 @@ export async function fetchAuthorById(id: string): Promise<ApiResponse<Author>> 
 
     return JSON.parse(text);
 }
+
+/**
+ * Get current user's author profile
+ */
+export async function getMyAuthorProfile(): Promise<ApiResponse<Author>> {
+    const baseUrl = getApiBaseUrl();
+    const token = typeof window !== 'undefined' ? localStorage.getItem('kaleereads_token') : null;
+
+    const response = await fetchWithRetry(`${baseUrl}/api/authors/me`, {
+        cache: 'no-store',
+        headers: {
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+    });
+
+    if (!response.ok) {
+        throw new Error(`Failed to fetch author profile: ${response.statusText}`);
+    }
+
+    const text = await response.text();
+    if (!text) {
+        throw new Error('Empty response from API');
+    }
+
+    return JSON.parse(text);
+}
+
+/**
+ * Register as a new author
+ */
+export async function createAuthor(data: { bio?: string, phoneNumber?: string }): Promise<ApiResponse<{ author: any, user: any, token: string }>> {
+    const baseUrl = getApiBaseUrl();
+    const token = typeof window !== 'undefined' ? localStorage.getItem('kaleereads_token') : null;
+
+    const response = await fetchWithRetry(`${baseUrl}/api/authors`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(data)
+    });
+
+    if (!response.ok) {
+        const error = await response.json().catch(() => ({ error: 'Failed to create author profile' })) as any;
+        throw new Error(error.error || 'Failed to create author profile');
+    }
+
+    const json = await response.json() as any;
+    return json;
+}
+

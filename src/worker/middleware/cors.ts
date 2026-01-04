@@ -13,11 +13,11 @@ interface CorsConfig {
 /**
  * Get CORS configuration based on environment
  */
-function getCorsConfig(env: Env): CorsConfig {
+export function getCorsConfig(env: Env): CorsConfig {
     // Always allow these origins regardless of environment
     const allowedOrigins = [
         'http://localhost:3000',
-        'http://localhost:3001', 
+        'http://localhost:3001',
         'http://localhost:8787',
         'http://127.0.0.1:3000',
         'http://127.0.0.1:3001',
@@ -43,7 +43,7 @@ function getCorsConfig(env: Env): CorsConfig {
 /**
  * Check if origin is allowed
  */
-function isOriginAllowed(origin: string | null, allowedOrigins: string[]): boolean {
+export function isOriginAllowed(origin: string | null, allowedOrigins: string[]): boolean {
     if (!origin) return false;
 
     // Allow localhost in development
@@ -72,10 +72,29 @@ export function corsMiddleware(env: Env) {
         }
 
         // Process the request
-        const response = await next();
+        try {
+            const response = await next();
+            // Add CORS headers to response
+            return addCorsHeaders(response, origin, config);
+        } catch (error) {
+            console.error('[CorsMiddleware] Error in handler:', error);
 
-        // Add CORS headers to response
-        return addCorsHeaders(response, origin, config);
+            // Create error response
+            const errorMsg = error instanceof Error ? error.message : 'Internal Server Error';
+            const response = new Response(JSON.stringify({
+                success: false,
+                error: errorMsg,
+                code: 'INTERNAL_ERROR'
+            }), {
+                status: 500,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            // Add CORS headers to error response
+            return addCorsHeaders(response, origin, config);
+        }
     };
 }
 
@@ -102,7 +121,7 @@ function handlePreflight(origin: string | null, config: CorsConfig): Response {
 /**
  * Add CORS headers to response
  */
-function addCorsHeaders(
+export function addCorsHeaders(
     response: Response,
     origin: string | null,
     config: CorsConfig

@@ -3,6 +3,7 @@
 import { Book, DollarSign, TrendingUp, Users, BarChart3, Settings, LogOut, FileText } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useAuth } from '@/lib/auth-context';
 
 const navigation = [
     { name: 'Dashboard', href: '/dashboard/author', icon: BarChart3 },
@@ -16,6 +17,7 @@ const navigation = [
 
 export function DashboardSidebar() {
     const pathname = usePathname();
+    const { logout } = useAuth();
 
     return (
         <div className="w-64 bg-white border-r border-neutral-brown-500/10 min-h-screen flex flex-col">
@@ -56,7 +58,10 @@ export function DashboardSidebar() {
 
             {/* Logout */}
             <div className="p-4 border-t border-neutral-brown-500/10">
-                <button className="flex items-center gap-3 px-4 py-3 rounded-lg text-neutral-brown-700 hover:bg-neutral-cream w-full transition-all">
+                <button
+                    onClick={() => logout()}
+                    className="flex items-center gap-3 px-4 py-3 rounded-lg text-neutral-brown-700 hover:bg-neutral-cream w-full transition-all"
+                >
                     <LogOut size={20} />
                     <span className="font-medium">Logout</span>
                 </button>
