@@ -4,9 +4,10 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
-import { Book, Mail, Lock, Loader2, ArrowRight } from 'lucide-react';
+import { Mail, Lock, Loader2, ArrowRight } from 'lucide-react';
 import { KaleeReadsFullLogo } from '@/components/KaleeReadsLogo';
 import AfricanBorder from '@/components/AfricanBorder';
+import { GoogleSignInButton } from '@/components/GoogleSignInButton';
 
 export default function LoginPage() {
     const [email, setEmail] = useState('');
@@ -24,7 +25,7 @@ export default function LoginPage() {
         try {
             const user = await login(email, password);
             if (user && user.role === 'ADMIN') {
-                window.location.href = '/admin/dashboard';
+                window.location.href = '/dashboard/admin';
                 return;
             }
             router.push('/dashboard/author');
@@ -40,7 +41,7 @@ export default function LoginPage() {
             setIsLoading(true);
             const user = await googleLogin(response.credential);
             if (user && user.role === 'ADMIN') {
-                window.location.href = '/admin/dashboard';
+                window.location.href = '/dashboard/admin';
                 return;
             }
             router.push('/dashboard/author');
@@ -133,8 +134,11 @@ export default function LoginPage() {
                             </div>
 
                             <div className="flex justify-center flex-col items-center gap-4">
-                                <p className="text-xs text-neutral-brown-400 italic mb-2">Sign in with Google coming soon to this page</p>
-                                {/* We could potentially render the GSI button here too */}
+                                <GoogleSignInButton
+                                    onSuccess={handleGoogleSuccess}
+                                    onError={(error) => setError('Google Sign-In failed. Please try again.')}
+                                    disabled={isLoading}
+                                />
                             </div>
 
                             <p className="mt-8 text-center text-neutral-brown-600">

@@ -5,6 +5,7 @@ import { DollarSign, Book, ShoppingCart, TrendingUp, Plus, Clock, CheckCircle, X
 import Link from 'next/link';
 import { useAuth } from '@/lib/auth-context';
 import { getAuthorById } from '@/lib/api/authors';
+import { useRouter } from 'next/navigation';
 
 // This would come from API/database
 const initialStats = {
@@ -21,6 +22,17 @@ export default function AuthorDashboardPage() {
   const { user, isLoading: authLoading, googleLogin, registerAuthor } = useAuth();
   const [stats, setStats] = useState(initialStats);
   const [isLoadingStats, setIsLoadingStats] = useState(false);
+  const [authorStatus, setAuthorStatus] = useState<any>(null);
+  const [isLoadingAuthorStatus, setIsLoadingAuthorStatus] = useState(false);
+  const router = useRouter();
+
+  // Redirect admin users to admin dashboard
+  useEffect(() => {
+    if (!authLoading && user && user.role === 'ADMIN') {
+      console.log('Admin user detected, redirecting to admin dashboard');
+      router.push('/dashboard/admin');
+    }
+  }, [user, authLoading, router]);
 
   useEffect(() => {
     async function loadStats() {
@@ -37,7 +49,35 @@ export default function AuthorDashboardPage() {
         }
       }
     }
+
+    async function loadAuthorStatus() {
+      if (user?.id && (user.role === 'AUTHOR' || user.role === 'ADMIN')) {
+        setIsLoadingAuthorStatus(true);
+        try {
+          const token = localStorage.getItem('kaleereads_token');
+          if (token) {
+            const response = await fetch('https://kalenjin-books-worker.pngobiro.workers.dev/api/authors/me', {
+              headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+              },
+            });
+            
+            if (response.ok) {
+              const data = await response.json();
+              setAuthorStatus(data.data);
+            }
+          }
+        } catch (e) {
+          console.error("Failed to load author status", e);
+        } finally {
+          setIsLoadingAuthorStatus(false);
+        }
+      }
+    }
+
     loadStats();
+    loadAuthorStatus();
 
     // Google Sign In Init
     if (typeof window !== 'undefined' && window.google) {
@@ -52,9 +92,9 @@ export default function AuthorDashboardPage() {
         { theme: "outline", size: "large" }
       );
     }
-  }, [googleLogin, user?.id]);
+  }, [googleLogin, user?.id, user?.role]);
 
-  if (authLoading || isLoadingStats) {
+  if (authLoading || isLoadingStats || isLoadingAuthorStatus) {
     return (
       <div className="min-h-screen bg-neutral-cream flex items-center justify-center">
         <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin" />
@@ -83,14 +123,14 @@ export default function AuthorDashboardPage() {
                 <div className="space-y-4">
                   <div className="p-4 bg-primary/5 rounded-lg border border-primary/10">
                     <p className="text-sm text-neutral-brown-700 mb-2">Signed in as <span className="font-semibold">{user.email}</span></p>
-                    <button
-                      onClick={() => registerAuthor()}
+                    <Link
+                      href="/dashboard/author/register"
                       className="w-full bg-primary hover:bg-primary-dark text-white font-bold py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
                     >
-                      Activate Author Account <ArrowRight size={18} />
-                    </button>
+                      Complete Author Registration <ArrowRight size={18} />
+                    </Link>
                   </div>
-                  <p className="text-xs text-neutral-brown-500">By activating, you agree to our Author Terms of Service.</p>
+                  <p className="text-xs text-neutral-brown-500">Complete your author profile to start publishing books.</p>
                 </div>
               ) : (
                 <>
@@ -142,6 +182,101 @@ export default function AuthorDashboardPage() {
 
   // Approved - show full dashboard
   if (user && (user.role === 'AUTHOR' || user.role === 'ADMIN')) {
+    // Show status notification if author status is available
+    if (authorStatus) {
+      if (authorStatus.status === 'PENDING') {
+        return (
+          <div className="min-h-screen bg-neutral-cream flex items-center justify-center p-4">
+            <div className="max-w-md w-full bg-white rounded-2xl p-8 shadow-lg text-center">
+              <div className="w-20 h-20 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Clock size={40} className="text-yellow-600" />
+              </div>
+              <h2 className="text-2xl font-bold text-neutral-brown-900 mb-2">Application Pending</h2>
+              <p className="text-neutral-brown-600 mb-6">
+                {authorStatus.statusMessage}
+              </p>
+              <div className="bg-neutral-cream rounded-lg p-4 mb-6">
+                <p className="text-sm text-neutral-brown-600">
+                  <strong>Applied:</strong> {new Date(authorStatus.appliedAt).toLocaleDateString()}
+                </p>
+              </div>
+              <button
+                onClick={() => window.location.reload()}
+                className="text-primary hover:underline text-sm font-medium"
+              >
+                Check Status Again
+              </button>
+            </div>
+          </div>
+        );
+      }
+
+      if (authorStatus.status === 'REJECTED') {
+        return (
+          <div className="min-h-screen bg-neutral-cream flex items-center justify-center p-4">
+            <div className="max-w-md w-full bg-white rounded-2xl p-8 shadow-lg text-center">
+              <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <XCircle size={40} className="text-red-600" />
+              </div>
+              <h2 className="text-2xl font-bold text-neutral-brown-900 mb-2">Application Not Approved</h2>
+              <p className="text-neutral-brown-600 mb-4">
+                We're sorry, but your author application was not approved at this time.
+              </p>
+              {authorStatus.rejectionReason && (
+                <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6 text-left">
+                  <h3 className="font-semibold text-red-900 mb-2">Reason:</h3>
+                  <p className="text-red-700 text-sm">{authorStatus.rejectionReason}</p>
+                </div>
+              )}
+              <div className="bg-neutral-cream rounded-lg p-4 mb-6">
+                <p className="text-sm text-neutral-brown-600">
+                  <strong>Applied:</strong> {new Date(authorStatus.appliedAt).toLocaleDateString()}
+                </p>
+              </div>
+              <div className="space-y-3">
+                <Link
+                  href="/dashboard/author/register"
+                  className="block w-full bg-primary hover:bg-primary-dark text-white font-semibold px-4 py-2 rounded-lg transition-colors"
+                >
+                  Apply Again
+                </Link>
+                <Link
+                  href="/contact"
+                  className="block w-full text-primary hover:underline text-sm font-medium"
+                >
+                  Contact Support
+                </Link>
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      // If approved but disabled by admin
+      if (authorStatus.status === 'APPROVED' && !authorStatus.isActive) {
+        return (
+          <div className="min-h-screen bg-neutral-cream flex items-center justify-center p-4">
+            <div className="max-w-md w-full bg-white rounded-2xl p-8 shadow-lg text-center">
+              <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <XCircle size={40} className="text-gray-600" />
+              </div>
+              <h2 className="text-2xl font-bold text-neutral-brown-900 mb-2">Account Disabled</h2>
+              <p className="text-neutral-brown-600 mb-6">
+                Your author account has been temporarily disabled. Please contact support for assistance.
+              </p>
+              <Link
+                href="/contact"
+                className="block w-full bg-primary hover:bg-primary-dark text-white font-semibold px-4 py-2 rounded-lg transition-colors"
+              >
+                Contact Support
+              </Link>
+            </div>
+          </div>
+        );
+      }
+    }
+
+    // Legacy check for old authorStatus field
     if (user.authorStatus === 'PENDING') {
       return (
         <div className="min-h-screen bg-neutral-cream flex items-center justify-center p-4">
@@ -179,7 +314,7 @@ export default function AuthorDashboardPage() {
           <div className="flex items-center gap-3">
             {user.role === 'ADMIN' && (
               <Link
-                href="/admin/dashboard"
+                href="/dashboard/admin"
                 className="bg-neutral-brown-800 hover:bg-neutral-brown-900 text-white font-semibold px-6 py-3 rounded-lg flex items-center gap-2 transition-all hover:-translate-y-0.5"
               >
                 <User size={20} />

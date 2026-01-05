@@ -38,12 +38,137 @@ export async function handleAuthorsRequest(
         return await getAuthor(request, env, authorId);
     }
 
-    // POST /api/authors - Become a new author
+    // POST /api/authors/apply - Enhanced author application
+    if (path === '/api/authors/apply' && method === 'POST') {
+        return await applyAsAuthor(request, env);
+    }
+
+    // POST /api/authors - Become a new author (legacy endpoint)
     if (path === '/api/authors' && method === 'POST') {
         return await createAuthor(request, env);
     }
 
     return errorResponse(`Not Found. Path: ${path}, Method: ${method}`, HttpStatus.NOT_FOUND);
+}
+
+/**
+ * Enhanced author application with comprehensive data
+ */
+async function applyAsAuthor(request: WorkerRequest, env: Env): Promise<Response> {
+    try {
+        const body = await request.json() as any;
+        const { googleUser, ...formData } = body;
+
+        if (!googleUser || !googleUser.email) {
+            return errorResponse('Google authentication required', HttpStatus.BAD_REQUEST, ErrorCode.VALIDATION_ERROR);
+        }
+
+        const prisma = createD1PrismaClient(env.DB);
+
+        // Check if user already exists
+        let user = await prisma.user.findUnique({
+            where: { email: googleUser.email },
+        });
+
+        // Create user if doesn't exist
+        if (!user) {
+            user = await prisma.user.create({
+                data: {
+                    email: googleUser.email,
+                    name: googleUser.name,
+                    image: googleUser.image,
+                    role: 'READER', // Will be updated to AUTHOR after approval
+                },
+            });
+        }
+
+        // Check if author profile already exists
+        const existingAuthor = await prisma.author.findUnique({
+            where: { userId: user.id },
+        });
+
+        if (existingAuthor) {
+            return errorResponse('Author application already exists', HttpStatus.CONFLICT, ErrorCode.RESOURCE_ALREADY_EXISTS);
+        }
+
+        // Create comprehensive author profile
+        const author = await prisma.author.create({
+            data: {
+                userId: user.id,
+                // Basic info
+                bio: formData.bio,
+                profileImage: formData.profileImage || googleUser.image,
+                phoneNumber: formData.phoneNumber,
+                
+                // Personal information
+                dateOfBirth: formData.dateOfBirth,
+                nationality: formData.nationality,
+                location: formData.location,
+                
+                // Professional information
+                education: formData.education,
+                occupation: formData.occupation,
+                writingExperience: formData.writingExperience,
+                previousPublications: formData.previousPublications,
+                awards: formData.awards,
+                
+                // Writing information
+                genres: JSON.stringify(formData.genres || []),
+                languages: JSON.stringify(formData.languages || []),
+                writingStyle: formData.writingStyle,
+                inspirations: formData.inspirations,
+                targetAudience: formData.targetAudience,
+                publishingGoals: formData.publishingGoals,
+                
+                // Social media
+                website: formData.website,
+                twitter: formData.twitter,
+                facebook: formData.facebook,
+                instagram: formData.instagram,
+                linkedin: formData.linkedin,
+                
+                // Payment information
+                paymentMethod: formData.paymentMethod,
+                paymentDetails: JSON.stringify({
+                    mpesaNumber: formData.mpesaNumber,
+                    bankDetails: formData.bankDetails,
+                }),
+                
+                // Additional information
+                howDidYouHear: formData.howDidYouHear,
+                additionalInfo: formData.additionalInfo,
+                agreeToMarketing: formData.agreeToMarketing || false,
+                
+                // Status
+                status: 'PENDING',
+                appliedAt: new Date(),
+            },
+        });
+
+        // Clear any cached author lists
+        const { invalidateCacheByPrefix, CachePrefix } = await import('../utils/cache');
+        await invalidateCacheByPrefix(env.CACHE, CachePrefix.AUTHORS);
+
+        return successResponse({
+            message: 'Author application submitted successfully',
+            author: {
+                id: author.id,
+                status: author.status,
+                appliedAt: author.appliedAt,
+            },
+            user: {
+                id: user.id,
+                name: user.name,
+                email: user.email,
+                role: user.role,
+                image: user.image,
+            },
+        }, HttpStatus.CREATED);
+
+    } catch (error) {
+        console.error('Author application error:', error);
+        return errorResponse('Failed to submit author application', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }
 
 /**
@@ -265,5 +390,35 @@ async function getMyAuthorProfile(request: WorkerRequest, env: Env): Promise<Res
         return errorResponse('Author profile not found', HttpStatus.NOT_FOUND);
     }
 
-    return successResponse(author);
+    // Return detailed author status information
+    return successResponse({
+        id: author.id,
+        userId: author.userId,
+        status: author.status,
+        rejectionReason: author.rejectionReason,
+        appliedAt: author.appliedAt,
+        approvedAt: author.approvedAt,
+        isActive: author.isActive,
+        bio: author.bio,
+        phoneNumber: author.phoneNumber,
+        paymentMethod: author.paymentMethod,
+        totalEarnings: author.totalEarnings,
+        user: author.user,
+        // Status messages for UI
+        statusMessage: getStatusMessage(author.status, author.rejectionReason),
+        canPublish: author.status === 'APPROVED' && author.isActive,
+    });
+}
+
+function getStatusMessage(status: string, rejectionReason?: string | null): string {
+    switch (status) {
+        case 'PENDING':
+            return 'Your author application is being reviewed by our team. You will be notified once a decision is made.';
+        case 'APPROVED':
+            return 'Congratulations! Your author application has been approved. You can now start publishing books.';
+        case 'REJECTED':
+            return rejectionReason || 'Your author application was not approved at this time. Please contact support for more information.';
+        default:
+            return 'Unknown status';
+    }
 }

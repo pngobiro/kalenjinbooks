@@ -40,15 +40,48 @@ model Author {
   bio           String?
   profileImage  String?
   phoneNumber   String?
-  paymentMethod String?   // e.g., "mpesa", "bank"
+  paymentMethod String?   // e.g., "mpesa", "bank", "stripe"
   paymentDetails String?  // JSON string with payment info
   totalEarnings Float     @default(0)
   status        AuthorStatus @default(PENDING)
   rejectionReason String? // Reason if rejected
   appliedAt     DateTime  @default(now())
   approvedAt    DateTime?
+  isActive      Boolean   @default(true) // Admin can disable authors
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
+  
+  // Enhanced Personal Information
+  dateOfBirth   String?
+  nationality   String?
+  location      String?
+  
+  // Professional Information
+  education     String?
+  occupation    String?
+  writingExperience String?
+  previousPublications String?
+  awards        String?
+  
+  // Writing Information
+  genres        String?   // JSON array of genres
+  languages     String?   // JSON array of languages
+  writingStyle  String?
+  inspirations  String?
+  targetAudience String?
+  publishingGoals String?
+  
+  // Social Media & Online Presence
+  website       String?
+  twitter       String?
+  facebook      String?
+  instagram     String?
+  linkedin      String?
+  
+  // Additional Information
+  howDidYouHear String?
+  additionalInfo String?
+  agreeToMarketing Boolean @default(false)
   
   // Relations
   user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -82,6 +115,7 @@ model Book {
   featuredOrder Int?      // Order in featured list (lower = first)
   rating        Float     @default(0)
   reviewCount   Int       @default(0)
+  isActive      Boolean   @default(true) // Admin can disable books
   authorId      String
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
