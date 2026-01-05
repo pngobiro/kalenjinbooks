@@ -1,9 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Edit, Trash2, Eye, MoreVertical, Image as ImageIcon, Plus, Book, TrendingUp } from 'lucide-react';
+import { Edit, Trash2, Eye, Plus, Book, TrendingUp } from 'lucide-react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { useAuth } from '@/lib/auth-context';
 import { useRouter } from 'next/navigation';
 
@@ -83,6 +82,7 @@ export default function MyBooksPage() {
 
                 const authorData: any = await authorResponse.json();
                 const authorId = authorData.data?.id;
+                const authorEarnings = authorData.data?.totalEarnings || 0;
 
                 if (!authorId) {
                     throw new Error('Author profile not found');
@@ -113,8 +113,8 @@ export default function MyBooksPage() {
                     totalBooks: authorBooks.length,
                     publishedBooks,
                     draftBooks,
-                    totalSales: 0, // TODO: Get from sales API
-                    totalEarnings: 0, // TODO: Get from sales API
+                    totalSales: 0, // Will be calculated from sales data when available
+                    totalEarnings: authorEarnings, // Get from author profile
                 });
 
             } catch (err) {
@@ -254,7 +254,6 @@ export default function MyBooksPage() {
                     <p className="text-2xl font-bold text-accent-green">
                         KES {stats.totalEarnings.toLocaleString()}
                     </p>
-                    <p className="text-xs text-neutral-brown-500 mt-1">Coming soon</p>
                 </div>
             </div>
 

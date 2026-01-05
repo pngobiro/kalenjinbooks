@@ -2,10 +2,12 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { 
   ArrowLeft, Book, Save, Eye, Upload, X, AlertTriangle,
   DollarSign, Tag, Globe, FileText, Image as ImageIcon
 } from 'lucide-react';
+import { useAuth } from '@/lib/auth-context';
 
 interface BookData {
   id: string;
@@ -13,12 +15,14 @@ interface BookData {
   description: string;
   coverImage: string | null;
   price: number;
-  rentalPrice: number;
+  rentalPrice: number | null;
   category: string;
   language: string;
   previewPages: number;
   isPublished: boolean;
   isFeatured: boolean;
+  tags: string[];
+  isbn: string | null;
 }
 
 const categories = [
@@ -29,10 +33,13 @@ const categories = [
 const languages = ['English', 'Swahili', 'Kalenjin'];
 
 export default function EditBookPage({ params }: { params: Promise<{ id: string }> }) {
+  const { user, isAuthenticated } = useAuth();
+  const router = useRouter();
   const [bookId, setBookId] = useState<string>('');
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   
   // Form data
   const [formData, setFormData] = useState<BookData>({
@@ -41,12 +48,14 @@ export default function EditBookPage({ params }: { params: Promise<{ id: string 
     description: '',
     coverImage: null,
     price: 0,
-    rentalPrice: 0,
+    rentalPrice: null,
     category: 'Fiction',
     language: 'English',
     previewPages: 5,
     isPublished: false,
     isFeatured: false,
+    tags: [],
+    isbn: null,
   });
 
   // File upload
@@ -57,28 +66,68 @@ export default function EditBookPage({ params }: { params: Promise<{ id: string 
     async function getParams() {
       const resolvedParams = await params;
       setBookId(resolvedParams.id);
-      
-      // Mock data - in production, fetch from API
-      const mockBook: BookData = {
-        id: resolvedParams.id,
-        title: 'Immortal Knowledge',
-        description: 'A message to the African Grassroots. It blows the trumpet. It plays the African drum loud enough for all to hear. It calls on the Africans to end the dirge. The African Grassroots need to understand what and where they have been and what they are.',
-        coverImage: '/books/immortalknowledge.jpg',
-        price: 1200,
-        rentalPrice: 50,
-        category: 'Non-Fiction',
-        language: 'English',
-        previewPages: 10,
-        isPublished: true,
-        isFeatured: true,
-      };
-      
-      setFormData(mockBook);
-      setLoading(false);
+      await fetchBookData(resolvedParams.id);
     }
     
     getParams();
   }, [params]);
+
+  const fetchBookData = async (id: string) => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const token = localStorage.getItem('kaleereads_token');
+      if (!token) {
+        setError('Authentication required');
+        return;
+      }
+
+      const response = await fetch(`https://kalenjin-books-worker.pngobiro.workers.dev/api/books/${id}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch book data');
+      }
+
+      const data: any = await response.json();
+      const book = data.data;
+
+      // Parse tags if they exist
+      let tags = [];
+      try {
+        tags = book.tags ? JSON.parse(book.tags) : [];
+      } catch (e) {
+        tags = [];
+      }
+
+      setFormData({
+        id: book.id,
+        title: book.title,
+        description: book.description || '',
+        coverImage: book.coverImage,
+        price: book.price,
+        rentalPrice: book.rentalPrice,
+        category: book.category || 'Fiction',
+        language: book.language || 'English',
+        previewPages: book.previewPages || 5,
+        isPublished: book.isPublished,
+        isFeatured: book.isFeatured,
+        tags,
+        isbn: book.isbn,
+      });
+
+    } catch (err) {
+      console.error('Error fetching book:', err);
+      setError(err instanceof Error ? err.message : 'Failed to load book');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleInputChange = (field: keyof BookData, value: any) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -87,6 +136,18 @@ export default function EditBookPage({ params }: { params: Promise<{ id: string 
   const handleCoverUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      // Validate file size (5MB max)
+      if (file.size > 5 * 1024 * 1024) {
+        alert('Cover image must be smaller than 5MB');
+        return;
+      }
+
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        alert('Please select a valid image file');
+        return;
+      }
+
       setCoverFile(file);
       const reader = new FileReader();
       reader.onload = () => setCoverPreview(reader.result as string);
@@ -95,26 +156,151 @@ export default function EditBookPage({ params }: { params: Promise<{ id: string 
   };
 
   const handleSave = async () => {
-    setSaving(true);
-    
-    // Mock save - in production, send to API
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    setSaving(false);
-    // Show success message or redirect
+    try {
+      setSaving(true);
+      setError(null);
+
+      const token = localStorage.getItem('kaleereads_token');
+      if (!token) {
+        setError('Authentication required');
+        return;
+      }
+
+      // Prepare form data for multipart upload if there's a new cover
+      let requestBody;
+      let headers: any = {
+        'Authorization': `Bearer ${token}`,
+      };
+
+      if (coverFile) {
+        // Use FormData for file upload
+        const formDataToSend = new FormData();
+        formDataToSend.append('title', formData.title);
+        formDataToSend.append('description', formData.description);
+        formDataToSend.append('price', formData.price.toString());
+        if (formData.rentalPrice) {
+          formDataToSend.append('rentalPrice', formData.rentalPrice.toString());
+        }
+        formDataToSend.append('category', formData.category);
+        formDataToSend.append('language', formData.language);
+        formDataToSend.append('previewPages', formData.previewPages.toString());
+        formDataToSend.append('isPublished', formData.isPublished.toString());
+        formDataToSend.append('isFeatured', formData.isFeatured.toString());
+        formDataToSend.append('tags', JSON.stringify(formData.tags));
+        if (formData.isbn) {
+          formDataToSend.append('isbn', formData.isbn);
+        }
+        formDataToSend.append('coverImage', coverFile);
+
+        requestBody = formDataToSend;
+      } else {
+        // Use JSON for text-only updates
+        headers['Content-Type'] = 'application/json';
+        requestBody = JSON.stringify({
+          title: formData.title,
+          description: formData.description,
+          price: formData.price,
+          rentalPrice: formData.rentalPrice,
+          category: formData.category,
+          language: formData.language,
+          previewPages: formData.previewPages,
+          isPublished: formData.isPublished,
+          isFeatured: formData.isFeatured,
+          tags: formData.tags,
+          isbn: formData.isbn,
+        });
+      }
+
+      const response = await fetch(`https://kalenjin-books-worker.pngobiro.workers.dev/api/books/${bookId}`, {
+        method: 'PUT',
+        headers,
+        body: requestBody,
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update book');
+      }
+
+      alert('Book updated successfully!');
+      
+      // Clear cover file state
+      setCoverFile(null);
+      setCoverPreview(null);
+
+      // Refresh book data
+      await fetchBookData(bookId);
+
+    } catch (err) {
+      console.error('Error saving book:', err);
+      setError(err instanceof Error ? err.message : 'Failed to save book');
+    } finally {
+      setSaving(false);
+    }
   };
 
   const handleDelete = async () => {
-    // Mock delete - in production, send to API
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    setShowDeleteModal(false);
-    // Redirect to books list
+    try {
+      const token = localStorage.getItem('kaleereads_token');
+      if (!token) {
+        alert('Authentication required');
+        return;
+      }
+
+      const response = await fetch(`https://kalenjin-books-worker.pngobiro.workers.dev/api/books/${bookId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete book');
+      }
+
+      alert('Book deleted successfully');
+      router.push('/dashboard/author/books');
+
+    } catch (err) {
+      console.error('Error deleting book:', err);
+      alert('Failed to delete book');
+    } finally {
+      setShowDeleteModal(false);
+    }
   };
+
+  // Redirect if not authenticated
+  useEffect(() => {
+    if (!isAuthenticated) {
+      router.push('/login');
+    }
+  }, [isAuthenticated, router]);
+
+  if (!isAuthenticated) {
+    return null;
+  }
 
   if (loading) {
     return (
       <div className="min-h-screen bg-neutral-cream flex items-center justify-center">
         <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-neutral-cream flex items-center justify-center">
+        <div className="bg-red-50 border border-red-200 rounded-xl p-6 text-center max-w-md">
+          <p className="text-red-600 font-medium mb-2">Error loading book</p>
+          <p className="text-red-500 text-sm mb-4">{error}</p>
+          <button 
+            onClick={() => fetchBookData(bookId)}
+            className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors"
+          >
+            Try Again
+          </button>
+        </div>
       </div>
     );
   }
@@ -178,6 +364,12 @@ export default function EditBookPage({ params }: { params: Promise<{ id: string 
           </div>
         </div>
 
+        {error && (
+          <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6">
+            <p className="text-red-600 text-sm">{error}</p>
+          </div>
+        )}
+
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Form */}
           <div className="lg:col-span-2 space-y-6">
@@ -196,6 +388,7 @@ export default function EditBookPage({ params }: { params: Promise<{ id: string 
                     onChange={(e) => handleInputChange('title', e.target.value)}
                     className="w-full px-4 py-3 border border-neutral-brown-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                     placeholder="Enter book title"
+                    required
                   />
                 </div>
 
@@ -237,6 +430,17 @@ export default function EditBookPage({ params }: { params: Promise<{ id: string 
                     </select>
                   </div>
                 </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-neutral-brown-700 mb-1">ISBN (Optional)</label>
+                  <input
+                    type="text"
+                    value={formData.isbn || ''}
+                    onChange={(e) => handleInputChange('isbn', e.target.value || null)}
+                    className="w-full px-4 py-3 border border-neutral-brown-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                    placeholder="Enter ISBN number"
+                  />
+                </div>
               </div>
             </div>
 
@@ -256,6 +460,7 @@ export default function EditBookPage({ params }: { params: Promise<{ id: string 
                     className="w-full px-4 py-3 border border-neutral-brown-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                     placeholder="0"
                     min="0"
+                    required
                   />
                 </div>
 
@@ -263,8 +468,8 @@ export default function EditBookPage({ params }: { params: Promise<{ id: string 
                   <label className="block text-sm font-medium text-neutral-brown-700 mb-1">24-Hour Rental (KES)</label>
                   <input
                     type="number"
-                    value={formData.rentalPrice}
-                    onChange={(e) => handleInputChange('rentalPrice', Number(e.target.value))}
+                    value={formData.rentalPrice || ''}
+                    onChange={(e) => handleInputChange('rentalPrice', e.target.value ? Number(e.target.value) : null)}
                     className="w-full px-4 py-3 border border-neutral-brown-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                     placeholder="0"
                     min="0"

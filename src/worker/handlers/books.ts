@@ -258,7 +258,6 @@ async function updateBook(request: WorkerRequest, env: Env, bookId: string): Pro
     const prisma = createD1PrismaClient(env.DB);
 
     try {
-        const body = await request.json() as Record<string, unknown>;
         const userId = request.ctx?.user?.id;
 
         // Get book
@@ -276,10 +275,111 @@ async function updateBook(request: WorkerRequest, env: Env, bookId: string): Pro
             return errorResponse('Not authorized', HttpStatus.FORBIDDEN);
         }
 
+        let updateData: any = {};
+        let coverImageUrl = book.coverImage; // Keep existing cover by default
+
+        // Check if this is a multipart form (file upload)
+        const contentType = request.headers.get('content-type') || '';
+        
+        if (contentType.includes('multipart/form-data')) {
+            // Handle multipart form data (with file upload)
+            const formData = await request.formData();
+            
+            // Extract form fields
+            const title = formData.get('title') as string;
+            const description = formData.get('description') as string;
+            const category = formData.get('category') as string;
+            const language = formData.get('language') as string;
+            const price = parseFloat(formData.get('price') as string);
+            const rentalPrice = formData.get('rentalPrice') ? parseFloat(formData.get('rentalPrice') as string) : null;
+            const previewPages = parseInt(formData.get('previewPages') as string);
+            const isPublished = formData.get('isPublished') === 'true';
+            const isFeatured = formData.get('isFeatured') === 'true';
+            const tagsJson = formData.get('tags') as string;
+            const isbn = formData.get('isbn') as string || null;
+            const coverImage = formData.get('coverImage') as File;
+
+            // Parse tags
+            let tags: string[] = [];
+            try {
+                tags = tagsJson ? JSON.parse(tagsJson) : [];
+            } catch (e) {
+                tags = [];
+            }
+
+            // Validate required fields
+            if (!title || isNaN(price)) {
+                return errorResponse('Title and valid price are required', HttpStatus.BAD_REQUEST);
+            }
+
+            // Handle cover image upload if provided
+            if (coverImage && coverImage.size > 0) {
+                // Validate file type and size
+                const allowedImageTypes = ['image/jpeg', 'image/png', 'image/webp'];
+                if (!allowedImageTypes.includes(coverImage.type)) {
+                    return errorResponse('Cover image must be JPEG, PNG, or WebP format', HttpStatus.BAD_REQUEST);
+                }
+
+                if (coverImage.size > 5 * 1024 * 1024) {
+                    return errorResponse('Cover image must be smaller than 5MB', HttpStatus.BAD_REQUEST);
+                }
+
+                // Upload new cover image
+                const coverImageKey = `covers/${bookId}/${coverImage.name}`;
+                
+                try {
+                    await env.BOOKS_BUCKET.put(coverImageKey, coverImage.stream(), {
+                        httpMetadata: {
+                            contentType: coverImage.type,
+                        },
+                    });
+                    coverImageUrl = `https://kalenjin-books-worker.pngobiro.workers.dev/api/images/${coverImageKey}`;
+
+                    // Delete old cover image if it exists
+                    if (book.coverImage) {
+                        const oldKey = book.coverImage.replace('https://pub-kalenjin-books.r2.dev/', '');
+                        try {
+                            await env.BOOKS_BUCKET.delete(oldKey);
+                        } catch (deleteError) {
+                            console.error('Error deleting old cover image:', deleteError);
+                        }
+                    }
+                } catch (uploadError) {
+                    console.error('Cover image upload error:', uploadError);
+                    return errorResponse('Failed to upload cover image', HttpStatus.INTERNAL_SERVER_ERROR);
+                }
+            }
+
+            updateData = {
+                title,
+                description,
+                category,
+                language,
+                price,
+                rentalPrice,
+                previewPages,
+                isPublished,
+                isFeatured,
+                tags: tags.length > 0 ? JSON.stringify(tags) : null,
+                isbn,
+                coverImage: coverImageUrl,
+                publishedAt: isPublished && !book.isPublished ? new Date() : book.publishedAt,
+            };
+        } else {
+            // Handle JSON data (no file upload)
+            const body = await request.json() as Record<string, unknown>;
+            updateData = body;
+            
+            // If publishing for the first time, set publishedAt
+            if (updateData.isPublished && !book.isPublished) {
+                updateData.publishedAt = new Date();
+            }
+        }
+
         // Update book
         const updated = await prisma.book.update({
             where: { id: bookId },
-            data: body,
+            data: updateData as any,
         });
 
         // Invalidate cache
@@ -398,7 +498,7 @@ async function uploadBook(request: WorkerRequest, env: Env): Promise<Response> {
                         contentType: coverImage.type,
                     },
                 });
-                coverImageUrl = `https://pub-kalenjin-books.r2.dev/${coverImageKey}`;
+                coverImageUrl = `https://kalenjin-books-worker.pngobiro.workers.dev/api/images/${coverImageKey}`;
             }
 
             // Create book record in database
@@ -419,7 +519,7 @@ async function uploadBook(request: WorkerRequest, env: Env): Promise<Response> {
                     authorId: author.id,
                     isPublished: false, // Books start as drafts
                     publishedAt: null,
-                },
+                } as any,
                 include: {
                     author: {
                         include: {

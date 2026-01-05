@@ -314,14 +314,20 @@ async function listAuthors(request: WorkerRequest, env: Env): Promise<Response> 
  * Get author details with their books
  */
 async function getAuthor(request: WorkerRequest, env: Env, authorId: string): Promise<Response> {
+    const url = new URL(request.url);
+    const skipCache = url.searchParams.get('_cache') === 'false';
+    
     const cacheKey = generateCacheKey(CachePrefix.AUTHOR_DETAIL, authorId);
 
-    // Try cache first
+    // Try cache first (unless skipped)
     const { getCached, setCached } = await import('../utils/cache');
-    const cached = await getCached<any>(env.CACHE, cacheKey);
-
-    if (cached) {
-        return successResponse(cached);
+    
+    if (!skipCache) {
+        const cached = await getCached<any>(env.CACHE, cacheKey);
+        
+        if (cached) {
+            return successResponse(cached);
+        }
     }
 
     const prisma = createD1PrismaClient(env.DB);
@@ -358,6 +364,41 @@ async function getAuthor(request: WorkerRequest, env: Env, authorId: string): Pr
         rating: author.books.length > 0
             ? author.books.reduce((sum, book) => sum + (book.rating || 0), 0) / author.books.length
             : 0,
+        
+        // Personal Information (from main author record)
+        dateOfBirth: author.dateOfBirth,
+        nationality: author.nationality,
+        location: author.location,
+        phoneNumber: author.phoneNumber,
+        
+        // Professional Background
+        education: author.education,
+        occupation: author.occupation,
+        writingExperience: author.writingExperience,
+        previousPublications: author.previousPublications,
+        awards: author.awards,
+        
+        // Writing Details
+        genres: author.genres,
+        languages: author.languages,
+        writingStyle: author.writingStyle,
+        inspirations: author.inspirations,
+        targetAudience: author.targetAudience,
+        publishingGoals: author.publishingGoals,
+        
+        // Social Media & Contact
+        website: author.website,
+        twitter: author.twitter,
+        facebook: author.facebook,
+        instagram: author.instagram,
+        linkedin: author.linkedin,
+        
+        // Additional Info
+        totalEarnings: author.totalEarnings,
+        status: author.status,
+        appliedAt: author.appliedAt,
+        approvedAt: author.approvedAt,
+        
         books: author.books,
     };
 

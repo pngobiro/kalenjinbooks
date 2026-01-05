@@ -11,6 +11,89 @@ import { handleAuthRequest } from './handlers/auth';
 import { handleAdminRequest } from './handlers/admin';
 
 /**
+ * Handle image proxy requests to serve R2 images with CORS headers
+ */
+async function handleImageProxy(request: Request, env: Env, path: string): Promise<Response> {
+    try {
+        // Extract the image path from /api/images/{path}
+        const imagePath = decodeURIComponent(path.replace('/api/images/', ''));
+        
+        console.log(`[ImageProxy] Requested path: ${path}`);
+        console.log(`[ImageProxy] Decoded image path: ${imagePath}`);
+        
+        if (!imagePath) {
+            return errorResponse('Image path required', HttpStatus.BAD_REQUEST);
+        }
+
+        // Get the image from R2
+        const object = await env.BOOKS_BUCKET.get(imagePath);
+        
+        console.log(`[ImageProxy] R2 object found: ${object ? 'yes' : 'no'}`);
+        
+        if (!object) {
+            return errorResponse('Image not found', HttpStatus.NOT_FOUND);
+        }
+
+        // Create response with proper headers
+        const headers = new Headers();
+        
+        // Set content type based on file extension
+        const extension = imagePath.split('.').pop()?.toLowerCase();
+        switch (extension) {
+            case 'jpg':
+            case 'jpeg':
+                headers.set('Content-Type', 'image/jpeg');
+                break;
+            case 'png':
+                headers.set('Content-Type', 'image/png');
+                break;
+            case 'webp':
+                headers.set('Content-Type', 'image/webp');
+                break;
+            case 'gif':
+                headers.set('Content-Type', 'image/gif');
+                break;
+            default:
+                headers.set('Content-Type', 'application/octet-stream');
+        }
+
+        // Add CORS headers
+        const origin = request.headers.get('Origin');
+        const allowedOrigins = [
+            'http://localhost:3000',
+            'http://localhost:3001',
+            'http://127.0.0.1:3000',
+            'http://127.0.0.1:3001',
+            'https://kalenjin-books.dspop.info',
+            'https://kalenjinbooks.com',
+        ];
+
+        if (origin && allowedOrigins.includes(origin)) {
+            headers.set('Access-Control-Allow-Origin', origin);
+        } else {
+            headers.set('Access-Control-Allow-Origin', '*');
+        }
+        
+        headers.set('Access-Control-Allow-Methods', 'GET, HEAD, OPTIONS');
+        headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+        headers.set('Access-Control-Max-Age', '86400');
+
+        // Add caching headers
+        headers.set('Cache-Control', 'public, max-age=31536000'); // 1 year
+        headers.set('ETag', `"${imagePath}"`);
+
+        return new Response(object.body, {
+            status: 200,
+            headers,
+        });
+
+    } catch (error) {
+        console.error('Image proxy error:', error);
+        return errorResponse('Failed to load image', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+}
+
+/**
  * Main Cloudflare Worker entry point
  */
 export default {
@@ -48,6 +131,11 @@ export default {
                 if (path.startsWith('/api/admin')) {
                     console.log('[Worker] Routing to admin handler');
                     return handleAdminRequest(request as WorkerRequest, env, ctx);
+                }
+
+                // Image proxy endpoint to serve R2 images with CORS headers
+                if (path.startsWith('/api/images/')) {
+                    return handleImageProxy(request, env, path);
                 }
 
                 // Health check endpoint
