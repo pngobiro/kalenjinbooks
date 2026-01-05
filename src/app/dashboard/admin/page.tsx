@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { 
   Users, Book, TrendingUp, UserCheck, 
   Star, Eye, Edit, CheckCircle, XCircle, Clock,
@@ -18,10 +19,23 @@ import { Author, BookData, PendingBook, Stats } from '@/types/admin';
 type TabType = 'overview' | 'authors' | 'applications' | 'rejected' | 'books' | 'pending-books';
 
 export default function AdminDashboardPage() {
-  const [activeTab, setActiveTab] = useState<TabType>('overview');
+  const searchParams = useSearchParams();
+  const router = useRouter();
   const [showRejectModal, setShowRejectModal] = useState(false);
   const [selectedAuthorId, setSelectedAuthorId] = useState<string | null>(null);
   const [rejectionReason, setRejectionReason] = useState('');
+
+  // Get active tab from URL parameters
+  const activeTab = (searchParams.get('tab') as TabType) || 'overview';
+
+  // Function to change tab and update URL
+  const setActiveTab = (tab: TabType) => {
+    if (tab === 'overview') {
+      router.push('/dashboard/admin');
+    } else {
+      router.push(`/dashboard/admin?tab=${tab}`);
+    }
+  };
 
   const {
     stats,
@@ -244,7 +258,7 @@ export default function AdminDashboardPage() {
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
+        const errorData = await response.json() as { error?: string };
         throw new Error(errorData.error || 'Failed to make admin');
       }
 

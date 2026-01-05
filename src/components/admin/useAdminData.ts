@@ -21,6 +21,8 @@ interface BookData {
   title: string;
   description: string | null;
   coverImage: string | null;
+  fileKey: string;
+  fileType: string;
   price: number;
   rentalPrice: number | null;
   category: string | null;

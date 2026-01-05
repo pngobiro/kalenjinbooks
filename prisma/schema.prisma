@@ -19,6 +19,7 @@ model User {
   image         String?   // Profile image from OAuth
   googleId      String?   @unique // Google OAuth ID
   role          UserRole  @default(READER)
+  isAdmin       Boolean   @default(false) // Additional admin privileges
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   

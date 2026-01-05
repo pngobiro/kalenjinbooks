@@ -26,6 +26,38 @@ export async function handleBooksRequest(
         return await listBooks(request, env);
     }
 
+    // GET /api/books/debug/auth - Debug authentication (temporary)
+    if (path === '/api/books/debug/auth' && method === 'GET') {
+        return await authMiddleware(request, env, async () => {
+            const userId = request.ctx?.user?.id;
+            const userRole = request.ctx?.user?.role;
+            
+            if (!userId) {
+                return errorResponse('No user ID in context', HttpStatus.UNAUTHORIZED);
+            }
+
+            const prisma = createD1PrismaClient(env.DB);
+            const user = await prisma.user.findUnique({
+                where: { id: userId },
+                select: { id: true, email: true, role: true, isAdmin: true }
+            });
+
+            return successResponse({
+                contextUser: { id: userId, role: userRole },
+                dbUser: user,
+                isAdmin: user?.role === 'ADMIN' || user?.isAdmin
+            });
+        });
+    }
+
+    // GET /api/books/:id/secure-view - Get secure PDF viewing URL (admin/author only)
+    if (path.match(/^\/api\/books\/[^/]+\/secure-view$/) && method === 'GET') {
+        const bookId = path.split('/')[3];
+        return await authMiddleware(request, env, async () => {
+            return await getSecureBookView(request, env, bookId);
+        });
+    }
+
     // GET /api/books/:id - Get book details
     if (path.match(/^\/api\/books\/[^/]+$/) && method === 'GET') {
         const bookId = path.split('/').pop()!;
@@ -152,6 +184,124 @@ async function listBooks(request: WorkerRequest, env: Env): Promise<Response> {
     await setCached(env.CACHE, cacheKey, { books, total }, CacheTTL.FIVE_MINUTES);
 
     return paginatedResponse(books, total, page, limit);
+}
+
+/**
+ * Get secure book viewing URL with time-limited access
+ */
+async function getSecureBookView(request: WorkerRequest, env: Env, bookId: string): Promise<Response> {
+    try {
+        console.log('[SecureView] Getting secure view for book:', bookId);
+        
+        const prisma = createD1PrismaClient(env.DB);
+        
+        // Get book details
+        const book = await prisma.book.findUnique({
+            where: { id: bookId },
+            include: {
+                author: {
+                    include: {
+                        user: true
+                    }
+                }
+            }
+        });
+
+        console.log('[SecureView] Book found:', book ? 'yes' : 'no');
+
+        if (!book) {
+            return errorResponse('Book not found', HttpStatus.NOT_FOUND, ErrorCode.RESOURCE_NOT_FOUND);
+        }
+
+        // Check if user has permission (admin or book author)
+        const userId = request.ctx?.user?.id;
+        const userRole = request.ctx?.user?.role;
+        
+        console.log('[SecureView] User ID:', userId);
+        console.log('[SecureView] User role:', userRole);
+        
+        if (!userId) {
+            return errorResponse('Authentication required', HttpStatus.UNAUTHORIZED);
+        }
+
+        // Check if user is admin (either role=ADMIN or isAdmin=true)
+        const user = await prisma.user.findUnique({
+            where: { id: userId },
+            select: { role: true, isAdmin: true }
+        });
+
+        console.log('[SecureView] User from DB:', user);
+
+        if (!user) {
+            return errorResponse('User not found', HttpStatus.NOT_FOUND);
+        }
+
+        // Allow access for admins or the book's author
+        const isAdmin = user.role === 'ADMIN' || user.isAdmin;
+        const isAuthor = book.author.userId === userId;
+        
+        console.log('[SecureView] Is admin:', isAdmin);
+        console.log('[SecureView] Is author:', isAuthor);
+        console.log('[SecureView] Book author userId:', book.author.userId);
+        
+        if (!isAdmin && !isAuthor) {
+            return errorResponse('Insufficient permissions to view this book', HttpStatus.FORBIDDEN);
+        }
+
+        // Generate time-limited secure URL (valid for 1 hour)
+        const expirationTime = Date.now() + (60 * 60 * 1000); // 1 hour
+        const secureToken = await generateSecureToken(bookId, userId, expirationTime, env);
+        
+        console.log('[SecureView] Generated token:', secureToken);
+        
+        // Create secure viewing URL
+        const secureUrl = `https://kalenjin-books-worker.pngobiro.workers.dev/api/secure-pdf/${secureToken}`;
+
+        console.log('[SecureView] Secure URL:', secureUrl);
+
+        return successResponse({
+            secureUrl,
+            expiresAt: new Date(expirationTime).toISOString(),
+            book: {
+                id: book.id,
+                title: book.title,
+                fileType: book.fileType,
+                author: {
+                    user: {
+                        name: book.author.user.name
+                    }
+                }
+            }
+        });
+
+    } catch (error) {
+        console.error('Get secure book view error:', error);
+        return errorResponse('Failed to generate secure view', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+}
+
+/**
+ * Generate secure token for time-limited PDF access
+ */
+async function generateSecureToken(bookId: string, userId: string, expirationTime: number, env: Env): Promise<string> {
+    const payload = {
+        bookId,
+        userId,
+        exp: expirationTime,
+        type: 'secure_view',
+        nonce: Math.random().toString(36).substring(2, 15) // Add randomness for security
+    };
+    
+    // Create a simple token (in production, use proper JWT signing)
+    const tokenData = btoa(JSON.stringify(payload));
+    
+    // Store in KV with expiration
+    const tokenKey = `secure_token:${tokenData}`;
+    await env.SESSION.put(tokenKey, JSON.stringify(payload), {
+        expirationTtl: 3600 // 1 hour
+    });
+    
+    return tokenData;
 }
 
 /**

@@ -2,14 +2,15 @@
 
 import { Shield, Users, Book, TrendingUp, UserCheck, Settings, LogOut, BarChart3, DollarSign, FileText } from 'lucide-react';
 import Link from 'next/link';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
 
 const navigation = [
-    { name: 'Overview', href: '/dashboard/admin', icon: BarChart3 },
-    { name: 'Applications', href: '/dashboard/admin?tab=applications', icon: UserCheck },
-    { name: 'Authors', href: '/dashboard/admin?tab=authors', icon: Users },
-    { name: 'Books', href: '/dashboard/admin?tab=books', icon: Book },
+    { name: 'Overview', tab: 'overview', icon: BarChart3 },
+    { name: 'Applications', tab: 'applications', icon: UserCheck },
+    { name: 'Authors', tab: 'authors', icon: Users },
+    { name: 'Books', tab: 'books', icon: Book },
+    { name: 'Pending Books', tab: 'pending-books', icon: Book },
     { name: 'Analytics', href: '/dashboard/admin/analytics', icon: TrendingUp },
     { name: 'Revenue', href: '/dashboard/admin/revenue', icon: DollarSign },
     { name: 'Content', href: '/dashboard/admin/content', icon: FileText },
@@ -19,17 +20,32 @@ const navigation = [
 export function AdminSidebar() {
     const pathname = usePathname();
     const searchParams = useSearchParams();
+    const router = useRouter();
     const { logout, user } = useAuth();
 
-    const isActive = (href: string) => {
-        if (href === '/dashboard/admin') {
-            return pathname === '/dashboard/admin' && !searchParams.get('tab');
+    const currentTab = searchParams.get('tab') || 'overview';
+
+    const handleNavigation = (item: typeof navigation[0]) => {
+        if (item.href) {
+            // For future pages that have their own routes
+            router.push(item.href);
+        } else if (item.tab) {
+            // For tab-based navigation within the main admin page
+            if (item.tab === 'overview') {
+                router.push('/dashboard/admin');
+            } else {
+                router.push(`/dashboard/admin?tab=${item.tab}`);
+            }
         }
-        if (href.includes('?tab=')) {
-            const tab = href.split('?tab=')[1];
-            return pathname === '/dashboard/admin' && searchParams.get('tab') === tab;
+    };
+
+    const isActive = (item: typeof navigation[0]) => {
+        if (item.href) {
+            return pathname === item.href;
+        } else if (item.tab) {
+            return currentTab === item.tab;
         }
-        return pathname === href;
+        return false;
     };
 
     return (
@@ -55,9 +71,12 @@ export function AdminSidebar() {
                             {user?.name?.split(' ').map(n => n[0]).join('') || 'A'}
                         </span>
                     </div>
-                    <div>
-                        <p className="font-medium text-neutral-brown-900 text-sm">{user?.name || 'Admin'}</p>
-                        <p className="text-xs text-neutral-brown-600">Super Administrator</p>
+                    <div className="flex-1 min-w-0">
+                        <p className="font-medium text-neutral-brown-900 text-sm truncate">{user?.name || 'Admin'}</p>
+                        <p className="text-xs text-neutral-brown-500 truncate">{user?.email}</p>
+                        <p className="text-xs text-neutral-brown-600">
+                            {user?.role === 'ADMIN' ? 'Administrator' : user?.isAdmin ? 'Author Admin' : 'Admin'}
+                        </p>
                     </div>
                 </div>
             </div>
@@ -65,14 +84,14 @@ export function AdminSidebar() {
             {/* Navigation */}
             <nav className="flex-1 p-4 space-y-1">
                 {navigation.map((item) => {
-                    const active = isActive(item.href);
+                    const active = isActive(item);
                     const Icon = item.icon;
 
                     return (
-                        <Link
+                        <button
                             key={item.name}
-                            href={item.href}
-                            className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
+                            onClick={() => handleNavigation(item)}
+                            className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all w-full text-left ${
                                 active
                                     ? 'bg-primary text-white'
                                     : 'text-neutral-brown-700 hover:bg-neutral-cream'
@@ -80,7 +99,7 @@ export function AdminSidebar() {
                         >
                             <Icon size={20} />
                             <span className="font-medium">{item.name}</span>
-                        </Link>
+                        </button>
                     );
                 })}
             </nav>
@@ -88,6 +107,16 @@ export function AdminSidebar() {
             {/* Quick Actions */}
             <div className="p-4 border-t border-neutral-brown-500/10">
                 <div className="space-y-2 mb-4">
+                    {/* Author Dashboard Link - Only show for author-admins */}
+                    {user?.role === 'AUTHOR' && user?.isAdmin && (
+                        <Link
+                            href="/dashboard/author"
+                            className="flex items-center gap-3 px-4 py-2 rounded-lg text-purple-700 bg-purple-50 hover:bg-purple-100 w-full transition-all text-sm"
+                        >
+                            <Users size={16} />
+                            <span>My Author Dashboard</span>
+                        </Link>
+                    )}
                     <Link
                         href="/"
                         className="flex items-center gap-3 px-4 py-2 rounded-lg text-neutral-brown-700 hover:bg-neutral-cream w-full transition-all text-sm"

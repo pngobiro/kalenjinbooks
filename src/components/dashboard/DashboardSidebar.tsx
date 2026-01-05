@@ -1,6 +1,6 @@
 'use client';
 
-import { Book, DollarSign, TrendingUp, Users, BarChart3, Settings, LogOut, FileText } from 'lucide-react';
+import { Book, DollarSign, TrendingUp, Users, BarChart3, Settings, LogOut, FileText, Shield } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
@@ -18,7 +18,10 @@ const navigation = [
 
 export function DashboardSidebar() {
     const pathname = usePathname();
-    const { logout } = useAuth();
+    const { logout, user } = useAuth();
+
+    // Check if user has admin privileges
+    const isAdmin = user?.role === 'ADMIN' || user?.isAdmin;
 
     return (
         <div className="w-64 bg-white border-r border-neutral-brown-500/10 min-h-screen flex flex-col">
@@ -34,6 +37,19 @@ export function DashboardSidebar() {
                     </div>
                 </Link>
             </div>
+
+            {/* Admin Panel Link */}
+            {isAdmin && (
+                <div className="p-4 border-b border-neutral-brown-500/10">
+                    <Link
+                        href="/dashboard/admin"
+                        className="flex items-center gap-3 px-4 py-3 rounded-lg bg-purple-50 text-purple-700 hover:bg-purple-100 transition-all"
+                    >
+                        <Shield size={20} />
+                        <span className="font-medium">Admin Panel</span>
+                    </Link>
+                </div>
+            )}
 
             {/* Navigation */}
             <nav className="flex-1 p-4 space-y-1">

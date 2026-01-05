@@ -11,7 +11,6 @@ interface AuthContextType {
     isLoading: boolean;
     login: (email: string, password: string) => Promise<User>;
     register: (email: string, password: string, name: string, role?: string) => Promise<User>;
-    registerAuthor: (bio?: string, phoneNumber?: string) => Promise<User | undefined>;
     googleLogin: (token: string) => Promise<User>;
     logout: () => Promise<void>;
 }
@@ -64,26 +63,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
     };
 
-    const registerAuthor = async (bio?: string, phoneNumber?: string) => {
-        setIsLoading(true);
-        try {
-            // Import dynamically to avoid circular dependencies if any, or just import at top if clean
-            const { createAuthor } = await import('./api/authors');
-            const response = await createAuthor({ bio, phoneNumber });
-
-            if (response.success && response.data) {
-                const { user, token } = response.data;
-                setToken(token);
-                setUser(user);
-                localStorage.setItem('kaleereads_token', token);
-                localStorage.setItem('kaleereads_user', JSON.stringify(user));
-                return user as User;
-            }
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
     const googleLogin = async (googleToken: string) => {
         setIsLoading(true);
         try {
@@ -114,7 +93,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
 
     return (
-        <AuthContext.Provider value={{ user, token, isAuthenticated: !!user, isLoading, login, register, registerAuthor, googleLogin, logout }}>
+        <AuthContext.Provider value={{ user, token, isAuthenticated: !!user, isLoading, login, register, googleLogin, logout }}>
             {children}
         </AuthContext.Provider>
     );

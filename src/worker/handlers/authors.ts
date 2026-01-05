@@ -51,11 +51,6 @@ export async function handleAuthorsRequest(
         return await applyAsAuthor(request, env);
     }
 
-    // POST /api/authors - Become a new author (legacy endpoint)
-    if (path === '/api/authors' && method === 'POST') {
-        return await createAuthor(request, env);
-    }
-
     return errorResponse(`Not Found. Path: ${path}, Method: ${method}`, HttpStatus.NOT_FOUND);
 }
 
@@ -178,90 +173,6 @@ async function applyAsAuthor(request: WorkerRequest, env: Env): Promise<Response
         return errorResponse('Failed to submit author application', HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
-
-/**
- * Register as a new author
- */
-async function createAuthor(request: WorkerRequest, env: Env): Promise<Response> {
-    try {
-        const authHeader = request.headers.get('Authorization');
-        if (!authHeader || !authHeader.startsWith('Bearer ')) {
-            return errorResponse('Authentication required', HttpStatus.UNAUTHORIZED, ErrorCode.AUTHENTICATION_REQUIRED);
-        }
-
-        const token = authHeader.substring(7);
-        const { verifyToken } = await import('../middleware/auth');
-        let payload;
-
-        try {
-            payload = await verifyToken(token, env);
-        } catch (e) {
-            return errorResponse('Invalid token', HttpStatus.UNAUTHORIZED, ErrorCode.AUTHENTICATION_REQUIRED);
-        }
-
-        const userId = payload.sub as string;
-        const prisma = createD1PrismaClient(env.DB);
-
-        // Check if author already exists
-        const existingAuthor = await prisma.author.findUnique({
-            where: { userId },
-        });
-
-        if (existingAuthor) {
-            return errorResponse('You are already an author', HttpStatus.CONFLICT, ErrorCode.RESOURCE_ALREADY_EXISTS);
-        }
-
-        const body = await request.json() as any;
-        const { bio, phoneNumber } = body;
-
-        // Transaction to update role and create author profile
-        const result = await prisma.$transaction(async (tx) => {
-            const author = await tx.author.create({
-                data: {
-                    userId,
-                    bio,
-                    phoneNumber,
-                    status: 'PENDING', // Default to pending approval
-                }
-            });
-
-            const user = await tx.user.update({
-                where: { id: userId },
-                data: { role: 'AUTHOR' } // Auto-upgrade role for now, or keep READER until approved? 
-                // Requirement says "IF IS NEW AUTHOR TO REGISTER FLOW". 
-                // Usually we let them access dashboard immediately but with "Pending" status.
-            });
-
-            return { author, user };
-        });
-
-        // Generate new token with updated role
-        const { generateToken } = await import('../middleware/auth');
-        const newToken = await generateToken(
-            { id: result.user.id, email: result.user.email, role: result.user.role },
-            env,
-            payload.jti as string // reuse session ID
-        );
-
-        return successResponse({
-            author: result.author,
-            user: {
-                id: result.user.id,
-                name: result.user.name,
-                email: result.user.email,
-                role: result.user.role,
-                image: result.user.image,
-                authorStatus: 'PENDING'
-            },
-            token: newToken
-        }, HttpStatus.CREATED);
-
-    } catch (error) {
-        console.error('Create author error:', error);
-        return errorResponse('Failed to create author profile', HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-}
-
 
 /**
  * List authors with pagination

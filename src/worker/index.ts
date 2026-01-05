@@ -94,6 +94,76 @@ async function handleImageProxy(request: Request, env: Env, path: string): Promi
 }
 
 /**
+ * Handle secure PDF serving with token validation
+ */
+async function handleSecurePDF(request: Request, env: Env, path: string): Promise<Response> {
+    try {
+        // Extract token from path /api/secure-pdf/{token}
+        const token = path.replace('/api/secure-pdf/', '');
+        
+        if (!token) {
+            return errorResponse('Invalid token', HttpStatus.BAD_REQUEST);
+        }
+
+        // Validate token from KV
+        const tokenKey = `secure_token:${token}`;
+        const tokenDataStr = await env.SESSION.get(tokenKey);
+        
+        if (!tokenDataStr) {
+            return errorResponse('Token expired or invalid', HttpStatus.UNAUTHORIZED);
+        }
+
+        const tokenData = JSON.parse(tokenDataStr);
+        
+        // Check if token is expired
+        if (Date.now() > tokenData.exp) {
+            await env.SESSION.delete(tokenKey);
+            return errorResponse('Token expired', HttpStatus.UNAUTHORIZED);
+        }
+
+        // Get book details
+        const prisma = createD1PrismaClient(env.DB);
+        const book = await prisma.book.findUnique({
+            where: { id: tokenData.bookId },
+            select: { fileKey: true, fileType: true, title: true }
+        });
+
+        if (!book) {
+            return errorResponse('Book not found', HttpStatus.NOT_FOUND);
+        }
+
+        // Get PDF from R2
+        const object = await env.BOOKS_BUCKET.get(book.fileKey);
+        
+        if (!object) {
+            return errorResponse('File not found', HttpStatus.NOT_FOUND);
+        }
+
+        // Create secure response with aggressive anti-download headers
+        const headers = new Headers();
+        headers.set('Content-Type', 'application/pdf');
+        headers.set('Content-Disposition', 'inline'); // Remove filename completely
+        headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, private, max-age=0');
+        headers.set('Pragma', 'no-cache');
+        headers.set('Expires', '0');
+        headers.set('X-Content-Type-Options', 'nosniff');
+        headers.set('X-Download-Options', 'noopen');
+        headers.set('X-Frame-Options', 'SAMEORIGIN');
+        
+        // Add CORS headers
+        headers.set('Access-Control-Allow-Origin', '*');
+        headers.set('Access-Control-Allow-Methods', 'GET');
+        headers.set('Access-Control-Allow-Headers', 'Content-Type');
+
+        return new Response(object.body, { headers });
+
+    } catch (error) {
+        console.error('[SecurePDF] Error:', error);
+        return errorResponse('Failed to serve secure PDF', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+}
+
+/**
  * Main Cloudflare Worker entry point
  */
 export default {
@@ -136,6 +206,11 @@ export default {
                 // Image proxy endpoint to serve R2 images with CORS headers
                 if (path.startsWith('/api/images/')) {
                     return handleImageProxy(request, env, path);
+                }
+
+                // Secure PDF serving endpoint
+                if (path.startsWith('/api/secure-pdf/')) {
+                    return handleSecurePDF(request, env, path);
                 }
 
                 // Health check endpoint

@@ -8,6 +8,8 @@ interface BookData {
   title: string;
   description: string | null;
   coverImage: string | null;
+  fileKey: string;
+  fileType: string;
   price: number;
   rentalPrice: number | null;
   category: string | null;
@@ -160,6 +162,13 @@ export default function BooksTab({
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center justify-end gap-2">
+                        <button
+                          onClick={() => window.open(`/book/viewer/${book.id}`, '_blank')}
+                          className="p-2 text-blue-600 hover:bg-blue-100 rounded transition-colors"
+                          title={`View ${book.fileType.toUpperCase()} securely`}
+                        >
+                          <Eye size={16} />
+                        </button>
                         <button className="p-2 text-neutral-brown-600 hover:bg-neutral-brown-100 rounded">
                           <Eye size={16} />
                         </button>

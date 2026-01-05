@@ -118,6 +118,7 @@ async function register(request: WorkerRequest, env: Env): Promise<Response> {
                 email: user.email,
                 name: user.name,
                 role: user.role,
+                isAdmin: user.isAdmin,
                 authorStatus: user.role === 'AUTHOR' ? 'PENDING' : undefined
             },
             token,
@@ -192,6 +193,7 @@ async function login(request: WorkerRequest, env: Env): Promise<Response> {
                 email: user.email,
                 name: user.name,
                 role: user.role,
+                isAdmin: user.isAdmin,
                 authorStatus
             },
             token,
@@ -325,6 +327,7 @@ async function googleLogin(request: WorkerRequest, env: Env): Promise<Response> 
                 email: user.email,
                 name: user.name,
                 role: user.role,
+                isAdmin: user.isAdmin,
                 image: user.image,
                 authorStatus
             },

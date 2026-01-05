@@ -5,6 +5,7 @@ export interface User {
     email: string;
     name: string | null;
     role: 'READER' | 'AUTHOR' | 'ADMIN';
+    isAdmin?: boolean;
     image?: string;
     googleId?: string;
     authorStatus?: 'PENDING' | 'APPROVED' | 'REJECTED';

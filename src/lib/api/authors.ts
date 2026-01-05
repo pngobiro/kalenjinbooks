@@ -218,28 +218,3 @@ export async function getMyAuthorProfile(): Promise<ApiResponse<Author>> {
     return JSON.parse(text);
 }
 
-/**
- * Register as a new author
- */
-export async function createAuthor(data: { bio?: string, phoneNumber?: string }): Promise<ApiResponse<{ author: any, user: any, token: string }>> {
-    const baseUrl = getApiBaseUrl();
-    const token = typeof window !== 'undefined' ? localStorage.getItem('kaleereads_token') : null;
-
-    const response = await fetchWithRetry(`${baseUrl}/api/authors`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify(data)
-    });
-
-    if (!response.ok) {
-        const error = await response.json().catch(() => ({ error: 'Failed to create author profile' })) as any;
-        throw new Error(error.error || 'Failed to create author profile');
-    }
-
-    const json = await response.json() as any;
-    return json;
-}
-

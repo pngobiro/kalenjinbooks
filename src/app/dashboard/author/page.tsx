@@ -4,8 +4,8 @@ import { useState, useEffect } from 'react';
 import { DollarSign, Book, ShoppingCart, TrendingUp, Plus, Clock, CheckCircle, XCircle, User, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import { useAuth } from '@/lib/auth-context';
-import { getAuthorById } from '@/lib/api/authors';
 import { useRouter } from 'next/navigation';
+import { getAuthorById } from '@/lib/api/authors';
 import { AuthorProfileHeader } from '@/components/author/AuthorProfileHeader';
 
 // This would come from API/database
@@ -20,13 +20,13 @@ const initialStats = {
 };
 
 export default function AuthorDashboardPage() {
-  const { user, isLoading: authLoading, googleLogin, registerAuthor } = useAuth();
+  const { user, isLoading: authLoading, googleLogin } = useAuth();
+  const router = useRouter();
   const [stats, setStats] = useState(initialStats);
   const [isLoadingStats, setIsLoadingStats] = useState(false);
   const [authorStatus, setAuthorStatus] = useState<any>(null);
   const [isLoadingAuthorStatus, setIsLoadingAuthorStatus] = useState(false);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
-  const router = useRouter();
 
   // Check for success parameter from book upload
   useEffect(() => {
@@ -493,7 +493,15 @@ export default function AuthorDashboardPage() {
 
           <div className="max-w-sm mx-auto mb-8 text-left">
             {user ? (
-              <AuthorApplicationForm onSubmit={registerAuthor} email={user.email} />
+              <div className="text-center">
+                <p className="text-neutral-brown-600 mb-4">Ready to become an author?</p>
+                <button
+                  onClick={() => router.push('/dashboard/author/register')}
+                  className="w-full bg-primary hover:bg-primary-dark text-white font-bold py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
+                >
+                  Complete Author Application <ArrowRight size={18} />
+                </button>
+              </div>
             ) : (
               <div className="text-center">
                 <div id="google-signin-button"></div>
@@ -537,61 +545,5 @@ export default function AuthorDashboardPage() {
         </div>
       </div>
     </div>
-  );
-}
-
-function AuthorApplicationForm({ onSubmit, email }: { onSubmit: (bio?: string, phone?: string) => Promise<any>, email: string }) {
-  const [bio, setBio] = useState('');
-  const [phone, setPhone] = useState('');
-  const [submitting, setSubmitting] = useState(false);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSubmitting(true);
-    await onSubmit(bio, phone);
-    setSubmitting(false);
-  };
-
-  return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="p-4 bg-primary/5 rounded-lg border border-primary/10 mb-4">
-        <p className="text-sm text-neutral-brown-700">Applying as <span className="font-semibold">{email}</span></p>
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-neutral-brown-700 mb-1">Phone Number</label>
-        <input
-          type="tel"
-          required
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
-          placeholder="e.g +254 7..."
-          className="w-full rounded-lg border-neutral-brown-200 focus:ring-primary focus:border-primary"
-        />
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-neutral-brown-700 mb-1">Short Bio</label>
-        <textarea
-          required
-          value={bio}
-          onChange={(e) => setBio(e.target.value)}
-          placeholder="Tell us a bit about yourself and your writing..."
-          rows={3}
-          className="w-full rounded-lg border-neutral-brown-200 focus:ring-primary focus:border-primary"
-        />
-      </div>
-
-      <button
-        type="submit"
-        disabled={submitting}
-        className="w-full bg-primary hover:bg-primary-dark text-white font-bold py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
-      >
-        {submitting ? 'Submitting...' : 'Submit Application'} <ArrowRight size={18} />
-      </button>
-      <p className="text-xs text-neutral-brown-500 text-center">
-        By submitting, your account will be pending approval.
-      </p>
-    </form>
   );
 }

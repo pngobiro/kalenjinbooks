@@ -27,7 +27,15 @@ export async function handleAdminRequest(
     const token = authHeader.substring(7);
     try {
         const payload = await verifyToken(token, env);
-        if (payload.role !== 'ADMIN') {
+        
+        // Check if user has admin privileges (either role=ADMIN or isAdmin=true)
+        const prisma = createD1PrismaClient(env.DB);
+        const user = await prisma.user.findUnique({
+            where: { id: payload.sub as string },
+            select: { role: true, isAdmin: true, email: true }
+        });
+
+        if (!user || (user.role !== 'ADMIN' && !user.isAdmin)) {
             return errorResponse('Insufficient permissions', HttpStatus.FORBIDDEN);
         }
     } catch (e) {
@@ -69,6 +77,11 @@ export async function handleAdminRequest(
     // POST /api/admin/authors/make-admin - Promote author to admin
     if (path === '/api/admin/authors/make-admin' && method === 'POST') {
         return await makeAuthorAdmin(request, env);
+    }
+
+    // GET /api/admin/books - List all books (admin only)
+    if (path === '/api/admin/books' && method === 'GET') {
+        return await listAllBooks(request, env);
     }
 
     // GET /api/admin/books/pending - List books pending approval
@@ -118,6 +131,7 @@ async function listAllAuthors(request: WorkerRequest, env: Env): Promise<Respons
                         name: true,
                         image: true,
                         role: true,
+                        isAdmin: true,
                     }
                 },
                 books: {
@@ -168,6 +182,7 @@ async function listAuthorApplications(request: WorkerRequest, env: Env): Promise
                         name: true,
                         image: true,
                         role: true,
+                        isAdmin: true,
                     }
                 }
             },
@@ -294,6 +309,12 @@ async function approveAuthor(request: WorkerRequest, env: Env): Promise<Response
                 status: 'APPROVED',
                 approvedAt: new Date()
             }
+        });
+
+        // Update user role to AUTHOR when approving
+        await prisma.user.update({
+            where: { id: authorBefore.userId },
+            data: { role: 'AUTHOR' }
         });
 
         // Send approval email
@@ -441,9 +462,10 @@ async function makeAuthorAdmin(request: WorkerRequest, env: Env): Promise<Respon
         const payload = await verifyToken(token!, env);
         
         // Check if the requesting user is the main admin
+        // Note: JWT payload stores user ID in 'sub' field, not 'userId'
         const prisma = createD1PrismaClient(env.DB);
         const requestingUser = await prisma.user.findUnique({
-            where: { id: payload.userId }
+            where: { id: payload.sub as string }
         });
 
         if (!requestingUser || requestingUser.email !== 'pngobiro@gmail.com') {
@@ -472,23 +494,24 @@ async function makeAuthorAdmin(request: WorkerRequest, env: Env): Promise<Respon
         }
 
         // Check if user is already an admin
-        if (author.user.role === 'ADMIN') {
+        if (author.user.isAdmin) {
             return errorResponse('User is already an admin', HttpStatus.BAD_REQUEST);
         }
 
-        // Update user role to ADMIN
+        // Update user to have admin privileges while keeping their AUTHOR role
         const updatedUser = await prisma.user.update({
             where: { id: author.userId },
-            data: { role: 'ADMIN' }
+            data: { isAdmin: true }
         });
 
         return successResponse({ 
-            message: `${author.user.email} has been successfully promoted to admin`, 
+            message: `${author.user.email} has been successfully promoted to admin while retaining author privileges`, 
             user: {
                 id: updatedUser.id,
                 email: updatedUser.email,
                 name: updatedUser.name,
-                role: updatedUser.role
+                role: updatedUser.role,
+                isAdmin: updatedUser.isAdmin
             }
         });
 

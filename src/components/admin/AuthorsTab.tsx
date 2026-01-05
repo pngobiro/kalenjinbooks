@@ -17,6 +17,7 @@ interface Author {
     email: string;
     name: string | null;
     role: string;
+    isAdmin?: boolean;
   };
 }
 
@@ -108,11 +109,13 @@ export default function AuthorsTab({ allAuthors, onToggleAuthorStatus, onMakeAdm
                           </span>
                         )}
                         <span className={`inline-block px-2 py-1 text-xs font-medium rounded-full ${
-                          author.user.role === 'ADMIN' 
+                          author.user.role === 'ADMIN' || author.user.isAdmin
                             ? 'bg-purple-100 text-purple-600'
-                            : 'bg-blue-100 text-blue-600'
+                            : author.user.role === 'AUTHOR'
+                            ? 'bg-blue-100 text-blue-600'
+                            : 'bg-gray-100 text-gray-600'
                         }`}>
-                          {author.user.role === 'ADMIN' ? 'Admin' : 'Author'}
+                          {author.user.role === 'ADMIN' || author.user.isAdmin ? 'Admin' : author.user.role}
                         </span>
                       </div>
                     </td>
@@ -140,7 +143,7 @@ export default function AuthorsTab({ allAuthors, onToggleAuthorStatus, onMakeAdm
                             {author.isActive !== false ? <Ban size={16} /> : <Power size={16} />}
                           </button>
                         )}
-                        {author.status === 'APPROVED' && author.isActive !== false && author.user.role !== 'ADMIN' && (
+                        {author.status === 'APPROVED' && author.isActive !== false && author.user.role !== 'ADMIN' && !author.user.isAdmin && (
                           <button
                             onClick={() => onMakeAdmin(author.id, author.user.email)}
                             className="p-2 text-purple-600 hover:bg-purple-100 rounded transition-colors"
