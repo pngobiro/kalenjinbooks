@@ -5,6 +5,7 @@ import { Edit, Trash2, Eye, Plus, Book, TrendingUp } from 'lucide-react';
 import Link from 'next/link';
 import { useAuth } from '@/lib/auth-context';
 import { useRouter } from 'next/navigation';
+import { AuthorProfileHeader } from '@/components/author/AuthorProfileHeader';
 
 interface BookData {
     id: string;
@@ -208,7 +209,13 @@ export default function MyBooksPage() {
         <div className="p-8">
             {/* Header */}
             <div className="flex items-center justify-between mb-8">
-                <div>
+                <div className="flex-1">
+                    <AuthorProfileHeader 
+                        variant="compact" 
+                        showEmail={false} 
+                        showStatus={true}
+                        className="mb-4"
+                    />
                     <h1 className="text-3xl font-bold text-neutral-brown-900">My Books</h1>
                     <p className="text-neutral-brown-700 mt-1">
                         Manage your published books and drafts

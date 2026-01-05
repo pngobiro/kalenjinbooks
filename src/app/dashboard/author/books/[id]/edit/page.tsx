@@ -8,6 +8,7 @@ import {
   DollarSign, Tag, Globe, FileText, Image as ImageIcon
 } from 'lucide-react';
 import { useAuth } from '@/lib/auth-context';
+import { AuthorProfileHeader } from '@/components/author/AuthorProfileHeader';
 
 interface BookData {
   id: string;
@@ -331,7 +332,13 @@ export default function EditBookPage({ params }: { params: Promise<{ id: string 
       <div className="max-w-4xl mx-auto px-6 py-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
-          <div>
+          <div className="flex-1">
+            <AuthorProfileHeader 
+              variant="compact" 
+              showEmail={false} 
+              showStatus={true}
+              className="mb-4"
+            />
             <h1 className="text-3xl font-bold text-neutral-brown-900 font-heading">Edit Book</h1>
             <p className="text-neutral-brown-600 mt-1">Update your book details and settings</p>
           </div>

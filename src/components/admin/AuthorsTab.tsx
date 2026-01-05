@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Search, Filter, Eye, Edit, Ban, Power, MoreVertical, Users } from 'lucide-react';
+import { Search, Filter, Eye, Edit, Ban, Power, MoreVertical, Users, Shield } from 'lucide-react';
 
 interface Author {
   id: string;
@@ -23,9 +23,10 @@ interface Author {
 interface AuthorsTabProps {
   allAuthors: Author[];
   onToggleAuthorStatus: (authorId: string, currentStatus: boolean) => void;
+  onMakeAdmin: (authorId: string, userEmail: string) => void;
 }
 
-export default function AuthorsTab({ allAuthors, onToggleAuthorStatus }: AuthorsTabProps) {
+export default function AuthorsTab({ allAuthors, onToggleAuthorStatus, onMakeAdmin }: AuthorsTabProps) {
   const [searchQuery, setSearchQuery] = useState('');
 
   return (
@@ -106,6 +107,13 @@ export default function AuthorsTab({ allAuthors, onToggleAuthorStatus }: Authors
                             {author.isActive ? 'Active' : 'Disabled'}
                           </span>
                         )}
+                        <span className={`inline-block px-2 py-1 text-xs font-medium rounded-full ${
+                          author.user.role === 'ADMIN' 
+                            ? 'bg-purple-100 text-purple-600'
+                            : 'bg-blue-100 text-blue-600'
+                        }`}>
+                          {author.user.role === 'ADMIN' ? 'Admin' : 'Author'}
+                        </span>
                       </div>
                     </td>
                     <td className="px-6 py-4">
@@ -130,6 +138,15 @@ export default function AuthorsTab({ allAuthors, onToggleAuthorStatus }: Authors
                             title={author.isActive !== false ? 'Disable Author' : 'Enable Author'}
                           >
                             {author.isActive !== false ? <Ban size={16} /> : <Power size={16} />}
+                          </button>
+                        )}
+                        {author.status === 'APPROVED' && author.isActive !== false && author.user.role !== 'ADMIN' && (
+                          <button
+                            onClick={() => onMakeAdmin(author.id, author.user.email)}
+                            className="p-2 text-purple-600 hover:bg-purple-100 rounded transition-colors"
+                            title="Make Admin"
+                          >
+                            <Shield size={16} />
                           </button>
                         )}
                         <button className="p-2 text-neutral-brown-600 hover:bg-neutral-brown-100 rounded">

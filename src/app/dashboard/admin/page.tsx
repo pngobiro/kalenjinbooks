@@ -220,6 +220,42 @@ export default function AdminDashboardPage() {
     }
   };
 
+  const handleMakeAdmin = async (authorId: string, userEmail: string) => {
+    const message = `Are you sure you want to make ${userEmail} an admin? This will give them full administrative privileges.`;
+    
+    if (!confirm(message)) return;
+    
+    try {
+      const token = localStorage.getItem('kaleereads_token');
+      if (!token) {
+        alert('Authentication required');
+        return;
+      }
+
+      const response = await fetch('https://kalenjin-books-worker.pngobiro.workers.dev/api/admin/authors/make-admin', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+          authorId
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to make admin');
+      }
+
+      await refetch();
+      alert(`${userEmail} has been successfully promoted to admin!`);
+    } catch (err) {
+      console.error('Error making admin:', err);
+      alert(err instanceof Error ? err.message : 'Failed to make admin');
+    }
+  };
+
   const handleToggleBookStatus = async (bookId: string, currentStatus: boolean) => {
     const action = currentStatus ? 'disable' : 'enable';
     if (!confirm(`Are you sure you want to ${action} this book?`)) return;
@@ -401,6 +437,7 @@ export default function AdminDashboardPage() {
         <AuthorsTab
           allAuthors={allAuthors}
           onToggleAuthorStatus={handleToggleAuthorStatus}
+          onMakeAdmin={handleMakeAdmin}
         />
       )}
 

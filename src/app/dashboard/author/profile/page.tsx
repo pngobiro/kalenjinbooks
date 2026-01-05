@@ -126,17 +126,222 @@ export default function ProfilePage() {
                         <h3 className="text-lg font-bold text-neutral-brown-900 mb-4">
                             Author Statistics
                         </h3>
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                             <div>
                                 <p className="text-sm text-neutral-brown-700 mb-1">Books Published</p>
-                                <p className="font-medium text-neutral-brown-900 text-2xl">{author.booksCount}</p>
+                                <p className="font-medium text-neutral-brown-900 text-2xl">{author.booksCount || 0}</p>
                             </div>
                             <div>
                                 <p className="text-sm text-neutral-brown-700 mb-1">Average Rating</p>
-                                <p className="font-medium text-neutral-brown-900 text-2xl">{author.rating.toFixed(1)} / 5.0</p>
+                                <p className="font-medium text-neutral-brown-900 text-2xl">{author.rating ? author.rating.toFixed(1) : '0.0'} / 5.0</p>
+                            </div>
+                            <div>
+                                <p className="text-sm text-neutral-brown-700 mb-1">Total Earnings</p>
+                                <p className="font-medium text-neutral-brown-900 text-2xl">KES {(author as any).totalEarnings?.toLocaleString() || '0'}</p>
+                            </div>
+                            <div>
+                                <p className="text-sm text-neutral-brown-700 mb-1">Status</p>
+                                <span className={`inline-block px-3 py-1 rounded-full text-xs font-medium ${
+                                    (author as any).status === 'APPROVED' ? 'bg-green-100 text-green-700' :
+                                    (author as any).status === 'PENDING' ? 'bg-yellow-100 text-yellow-700' :
+                                    'bg-red-100 text-red-700'
+                                }`}>
+                                    {(author as any).status || 'Unknown'}
+                                </span>
                             </div>
                         </div>
                     </div>
+
+                    {/* Personal Information */}
+                    {((author as any).dateOfBirth || (author as any).nationality || (author as any).location || (author as any).occupation) && (
+                        <div className="bg-white rounded-xl p-6 shadow-sm">
+                            <h3 className="text-lg font-bold text-neutral-brown-900 mb-4">Personal Information</h3>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                {(author as any).dateOfBirth && (
+                                    <div>
+                                        <p className="text-sm text-neutral-brown-700 mb-1">Date of Birth</p>
+                                        <p className="text-neutral-brown-900">{new Date((author as any).dateOfBirth).toLocaleDateString()}</p>
+                                    </div>
+                                )}
+                                {(author as any).nationality && (
+                                    <div>
+                                        <p className="text-sm text-neutral-brown-700 mb-1">Nationality</p>
+                                        <p className="text-neutral-brown-900">{(author as any).nationality}</p>
+                                    </div>
+                                )}
+                                {(author as any).location && (
+                                    <div>
+                                        <p className="text-sm text-neutral-brown-700 mb-1">Location</p>
+                                        <p className="text-neutral-brown-900">{(author as any).location}</p>
+                                    </div>
+                                )}
+                                {(author as any).occupation && (
+                                    <div>
+                                        <p className="text-sm text-neutral-brown-700 mb-1">Occupation</p>
+                                        <p className="text-neutral-brown-900">{(author as any).occupation}</p>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Professional Background */}
+                    {((author as any).education || (author as any).writingExperience || (author as any).previousPublications || (author as any).awards) && (
+                        <div className="bg-white rounded-xl p-6 shadow-sm">
+                            <h3 className="text-lg font-bold text-neutral-brown-900 mb-4">Professional Background</h3>
+                            <div className="space-y-4">
+                                {(author as any).education && (
+                                    <div>
+                                        <p className="text-sm text-neutral-brown-700 mb-1 font-medium">Education</p>
+                                        <p className="text-neutral-brown-900">{(author as any).education}</p>
+                                    </div>
+                                )}
+                                {(author as any).writingExperience && (
+                                    <div>
+                                        <p className="text-sm text-neutral-brown-700 mb-1 font-medium">Writing Experience</p>
+                                        <p className="text-neutral-brown-900">{(author as any).writingExperience}</p>
+                                    </div>
+                                )}
+                                {(author as any).previousPublications && (
+                                    <div>
+                                        <p className="text-sm text-neutral-brown-700 mb-1 font-medium">Previous Publications</p>
+                                        <p className="text-neutral-brown-900">{(author as any).previousPublications}</p>
+                                    </div>
+                                )}
+                                {(author as any).awards && (
+                                    <div>
+                                        <p className="text-sm text-neutral-brown-700 mb-1 font-medium">Awards & Recognition</p>
+                                        <p className="text-neutral-brown-900">{(author as any).awards}</p>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Writing Information */}
+                    {((author as any).genres || (author as any).languages || (author as any).writingStyle || (author as any).inspirations) && (
+                        <div className="bg-white rounded-xl p-6 shadow-sm">
+                            <h3 className="text-lg font-bold text-neutral-brown-900 mb-4">Writing Information</h3>
+                            <div className="space-y-4">
+                                {(author as any).genres && (
+                                    <div>
+                                        <p className="text-sm text-neutral-brown-700 mb-2 font-medium">Genres</p>
+                                        <div className="flex flex-wrap gap-2">
+                                            {(() => {
+                                                try {
+                                                    const genres = JSON.parse((author as any).genres);
+                                                    return genres.length > 0 ? genres.map((genre: string, index: number) => (
+                                                        <span key={index} className="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">
+                                                            {genre}
+                                                        </span>
+                                                    )) : <span className="text-neutral-brown-500">Not specified</span>;
+                                                } catch {
+                                                    return <span className="text-neutral-brown-500">Not specified</span>;
+                                                }
+                                            })()}
+                                        </div>
+                                    </div>
+                                )}
+                                {(author as any).languages && (
+                                    <div>
+                                        <p className="text-sm text-neutral-brown-700 mb-2 font-medium">Languages</p>
+                                        <div className="flex flex-wrap gap-2">
+                                            {(() => {
+                                                try {
+                                                    const languages = JSON.parse((author as any).languages);
+                                                    return languages.map((language: string, index: number) => (
+                                                        <span key={index} className="bg-accent-green/10 text-accent-green px-3 py-1 rounded-full text-sm">
+                                                            {language}
+                                                        </span>
+                                                    ));
+                                                } catch {
+                                                    return <span className="text-neutral-brown-500">Not specified</span>;
+                                                }
+                                            })()}
+                                        </div>
+                                    </div>
+                                )}
+                                {(author as any).writingStyle && (
+                                    <div>
+                                        <p className="text-sm text-neutral-brown-700 mb-1 font-medium">Writing Style</p>
+                                        <p className="text-neutral-brown-900">{(author as any).writingStyle}</p>
+                                    </div>
+                                )}
+                                {(author as any).inspirations && (
+                                    <div>
+                                        <p className="text-sm text-neutral-brown-700 mb-1 font-medium">Inspirations</p>
+                                        <p className="text-neutral-brown-900">{(author as any).inspirations}</p>
+                                    </div>
+                                )}
+                                {(author as any).targetAudience && (
+                                    <div>
+                                        <p className="text-sm text-neutral-brown-700 mb-1 font-medium">Target Audience</p>
+                                        <p className="text-neutral-brown-900">{(author as any).targetAudience}</p>
+                                    </div>
+                                )}
+                                {(author as any).publishingGoals && (
+                                    <div>
+                                        <p className="text-sm text-neutral-brown-700 mb-1 font-medium">Publishing Goals</p>
+                                        <p className="text-neutral-brown-900">{(author as any).publishingGoals}</p>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Social Media & Online Presence */}
+                    {((author as any).website || (author as any).twitter || (author as any).facebook || (author as any).instagram || (author as any).linkedin) && (
+                        <div className="bg-white rounded-xl p-6 shadow-sm">
+                            <h3 className="text-lg font-bold text-neutral-brown-900 mb-4">Social Media & Online Presence</h3>
+                            <div className="space-y-3">
+                                {(author as any).website && (
+                                    <div className="flex items-center gap-3">
+                                        <span className="text-sm text-neutral-brown-700 w-20">Website:</span>
+                                        <a href={(author as any).website} target="_blank" rel="noopener noreferrer" 
+                                           className="text-primary hover:text-primary-dark transition-colors">
+                                            {(author as any).website}
+                                        </a>
+                                    </div>
+                                )}
+                                {(author as any).twitter && (
+                                    <div className="flex items-center gap-3">
+                                        <span className="text-sm text-neutral-brown-700 w-20">Twitter:</span>
+                                        <a href={`https://twitter.com/${(author as any).twitter}`} target="_blank" rel="noopener noreferrer"
+                                           className="text-primary hover:text-primary-dark transition-colors">
+                                            @{(author as any).twitter}
+                                        </a>
+                                    </div>
+                                )}
+                                {(author as any).facebook && (
+                                    <div className="flex items-center gap-3">
+                                        <span className="text-sm text-neutral-brown-700 w-20">Facebook:</span>
+                                        <a href={`https://facebook.com/${(author as any).facebook}`} target="_blank" rel="noopener noreferrer"
+                                           className="text-primary hover:text-primary-dark transition-colors">
+                                            {(author as any).facebook}
+                                        </a>
+                                    </div>
+                                )}
+                                {(author as any).instagram && (
+                                    <div className="flex items-center gap-3">
+                                        <span className="text-sm text-neutral-brown-700 w-20">Instagram:</span>
+                                        <a href={`https://instagram.com/${(author as any).instagram}`} target="_blank" rel="noopener noreferrer"
+                                           className="text-primary hover:text-primary-dark transition-colors">
+                                            @{(author as any).instagram}
+                                        </a>
+                                    </div>
+                                )}
+                                {(author as any).linkedin && (
+                                    <div className="flex items-center gap-3">
+                                        <span className="text-sm text-neutral-brown-700 w-20">LinkedIn:</span>
+                                        <a href={`https://linkedin.com/in/${(author as any).linkedin}`} target="_blank" rel="noopener noreferrer"
+                                           className="text-primary hover:text-primary-dark transition-colors">
+                                            {(author as any).linkedin}
+                                        </a>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

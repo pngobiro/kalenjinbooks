@@ -4,6 +4,7 @@ import { Book, DollarSign, TrendingUp, Users, BarChart3, Settings, LogOut, FileT
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
+import { AuthorProfileHeader } from '@/components/author/AuthorProfileHeader';
 
 const navigation = [
     { name: 'Dashboard', href: '/dashboard/author', icon: BarChart3 },
@@ -55,6 +56,15 @@ export function DashboardSidebar() {
                     );
                 })}
             </nav>
+
+            {/* Author Profile */}
+            <div className="border-t border-neutral-brown-500/10">
+                <AuthorProfileHeader 
+                    variant="sidebar" 
+                    showEmail={true} 
+                    showStatus={true}
+                />
+            </div>
 
             {/* Logout */}
             <div className="p-4 border-t border-neutral-brown-500/10">

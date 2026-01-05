@@ -5,6 +5,7 @@ import { Book, Upload, ArrowLeft, FileText, DollarSign, Globe, Tag, Image, Save 
 import Link from 'next/link';
 import { useAuth } from '@/lib/auth-context';
 import { useRouter } from 'next/navigation';
+import { AuthorProfileHeader } from '@/components/author/AuthorProfileHeader';
 
 interface BookFormData {
   title: string;
@@ -171,6 +172,12 @@ export default function NewBookPage() {
       <div className="max-w-4xl mx-auto px-6 py-12">
         <div className="bg-white rounded-2xl p-8 shadow-lg">
           <div className="text-center mb-8">
+            <AuthorProfileHeader 
+              variant="compact" 
+              showEmail={false} 
+              showStatus={true}
+              className="mb-6 justify-center"
+            />
             <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
               <Upload size={40} className="text-primary" />
             </div>

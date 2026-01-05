@@ -66,6 +66,11 @@ export async function handleAdminRequest(
         return await toggleAuthorStatus(request, env);
     }
 
+    // POST /api/admin/authors/make-admin - Promote author to admin
+    if (path === '/api/admin/authors/make-admin' && method === 'POST') {
+        return await makeAuthorAdmin(request, env);
+    }
+
     // GET /api/admin/books/pending - List books pending approval
     if (path === '/api/admin/books/pending' && method === 'GET') {
         console.log('[AdminHandler] Routing to listPendingBooks');
@@ -418,6 +423,78 @@ async function toggleAuthorStatus(request: WorkerRequest, env: Env): Promise<Res
     } catch (error) {
         console.error('Toggle author status error:', error);
         return errorResponse('Failed to update author status', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+}
+
+async function makeAuthorAdmin(request: WorkerRequest, env: Env): Promise<Response> {
+    try {
+        const body = await request.json() as any;
+        const { authorId } = body;
+
+        if (!authorId) {
+            return errorResponse('Author ID is required', HttpStatus.BAD_REQUEST);
+        }
+
+        // Additional security check - only allow the main admin to promote others
+        const authHeader = request.headers.get('Authorization');
+        const token = authHeader?.substring(7);
+        const payload = await verifyToken(token!, env);
+        
+        // Check if the requesting user is the main admin
+        const prisma = createD1PrismaClient(env.DB);
+        const requestingUser = await prisma.user.findUnique({
+            where: { id: payload.userId }
+        });
+
+        if (!requestingUser || requestingUser.email !== 'pngobiro@gmail.com') {
+            return errorResponse('Only the main admin can promote authors to admin', HttpStatus.FORBIDDEN);
+        }
+
+        // Get the author with user information
+        const author = await prisma.author.findUnique({
+            where: { id: authorId },
+            include: {
+                user: true
+            }
+        });
+
+        if (!author) {
+            return errorResponse('Author not found', HttpStatus.NOT_FOUND);
+        }
+
+        // Check if author is approved and active
+        if (author.status !== 'APPROVED') {
+            return errorResponse('Only approved authors can be made admin', HttpStatus.BAD_REQUEST);
+        }
+
+        if (!author.isActive) {
+            return errorResponse('Only active authors can be made admin', HttpStatus.BAD_REQUEST);
+        }
+
+        // Check if user is already an admin
+        if (author.user.role === 'ADMIN') {
+            return errorResponse('User is already an admin', HttpStatus.BAD_REQUEST);
+        }
+
+        // Update user role to ADMIN
+        const updatedUser = await prisma.user.update({
+            where: { id: author.userId },
+            data: { role: 'ADMIN' }
+        });
+
+        return successResponse({ 
+            message: `${author.user.email} has been successfully promoted to admin`, 
+            user: {
+                id: updatedUser.id,
+                email: updatedUser.email,
+                name: updatedUser.name,
+                role: updatedUser.role
+            }
+        });
+
+    } catch (error) {
+        console.error('Make author admin error:', error);
+        return errorResponse('Failed to make author admin', HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
 

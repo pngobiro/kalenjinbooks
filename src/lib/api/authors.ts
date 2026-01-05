@@ -8,8 +8,53 @@ export interface Author {
     bio: string | null;
     profileImage: string | null;
     booksCount: number;
-    rating: number;
+    rating: number | null | undefined;
     books?: any[];
+    
+    // Personal Information
+    dateOfBirth?: string | null;
+    nationality?: string | null;
+    location?: string | null;
+    phoneNumber?: string | null;
+    
+    // Professional Information
+    education?: string | null;
+    occupation?: string | null;
+    writingExperience?: string | null;
+    previousPublications?: string | null;
+    awards?: string | null;
+    
+    // Writing Information
+    genres?: string | null;
+    languages?: string | null;
+    writingStyle?: string | null;
+    inspirations?: string | null;
+    targetAudience?: string | null;
+    publishingGoals?: string | null;
+    
+    // Social Media & Online Presence
+    website?: string | null;
+    twitter?: string | null;
+    facebook?: string | null;
+    instagram?: string | null;
+    linkedin?: string | null;
+    
+    // Additional Information
+    howDidYouHear?: string | null;
+    additionalInfo?: string | null;
+    agreeToMarketing?: boolean;
+    
+    // Payment Information
+    paymentMethod?: string | null;
+    paymentDetails?: string | null;
+    totalEarnings?: number;
+    
+    // Status Information
+    status?: string;
+    rejectionReason?: string | null;
+    appliedAt?: string;
+    approvedAt?: string | null;
+    isActive?: boolean;
 }
 
 export interface PaginatedResponse<T> {

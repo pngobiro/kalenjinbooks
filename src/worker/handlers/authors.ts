@@ -27,6 +27,14 @@ export async function handleAuthorsRequest(
         });
     }
 
+    // PUT /api/authors/me - Update current user's author profile
+    if (path === '/api/authors/me' && method === 'PUT') {
+        const { authMiddleware: internalAuth } = await import('../middleware/auth');
+        return await internalAuth(request, env, async () => {
+            return await updateMyAuthorProfile(request, env);
+        });
+    }
+
     // GET /api/authors - List authors
     if (path === '/api/authors' && method === 'GET') {
         return await listAuthors(request, env);
@@ -424,6 +432,10 @@ async function getMyAuthorProfile(request: WorkerRequest, env: Env): Promise<Res
             user: {
                 select: { name: true, email: true, image: true },
             },
+            books: {
+                where: { isPublished: true },
+                select: { id: true, rating: true },
+            },
         },
     });
 
@@ -431,24 +443,250 @@ async function getMyAuthorProfile(request: WorkerRequest, env: Env): Promise<Res
         return errorResponse('Author profile not found', HttpStatus.NOT_FOUND);
     }
 
+    // Calculate rating and book count
+    const booksCount = author.books.length;
+    const rating = booksCount > 0
+        ? author.books.reduce((sum, book) => sum + (book.rating || 0), 0) / booksCount
+        : 0;
+
     // Return detailed author status information
     return successResponse({
         id: author.id,
         userId: author.userId,
+        name: author.user.name,
+        bio: author.bio,
+        profileImage: author.profileImage,
+        booksCount,
+        rating,
+        
+        // Personal Information
+        dateOfBirth: author.dateOfBirth,
+        nationality: author.nationality,
+        location: author.location,
+        phoneNumber: author.phoneNumber,
+        
+        // Professional Information
+        education: author.education,
+        occupation: author.occupation,
+        writingExperience: author.writingExperience,
+        previousPublications: author.previousPublications,
+        awards: author.awards,
+        
+        // Writing Information
+        genres: author.genres,
+        languages: author.languages,
+        writingStyle: author.writingStyle,
+        inspirations: author.inspirations,
+        targetAudience: author.targetAudience,
+        publishingGoals: author.publishingGoals,
+        
+        // Social Media & Online Presence
+        website: author.website,
+        twitter: author.twitter,
+        facebook: author.facebook,
+        instagram: author.instagram,
+        linkedin: author.linkedin,
+        
+        // Additional Information
+        howDidYouHear: author.howDidYouHear,
+        additionalInfo: author.additionalInfo,
+        agreeToMarketing: author.agreeToMarketing,
+        
+        // Payment Information
+        paymentMethod: author.paymentMethod,
+        paymentDetails: author.paymentDetails,
+        totalEarnings: author.totalEarnings,
+        
+        // Status Information
         status: author.status,
         rejectionReason: author.rejectionReason,
         appliedAt: author.appliedAt,
         approvedAt: author.approvedAt,
         isActive: author.isActive,
-        bio: author.bio,
-        phoneNumber: author.phoneNumber,
-        paymentMethod: author.paymentMethod,
-        totalEarnings: author.totalEarnings,
+        
         user: author.user,
         // Status messages for UI
         statusMessage: getStatusMessage(author.status, author.rejectionReason),
         canPublish: author.status === 'APPROVED' && author.isActive,
     });
+}
+
+/**
+ * Update current user's author profile
+ */
+async function updateMyAuthorProfile(request: WorkerRequest, env: Env): Promise<Response> {
+    const userId = request.ctx?.user?.id;
+    if (!userId) {
+        return errorResponse('User not authenticated', HttpStatus.UNAUTHORIZED);
+    }
+
+    const prisma = createD1PrismaClient(env.DB);
+
+    try {
+        let updateData: any = {};
+        let profileImageUrl: string | undefined;
+
+        // Check if this is a multipart form (file upload)
+        const contentType = request.headers.get('content-type') || '';
+        
+        if (contentType.includes('multipart/form-data')) {
+            // Handle multipart form data (with file upload)
+            const formData = await request.formData();
+            
+            // Extract form fields
+            const bio = formData.get('bio') as string;
+            const phoneNumber = formData.get('phoneNumber') as string;
+            const dateOfBirth = formData.get('dateOfBirth') as string;
+            const nationality = formData.get('nationality') as string;
+            const location = formData.get('location') as string;
+            const education = formData.get('education') as string;
+            const occupation = formData.get('occupation') as string;
+            const writingExperience = formData.get('writingExperience') as string;
+            const previousPublications = formData.get('previousPublications') as string;
+            const awards = formData.get('awards') as string;
+            const genres = formData.get('genres') as string;
+            const languages = formData.get('languages') as string;
+            const writingStyle = formData.get('writingStyle') as string;
+            const inspirations = formData.get('inspirations') as string;
+            const targetAudience = formData.get('targetAudience') as string;
+            const publishingGoals = formData.get('publishingGoals') as string;
+            const website = formData.get('website') as string;
+            const twitter = formData.get('twitter') as string;
+            const facebook = formData.get('facebook') as string;
+            const instagram = formData.get('instagram') as string;
+            const linkedin = formData.get('linkedin') as string;
+            const additionalInfo = formData.get('additionalInfo') as string;
+            const agreeToMarketing = formData.get('agreeToMarketing') === 'true';
+            const profileImage = formData.get('profileImage') as File;
+
+            // Handle profile image upload if provided
+            if (profileImage && profileImage.size > 0) {
+                // Validate file type and size
+                const allowedImageTypes = ['image/jpeg', 'image/png', 'image/webp'];
+                if (!allowedImageTypes.includes(profileImage.type)) {
+                    return errorResponse('Profile image must be JPEG, PNG, or WebP format', HttpStatus.BAD_REQUEST);
+                }
+
+                if (profileImage.size > 5 * 1024 * 1024) {
+                    return errorResponse('Profile image must be smaller than 5MB', HttpStatus.BAD_REQUEST);
+                }
+
+                // Upload profile image
+                const profileImageKey = `profiles/${userId}/${profileImage.name}`;
+                
+                try {
+                    await env.BOOKS_BUCKET.put(profileImageKey, profileImage.stream(), {
+                        httpMetadata: {
+                            contentType: profileImage.type,
+                        },
+                    });
+                    profileImageUrl = `https://kalenjin-books-worker.pngobiro.workers.dev/api/images/${profileImageKey}`;
+                } catch (uploadError) {
+                    console.error('Profile image upload error:', uploadError);
+                    return errorResponse('Failed to upload profile image', HttpStatus.INTERNAL_SERVER_ERROR);
+                }
+            }
+
+            updateData = {
+                bio: bio || null,
+                phoneNumber: phoneNumber || null,
+                dateOfBirth: dateOfBirth || null,
+                nationality: nationality || null,
+                location: location || null,
+                education: education || null,
+                occupation: occupation || null,
+                writingExperience: writingExperience || null,
+                previousPublications: previousPublications || null,
+                awards: awards || null,
+                genres: genres || null,
+                languages: languages || null,
+                writingStyle: writingStyle || null,
+                inspirations: inspirations || null,
+                targetAudience: targetAudience || null,
+                publishingGoals: publishingGoals || null,
+                website: website || null,
+                twitter: twitter || null,
+                facebook: facebook || null,
+                instagram: instagram || null,
+                linkedin: linkedin || null,
+                additionalInfo: additionalInfo || null,
+                agreeToMarketing,
+            };
+
+            if (profileImageUrl) {
+                updateData.profileImage = profileImageUrl;
+            }
+        } else {
+            // Handle JSON data (no file upload)
+            const body = await request.json() as any;
+            updateData = {
+                bio: body.bio || null,
+                phoneNumber: body.phoneNumber || null,
+                dateOfBirth: body.dateOfBirth || null,
+                nationality: body.nationality || null,
+                location: body.location || null,
+                education: body.education || null,
+                occupation: body.occupation || null,
+                writingExperience: body.writingExperience || null,
+                previousPublications: body.previousPublications || null,
+                awards: body.awards || null,
+                genres: body.genres || null,
+                languages: body.languages || null,
+                writingStyle: body.writingStyle || null,
+                inspirations: body.inspirations || null,
+                targetAudience: body.targetAudience || null,
+                publishingGoals: body.publishingGoals || null,
+                website: body.website || null,
+                twitter: body.twitter || null,
+                facebook: body.facebook || null,
+                instagram: body.instagram || null,
+                linkedin: body.linkedin || null,
+                additionalInfo: body.additionalInfo || null,
+                agreeToMarketing: body.agreeToMarketing || false,
+            };
+        }
+
+        // Update author profile
+        const updatedAuthor = await prisma.author.update({
+            where: { userId },
+            data: updateData,
+            include: {
+                user: {
+                    select: { name: true, email: true, image: true },
+                },
+                books: {
+                    where: { isPublished: true },
+                    select: { id: true, rating: true },
+                },
+            },
+        });
+
+        // Calculate rating and book count
+        const booksCount = updatedAuthor.books.length;
+        const rating = booksCount > 0
+            ? updatedAuthor.books.reduce((sum, book) => sum + (book.rating || 0), 0) / booksCount
+            : 0;
+
+        return successResponse({
+            message: 'Profile updated successfully',
+            author: {
+                id: updatedAuthor.id,
+                name: updatedAuthor.user.name,
+                bio: updatedAuthor.bio,
+                profileImage: updatedAuthor.profileImage,
+                booksCount,
+                rating,
+                // Include all the updated fields
+                ...updateData,
+                status: updatedAuthor.status,
+                user: updatedAuthor.user,
+            },
+        });
+
+    } catch (error) {
+        console.error('Update profile error:', error);
+        return errorResponse('Failed to update profile', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }
 
 function getStatusMessage(status: string, rejectionReason?: string | null): string {

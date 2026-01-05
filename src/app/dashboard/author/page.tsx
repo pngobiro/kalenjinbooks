@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useAuth } from '@/lib/auth-context';
 import { getAuthorById } from '@/lib/api/authors';
 import { useRouter } from 'next/navigation';
+import { AuthorProfileHeader } from '@/components/author/AuthorProfileHeader';
 
 // This would come from API/database
 const initialStats = {
@@ -368,10 +369,16 @@ export default function AuthorDashboardPage() {
         <SuccessMessage />
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
-          <div>
+          <div className="flex-1">
+            <AuthorProfileHeader 
+              variant="page" 
+              showEmail={true} 
+              showStatus={true}
+              className="mb-4"
+            />
             <h1 className="text-3xl font-bold text-neutral-brown-900">Dashboard</h1>
             <p className="text-neutral-brown-700 mt-1">
-              Welcome back, {user.name}! Here's your overview
+              Here's your author overview and recent activity
             </p>
           </div>
           <div className="flex items-center gap-3">
