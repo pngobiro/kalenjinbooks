@@ -109,6 +109,8 @@ model Book {
   previewPages  Int       @default(10)
   category      String?
   language      String    @default("Kalenjin")
+  isbn          String?   // ISBN number
+  tags          String?   // JSON array of tags
   publishedAt   DateTime?
   isPublished   Boolean   @default(false)
   isFeatured    Boolean   @default(false)

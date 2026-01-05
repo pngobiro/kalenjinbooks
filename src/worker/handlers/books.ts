@@ -32,6 +32,13 @@ export async function handleBooksRequest(
         return await getBook(request, env, bookId);
     }
 
+    // POST /api/books/upload - Upload book with files (authors only)
+    if (path === '/api/books/upload' && method === 'POST') {
+        return await authMiddleware(request, env, async () => {
+            return await uploadBook(request, env);
+        });
+    }
+
     // POST /api/books - Create book (authors only)
     if (path === '/api/books' && method === 'POST') {
         return await authMiddleware(request, env, async () => {
@@ -287,6 +294,175 @@ async function updateBook(request: WorkerRequest, env: Env, bookId: string): Pro
 }
 
 /**
+ * Upload a new book with files
+ */
+async function uploadBook(request: WorkerRequest, env: Env): Promise<Response> {
+    const prisma = createD1PrismaClient(env.DB);
+
+    try {
+        // Get user ID from authenticated user
+        const userId = request.ctx?.user?.id;
+        if (!userId) {
+            return errorResponse('User not authenticated', HttpStatus.UNAUTHORIZED);
+        }
+
+        // Get author record and check if approved
+        const author = await prisma.author.findUnique({
+            where: { userId },
+        });
+
+        if (!author) {
+            return errorResponse('Author profile not found', HttpStatus.NOT_FOUND);
+        }
+
+        if (author.status !== 'APPROVED') {
+            return errorResponse('Author account must be approved to upload books', HttpStatus.FORBIDDEN);
+        }
+
+        if (!author.isActive) {
+            return errorResponse('Author account is disabled', HttpStatus.FORBIDDEN);
+        }
+
+        // Parse multipart form data
+        const formData = await request.formData();
+        
+        // Extract form fields
+        const title = formData.get('title') as string;
+        const description = formData.get('description') as string;
+        const category = formData.get('category') as string;
+        const language = formData.get('language') as string;
+        const price = parseFloat(formData.get('price') as string);
+        const rentalPrice = parseFloat(formData.get('rentalPrice') as string) || null;
+        const isbn = formData.get('isbn') as string || null;
+        const tagsJson = formData.get('tags') as string;
+        const coverImage = formData.get('coverImage') as File;
+        const bookFile = formData.get('bookFile') as File;
+
+        // Validate required fields
+        if (!title || !description || !category || !bookFile) {
+            return errorResponse('Title, description, category, and book file are required', HttpStatus.BAD_REQUEST);
+        }
+
+        if (isNaN(price) || price < 0) {
+            return errorResponse('Valid price is required', HttpStatus.BAD_REQUEST);
+        }
+
+        // Parse tags
+        let tags: string[] = [];
+        try {
+            tags = tagsJson ? JSON.parse(tagsJson) : [];
+        } catch (e) {
+            tags = [];
+        }
+
+        // Validate file types
+        const allowedBookTypes = ['application/pdf', 'application/epub+zip'];
+        const allowedImageTypes = ['image/jpeg', 'image/png', 'image/webp'];
+
+        if (!allowedBookTypes.includes(bookFile.type)) {
+            return errorResponse('Book file must be PDF or EPUB format', HttpStatus.BAD_REQUEST);
+        }
+
+        if (coverImage && !allowedImageTypes.includes(coverImage.type)) {
+            return errorResponse('Cover image must be JPEG, PNG, or WebP format', HttpStatus.BAD_REQUEST);
+        }
+
+        // Check file sizes (50MB for book, 5MB for cover)
+        if (bookFile.size > 50 * 1024 * 1024) {
+            return errorResponse('Book file must be smaller than 50MB', HttpStatus.BAD_REQUEST);
+        }
+
+        if (coverImage && coverImage.size > 5 * 1024 * 1024) {
+            return errorResponse('Cover image must be smaller than 5MB', HttpStatus.BAD_REQUEST);
+        }
+
+        // Generate unique IDs for files
+        const bookId = `book-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+        const bookFileKey = `books/${bookId}/${bookFile.name}`;
+        const coverImageKey = coverImage ? `covers/${bookId}/${coverImage.name}` : null;
+
+        // Upload files to R2
+        try {
+            // Upload book file
+            await env.BOOKS_BUCKET.put(bookFileKey, bookFile.stream(), {
+                httpMetadata: {
+                    contentType: bookFile.type,
+                },
+            });
+
+            // Upload cover image if provided
+            let coverImageUrl = null;
+            if (coverImage && coverImageKey) {
+                await env.BOOKS_BUCKET.put(coverImageKey, coverImage.stream(), {
+                    httpMetadata: {
+                        contentType: coverImage.type,
+                    },
+                });
+                coverImageUrl = `https://pub-kalenjin-books.r2.dev/${coverImageKey}`;
+            }
+
+            // Create book record in database
+            const book = await prisma.book.create({
+                data: {
+                    id: bookId,
+                    title,
+                    description,
+                    category,
+                    language,
+                    price,
+                    rentalPrice,
+                    tags: tags.length > 0 ? JSON.stringify(tags) : null,
+                    coverImage: coverImageUrl,
+                    fileKey: bookFileKey,
+                    fileSize: bookFile.size,
+                    fileType: bookFile.type,
+                    authorId: author.id,
+                    isPublished: false, // Books start as drafts
+                    publishedAt: null,
+                },
+                include: {
+                    author: {
+                        include: {
+                            user: {
+                                select: { name: true },
+                            },
+                        },
+                    },
+                },
+            });
+
+            // Clear books cache
+            const { invalidateCacheByPrefix } = await import('../utils/cache');
+            await invalidateCacheByPrefix(env.CACHE, CachePrefix.BOOKS);
+
+            return successResponse({
+                message: 'Book uploaded successfully',
+                book,
+            }, HttpStatus.CREATED);
+
+        } catch (uploadError) {
+            console.error('File upload error:', uploadError);
+            
+            // Clean up any uploaded files on error
+            try {
+                await env.BOOKS_BUCKET.delete(bookFileKey);
+                if (coverImageKey) {
+                    await env.BOOKS_BUCKET.delete(coverImageKey);
+                }
+            } catch (cleanupError) {
+                console.error('Cleanup error:', cleanupError);
+            }
+
+            return errorResponse('Failed to upload files', HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+    } catch (error) {
+        console.error('Upload book error:', error);
+        return errorResponse('Failed to upload book', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+}
+
+/**
  * Delete a book
  */
 async function deleteBook(request: WorkerRequest, env: Env, bookId: string): Promise<Response> {
@@ -312,8 +488,7 @@ async function deleteBook(request: WorkerRequest, env: Env, bookId: string): Pro
 
         // Delete from R2
         if (book.fileKey) {
-            const { deleteBook: deleteFromR2 } = await import('../../lib/cloudflare-r2');
-            await deleteFromR2(book.fileKey);
+            await env.BOOKS_BUCKET.delete(book.fileKey);
         }
 
         // Delete from database

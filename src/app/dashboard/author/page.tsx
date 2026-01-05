@@ -24,7 +24,27 @@ export default function AuthorDashboardPage() {
   const [isLoadingStats, setIsLoadingStats] = useState(false);
   const [authorStatus, setAuthorStatus] = useState<any>(null);
   const [isLoadingAuthorStatus, setIsLoadingAuthorStatus] = useState(false);
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const router = useRouter();
+
+  // Check for success parameter from book upload
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('registered') === 'true') {
+      setShowSuccessMessage(true);
+      // Clean up URL
+      window.history.replaceState({}, '', '/dashboard/author');
+      // Hide message after 5 seconds
+      setTimeout(() => setShowSuccessMessage(false), 5000);
+    }
+    if (urlParams.get('bookUploaded') === 'true') {
+      setShowSuccessMessage(true);
+      // Clean up URL
+      window.history.replaceState({}, '', '/dashboard/author');
+      // Hide message after 5 seconds
+      setTimeout(() => setShowSuccessMessage(false), 5000);
+    }
+  }, []);
 
   // Redirect admin users to admin dashboard
   useEffect(() => {
@@ -51,7 +71,7 @@ export default function AuthorDashboardPage() {
     }
 
     async function loadAuthorStatus() {
-      if (user?.id && (user.role === 'AUTHOR' || user.role === 'ADMIN')) {
+      if (user?.id) {
         setIsLoadingAuthorStatus(true);
         try {
           const token = localStorage.getItem('kaleereads_token');
@@ -64,8 +84,13 @@ export default function AuthorDashboardPage() {
             });
             
             if (response.ok) {
-              const data = await response.json();
-              setAuthorStatus(data.data);
+              const data: any = await response.json();
+              if (data && data.data) {
+                setAuthorStatus(data.data);
+              }
+            } else if (response.status === 404) {
+              // User doesn't have an author profile yet
+              setAuthorStatus(null);
             }
           }
         } catch (e) {
@@ -87,10 +112,13 @@ export default function AuthorDashboardPage() {
           googleLogin(response.credential);
         }
       });
-      window.google.accounts.id.renderButton(
-        document.getElementById("google-signin-button"),
-        { theme: "outline", size: "large" }
-      );
+      const buttonElement = document.getElementById("google-signin-button");
+      if (buttonElement) {
+        window.google.accounts.id.renderButton(
+          buttonElement,
+          { theme: "outline", size: "large" }
+        );
+      }
     }
   }, [googleLogin, user?.id, user?.role]);
 
@@ -102,8 +130,39 @@ export default function AuthorDashboardPage() {
     );
   }
 
-  // Not registered / Not Logged In
-  if (!user || (user.role !== 'AUTHOR' && user.role !== 'ADMIN')) {
+  // Success message for new registrations and book uploads
+  const SuccessMessage = () => {
+    if (!showSuccessMessage) return null;
+    
+    const urlParams = new URLSearchParams(window.location.search);
+    const isBookUpload = urlParams.get('bookUploaded') === 'true';
+    
+    return (
+      <div className="fixed top-4 right-4 z-50 bg-accent-green text-white px-6 py-4 rounded-lg shadow-lg flex items-center gap-3 transform transition-all duration-300 ease-in-out">
+        <CheckCircle size={20} />
+        <div>
+          <p className="font-semibold">
+            {isBookUpload ? 'Book Uploaded Successfully!' : 'Application Submitted Successfully!'}
+          </p>
+          <p className="text-sm opacity-90">
+            {isBookUpload 
+              ? 'Your book is now in draft mode. You can publish it when ready.' 
+              : 'We\'ll review your application within 24-48 hours.'
+            }
+          </p>
+        </div>
+        <button 
+          onClick={() => setShowSuccessMessage(false)}
+          className="ml-2 text-white/80 hover:text-white"
+        >
+          ✕
+        </button>
+      </div>
+    );
+  };
+
+  // Check if user has author profile - if not, show registration page
+  if (!user || (!authorStatus && !isLoadingAuthorStatus)) {
     return (
       <div className="min-h-screen bg-neutral-cream">
         <div className="max-w-4xl mx-auto px-6 py-16">
@@ -180,13 +239,14 @@ export default function AuthorDashboardPage() {
     );
   }
 
-  // Approved - show full dashboard
-  if (user && (user.role === 'AUTHOR' || user.role === 'ADMIN')) {
+  // Show author dashboard if user has author profile
+  if (user && authorStatus) {
     // Show status notification if author status is available
     if (authorStatus) {
       if (authorStatus.status === 'PENDING') {
         return (
           <div className="min-h-screen bg-neutral-cream flex items-center justify-center p-4">
+            <SuccessMessage />
             <div className="max-w-md w-full bg-white rounded-2xl p-8 shadow-lg text-center">
               <div className="w-20 h-20 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-6">
                 <Clock size={40} className="text-yellow-600" />
@@ -214,6 +274,7 @@ export default function AuthorDashboardPage() {
       if (authorStatus.status === 'REJECTED') {
         return (
           <div className="min-h-screen bg-neutral-cream flex items-center justify-center p-4">
+            <SuccessMessage />
             <div className="max-w-md w-full bg-white rounded-2xl p-8 shadow-lg text-center">
               <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
                 <XCircle size={40} className="text-red-600" />
@@ -256,6 +317,7 @@ export default function AuthorDashboardPage() {
       if (authorStatus.status === 'APPROVED' && !authorStatus.isActive) {
         return (
           <div className="min-h-screen bg-neutral-cream flex items-center justify-center p-4">
+            <SuccessMessage />
             <div className="max-w-md w-full bg-white rounded-2xl p-8 shadow-lg text-center">
               <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
                 <XCircle size={40} className="text-gray-600" />
@@ -303,6 +365,7 @@ export default function AuthorDashboardPage() {
     // If approved (or undefined/legacy), show dashboard
     return (
       <div className="p-8 max-w-7xl mx-auto">
+        <SuccessMessage />
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>

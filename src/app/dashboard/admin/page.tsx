@@ -1,153 +1,106 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { 
-  Users, Book, TrendingUp, DollarSign, UserCheck, 
+  Users, Book, TrendingUp, UserCheck, 
   Star, Eye, Edit, CheckCircle, XCircle, Clock,
   Search, Filter, MoreVertical, Ban, Power
 } from 'lucide-react';
+import AdminOverview from '@/components/admin/AdminOverview';
+import PendingBooksTab from '@/components/admin/PendingBooksTab';
+import ApplicationsTab from '@/components/admin/ApplicationsTab';
+import RejectedTab from '@/components/admin/RejectedTab';
+import AuthorsTab from '@/components/admin/AuthorsTab';
+import BooksTab from '@/components/admin/BooksTab';
+import { useAdminData } from '@/components/admin/useAdminData';
+import { Author, BookData, PendingBook, Stats } from '@/types/admin';
 
-// Types for real data
-interface Author {
-  id: string;
-  userId: string;
-  bio: string | null;
-  profileImage: string | null;
-  status: 'PENDING' | 'APPROVED' | 'REJECTED';
-  totalEarnings: number | null;
-  createdAt: string;
-  user: {
-    id: string;
-    email: string;
-    name: string | null;
-    role: string;
-  };
-}
-
-interface BookData {
-  id: string;
-  title: string;
-  description: string | null;
-  coverImage: string | null;
-  price: number;
-  rentalPrice: number | null;
-  category: string | null;
-  language: string;
-  isPublished: boolean;
-  isFeatured: boolean;
-  featuredOrder: number | null;
-  rating: number;
-  reviewCount: number;
-  publishedAt: string | null;
-  author: {
-    id: string;
-    user: {
-      name: string | null;
-    };
-  };
-}
-
-interface Stats {
-  totalAuthors: number;
-  pendingApplications: number;
-  totalBooks: number;
-  featuredBooks: number;
-  totalRevenue: number;
-}
-
-type TabType = 'overview' | 'authors' | 'applications' | 'rejected' | 'books';
+type TabType = 'overview' | 'authors' | 'applications' | 'rejected' | 'books' | 'pending-books';
 
 export default function AdminDashboardPage() {
   const [activeTab, setActiveTab] = useState<TabType>('overview');
-  const [searchQuery, setSearchQuery] = useState('');
   const [showRejectModal, setShowRejectModal] = useState(false);
   const [selectedAuthorId, setSelectedAuthorId] = useState<string | null>(null);
   const [rejectionReason, setRejectionReason] = useState('');
-  const [stats, setStats] = useState<Stats>({
-    totalAuthors: 0,
-    pendingApplications: 0,
-    totalBooks: 0,
-    featuredBooks: 0,
-    totalRevenue: 0,
-  });
-  const [pendingAuthors, setPendingAuthors] = useState<Author[]>([]);
-  const [rejectedAuthors, setRejectedAuthors] = useState<Author[]>([]);
-  const [allAuthors, setAllAuthors] = useState<Author[]>([]);
-  const [allBooks, setAllBooks] = useState<BookData[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
-  // Fetch data from API
-  useEffect(() => {
-    fetchData();
-  }, []);
+  const {
+    stats,
+    pendingAuthors,
+    rejectedAuthors,
+    allAuthors,
+    allBooks,
+    pendingBooks,
+    isLoading,
+    error,
+    refetch,
+  } = useAdminData();
 
-  const fetchData = async () => {
+  // Handler functions
+  const handleApproveBook = async (bookId: string) => {
+    if (!confirm('Are you sure you want to approve and publish this book?')) return;
+    
     try {
-      setIsLoading(true);
-      setError(null);
-
-      // Get auth token from localStorage
       const token = localStorage.getItem('kaleereads_token');
       if (!token) {
-        setError('Authentication required');
+        alert('Authentication required');
         return;
       }
 
-      const headers = {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      };
-
-      // Fetch author applications
-      const applicationsResponse = await fetch('https://kalenjin-books-worker.pngobiro.workers.dev/api/admin/authors/applications', {
-        headers
+      const response = await fetch('https://kalenjin-books-worker.pngobiro.workers.dev/api/admin/books/approve', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ bookId }),
       });
-      
-      if (!applicationsResponse.ok) {
-        const errorText = await applicationsResponse.text();
-        console.error('API Error Response:', errorText);
-        throw new Error(`Failed to fetch author applications: ${applicationsResponse.status} ${errorText}`);
+
+      if (!response.ok) {
+        throw new Error('Failed to approve book');
       }
-      
-      const applicationsData = await applicationsResponse.json();
-      console.log('Applications API Response:', applicationsData);
-      const applications = applicationsData.data?.applications || [];
-      console.log('Parsed applications:', applications);
-      
-      // Separate pending, rejected, and approved authors
-      const pending = applications.filter((app: any) => app.status === 'PENDING');
-      const rejected = applications.filter((app: any) => app.status === 'REJECTED');
-      const approved = applications.filter((app: any) => app.status === 'APPROVED');
-      
-      setPendingAuthors(pending);
-      setRejectedAuthors(rejected);
-      setAllAuthors(applications);
 
-      // Fetch books
-      const booksResponse = await fetch('https://kalenjin-books-worker.pngobiro.workers.dev/api/books');
-      if (!booksResponse.ok) throw new Error('Failed to fetch books');
-      const booksData = await booksResponse.json();
-      
-      const books = booksData.data || [];
-      setAllBooks(books);
+      await refetch();
+      alert('Book approved and published successfully!');
+    } catch (err) {
+      console.error('Error approving book:', err);
+      alert('Failed to approve book');
+    }
+  };
 
-      // Calculate stats
-      const featuredBooks = books.filter((book: BookData) => book.isFeatured).length;
-      
-      setStats({
-        totalAuthors: approved.length,
-        pendingApplications: pending.length,
-        totalBooks: books.length,
-        featuredBooks,
-        totalRevenue: 0, // TODO: Calculate from actual sales data
+  const handleRejectBook = async (bookId: string, reason: string) => {
+    if (!reason.trim()) {
+      alert('Please provide a rejection reason');
+      return;
+    }
+    
+    try {
+      const token = localStorage.getItem('kaleereads_token');
+      if (!token) {
+        alert('Authentication required');
+        return;
+      }
+
+      const response = await fetch('https://kalenjin-books-worker.pngobiro.workers.dev/api/admin/books/reject', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+          bookId,
+          reason: reason.trim()
+        }),
       });
 
+      if (!response.ok) {
+        throw new Error('Failed to reject book');
+      }
+
+      await refetch();
+      alert('Book rejected successfully!');
     } catch (err) {
-      console.error('Error fetching data:', err);
-      setError(err instanceof Error ? err.message : 'Failed to load data');
-    } finally {
-      setIsLoading(false);
+      console.error('Error rejecting book:', err);
+      alert('Failed to reject book');
     }
   };
 
@@ -174,8 +127,7 @@ export default function AdminDashboardPage() {
         throw new Error('Failed to approve author');
       }
 
-      // Refresh data
-      await fetchData();
+      await refetch();
       alert('Author approved successfully!');
     } catch (err) {
       console.error('Error approving author:', err);
@@ -218,11 +170,10 @@ export default function AdminDashboardPage() {
         throw new Error('Failed to reject author');
       }
 
-      // Close modal and refresh data
       setShowRejectModal(false);
       setSelectedAuthorId(null);
       setRejectionReason('');
-      await fetchData();
+      await refetch();
       alert('Author rejected successfully!');
     } catch (err) {
       console.error('Error rejecting author:', err);
@@ -261,7 +212,7 @@ export default function AdminDashboardPage() {
         throw new Error(`Failed to ${action} author`);
       }
 
-      await fetchData();
+      await refetch();
       alert(`Author ${action}d successfully!`);
     } catch (err) {
       console.error(`Error ${action}ing author:`, err);
@@ -296,7 +247,7 @@ export default function AdminDashboardPage() {
         throw new Error(`Failed to ${action} book`);
       }
 
-      await fetchData();
+      await refetch();
       alert(`Book ${action}d successfully!`);
     } catch (err) {
       console.error(`Error ${action}ing book:`, err);
@@ -331,7 +282,7 @@ export default function AdminDashboardPage() {
         throw new Error(`Failed to ${action} book`);
       }
 
-      await fetchData();
+      await refetch();
       alert(`Book ${action}d successfully!`);
     } catch (err) {
       console.error(`Error ${action}ing book:`, err);
@@ -345,6 +296,7 @@ export default function AdminDashboardPage() {
     { id: 'rejected', label: 'Rejected', icon: XCircle, badge: rejectedAuthors.length },
     { id: 'authors', label: 'Authors', icon: Users },
     { id: 'books', label: 'Books', icon: Book },
+    { id: 'pending-books', label: 'Pending Books', icon: Clock, badge: stats.pendingBooks },
   ];
 
   if (isLoading) {
@@ -364,7 +316,7 @@ export default function AdminDashboardPage() {
           <p className="text-red-600 font-medium mb-2">Error loading dashboard</p>
           <p className="text-red-500 text-sm mb-4">{error}</p>
           <button 
-            onClick={fetchData}
+            onClick={refetch}
             className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors"
           >
             Try Again
@@ -407,793 +359,57 @@ export default function AdminDashboardPage() {
         ))}
       </div>
 
-      {/* Overview Tab */}
+      {/* Tab Content */}
       {activeTab === 'overview' && (
-        <div className="space-y-8">
-          {/* Stats Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-white rounded-xl p-6 shadow-sm">
-              <div className="flex items-center justify-between mb-4">
-                <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-                  <Users className="text-primary" size={24} />
-                </div>
-              </div>
-              <p className="text-sm text-neutral-brown-600 mb-1">Total Authors</p>
-              <p className="text-2xl font-bold text-neutral-brown-900">{stats.totalAuthors}</p>
-            </div>
-
-            <div className="bg-white rounded-xl p-6 shadow-sm">
-              <div className="flex items-center justify-between mb-4">
-                <div className="w-12 h-12 bg-accent-gold/10 rounded-lg flex items-center justify-center">
-                  <Clock className="text-accent-gold" size={24} />
-                </div>
-                {stats.pendingApplications > 0 && (
-                  <span className="bg-red-500 text-white text-xs px-2 py-1 rounded-full">
-                    {stats.pendingApplications}
-                  </span>
-                )}
-              </div>
-              <p className="text-sm text-neutral-brown-600 mb-1">Pending Applications</p>
-              <p className="text-2xl font-bold text-neutral-brown-900">{stats.pendingApplications}</p>
-            </div>
-
-            <div className="bg-white rounded-xl p-6 shadow-sm">
-              <div className="flex items-center justify-between mb-4">
-                <div className="w-12 h-12 bg-accent-green/10 rounded-lg flex items-center justify-center">
-                  <Book className="text-accent-green" size={24} />
-                </div>
-              </div>
-              <p className="text-sm text-neutral-brown-600 mb-1">Total Books</p>
-              <p className="text-2xl font-bold text-neutral-brown-900">{stats.totalBooks}</p>
-            </div>
-
-            <div className="bg-white rounded-xl p-6 shadow-sm">
-              <div className="flex items-center justify-between mb-4">
-                <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-                  <Star className="text-primary" size={24} />
-                </div>
-              </div>
-              <p className="text-sm text-neutral-brown-600 mb-1">Featured Books</p>
-              <p className="text-2xl font-bold text-neutral-brown-900">{stats.featuredBooks}</p>
-            </div>
-          </div>
-
-          {/* Quick Actions */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="bg-white rounded-xl p-6 shadow-sm">
-              <h2 className="text-xl font-bold text-neutral-brown-900 mb-4">Recent Applications</h2>
-              <div className="space-y-3">
-                {pendingAuthors.length > 0 ? (
-                  pendingAuthors.slice(0, 3).map((author) => (
-                    <div key={author.id} className="flex items-center justify-between p-3 bg-neutral-cream rounded-lg">
-                      <div>
-                        <p className="font-medium text-neutral-brown-900">{author.user.name || 'Unknown'}</p>
-                        <p className="text-sm text-neutral-brown-600">{author.user.email}</p>
-                      </div>
-                      <div className="flex gap-2">
-                        <button
-                          onClick={() => handleApproveAuthor(author.id)}
-                          className="p-2 text-accent-green hover:bg-accent-green/10 rounded transition-colors"
-                        >
-                          <CheckCircle size={16} />
-                        </button>
-                        <button
-                          onClick={() => handleRejectAuthor(author.id)}
-                          className="p-2 text-red-500 hover:bg-red-50 rounded transition-colors"
-                        >
-                          <XCircle size={16} />
-                        </button>
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <p className="text-neutral-brown-500 text-center py-4">No pending applications</p>
-                )}
-              </div>
-              <button
-                onClick={() => setActiveTab('applications')}
-                className="block w-full text-center text-primary hover:text-primary-dark font-medium mt-4"
-              >
-                View All Applications →
-              </button>
-            </div>
-
-            <div className="bg-white rounded-xl p-6 shadow-sm">
-              <h2 className="text-xl font-bold text-neutral-brown-900 mb-4">Featured Books</h2>
-              <div className="space-y-3">
-                {allBooks.filter(book => book.isFeatured).length > 0 ? (
-                  allBooks
-                    .filter(book => book.isFeatured)
-                    .sort((a, b) => (a.featuredOrder || 999) - (b.featuredOrder || 999))
-                    .slice(0, 3)
-                    .map((book) => (
-                    <div key={book.id} className="flex items-center justify-between p-3 bg-accent-gold/5 rounded-lg">
-                      <div className="flex items-center gap-3">
-                        <Star size={16} className="text-accent-gold fill-current" />
-                        <div>
-                          <p className="font-medium text-neutral-brown-900">{book.title}</p>
-                          <p className="text-sm text-neutral-brown-600">by {book.author.user.name || 'Unknown'}</p>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        {book.featuredOrder && (
-                          <span className="bg-accent-gold/20 text-accent-gold px-2 py-1 rounded text-xs font-medium">
-                            #{book.featuredOrder}
-                          </span>
-                        )}
-                        <button
-                          onClick={() => handleToggleFeatured(book.id, book.isFeatured)}
-                          className="p-1 text-accent-gold hover:bg-accent-gold/10 rounded transition-colors"
-                        >
-                          <XCircle size={14} />
-                        </button>
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <p className="text-neutral-brown-500 text-center py-4">No featured books</p>
-                )}
-              </div>
-              <button
-                onClick={() => setActiveTab('books')}
-                className="block w-full text-center text-primary hover:text-primary-dark font-medium mt-4"
-              >
-                Manage Featured Books →
-              </button>
-            </div>
-
-            <div className="bg-white rounded-xl p-6 shadow-sm">
-              <h2 className="text-xl font-bold text-neutral-brown-900 mb-4">Recent Books</h2>
-              <div className="space-y-3">
-                {allBooks.length > 0 ? (
-                  allBooks.slice(0, 3).map((book) => (
-                    <div key={book.id} className="flex items-center justify-between p-3 bg-neutral-cream rounded-lg">
-                      <div>
-                        <p className="font-medium text-neutral-brown-900">{book.title}</p>
-                        <p className="text-sm text-neutral-brown-600">by {book.author.user.name || 'Unknown'}</p>
-                      </div>
-                      <button
-                        onClick={() => handleToggleFeatured(book.id, book.isFeatured)}
-                        className={`p-2 rounded transition-colors ${
-                          book.isFeatured 
-                            ? 'text-accent-gold bg-accent-gold/10' 
-                            : 'text-neutral-brown-400 hover:bg-neutral-brown-100'
-                        }`}
-                      >
-                        <Star size={16} fill={book.isFeatured ? 'currentColor' : 'none'} />
-                      </button>
-                    </div>
-                  ))
-                ) : (
-                  <p className="text-neutral-brown-500 text-center py-4">No books available</p>
-                )}
-              </div>
-              <button
-                onClick={() => setActiveTab('books')}
-                className="block w-full text-center text-primary hover:text-primary-dark font-medium mt-4"
-              >
-                Manage All Books →
-              </button>
-            </div>
-          </div>
-        </div>
+        <AdminOverview
+          stats={stats}
+          pendingAuthors={pendingAuthors}
+          pendingBooks={pendingBooks}
+          allBooks={allBooks}
+          onApproveAuthor={handleApproveAuthor}
+          onRejectAuthor={handleRejectAuthor}
+          onApproveBook={handleApproveBook}
+          onRejectBook={handleRejectBook}
+          onToggleFeatured={handleToggleFeatured}
+          onSetActiveTab={setActiveTab}
+        />
       )}
 
-      {/* Applications Tab */}
+      {activeTab === 'pending-books' && (
+        <PendingBooksTab
+          pendingBooks={pendingBooks}
+          onApproveBook={handleApproveBook}
+          onRejectBook={handleRejectBook}
+        />
+      )}
+
       {activeTab === 'applications' && (
-        <div className="space-y-6">
-          <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-bold text-neutral-brown-900">Author Applications</h2>
-            <div className="flex items-center gap-3">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-brown-400" size={18} />
-                <input
-                  type="search"
-                  placeholder="Search applications..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 pr-4 py-2 border border-neutral-brown-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20"
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-            {pendingAuthors.length > 0 ? (
-              <div className="divide-y divide-neutral-brown-100">
-                {pendingAuthors
-                  .filter((author: any) => 
-                    !searchQuery || 
-                    author.user.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                    author.user.email?.toLowerCase().includes(searchQuery.toLowerCase())
-                  )
-                  .map((author: any) => (
-                  <div key={author.id} className="p-6">
-                    <div className="flex items-start justify-between mb-4">
-                      <div className="flex items-center gap-4">
-                        <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center overflow-hidden">
-                          {author.profileImage ? (
-                            <img src={author.profileImage} alt={author.user.name} className="w-full h-full object-cover" />
-                          ) : (
-                            <span className="text-primary font-bold text-xl">
-                              {author.user.name?.split(' ').map((n: string) => n[0]).join('') || 'U'}
-                            </span>
-                          )}
-                        </div>
-                        <div>
-                          <h3 className="text-xl font-bold text-neutral-brown-900">{author.user.name}</h3>
-                          <p className="text-neutral-brown-600">{author.user.email}</p>
-                          <p className="text-sm text-neutral-brown-500">
-                            Applied {new Date(author.appliedAt).toLocaleDateString()}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="flex gap-2">
-                        <button
-                          onClick={() => handleApproveAuthor(author.id)}
-                          className="flex items-center gap-2 bg-accent-green text-white px-4 py-2 rounded-lg hover:bg-accent-green/90 transition-colors"
-                        >
-                          <CheckCircle size={16} />
-                          Approve
-                        </button>
-                        <button
-                          onClick={() => handleRejectAuthor(author.id)}
-                          className="flex items-center gap-2 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors"
-                        >
-                          <XCircle size={16} />
-                          Reject
-                        </button>
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                      {/* Personal Information */}
-                      <div className="space-y-3">
-                        <h4 className="font-semibold text-neutral-brown-900">Personal Information</h4>
-                        <div className="space-y-2 text-sm">
-                          {author.phoneNumber && (
-                            <p><span className="text-neutral-brown-600">Phone:</span> {author.phoneNumber}</p>
-                          )}
-                          {author.dateOfBirth && (
-                            <p><span className="text-neutral-brown-600">Date of Birth:</span> {new Date(author.dateOfBirth).toLocaleDateString()}</p>
-                          )}
-                          {author.nationality && (
-                            <p><span className="text-neutral-brown-600">Nationality:</span> {author.nationality}</p>
-                          )}
-                          {author.location && (
-                            <p><span className="text-neutral-brown-600">Location:</span> {author.location}</p>
-                          )}
-                        </div>
-                      </div>
-
-                      {/* Professional Information */}
-                      <div className="space-y-3">
-                        <h4 className="font-semibold text-neutral-brown-900">Professional Background</h4>
-                        <div className="space-y-2 text-sm">
-                          {author.occupation && (
-                            <p><span className="text-neutral-brown-600">Occupation:</span> {author.occupation}</p>
-                          )}
-                          {author.education && (
-                            <p><span className="text-neutral-brown-600">Education:</span> {author.education}</p>
-                          )}
-                          {author.writingExperience && (
-                            <p><span className="text-neutral-brown-600">Writing Experience:</span> {author.writingExperience}</p>
-                          )}
-                        </div>
-                      </div>
-
-                      {/* Writing Information */}
-                      <div className="space-y-3">
-                        <h4 className="font-semibold text-neutral-brown-900">Writing Details</h4>
-                        <div className="space-y-2 text-sm">
-                          {author.genres && author.genres.length > 0 && (
-                            <div>
-                              <span className="text-neutral-brown-600">Genres:</span>
-                              <div className="flex flex-wrap gap-1 mt-1">
-                                {author.genres.map((genre: string) => (
-                                  <span key={genre} className="bg-primary/10 text-primary px-2 py-1 rounded text-xs">
-                                    {genre}
-                                  </span>
-                                ))}
-                              </div>
-                            </div>
-                          )}
-                          {author.languages && author.languages.length > 0 && (
-                            <div>
-                              <span className="text-neutral-brown-600">Languages:</span>
-                              <div className="flex flex-wrap gap-1 mt-1">
-                                {author.languages.map((language: string) => (
-                                  <span key={language} className="bg-accent-green/10 text-accent-green px-2 py-1 rounded text-xs">
-                                    {language}
-                                  </span>
-                                ))}
-                              </div>
-                            </div>
-                          )}
-                          {author.paymentMethod && (
-                            <p><span className="text-neutral-brown-600">Payment Method:</span> {author.paymentMethod.toUpperCase()}</p>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Bio */}
-                    {author.bio && (
-                      <div className="mt-4 p-4 bg-neutral-cream rounded-lg">
-                        <h4 className="font-semibold text-neutral-brown-900 mb-2">Author Bio</h4>
-                        <p className="text-sm text-neutral-brown-700">{author.bio}</p>
-                      </div>
-                    )}
-
-                    {/* Additional Information */}
-                    {(author.previousPublications || author.awards || author.publishingGoals) && (
-                      <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
-                        {author.previousPublications && (
-                          <div className="p-3 bg-blue-50 rounded-lg">
-                            <h5 className="font-medium text-blue-900 mb-1">Previous Publications</h5>
-                            <p className="text-sm text-blue-700">{author.previousPublications}</p>
-                          </div>
-                        )}
-                        {author.awards && (
-                          <div className="p-3 bg-yellow-50 rounded-lg">
-                            <h5 className="font-medium text-yellow-900 mb-1">Awards & Recognition</h5>
-                            <p className="text-sm text-yellow-700">{author.awards}</p>
-                          </div>
-                        )}
-                        {author.publishingGoals && (
-                          <div className="p-3 bg-green-50 rounded-lg">
-                            <h5 className="font-medium text-green-900 mb-1">Publishing Goals</h5>
-                            <p className="text-sm text-green-700">{author.publishingGoals}</p>
-                          </div>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="p-12 text-center text-neutral-brown-500">
-                <UserCheck size={48} className="mx-auto mb-4 text-neutral-brown-300" />
-                <p className="text-lg font-medium mb-2">No pending applications</p>
-                <p className="text-sm">All author applications have been processed.</p>
-              </div>
-            )}
-          </div>
-        </div>
+        <ApplicationsTab
+          pendingAuthors={pendingAuthors}
+          onApproveAuthor={handleApproveAuthor}
+          onRejectAuthor={handleRejectAuthor}
+        />
       )}
 
-      {/* Rejected Tab */}
       {activeTab === 'rejected' && (
-        <div className="space-y-6">
-          <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-bold text-neutral-brown-900">Rejected Applications</h2>
-            <div className="flex items-center gap-3">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-brown-400" size={18} />
-                <input
-                  type="search"
-                  placeholder="Search rejected applications..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 pr-4 py-2 border border-neutral-brown-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20"
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-            {rejectedAuthors.length > 0 ? (
-              <div className="divide-y divide-neutral-brown-100">
-                {rejectedAuthors
-                  .filter((author: any) => 
-                    !searchQuery || 
-                    author.user.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                    author.user.email?.toLowerCase().includes(searchQuery.toLowerCase())
-                  )
-                  .map((author: any) => (
-                  <div key={author.id} className="p-6">
-                    <div className="flex items-start justify-between mb-4">
-                      <div className="flex items-center gap-4">
-                        <div className="w-16 h-16 rounded-full bg-red-100 flex items-center justify-center overflow-hidden">
-                          {author.profileImage ? (
-                            <img src={author.profileImage} alt={author.user.name} className="w-full h-full object-cover" />
-                          ) : (
-                            <span className="text-red-600 font-bold text-xl">
-                              {author.user.name?.split(' ').map((n: string) => n[0]).join('') || 'U'}
-                            </span>
-                          )}
-                        </div>
-                        <div>
-                          <h3 className="text-xl font-bold text-neutral-brown-900">{author.user.name}</h3>
-                          <p className="text-neutral-brown-600">{author.user.email}</p>
-                          <p className="text-sm text-neutral-brown-500">
-                            Applied {new Date(author.appliedAt).toLocaleDateString()} • 
-                            Rejected {new Date(author.updatedAt).toLocaleDateString()}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span className="bg-red-100 text-red-600 px-3 py-1 rounded-full text-sm font-medium">
-                          Rejected
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Rejection Reason */}
-                    {author.rejectionReason && (
-                      <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
-                        <h4 className="font-semibold text-red-900 mb-2">Rejection Reason</h4>
-                        <p className="text-red-700 text-sm">{author.rejectionReason}</p>
-                      </div>
-                    )}
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                      {/* Personal Information */}
-                      <div className="space-y-3">
-                        <h4 className="font-semibold text-neutral-brown-900">Personal Information</h4>
-                        <div className="space-y-2 text-sm">
-                          {author.phoneNumber && (
-                            <p><span className="text-neutral-brown-600">Phone:</span> {author.phoneNumber}</p>
-                          )}
-                          {author.dateOfBirth && (
-                            <p><span className="text-neutral-brown-600">Date of Birth:</span> {new Date(author.dateOfBirth).toLocaleDateString()}</p>
-                          )}
-                          {author.nationality && (
-                            <p><span className="text-neutral-brown-600">Nationality:</span> {author.nationality}</p>
-                          )}
-                          {author.location && (
-                            <p><span className="text-neutral-brown-600">Location:</span> {author.location}</p>
-                          )}
-                        </div>
-                      </div>
-
-                      {/* Professional Information */}
-                      <div className="space-y-3">
-                        <h4 className="font-semibold text-neutral-brown-900">Professional Background</h4>
-                        <div className="space-y-2 text-sm">
-                          {author.occupation && (
-                            <p><span className="text-neutral-brown-600">Occupation:</span> {author.occupation}</p>
-                          )}
-                          {author.education && (
-                            <p><span className="text-neutral-brown-600">Education:</span> {author.education}</p>
-                          )}
-                          {author.writingExperience && (
-                            <p><span className="text-neutral-brown-600">Writing Experience:</span> {author.writingExperience}</p>
-                          )}
-                        </div>
-                      </div>
-
-                      {/* Writing Information */}
-                      <div className="space-y-3">
-                        <h4 className="font-semibold text-neutral-brown-900">Writing Details</h4>
-                        <div className="space-y-2 text-sm">
-                          {author.genres && author.genres.length > 0 && (
-                            <div>
-                              <span className="text-neutral-brown-600">Genres:</span>
-                              <div className="flex flex-wrap gap-1 mt-1">
-                                {author.genres.map((genre: string) => (
-                                  <span key={genre} className="bg-primary/10 text-primary px-2 py-1 rounded text-xs">
-                                    {genre}
-                                  </span>
-                                ))}
-                              </div>
-                            </div>
-                          )}
-                          {author.languages && author.languages.length > 0 && (
-                            <div>
-                              <span className="text-neutral-brown-600">Languages:</span>
-                              <div className="flex flex-wrap gap-1 mt-1">
-                                {author.languages.map((language: string) => (
-                                  <span key={language} className="bg-accent-green/10 text-accent-green px-2 py-1 rounded text-xs">
-                                    {language}
-                                  </span>
-                                ))}
-                              </div>
-                            </div>
-                          )}
-                          {author.paymentMethod && (
-                            <p><span className="text-neutral-brown-600">Payment Method:</span> {author.paymentMethod.toUpperCase()}</p>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Bio */}
-                    {author.bio && (
-                      <div className="mt-4 p-4 bg-neutral-cream rounded-lg">
-                        <h4 className="font-semibold text-neutral-brown-900 mb-2">Author Bio</h4>
-                        <p className="text-sm text-neutral-brown-700">{author.bio}</p>
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="p-12 text-center text-neutral-brown-500">
-                <XCircle size={48} className="mx-auto mb-4 text-neutral-brown-300" />
-                <p className="text-lg font-medium mb-2">No rejected applications</p>
-                <p className="text-sm">Rejected author applications will appear here.</p>
-              </div>
-            )}
-          </div>
-        </div>
+        <RejectedTab
+          rejectedAuthors={rejectedAuthors}
+        />
       )}
 
-      {/* Authors Tab */}
       {activeTab === 'authors' && (
-        <div className="space-y-6">
-          <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-bold text-neutral-brown-900">All Authors</h2>
-            <div className="flex items-center gap-3">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-brown-400" size={18} />
-                <input
-                  type="search"
-                  placeholder="Search authors..."
-                  className="pl-10 pr-4 py-2 border border-neutral-brown-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20"
-                />
-              </div>
-              <button className="flex items-center gap-2 px-4 py-2 border border-neutral-brown-200 rounded-lg hover:bg-neutral-brown-50">
-                <Filter size={18} />
-                Filter
-              </button>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-            {allAuthors.length > 0 ? (
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead className="bg-neutral-cream border-b border-neutral-brown-100">
-                    <tr>
-                      <th className="px-6 py-4 text-left text-sm font-semibold text-neutral-brown-900">Author</th>
-                      <th className="px-6 py-4 text-left text-sm font-semibold text-neutral-brown-900">Status</th>
-                      <th className="px-6 py-4 text-left text-sm font-semibold text-neutral-brown-900">Earnings</th>
-                      <th className="px-6 py-4 text-right text-sm font-semibold text-neutral-brown-900">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-neutral-brown-100">
-                    {allAuthors.map((author) => (
-                      <tr key={author.id} className="hover:bg-neutral-cream/50">
-                        <td className="px-6 py-4">
-                          <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
-                              <span className="text-primary font-bold text-sm">
-                                {author.user.name?.split(' ').map(n => n[0]).join('') || 'U'}
-                              </span>
-                            </div>
-                            <div>
-                              <p className="font-medium text-neutral-brown-900">
-                                {author.user.name || 'Unknown'}
-                              </p>
-                              <p className="text-sm text-neutral-brown-600">{author.user.email}</p>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="px-6 py-4">
-                          <div className="flex items-center gap-2">
-                            <span className={`inline-block px-3 py-1 text-sm font-medium rounded-full ${
-                              author.status === 'APPROVED' 
-                                ? 'bg-accent-green/20 text-accent-green'
-                                : author.status === 'REJECTED'
-                                ? 'bg-red-100 text-red-600'
-                                : 'bg-yellow-100 text-yellow-600'
-                            }`}>
-                              {author.status.toLowerCase()}
-                            </span>
-                            {author.isActive !== undefined && (
-                              <span className={`inline-block px-2 py-1 text-xs font-medium rounded-full ${
-                                author.isActive 
-                                  ? 'bg-green-100 text-green-600'
-                                  : 'bg-gray-100 text-gray-600'
-                              }`}>
-                                {author.isActive ? 'Active' : 'Disabled'}
-                              </span>
-                            )}
-                          </div>
-                        </td>
-                        <td className="px-6 py-4">
-                          <p className="font-bold text-accent-green">KES {(author.totalEarnings || 0).toLocaleString()}</p>
-                        </td>
-                        <td className="px-6 py-4">
-                          <div className="flex items-center justify-end gap-2">
-                            <button className="p-2 text-neutral-brown-600 hover:bg-neutral-brown-100 rounded">
-                              <Eye size={16} />
-                            </button>
-                            <button className="p-2 text-primary hover:bg-primary/10 rounded">
-                              <Edit size={16} />
-                            </button>
-                            {author.status === 'APPROVED' && (
-                              <button
-                                onClick={() => handleToggleAuthorStatus(author.id, author.isActive !== false)}
-                                className={`p-2 rounded transition-colors ${
-                                  author.isActive !== false
-                                    ? 'text-red-600 hover:bg-red-100'
-                                    : 'text-green-600 hover:bg-green-100'
-                                }`}
-                                title={author.isActive !== false ? 'Disable Author' : 'Enable Author'}
-                              >
-                                {author.isActive !== false ? <Ban size={16} /> : <Power size={16} />}
-                              </button>
-                            )}
-                            <button className="p-2 text-neutral-brown-600 hover:bg-neutral-brown-100 rounded">
-                              <MoreVertical size={16} />
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            ) : (
-              <div className="p-12 text-center text-neutral-brown-500">
-                <Users size={48} className="mx-auto mb-4 text-neutral-brown-300" />
-                <p className="text-lg font-medium mb-2">No authors found</p>
-                <p className="text-sm">Authors will appear here once they register.</p>
-              </div>
-            )}
-          </div>
-        </div>
+        <AuthorsTab
+          allAuthors={allAuthors}
+          onToggleAuthorStatus={handleToggleAuthorStatus}
+        />
       )}
 
-      {/* Books Tab */}
       {activeTab === 'books' && (
-        <div className="space-y-6">
-          <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-bold text-neutral-brown-900">All Books</h2>
-            <div className="flex items-center gap-3">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-brown-400" size={18} />
-                <input
-                  type="search"
-                  placeholder="Search books..."
-                  className="pl-10 pr-4 py-2 border border-neutral-brown-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20"
-                />
-              </div>
-              <button className="flex items-center gap-2 px-4 py-2 border border-neutral-brown-200 rounded-lg hover:bg-neutral-brown-50">
-                <Filter size={18} />
-                Filter
-              </button>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-            {allBooks.length > 0 ? (
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead className="bg-neutral-cream border-b border-neutral-brown-100">
-                    <tr>
-                      <th className="px-6 py-4 text-left text-sm font-semibold text-neutral-brown-900">Book</th>
-                      <th className="px-6 py-4 text-left text-sm font-semibold text-neutral-brown-900">Author</th>
-                      <th className="px-6 py-4 text-left text-sm font-semibold text-neutral-brown-900">Category</th>
-                      <th className="px-6 py-4 text-left text-sm font-semibold text-neutral-brown-900">Price</th>
-                      <th className="px-6 py-4 text-left text-sm font-semibold text-neutral-brown-900">Status</th>
-                      <th className="px-6 py-4 text-left text-sm font-semibold text-neutral-brown-900">Featured</th>
-                      <th className="px-6 py-4 text-right text-sm font-semibold text-neutral-brown-900">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-neutral-brown-100">
-                    {allBooks.map((book) => (
-                      <tr key={book.id} className="hover:bg-neutral-cream/50">
-                        <td className="px-6 py-4">
-                          <div className="flex items-center gap-3">
-                            <div className="w-12 h-16 bg-neutral-cream rounded overflow-hidden">
-                              {book.coverImage ? (
-                                <img src={book.coverImage} alt={book.title} className="w-full h-full object-cover" />
-                              ) : (
-                                <div className="w-full h-full bg-gradient-to-br from-primary/20 to-primary/5" />
-                              )}
-                            </div>
-                            <div>
-                              <p className="font-medium text-neutral-brown-900 flex items-center gap-2">
-                                {book.title}
-                                {book.isFeatured && (
-                                  <Star size={14} className="text-accent-gold fill-current" />
-                                )}
-                              </p>
-                              <p className="text-sm text-neutral-brown-600">
-                                {book.publishedAt ? new Date(book.publishedAt).toLocaleDateString() : 'Not published'}
-                              </p>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="px-6 py-4">
-                          <p className="font-medium text-neutral-brown-900">{book.author.user.name || 'Unknown'}</p>
-                        </td>
-                        <td className="px-6 py-4">
-                          <span className="inline-block px-2 py-1 bg-primary/10 text-primary text-sm rounded-full">
-                            {book.category || 'Uncategorized'}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4">
-                          <p className="font-medium text-neutral-brown-900">KES {book.price}</p>
-                        </td>
-                        <td className="px-6 py-4">
-                          <div className="flex items-center gap-2">
-                            <span className={`inline-block px-2 py-1 text-sm font-medium rounded-full ${
-                              book.isPublished 
-                                ? 'bg-accent-green/20 text-accent-green'
-                                : 'bg-yellow-100 text-yellow-600'
-                            }`}>
-                              {book.isPublished ? 'Published' : 'Draft'}
-                            </span>
-                            {book.isActive !== undefined && (
-                              <span className={`inline-block px-2 py-1 text-xs font-medium rounded-full ${
-                                book.isActive 
-                                  ? 'bg-green-100 text-green-600'
-                                  : 'bg-gray-100 text-gray-600'
-                              }`}>
-                                {book.isActive ? 'Active' : 'Disabled'}
-                              </span>
-                            )}
-                          </div>
-                        </td>
-                        <td className="px-6 py-4">
-                          <div className="flex items-center gap-2">
-                            {book.isFeatured ? (
-                              <div className="flex items-center gap-2">
-                                <Star size={16} className="text-accent-gold fill-current" />
-                                <span className="text-sm font-medium text-accent-gold">
-                                  Featured
-                                </span>
-                                {book.featuredOrder && (
-                                  <span className="bg-accent-gold/10 text-accent-gold px-2 py-1 rounded text-xs font-medium">
-                                    #{book.featuredOrder}
-                                  </span>
-                                )}
-                              </div>
-                            ) : (
-                              <span className="text-sm text-neutral-brown-500">Not Featured</span>
-                            )}
-                          </div>
-                        </td>
-                        <td className="px-6 py-4">
-                          <div className="flex items-center justify-end gap-2">
-                            <button className="p-2 text-neutral-brown-600 hover:bg-neutral-brown-100 rounded">
-                              <Eye size={16} />
-                            </button>
-                            <button
-                              onClick={() => handleToggleFeatured(book.id, book.isFeatured)}
-                              className={`p-2 rounded transition-colors ${
-                                book.isFeatured 
-                                  ? 'text-accent-gold bg-accent-gold/10' 
-                                  : 'text-neutral-brown-400 hover:bg-neutral-brown-100'
-                              }`}
-                              title={book.isFeatured ? 'Remove from Featured' : 'Add to Featured'}
-                            >
-                              <Star size={16} fill={book.isFeatured ? 'currentColor' : 'none'} />
-                            </button>
-                            <button
-                              onClick={() => handleToggleBookStatus(book.id, book.isActive !== false)}
-                              className={`p-2 rounded transition-colors ${
-                                book.isActive !== false
-                                  ? 'text-red-600 hover:bg-red-100'
-                                  : 'text-green-600 hover:bg-green-100'
-                              }`}
-                              title={book.isActive !== false ? 'Disable Book' : 'Enable Book'}
-                            >
-                              {book.isActive !== false ? <Ban size={16} /> : <Power size={16} />}
-                            </button>
-                            <button className="p-2 text-primary hover:bg-primary/10 rounded">
-                              <Edit size={16} />
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            ) : (
-              <div className="p-12 text-center text-neutral-brown-500">
-                <Book size={48} className="mx-auto mb-4 text-neutral-brown-300" />
-                <p className="text-lg font-medium mb-2">No books found</p>
-                <p className="text-sm">Books will appear here once authors upload them.</p>
-              </div>
-            )}
-          </div>
-        </div>
+        <BooksTab
+          allBooks={allBooks}
+          onToggleBookStatus={handleToggleBookStatus}
+          onToggleFeatured={handleToggleFeatured}
+        />
       )}
       
       {/* Rejection Modal */}

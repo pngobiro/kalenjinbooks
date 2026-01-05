@@ -210,7 +210,7 @@ export default function AuthorRegisterPage() {
       const result = await response.json() as { error?: string };
 
       if (response.ok) {
-        setStep('pending');
+        router.push('/dashboard/author?registered=true');
       } else {
         alert(result.error || 'Failed to submit application. Please try again.');
       }

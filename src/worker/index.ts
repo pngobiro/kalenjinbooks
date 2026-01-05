@@ -46,6 +46,7 @@ export default {
                 }
 
                 if (path.startsWith('/api/admin')) {
+                    console.log('[Worker] Routing to admin handler');
                     return handleAdminRequest(request as WorkerRequest, env, ctx);
                 }
 
