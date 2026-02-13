@@ -30,7 +30,8 @@ export function AuthorProfileHeader({
           setAuthor(response.data);
         }
       } catch (error) {
-        console.error('Failed to load author profile:', error);
+        // Silently handle - user might not have an author profile (e.g., pure admin)
+        // This is expected behavior for non-author users
       } finally {
         setIsLoading(false);
       }

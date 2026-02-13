@@ -93,7 +93,11 @@ export function useAdminData() {
       // Get auth token from localStorage
       const token = localStorage.getItem('kaleereads_token');
       if (!token) {
-        setError('Authentication required');
+        setError('Authentication required. Please log in.');
+        // Redirect to login after a short delay
+        setTimeout(() => {
+          window.location.href = '/login?redirect=/dashboard/admin';
+        }, 1500);
         return;
       }
 
@@ -107,10 +111,20 @@ export function useAdminData() {
         headers
       });
       
+      if (applicationsResponse.status === 401) {
+        // Token is invalid or expired
+        localStorage.removeItem('kaleereads_token');
+        setError('Session expired. Redirecting to login...');
+        setTimeout(() => {
+          window.location.href = '/login?redirect=/dashboard/admin';
+        }, 1500);
+        return;
+      }
+      
       if (!applicationsResponse.ok) {
         const errorText = await applicationsResponse.text();
         console.error('API Error Response:', errorText);
-        throw new Error(`Failed to fetch author applications: ${applicationsResponse.status} ${errorText}`);
+        throw new Error(`Failed to fetch author applications: ${applicationsResponse.status}`);
       }
       
       const applicationsData = await applicationsResponse.json();
@@ -139,6 +153,17 @@ export function useAdminData() {
       const pendingBooksResponse = await fetch('https://kalenjin-books-worker.pngobiro.workers.dev/api/admin/books/pending', {
         headers
       });
+      
+      if (pendingBooksResponse.status === 401) {
+        // Token is invalid or expired
+        localStorage.removeItem('kaleereads_token');
+        setError('Session expired. Redirecting to login...');
+        setTimeout(() => {
+          window.location.href = '/login?redirect=/dashboard/admin';
+        }, 1500);
+        return;
+      }
+      
       if (!pendingBooksResponse.ok) throw new Error('Failed to fetch pending books');
       const pendingBooksData = await pendingBooksResponse.json();
       

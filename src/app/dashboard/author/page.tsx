@@ -92,10 +92,15 @@ export default function AuthorDashboardPage() {
             } else if (response.status === 404) {
               // User doesn't have an author profile yet
               setAuthorStatus(null);
+            } else if (response.status === 401) {
+              // Invalid token - user needs to log in again
+              console.log('Authentication required');
+              setAuthorStatus(null);
             }
           }
         } catch (e) {
-          console.error("Failed to load author status", e);
+          // Silently handle - user might not be authenticated or have author profile
+          console.log('Author status check skipped');
         } finally {
           setIsLoadingAuthorStatus(false);
         }

@@ -135,7 +135,7 @@ export default function AuthorsPage() {
                 </div>
                 <h3 className="text-xl font-bold text-white mb-2">Become an Author</h3>
                 <p className="text-neutral-brown-400 text-sm mb-6">Share your story with the world</p>
-                <Link href="/dashboard/author" className="bg-primary hover:bg-primary-dark text-white font-semibold px-6 py-3 rounded-full transition-all">
+                <Link href="/login?redirect=/dashboard/author" className="bg-primary hover:bg-primary-dark text-white font-semibold px-6 py-3 rounded-full transition-all">
                   Apply Now
                 </Link>
               </div>

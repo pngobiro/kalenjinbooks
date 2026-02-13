@@ -16,6 +16,10 @@ export default function LoginPage() {
     const [error, setError] = useState<string | null>(null);
     const { login, googleLogin } = useAuth();
     const router = useRouter();
+    
+    // Get redirect parameter from URL
+    const searchParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
+    const redirectTo = searchParams?.get('redirect') || '/dashboard/author';
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -28,7 +32,7 @@ export default function LoginPage() {
                 window.location.href = '/dashboard/admin';
                 return;
             }
-            router.push('/dashboard/author');
+            router.push(redirectTo);
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Login failed. Please check your credentials.');
         } finally {
@@ -44,7 +48,7 @@ export default function LoginPage() {
                 window.location.href = '/dashboard/admin';
                 return;
             }
-            router.push('/dashboard/author');
+            router.push(redirectTo);
         } catch (err) {
             setError('Google login failed. Please try again.');
             setIsLoading(false);
