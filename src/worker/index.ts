@@ -9,6 +9,8 @@ import { handleAuthorsRequest } from './handlers/authors';
 import { handleUploadRequest } from './handlers/upload';
 import { handleAuthRequest } from './handlers/auth';
 import { handleAdminRequest } from './handlers/admin';
+import { handleAnalyticsRequest } from './handlers/analytics';
+import { handleHardCopyRequest } from './handlers/hardcopy';
 
 /**
  * Handle image proxy requests to serve R2 images with CORS headers
@@ -101,6 +103,8 @@ async function handleSecurePDF(request: Request, env: Env, path: string): Promis
         // Extract token from path /api/secure-pdf/{token}
         const token = path.replace('/api/secure-pdf/', '');
         
+        console.log('[SecurePDF] Token received:', token.substring(0, 20) + '...');
+        
         if (!token) {
             return errorResponse('Invalid token', HttpStatus.BAD_REQUEST);
         }
@@ -108,6 +112,8 @@ async function handleSecurePDF(request: Request, env: Env, path: string): Promis
         // Validate token from KV
         const tokenKey = `secure_token:${token}`;
         const tokenDataStr = await env.SESSION.get(tokenKey);
+        
+        console.log('[SecurePDF] Token data from KV:', tokenDataStr ? 'found' : 'not found');
         
         if (!tokenDataStr) {
             return errorResponse('Token expired or invalid', HttpStatus.UNAUTHORIZED);
@@ -121,6 +127,8 @@ async function handleSecurePDF(request: Request, env: Env, path: string): Promis
             return errorResponse('Token expired', HttpStatus.UNAUTHORIZED);
         }
 
+        console.log('[SecurePDF] Token valid for book:', tokenData.bookId);
+
         // Get book details
         const prisma = createD1PrismaClient(env.DB);
         const book = await prisma.book.findUnique({
@@ -129,15 +137,23 @@ async function handleSecurePDF(request: Request, env: Env, path: string): Promis
         });
 
         if (!book) {
+            console.log('[SecurePDF] Book not found in database');
             return errorResponse('Book not found', HttpStatus.NOT_FOUND);
         }
+
+        console.log('[SecurePDF] Book found, fileKey:', book.fileKey);
 
         // Get PDF from R2
         const object = await env.BOOKS_BUCKET.get(book.fileKey);
         
+        console.log('[SecurePDF] R2 object:', object ? 'found' : 'NOT FOUND');
+        
         if (!object) {
-            return errorResponse('File not found', HttpStatus.NOT_FOUND);
+            console.error('[SecurePDF] File not found in R2 bucket:', book.fileKey);
+            return errorResponse('PDF file not found in storage. Please contact support.', HttpStatus.NOT_FOUND);
         }
+
+        console.log('[SecurePDF] Serving PDF successfully');
 
         // Create secure response with aggressive anti-download headers
         const headers = new Headers();
@@ -201,6 +217,17 @@ export default {
                 if (path.startsWith('/api/admin')) {
                     console.log('[Worker] Routing to admin handler');
                     return handleAdminRequest(request as WorkerRequest, env, ctx);
+                }
+
+                if (path.startsWith('/api/analytics')) {
+                    console.log('[Worker] Routing to analytics handler');
+                    return handleAnalyticsRequest(request as WorkerRequest, env, ctx);
+                }
+
+                // Hard copy requests
+                if (path.startsWith('/api/authors/hard-copy-requests') || path.startsWith('/api/hard-copy-requests')) {
+                    console.log('[Worker] Routing to hard copy handler');
+                    return handleHardCopyRequest(request as WorkerRequest, env, ctx);
                 }
 
                 // Image proxy endpoint to serve R2 images with CORS headers

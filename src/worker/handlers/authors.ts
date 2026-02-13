@@ -27,6 +27,22 @@ export async function handleAuthorsRequest(
         });
     }
 
+    // GET /api/authors/earnings - Get author earnings data
+    if (path === '/api/authors/earnings' && method === 'GET') {
+        const { authMiddleware: internalAuth } = await import('../middleware/auth');
+        return await internalAuth(request, env, async () => {
+            return await getAuthorEarnings(request, env);
+        });
+    }
+
+    // GET /api/authors/analytics - Get author analytics data
+    if (path === '/api/authors/analytics' && method === 'GET') {
+        const { authMiddleware: internalAuth } = await import('../middleware/auth');
+        return await internalAuth(request, env, async () => {
+            return await getAuthorAnalytics(request, env);
+        });
+    }
+
     // PUT /api/authors/me - Update current user's author profile
     if (path === '/api/authors/me' && method === 'PUT') {
         const { authMiddleware: internalAuth } = await import('../middleware/auth');
@@ -610,5 +626,231 @@ function getStatusMessage(status: string, rejectionReason?: string | null): stri
             return rejectionReason || 'Your author application was not approved at this time. Please contact support for more information.';
         default:
             return 'Unknown status';
+    }
+}
+
+/**
+ * Get author earnings data
+ */
+async function getAuthorEarnings(request: WorkerRequest, env: Env): Promise<Response> {
+    try {
+        const userId = request.ctx?.user?.id;
+        if (!userId) {
+            return errorResponse('User not authenticated', HttpStatus.UNAUTHORIZED);
+        }
+
+        const prisma = createD1PrismaClient(env.DB);
+
+        // Get author profile
+        const author = await prisma.author.findUnique({
+            where: { userId },
+            include: {
+                user: {
+                    select: { email: true }
+                },
+                books: {
+                    select: { id: true, title: true }
+                },
+                payments: {
+                    orderBy: { paidAt: 'desc' },
+                    take: 1
+                }
+            }
+        });
+
+        if (!author) {
+            return errorResponse('Author profile not found', HttpStatus.NOT_FOUND);
+        }
+
+        // Get all purchases for this author's books
+        const bookIds = author.books.map(b => b.id);
+        const purchases = await prisma.purchase.findMany({
+            where: {
+                bookId: { in: bookIds },
+                status: 'COMPLETED'
+            },
+            include: {
+                book: {
+                    select: { title: true }
+                }
+            },
+            orderBy: { purchasedAt: 'desc' }
+        });
+
+        // Calculate earnings
+        const totalEarnings = purchases.reduce((sum, p) => sum + p.authorEarning, 0);
+        const pendingPayout = totalEarnings - author.totalEarnings;
+
+        // Calculate this month's earnings
+        const now = new Date();
+        const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+        const thisMonthPurchases = purchases.filter(p => new Date(p.purchasedAt) >= firstDayOfMonth);
+        const thisMonthEarnings = thisMonthPurchases.reduce((sum, p) => sum + p.authorEarning, 0);
+
+        // Get last payout info
+        const lastPayout = author.payments[0];
+
+        // Format sales data
+        const sales = purchases.slice(0, 50).map(p => ({
+            id: p.id,
+            bookTitle: p.book.title,
+            amount: p.amount,
+            platformFee: p.platformFee,
+            authorEarning: p.authorEarning,
+            purchasedAt: p.purchasedAt.toISOString()
+        }));
+
+        // Get all payouts
+        const payouts = await prisma.payment.findMany({
+            where: { authorId: author.id },
+            orderBy: { createdAt: 'desc' }
+        });
+
+        const formattedPayouts = payouts.map(p => ({
+            id: p.id,
+            amount: p.amount,
+            status: p.status,
+            method: p.method,
+            reference: p.reference,
+            createdAt: p.createdAt.toISOString(),
+            paidAt: p.paidAt?.toISOString() || null
+        }));
+
+        return successResponse({
+            earnings: {
+                totalEarnings,
+                pendingPayout: pendingPayout > 0 ? pendingPayout : 0,
+                lastPayoutAmount: lastPayout?.amount || 0,
+                lastPayoutDate: lastPayout?.paidAt?.toISOString() || null,
+                totalSales: purchases.length,
+                thisMonthEarnings,
+                booksSold: purchases.length
+            },
+            sales,
+            payouts: formattedPayouts
+        });
+
+    } catch (error) {
+        console.error('Get author earnings error:', error);
+        return errorResponse('Failed to fetch earnings data', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+}
+
+/**
+ * Get author analytics data
+ */
+async function getAuthorAnalytics(request: WorkerRequest, env: Env): Promise<Response> {
+    try {
+        const userId = request.ctx?.user?.id;
+        if (!userId) {
+            return errorResponse('User not authenticated', HttpStatus.UNAUTHORIZED);
+        }
+
+        const url = new URL(request.url);
+        const days = parseInt(url.searchParams.get('days') || '30');
+
+        const prisma = createD1PrismaClient(env.DB);
+
+        // Get author profile
+        const author = await prisma.author.findUnique({
+            where: { userId },
+            include: {
+                books: {
+                    select: { id: true, title: true }
+                }
+            }
+        });
+
+        if (!author) {
+            return errorResponse('Author profile not found', HttpStatus.NOT_FOUND);
+        }
+
+        const bookIds = author.books.map(b => b.id);
+
+        // Get book analytics for all author's books
+        const bookAnalytics = await prisma.bookAnalytics.findMany({
+            where: { bookId: { in: bookIds } }
+        });
+
+        // Merge book titles with analytics
+        const bookAnalyticsWithTitles = bookAnalytics.map(analytics => {
+            const book = author.books.find(b => b.id === analytics.bookId);
+            return {
+                ...analytics,
+                bookTitle: book?.title || 'Unknown Book'
+            };
+        });
+
+        // Calculate totals
+        const totalViews = bookAnalytics.reduce((sum, b) => sum + b.views, 0);
+        const totalClicks = bookAnalytics.reduce((sum, b) => sum + b.clicks, 0);
+        const totalPurchases = bookAnalytics.reduce((sum, b) => sum + b.purchases, 0);
+        const totalRevenue = bookAnalytics.reduce((sum, b) => sum + b.revenue, 0);
+
+        // Get date range for daily stats
+        const endDate = new Date();
+        const startDate = new Date();
+        startDate.setDate(startDate.getDate() - days);
+
+        // Get analytics events for the period
+        const events = await prisma.analyticsEvent.findMany({
+            where: {
+                bookId: { in: bookIds },
+                createdAt: {
+                    gte: startDate,
+                    lte: endDate
+                }
+            },
+            orderBy: { createdAt: 'asc' }
+        });
+
+        // Group events by date
+        const dailyStatsMap = new Map<string, { views: number; clicks: number; purchases: number }>();
+        
+        events.forEach(event => {
+            const date = event.createdAt.toISOString().split('T')[0];
+            if (!dailyStatsMap.has(date)) {
+                dailyStatsMap.set(date, { views: 0, clicks: 0, purchases: 0 });
+            }
+            const stats = dailyStatsMap.get(date)!;
+            
+            if (event.eventType === 'BOOK_VIEW') stats.views++;
+            if (event.eventType === 'BOOK_CLICK') stats.clicks++;
+            if (event.eventType === 'BOOK_PURCHASE') stats.purchases++;
+        });
+
+        // Convert to array and fill missing dates
+        const dailyStats = [];
+        for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
+            const dateStr = d.toISOString().split('T')[0];
+            const stats = dailyStatsMap.get(dateStr) || { views: 0, clicks: 0, purchases: 0 };
+            dailyStats.push({
+                date: dateStr,
+                ...stats
+            });
+        }
+
+        return successResponse({
+            totalViews,
+            totalClicks,
+            totalPurchases,
+            totalRevenue,
+            bookAnalytics: bookAnalyticsWithTitles.map(b => ({
+                bookId: b.bookId,
+                bookTitle: b.bookTitle,
+                views: b.views,
+                clicks: b.clicks,
+                previews: b.previews,
+                purchases: b.purchases,
+                downloads: b.downloads,
+                revenue: b.revenue,
+                lastViewedAt: b.lastViewedAt?.toISOString() || null
+            })),
+            dailyStats
+        });
+
+    } catch (error) {
+        console.error('Get author analytics error:', error);
+        return errorResponse('Failed to fetch analytics data', HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

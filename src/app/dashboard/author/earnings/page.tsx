@@ -1,277 +1,336 @@
-import { DollarSign, TrendingUp, Download, Calendar, Image as ImageIcon } from 'lucide-react';
+'use client';
+
+import { useState, useEffect } from 'react';
+import { 
+  DollarSign, TrendingUp, ShoppingCart, Clock, 
+  Calendar, Download, Eye, Book, ArrowLeft
+} from 'lucide-react';
 import Link from 'next/link';
-import Image from 'next/image';
+import { useAuth } from '@/lib/auth-context';
+import { AuthorProfileHeader } from '@/components/author/AuthorProfileHeader';
 
-// Mock data
-const earnings = {
-    total: 145250,
-    available: 25000,
-    pending: 5000,
-    paidOut: 115250,
-    trend: 12,
-};
+interface EarningsData {
+  totalEarnings: number;
+  pendingPayout: number;
+  lastPayoutAmount: number;
+  lastPayoutDate: string | null;
+  totalSales: number;
+  thisMonthEarnings: number;
+  booksSold: number;
+}
 
-const monthlyData = [
-    { month: 'Jul', amount: 18500 },
-    { month: 'Aug', amount: 22300 },
-    { month: 'Sep', amount: 19800 },
-    { month: 'Oct', amount: 25400 },
-    { month: 'Nov', amount: 28200 },
-    { month: 'Dec', amount: 31050 },
-];
+interface Sale {
+  id: string;
+  bookTitle: string;
+  amount: number;
+  platformFee: number;
+  authorEarning: number;
+  purchasedAt: string;
+}
 
-const transactions = [
-    {
-        id: '1',
-        type: 'sale',
-        book: 'Kalenjin Folklore Tales',
-        customer: 'John Doe',
-        amount: 450,
-        platformFee: 50,
-        netEarning: 400,
-        date: '2024-12-02T10:30:00',
-        status: 'completed',
-    },
-    {
-        id: '2',
-        type: 'payout',
-        description: 'M-Pesa Payout',
-        amount: -15000,
-        date: '2024-12-01T14:20:00',
-        status: 'completed',
-    },
-    {
-        id: '3',
-        type: 'sale',
-        book: 'Traditional Wisdom',
-        customer: 'Jane Smith',
-        amount: 675,
-        platformFee: 75,
-        netEarning: 600,
-        date: '2024-12-01T09:15:00',
-        status: 'completed',
-    },
-];
+interface Payout {
+  id: string;
+  amount: number;
+  status: string;
+  method: string;
+  reference: string | null;
+  createdAt: string;
+  paidAt: string | null;
+}
 
-export default function EarningsPage() {
-    const maxAmount = Math.max(...monthlyData.map((d) => d.amount));
+export default function AuthorEarningsPage() {
+  const { user } = useAuth();
+  const [earnings, setEarnings] = useState<EarningsData | null>(null);
+  const [sales, setSales] = useState<Sale[]>([]);
+  const [payouts, setPayouts] = useState<Payout[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
+  useEffect(() => {
+    fetchEarningsData();
+  }, []);
+
+  const fetchEarningsData = async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+
+      const token = localStorage.getItem('kaleereads_token');
+      if (!token) {
+        setError('Authentication required');
+        return;
+      }
+
+      const response = await fetch(
+        'https://kalenjin-books-worker.pngobiro.workers.dev/api/authors/earnings',
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch earnings data');
+      }
+
+      const result = await response.json();
+      const data = result.data;
+      
+      setEarnings(data.earnings);
+      setSales(data.sales);
+      setPayouts(data.payouts);
+    } catch (err) {
+      console.error('Error fetching earnings:', err);
+      setError(err instanceof Error ? err.message : 'Failed to load earnings data');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  if (isLoading) {
     return (
-        <div className="p-8">
-            {/* UI Mockup Reference */}
-            <details className="mb-6 bg-white rounded-xl p-4 shadow-sm border-l-4 border-accent-gold">
-                <summary className="cursor-pointer font-semibold text-neutral-brown-900 flex items-center gap-2">
-                    <ImageIcon size={20} className="text-accent-gold" />
-                    View Payment UI Mockups
-                </summary>
-                <div className="mt-4 border-t border-neutral-brown-500/10 pt-4 space-y-4">
-                    <div>
-                        <p className="text-sm text-neutral-brown-700 mb-3">
-                            Checkout page design:
-                        </p>
-                        <p className="text-xs text-neutral-brown-700 mb-2 italic">
-                            See docs/PAYMENTS.md for detailed payment UI specifications
-                        </p>
-                    </div>
-                </div>
-            </details>
-
-            {/* Header */}
-            <div className="flex items-center justify-between mb-8">
-                <div>
-                    <h1 className="text-3xl font-bold text-neutral-brown-900">Earnings</h1>
-                    <p className="text-neutral-brown-700 mt-1">
-                        Track your sales and manage payouts
-                    </p>
-                </div>
-                <button className="bg-primary hover:bg-primary-dark text-white font-semibold px-6 py-3 rounded-lg flex items-center gap-2 transition-all">
-                    <Download size={20} />
-                    Export Report
-                </button>
-            </div>
-
-            {/* Stats Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-                <div className="bg-gradient-to-br from-primary/10 to-primary/5 rounded-xl p-6 border-l-4 border-primary">
-                    <div className="flex items-center gap-2 mb-2">
-                        <DollarSign className="text-primary" size={20} />
-                        <span className="text-sm text-neutral-brown-700">Total Earnings</span>
-                    </div>
-                    <p className="text-3xl font-bold text-neutral-brown-900">
-                        KES {earnings.total.toLocaleString()}
-                    </p>
-                    <div className="flex items-center gap-1 mt-2 text-accent-green text-sm">
-                        <TrendingUp size={14} />
-                        <span>+{earnings.trend}% from last month</span>
-                    </div>
-                </div>
-
-                <div className="bg-white rounded-xl p-6 shadow-sm">
-                    <p className="text-sm text-neutral-brown-700 mb-2">Available Balance</p>
-                    <p className="text-3xl font-bold text-accent-green">
-                        KES {earnings.available.toLocaleString()}
-                    </p>
-                    <Link
-                        href="#request-payout"
-                        className="text-sm text-primary hover:text-primary-dark font-medium mt-2 inline-block"
-                    >
-                        Request Payout →
-                    </Link>
-                </div>
-
-                <div className="bg-white rounded-xl p-6 shadow-sm">
-                    <p className="text-sm text-neutral-brown-700 mb-2">Pending Payouts</p>
-                    <p className="text-3xl font-bold text-primary">
-                        KES {earnings.pending.toLocaleString()}
-                    </p>
-                </div>
-
-                <div className="bg-white rounded-xl p-6 shadow-sm">
-                    <p className="text-sm text-neutral-brown-700 mb-2">Total Paid Out</p>
-                    <p className="text-3xl font-bold text-neutral-brown-900">
-                        KES {earnings.paidOut.toLocaleString()}
-                    </p>
-                </div>
-            </div>
-
-            {/* Monthly Earnings Chart */}
-            <div className="bg-white rounded-xl p-6 shadow-sm mb-8">
-                <div className="flex items-center justify-between mb-6">
-                    <h2 className="text-xl font-bold text-neutral-brown-900">Monthly Earnings</h2>
-                    <div className="flex items-center gap-2 text-sm text-neutral-brown-700">
-                        <Calendar size={16} />
-                        <span>Last 6 Months</span>
-                    </div>
-                </div>
-
-                {/* Simple Bar Chart */}
-                <div className="flex items-end justify-between gap-4 h-64">
-                    {monthlyData.map((data) => {
-                        const height = (data.amount / maxAmount) * 100;
-                        return (
-                            <div key={data.month} className="flex-1 flex flex-col items-center gap-2">
-                                <div className="w-full flex flex-col justify-end h-full">
-                                    <div
-                                        className="w-full bg-primary rounded-t-lg hover:bg-primary-dark transition-all cursor-pointer relative group"
-                                        style={{ height: `${height}%` }}
-                                    >
-                                        <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-neutral-brown-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                                            KES {data.amount.toLocaleString()}
-                                        </div>
-                                    </div>
-                                </div>
-                                <span className="text-sm font-medium text-neutral-brown-700">
-                                    {data.month}
-                                </span>
-                            </div>
-                        );
-                    })}
-                </div>
-            </div>
-
-            {/* Request Payout Section */}
-            <div id="request-payout" className="bg-white rounded-xl p-6 shadow-sm mb-8">
-                <h2 className="text-xl font-bold text-neutral-brown-900 mb-4">
-                    Request Payout
-                </h2>
-                <div className="flex items-center justify-between p-4 bg-neutral-cream rounded-lg">
-                    <div>
-                        <p className="text-sm text-neutral-brown-700 mb-1">Available for Payout</p>
-                        <p className="text-2xl font-bold text-accent-green">
-                            KES {earnings.available.toLocaleString()}
-                        </p>
-                        <p className="text-xs text-neutral-brown-700 mt-1">
-                            Minimum payout: KES 1,000
-                        </p>
-                    </div>
-                    <button
-                        disabled={earnings.available < 1000}
-                        className="bg-primary hover:bg-primary-dark text-white font-semibold px-8 py-3 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                        Request Payout
-                    </button>
-                </div>
-            </div>
-
-            {/* Transaction History */}
-            <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-                <div className="p-6 border-b border-neutral-brown-500/10">
-                    <h2 className="text-xl font-bold text-neutral-brown-900">
-                        Transaction History
-                    </h2>
-                </div>
-
-                <table className="w-full">
-                    <thead className="bg-neutral-cream border-b-2 border-neutral-brown-500/10">
-                        <tr>
-                            <th className="px-6 py-4 text-left text-sm font-semibold text-neutral-brown-900">
-                                Date
-                            </th>
-                            <th className="px-6 py-4 text-left text-sm font-semibold text-neutral-brown-900">
-                                Type
-                            </th>
-                            <th className="px-6 py-4 text-left text-sm font-semibold text-neutral-brown-900">
-                                Description
-                            </th>
-                            <th className="px-6 py-4 text-right text-sm font-semibold text-neutral-brown-900">
-                                Amount
-                            </th>
-                            <th className="px-6 py-4 text-left text-sm font-semibold text-neutral-brown-900">
-                                Status
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-neutral-brown-500/10">
-                        {transactions.map((transaction) => (
-                            <tr key={transaction.id} className="hover:bg-neutral-cream/50 transition-colors">
-                                <td className="px-6 py-4 text-sm text-neutral-brown-700">
-                                    {new Date(transaction.date).toLocaleDateString()}
-                                </td>
-                                <td className="px-6 py-4">
-                                    {transaction.type === 'sale' ? (
-                                        <span className="inline-block px-3 py-1 bg-accent-green/20 text-accent-green text-sm font-medium rounded-full">
-                                            Sale
-                                        </span>
-                                    ) : (
-                                        <span className="inline-block px-3 py-1 bg-primary/20 text-primary text-sm font-medium rounded-full">
-                                            Payout
-                                        </span>
-                                    )}
-                                </td>
-                                <td className="px-6 py-4">
-                                    <p className="font-medium text-neutral-brown-900">
-                                        {transaction.type === 'sale' ? transaction.book : transaction.description}
-                                    </p>
-                                    {transaction.type === 'sale' && (
-                                        <p className="text-xs text-neutral-brown-700">
-                                            Customer: {transaction.customer}
-                                        </p>
-                                    )}
-                                </td>
-                                <td className="px-6 py-4 text-right">
-                                    <p
-                                        className={`font-bold ${transaction.type === 'sale' ? 'text-accent-green' : 'text-error'
-                                            }`}
-                                    >
-                                        {transaction.type === 'sale' ? '+' : ''}KES{' '}
-                                        {Math.abs(transaction.amount).toLocaleString()}
-                                    </p>
-                                    {transaction.type === 'sale' && transaction.netEarning && (
-                                        <p className="text-xs text-neutral-brown-700">
-                                            Net: KES {transaction.netEarning.toLocaleString()}
-                                        </p>
-                                    )}
-                                </td>
-                                <td className="px-6 py-4">
-                                    <span className="inline-block px-3 py-1 bg-accent-green/20 text-accent-green text-sm font-medium rounded-full">
-                                        {transaction.status}
-                                    </span>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
-        </div>
+      <div className="min-h-screen bg-neutral-cream flex items-center justify-center">
+        <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+      </div>
     );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-neutral-cream flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-600 mb-4">{error}</p>
+          <button
+            onClick={fetchEarningsData}
+            className="bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary-dark"
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (!earnings) return null;
+
+  return (
+    <div className="min-h-screen bg-neutral-cream p-8">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center gap-4">
+            <Link
+              href="/dashboard/author"
+              className="p-2 hover:bg-white rounded-lg transition-colors"
+            >
+              <ArrowLeft size={24} className="text-neutral-brown-700" />
+            </Link>
+            <div>
+              <h1 className="text-3xl font-bold text-neutral-brown-900">Earnings & Payouts</h1>
+              <p className="text-neutral-brown-600 mt-1">Track your sales and earnings</p>
+            </div>
+          </div>
+          
+          <button className="flex items-center gap-2 px-4 py-2 border border-neutral-brown-200 rounded-lg hover:bg-white">
+            <Download size={18} />
+            Download Report
+          </button>
+        </div>
+
+        {/* Author Profile */}
+        <div className="mb-6">
+          <AuthorProfileHeader variant="compact" showEmail={false} />
+        </div>
+
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <div className="bg-white rounded-xl p-6 shadow-sm">
+            <div className="flex items-center justify-between mb-4">
+              <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                <DollarSign className="text-green-600" size={24} />
+              </div>
+            </div>
+            <h3 className="text-2xl font-bold text-neutral-brown-900">KES {earnings.totalEarnings.toLocaleString()}</h3>
+            <p className="text-neutral-brown-600 text-sm">Total Earnings</p>
+          </div>
+
+          <div className="bg-white rounded-xl p-6 shadow-sm">
+            <div className="flex items-center justify-between mb-4">
+              <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
+                <Clock className="text-yellow-600" size={24} />
+              </div>
+            </div>
+            <h3 className="text-2xl font-bold text-neutral-brown-900">KES {earnings.pendingPayout.toLocaleString()}</h3>
+            <p className="text-neutral-brown-600 text-sm">Pending Payout</p>
+          </div>
+
+          <div className="bg-white rounded-xl p-6 shadow-sm">
+            <div className="flex items-center justify-between mb-4">
+              <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                <TrendingUp className="text-blue-600" size={24} />
+              </div>
+            </div>
+            <h3 className="text-2xl font-bold text-neutral-brown-900">KES {earnings.thisMonthEarnings.toLocaleString()}</h3>
+            <p className="text-neutral-brown-600 text-sm">This Month</p>
+          </div>
+
+          <div className="bg-white rounded-xl p-6 shadow-sm">
+            <div className="flex items-center justify-between mb-4">
+              <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                <ShoppingCart className="text-purple-600" size={24} />
+              </div>
+            </div>
+            <h3 className="text-2xl font-bold text-neutral-brown-900">{earnings.booksSold}</h3>
+            <p className="text-neutral-brown-600 text-sm">Books Sold</p>
+          </div>
+        </div>
+
+        {/* Last Payout Info */}
+        {earnings.lastPayoutDate && (
+          <div className="bg-gradient-to-r from-primary/10 to-accent-green/10 rounded-xl p-6 mb-8">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-neutral-brown-600 text-sm mb-1">Last Payout</p>
+                <p className="text-2xl font-bold text-neutral-brown-900">KES {earnings.lastPayoutAmount.toLocaleString()}</p>
+              </div>
+              <div className="text-right">
+                <p className="text-neutral-brown-600 text-sm mb-1">Date</p>
+                <p className="font-medium text-neutral-brown-900">
+                  {new Date(earnings.lastPayoutDate).toLocaleDateString('en-US', { 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                  })}
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Sales History */}
+        <div className="bg-white rounded-xl shadow-sm mb-6">
+          <div className="p-6 border-b border-neutral-brown-100">
+            <h3 className="text-lg font-bold text-neutral-brown-900">Recent Sales</h3>
+          </div>
+          <div className="p-6">
+            {sales.length > 0 ? (
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-neutral-cream border-b border-neutral-brown-100">
+                    <tr>
+                      <th className="px-4 py-3 text-left text-sm font-semibold text-neutral-brown-900">Book</th>
+                      <th className="px-4 py-3 text-left text-sm font-semibold text-neutral-brown-900">Sale Amount</th>
+                      <th className="px-4 py-3 text-left text-sm font-semibold text-neutral-brown-900">Platform Fee</th>
+                      <th className="px-4 py-3 text-left text-sm font-semibold text-neutral-brown-900">Your Earning</th>
+                      <th className="px-4 py-3 text-left text-sm font-semibold text-neutral-brown-900">Date</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-neutral-brown-100">
+                    {sales.map((sale) => (
+                      <tr key={sale.id} className="hover:bg-neutral-cream/50">
+                        <td className="px-4 py-4">
+                          <p className="font-medium text-neutral-brown-900">{sale.bookTitle}</p>
+                        </td>
+                        <td className="px-4 py-4">
+                          <p className="text-neutral-brown-900">KES {sale.amount.toLocaleString()}</p>
+                        </td>
+                        <td className="px-4 py-4">
+                          <p className="text-neutral-brown-600">KES {sale.platformFee.toLocaleString()}</p>
+                        </td>
+                        <td className="px-4 py-4">
+                          <p className="font-bold text-green-600">KES {sale.authorEarning.toLocaleString()}</p>
+                        </td>
+                        <td className="px-4 py-4">
+                          <p className="text-sm text-neutral-brown-600">
+                            {new Date(sale.purchasedAt).toLocaleDateString()}
+                          </p>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <div className="text-center py-12">
+                <ShoppingCart size={48} className="text-neutral-brown-300 mx-auto mb-4" />
+                <p className="text-neutral-brown-600 mb-2">No sales yet</p>
+                <p className="text-sm text-neutral-brown-500">Your sales will appear here once customers purchase your books</p>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Payout History */}
+        <div className="bg-white rounded-xl shadow-sm">
+          <div className="p-6 border-b border-neutral-brown-100">
+            <h3 className="text-lg font-bold text-neutral-brown-900">Payout History</h3>
+          </div>
+          <div className="p-6">
+            {payouts.length > 0 ? (
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-neutral-cream border-b border-neutral-brown-100">
+                    <tr>
+                      <th className="px-4 py-3 text-left text-sm font-semibold text-neutral-brown-900">Amount</th>
+                      <th className="px-4 py-3 text-left text-sm font-semibold text-neutral-brown-900">Method</th>
+                      <th className="px-4 py-3 text-left text-sm font-semibold text-neutral-brown-900">Reference</th>
+                      <th className="px-4 py-3 text-left text-sm font-semibold text-neutral-brown-900">Status</th>
+                      <th className="px-4 py-3 text-left text-sm font-semibold text-neutral-brown-900">Requested</th>
+                      <th className="px-4 py-3 text-left text-sm font-semibold text-neutral-brown-900">Paid</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-neutral-brown-100">
+                    {payouts.map((payout) => (
+                      <tr key={payout.id} className="hover:bg-neutral-cream/50">
+                        <td className="px-4 py-4">
+                          <p className="font-bold text-neutral-brown-900">KES {payout.amount.toLocaleString()}</p>
+                        </td>
+                        <td className="px-4 py-4">
+                          <p className="text-neutral-brown-900 capitalize">{payout.method}</p>
+                        </td>
+                        <td className="px-4 py-4">
+                          <p className="text-sm text-neutral-brown-600">{payout.reference || '-'}</p>
+                        </td>
+                        <td className="px-4 py-4">
+                          <span className={`inline-block px-2 py-1 text-xs font-medium rounded-full ${
+                            payout.status === 'COMPLETED' 
+                              ? 'bg-green-100 text-green-700'
+                              : payout.status === 'PROCESSING'
+                              ? 'bg-blue-100 text-blue-700'
+                              : payout.status === 'PENDING'
+                              ? 'bg-yellow-100 text-yellow-700'
+                              : 'bg-red-100 text-red-700'
+                          }`}>
+                            {payout.status}
+                          </span>
+                        </td>
+                        <td className="px-4 py-4">
+                          <p className="text-sm text-neutral-brown-600">
+                            {new Date(payout.createdAt).toLocaleDateString()}
+                          </p>
+                        </td>
+                        <td className="px-4 py-4">
+                          <p className="text-sm text-neutral-brown-600">
+                            {payout.paidAt ? new Date(payout.paidAt).toLocaleDateString() : '-'}
+                          </p>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <div className="text-center py-12">
+                <Calendar size={48} className="text-neutral-brown-300 mx-auto mb-4" />
+                <p className="text-neutral-brown-600 mb-2">No payouts yet</p>
+                <p className="text-sm text-neutral-brown-500">Payout history will appear here once processed</p>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }

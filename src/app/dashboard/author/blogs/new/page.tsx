@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { 
@@ -8,15 +8,19 @@ import {
   List, ListOrdered, Link as LinkIcon, Quote, Code,
   Eye, Save, Send, X, Upload, Heading1, Heading2
 } from 'lucide-react';
+import { useAuth } from '@/lib/auth-context';
 
 export default function NewBlogPostPage() {
   const router = useRouter();
+  const { user } = useAuth();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const contentRef = useRef<HTMLTextAreaElement>(null);
   
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
   const [coverImage, setCoverImage] = useState<string | null>(null);
+  const [coverImageFile, setCoverImageFile] = useState<File | null>(null);
+  const [authorId, setAuthorId] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     title: '',
     excerpt: '',
@@ -24,9 +28,44 @@ export default function NewBlogPostPage() {
     tags: '',
   });
 
+  // Fetch author profile to get authorId
+  useEffect(() => {
+    const fetchAuthorProfile = async () => {
+      try {
+        const token = localStorage.getItem('kaleereads_token');
+        if (!token) {
+          router.push('/login');
+          return;
+        }
+
+        const response = await fetch(
+          'https://kalenjin-books-worker.pngobiro.workers.dev/api/authors/me',
+          {
+            headers: {
+              'Authorization': `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.ok) {
+          const result = await response.json();
+          setAuthorId(result.data.id);
+        } else {
+          router.push('/login');
+        }
+      } catch (err) {
+        console.error('Error fetching author profile:', err);
+        router.push('/login');
+      }
+    };
+
+    fetchAuthorProfile();
+  }, [router]);
+
   const handleCoverImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      setCoverImageFile(file);
       const reader = new FileReader();
       reader.onloadend = () => {
         setCoverImage(reader.result as string);
@@ -66,13 +105,60 @@ export default function NewBlogPostPage() {
   ];
 
   const handleSaveDraft = async () => {
+    if (!formData.title.trim() || !formData.content.trim()) {
+      alert('Please fill in the title and content');
+      return;
+    }
+
+    if (!authorId) {
+      alert('Author profile not loaded. Please refresh the page.');
+      return;
+    }
+
     setIsSubmitting(true);
     try {
-      // In production, save to API
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Upload cover image if provided
+      let coverImageUrl = null;
+      if (coverImageFile) {
+        const imageFormData = new FormData();
+        imageFormData.append('file', coverImageFile);
+        
+        const imageResponse = await fetch('/api/blog/images', {
+          method: 'POST',
+          body: imageFormData,
+        });
+
+        if (imageResponse.ok) {
+          const imageData = await imageResponse.json();
+          coverImageUrl = imageData.imageUrl;
+        }
+      }
+
+      // Create blog post as draft
+      const response = await fetch('/api/blog/posts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          title: formData.title,
+          content: formData.content,
+          excerpt: formData.excerpt,
+          coverImage: coverImageUrl,
+          isPublished: false,
+          authorId,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to save draft');
+      }
+
       alert('Draft saved successfully!');
+      router.push('/dashboard/author/blogs');
     } catch (error) {
       console.error('Failed to save draft:', error);
+      alert('Failed to save draft. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -84,13 +170,55 @@ export default function NewBlogPostPage() {
       return;
     }
 
+    if (!authorId) {
+      alert('Author profile not loaded. Please refresh the page.');
+      return;
+    }
+
     setIsSubmitting(true);
     try {
-      // In production, publish to API
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      router.push('/dashboard/author/blogs?published=true');
+      // Upload cover image if provided
+      let coverImageUrl = null;
+      if (coverImageFile) {
+        const imageFormData = new FormData();
+        imageFormData.append('file', coverImageFile);
+        
+        const imageResponse = await fetch('/api/blog/images', {
+          method: 'POST',
+          body: imageFormData,
+        });
+
+        if (imageResponse.ok) {
+          const imageData = await imageResponse.json();
+          coverImageUrl = imageData.imageUrl;
+        }
+      }
+
+      // Create and publish blog post
+      const response = await fetch('/api/blog/posts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          title: formData.title,
+          content: formData.content,
+          excerpt: formData.excerpt,
+          coverImage: coverImageUrl,
+          isPublished: true,
+          authorId,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to publish');
+      }
+
+      alert('Blog post published successfully!');
+      router.push('/dashboard/author/blogs');
     } catch (error) {
       console.error('Failed to publish:', error);
+      alert('Failed to publish. Please try again.');
     } finally {
       setIsSubmitting(false);
     }

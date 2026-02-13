@@ -1,7 +1,33 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // Disable the development indicator overlay
+  devIndicators: {
+    appIsrStatus: false,
+    buildActivity: false,
+    buildActivityPosition: 'bottom-right',
+  },
+  
+  // Image optimization settings
+  images: {
+    unoptimized: true, // Required for static export
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**.workers.dev',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.r2.dev',
+      },
+    ],
+  },
+  
+  // Environment variables
+  env: {
+    NEXT_PUBLIC_WORKER_URL: process.env.NEXT_PUBLIC_WORKER_URL || 'https://kalenjin-books-worker.pngobiro.workers.dev',
+    NEXT_PUBLIC_GOOGLE_CLIENT_ID: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
+  },
 };
 
 export default nextConfig;

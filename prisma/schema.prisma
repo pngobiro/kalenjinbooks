@@ -89,6 +89,7 @@ model Author {
   books         Book[]
   payments      Payment[]
   blogPosts     BlogPost[]
+  hardCopyRequests HardCopyRequest[]
 }
 
 enum AuthorStatus {
@@ -127,6 +128,7 @@ model Book {
   author        Author    @relation(fields: [authorId], references: [id], onDelete: Cascade)
   purchases     Purchase[]
   accessLinks   TimeAccessLink[]
+  hardCopyRequests HardCopyRequest[]
 }
 
 model Purchase {
@@ -216,4 +218,119 @@ model BlogImage {
   
   // Relations
   blogPost      BlogPost  @relation(fields: [blogPostId], references: [id], onDelete: Cascade)
+}
+
+// Analytics Models
+model AnalyticsEvent {
+  id            String    @id @default(uuid())
+  eventType     EventType
+  bookId        String?
+  authorId      String?
+  userId        String?
+  sessionId     String?   // Anonymous session tracking
+  metadata      String?   // JSON string with additional data
+  ipAddress     String?
+  userAgent     String?
+  referrer      String?
+  createdAt     DateTime  @default(now())
+  
+  @@index([eventType])
+  @@index([bookId])
+  @@index([authorId])
+  @@index([createdAt])
+}
+
+enum EventType {
+  BOOK_VIEW         // Book detail page viewed
+  BOOK_CLICK        // Book clicked from list
+  BOOK_SEARCH       // Book searched
+  BOOK_PREVIEW      // Preview opened
+  BOOK_PURCHASE     // Book purchased
+  BOOK_DOWNLOAD     // Book downloaded
+  AUTHOR_VIEW       // Author profile viewed
+  AUTHOR_FOLLOW     // Author followed
+  PAGE_VIEW         // General page view
+  SIGNUP            // User signed up
+  LOGIN             // User logged in
+}
+
+model DailyStats {
+  id            String    @id @default(uuid())
+  date          String    @unique // YYYY-MM-DD format
+  totalViews    Int       @default(0)
+  totalClicks   Int       @default(0)
+  totalPurchases Int      @default(0)
+  totalRevenue  Float     @default(0)
+  uniqueVisitors Int      @default(0)
+  newUsers      Int       @default(0)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  @@index([date])
+}
+
+model BookAnalytics {
+  id            String    @id @default(uuid())
+  bookId        String    @unique
+  views         Int       @default(0)
+  clicks        Int       @default(0)
+  previews      Int       @default(0)
+  purchases     Int       @default(0)
+  downloads     Int       @default(0)
+  revenue       Float     @default(0)
+  lastViewedAt  DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  @@index([bookId])
+}
+
+// Hard Copy Request Model
+model HardCopyRequest {
+  id            String    @id @default(uuid())
+  bookId        String
+  authorId      String
+  
+  // Requester Information
+  requesterName     String
+  requesterEmail    String
+  requesterPhone    String
+  
+  // Delivery Information
+  deliveryAddress   String
+  city              String
+  country           String
+  postalCode        String?
+  
+  // Request Details
+  quantity          Int       @default(1)
+  message           String?   // Optional message to author
+  
+  // Status
+  status            HardCopyRequestStatus @default(PENDING)
+  authorResponse    String?   // Author's response/notes
+  estimatedPrice    Float?    // Price quoted by author
+  estimatedDelivery String?   // Estimated delivery time
+  
+  // Timestamps
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  respondedAt       DateTime? // When author responded
+  
+  // Relations
+  book              Book      @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  author            Author    @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  
+  @@index([authorId])
+  @@index([bookId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+enum HardCopyRequestStatus {
+  PENDING       // New request, awaiting author response
+  ACCEPTED      // Author accepted and provided details
+  DECLINED      // Author declined the request
+  COMPLETED     // Order fulfilled
+  CANCELLED     // Cancelled by requester
 }

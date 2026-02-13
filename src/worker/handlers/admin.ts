@@ -115,6 +115,11 @@ export async function handleAdminRequest(
         return await setFeaturedOrder(request, env);
     }
 
+    // GET /api/admin/revenue - Get revenue data (admin only)
+    if (path === '/api/admin/revenue' && method === 'GET') {
+        return await getRevenueData(request, env);
+    }
+
     return errorResponse('Not Found', HttpStatus.NOT_FOUND);
 }
 
@@ -810,5 +815,136 @@ async function rejectBook(request: WorkerRequest, env: Env): Promise<Response> {
     } catch (error) {
         console.error('Reject book error:', error);
         return errorResponse('Failed to reject book', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+}
+
+/**
+ * Get revenue data for admin dashboard
+ */
+async function getRevenueData(request: WorkerRequest, env: Env): Promise<Response> {
+    try {
+        const prisma = createD1PrismaClient(env.DB);
+
+        // Get all purchases
+        const purchases = await prisma.purchase.findMany({
+            where: { status: 'COMPLETED' },
+            include: {
+                book: {
+                    select: {
+                        title: true,
+                        author: {
+                            select: {
+                                user: {
+                                    select: { name: true, email: true }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            orderBy: { purchasedAt: 'desc' }
+        });
+
+        // Calculate stats
+        const totalRevenue = purchases.reduce((sum, p) => sum + p.amount, 0);
+        const platformRevenue = purchases.reduce((sum, p) => sum + p.platformFee, 0);
+        const authorEarnings = purchases.reduce((sum, p) => sum + p.authorEarning, 0);
+
+        // Get all authors with their earnings
+        const authors = await prisma.author.findMany({
+            where: { status: 'APPROVED' },
+            include: {
+                user: {
+                    select: { name: true, email: true }
+                },
+                payments: {
+                    where: { status: 'COMPLETED' },
+                    orderBy: { paidAt: 'desc' },
+                    take: 1
+                }
+            }
+        });
+
+        // Calculate author earnings
+        const authorEarningsData = authors.map(author => {
+            const authorPurchases = purchases.filter(p => p.book.author.user.email === author.user.email);
+            const totalEarnings = authorPurchases.reduce((sum, p) => sum + p.authorEarning, 0);
+            const pendingPayout = totalEarnings - author.totalEarnings;
+            
+            return {
+                authorId: author.id,
+                authorName: author.user.name || 'Unknown',
+                authorEmail: author.user.email,
+                totalEarnings,
+                pendingPayout: pendingPayout > 0 ? pendingPayout : 0,
+                lastPayoutDate: author.payments[0]?.paidAt || null,
+                booksSold: authorPurchases.length
+            };
+        });
+
+        // Get all payouts
+        const payouts = await prisma.payment.findMany({
+            include: {
+                author: {
+                    select: {
+                        user: {
+                            select: { name: true }
+                        }
+                    }
+                }
+            },
+            orderBy: { createdAt: 'desc' },
+            take: 50
+        });
+
+        const pendingPayouts = payouts
+            .filter(p => p.status === 'PENDING' || p.status === 'PROCESSING')
+            .reduce((sum, p) => sum + p.amount, 0);
+
+        const completedPayouts = payouts
+            .filter(p => p.status === 'COMPLETED')
+            .reduce((sum, p) => sum + p.amount, 0);
+
+        // Format recent transactions
+        const recentTransactions = purchases.slice(0, 50).map(p => ({
+            id: p.id,
+            bookTitle: p.book.title,
+            authorName: p.book.author.user.name || 'Unknown',
+            amount: p.amount,
+            platformFee: p.platformFee,
+            authorEarning: p.authorEarning,
+            status: p.status,
+            purchasedAt: p.purchasedAt.toISOString()
+        }));
+
+        // Format payouts
+        const recentPayouts = payouts.map(p => ({
+            id: p.id,
+            authorName: p.author.user.name || 'Unknown',
+            amount: p.amount,
+            status: p.status,
+            method: p.method,
+            reference: p.reference,
+            createdAt: p.createdAt.toISOString(),
+            paidAt: p.paidAt?.toISOString() || null
+        }));
+
+        return successResponse({
+            stats: {
+                totalRevenue,
+                platformRevenue,
+                authorEarnings,
+                pendingPayouts,
+                completedPayouts,
+                totalTransactions: purchases.length
+            },
+            authorEarnings: authorEarningsData,
+            recentTransactions,
+            recentPayouts
+        });
+
+    } catch (error) {
+        console.error('Get revenue data error:', error);
+        return errorResponse('Failed to fetch revenue data', HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

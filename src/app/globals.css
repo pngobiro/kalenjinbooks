@@ -146,3 +146,32 @@ a {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--brand-primary);
 }
+
+
+/* Hide Next.js Development Indicator */
+#__next-build-watcher,
+nextjs-portal,
+[data-nextjs-dialog-overlay],
+[data-nextjs-toast],
+[data-nextjs-scroll-lock],
+.__next-dev-overlay,
+.__next-dev-overlay-backdrop {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Hide the floating dev indicator button */
+button[aria-label*="Open"],
+button[aria-label*="Route"],
+button[aria-label*="Turbopack"] {
+  display: none !important;
+}
+
+/* Additional selectors for Next.js 15+ dev indicators */
+[class*="nextjs-portal"],
+[class*="nextjs-toast"],
+[class*="build-watcher"] {
+  display: none !important;
+}

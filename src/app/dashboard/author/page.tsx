@@ -1,12 +1,23 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { DollarSign, Book, ShoppingCart, TrendingUp, Plus, Clock, CheckCircle, XCircle, User, ArrowRight } from 'lucide-react';
+import { DollarSign, Book, ShoppingCart, TrendingUp, Plus, Clock, CheckCircle, XCircle, User, ArrowRight, FileText, Eye, Edit } from 'lucide-react';
 import Link from 'next/link';
 import { useAuth } from '@/lib/auth-context';
 import { useRouter } from 'next/navigation';
 import { getAuthorById } from '@/lib/api/authors';
 import { AuthorProfileHeader } from '@/components/author/AuthorProfileHeader';
+
+interface BlogPost {
+  id: string;
+  title: string;
+  slug: string;
+  coverImage?: string;
+  isPublished: boolean;
+  publishedAt?: string;
+  viewCount: number;
+  createdAt: string;
+}
 
 // This would come from API/database
 const initialStats = {
@@ -27,6 +38,8 @@ export default function AuthorDashboardPage() {
   const [authorStatus, setAuthorStatus] = useState<any>(null);
   const [isLoadingAuthorStatus, setIsLoadingAuthorStatus] = useState(false);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [recentBlogs, setRecentBlogs] = useState<BlogPost[]>([]);
+  const [isLoadingBlogs, setIsLoadingBlogs] = useState(false);
 
   // Check for success parameter from book upload
   useEffect(() => {
@@ -88,6 +101,8 @@ export default function AuthorDashboardPage() {
               const data: any = await response.json();
               if (data && data.data) {
                 setAuthorStatus(data.data);
+                // Load blogs after getting author ID
+                loadBlogs(data.data.id);
               }
             } else if (response.status === 404) {
               // User doesn't have an author profile yet
@@ -104,6 +119,21 @@ export default function AuthorDashboardPage() {
         } finally {
           setIsLoadingAuthorStatus(false);
         }
+      }
+    }
+
+    async function loadBlogs(authorId: string) {
+      setIsLoadingBlogs(true);
+      try {
+        const response = await fetch(`/api/blog/posts?authorId=${authorId}&limit=5`);
+        if (response.ok) {
+          const data: any = await response.json();
+          setRecentBlogs(data.posts || []);
+        }
+      } catch (e) {
+        console.error('Failed to load blogs', e);
+      } finally {
+        setIsLoadingBlogs(false);
       }
     }
 
@@ -397,6 +427,13 @@ export default function AuthorDashboardPage() {
               </Link>
             )}
             <Link
+              href="/dashboard/author/blogs/new"
+              className="bg-white hover:bg-neutral-cream text-primary border-2 border-primary font-semibold px-6 py-3 rounded-lg flex items-center gap-2 transition-all hover:-translate-y-0.5"
+            >
+              <FileText size={20} />
+              New Blog Post
+            </Link>
+            <Link
               href="/dashboard/author/books/new"
               className="bg-primary hover:bg-primary-dark text-white font-semibold px-6 py-3 rounded-lg flex items-center gap-2 transition-all hover:-translate-y-0.5"
             >
@@ -407,7 +444,7 @@ export default function AuthorDashboardPage() {
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
           {/* Total Earnings */}
           <div className="bg-white rounded-xl p-6 shadow-sm border-l-4 border-primary">
             <div className="flex items-center justify-between mb-4">
@@ -434,6 +471,23 @@ export default function AuthorDashboardPage() {
             </div>
             <p className="text-sm text-neutral-brown-700 mb-1">Books Published</p>
             <p className="text-2xl font-bold text-neutral-brown-900">{stats.booksPublished}</p>
+          </div>
+
+          {/* Blog Posts */}
+          <div className="bg-white rounded-xl p-6 shadow-sm">
+            <div className="flex items-center justify-between mb-4">
+              <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                <FileText className="text-blue-600" size={24} />
+              </div>
+            </div>
+            <p className="text-sm text-neutral-brown-700 mb-1">Blog Posts</p>
+            <p className="text-2xl font-bold text-neutral-brown-900">{recentBlogs.length}</p>
+            <Link
+              href="/dashboard/author/blogs"
+              className="text-sm text-primary hover:text-primary-dark font-medium mt-2 inline-block"
+            >
+              Manage Blogs →
+            </Link>
           </div>
 
           {/* Total Sales */}
@@ -471,10 +525,111 @@ export default function AuthorDashboardPage() {
           </div>
         </div>
 
-        <div className="bg-neutral-cream p-4 rounded-lg border border-neutral-brown-200">
+        <div className="bg-neutral-cream p-4 rounded-lg border border-neutral-brown-200 mb-8">
           <p className="text-sm text-neutral-brown-600 text-center">
             More analytics and sales data will be available soon as we connect to the payment processing system.
           </p>
+        </div>
+
+        {/* Recent Blog Posts Section */}
+        <div className="bg-white rounded-xl shadow-sm p-6 mb-8">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h2 className="text-2xl font-bold text-neutral-brown-900 flex items-center gap-2">
+                <FileText size={24} className="text-primary" />
+                Recent Blog Posts
+              </h2>
+              <p className="text-neutral-brown-600 text-sm mt-1">
+                Your latest published and draft blog posts
+              </p>
+            </div>
+            <Link
+              href="/dashboard/author/blogs"
+              className="text-primary hover:text-primary-dark font-medium flex items-center gap-1"
+            >
+              View All <ArrowRight size={16} />
+            </Link>
+          </div>
+
+          {isLoadingBlogs ? (
+            <div className="flex items-center justify-center py-12">
+              <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+            </div>
+          ) : recentBlogs.length > 0 ? (
+            <div className="space-y-4">
+              {recentBlogs.map((post) => (
+                <div
+                  key={post.id}
+                  className="flex items-center gap-4 p-4 rounded-lg border border-neutral-brown-100 hover:border-primary/30 hover:bg-neutral-cream/30 transition-all"
+                >
+                  {post.coverImage ? (
+                    <img
+                      src={post.coverImage}
+                      alt={post.title}
+                      className="w-20 h-16 object-cover rounded-lg flex-shrink-0"
+                    />
+                  ) : (
+                    <div className="w-20 h-16 bg-neutral-cream rounded-lg flex items-center justify-center flex-shrink-0">
+                      <FileText size={24} className="text-neutral-brown-400" />
+                    </div>
+                  )}
+                  
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-semibold text-neutral-brown-900 truncate">
+                      {post.title}
+                    </h3>
+                    <div className="flex items-center gap-4 mt-1">
+                      <span className={`text-xs px-2 py-1 rounded-full ${
+                        post.isPublished 
+                          ? 'bg-accent-green/10 text-accent-green' 
+                          : 'bg-neutral-brown-100 text-neutral-brown-600'
+                      }`}>
+                        {post.isPublished ? 'Published' : 'Draft'}
+                      </span>
+                      <span className="text-sm text-neutral-brown-500 flex items-center gap-1">
+                        <Eye size={14} />
+                        {post.viewCount.toLocaleString()} views
+                      </span>
+                      <span className="text-sm text-neutral-brown-500">
+                        {new Date(post.createdAt).toLocaleDateString()}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2 flex-shrink-0">
+                    <Link
+                      href={`/blogs/${post.slug}`}
+                      className="p-2 text-neutral-brown-600 hover:bg-primary/10 hover:text-primary rounded-lg transition-colors"
+                      title="View"
+                    >
+                      <Eye size={18} />
+                    </Link>
+                    <Link
+                      href={`/dashboard/author/blogs/${post.id}/edit`}
+                      className="p-2 text-neutral-brown-600 hover:bg-primary/10 hover:text-primary rounded-lg transition-colors"
+                      title="Edit"
+                    >
+                      <Edit size={18} />
+                    </Link>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <div className="w-16 h-16 bg-neutral-cream rounded-full flex items-center justify-center mx-auto mb-4">
+                <FileText size={32} className="text-neutral-brown-400" />
+              </div>
+              <p className="text-neutral-brown-600 mb-4">No blog posts yet</p>
+              <Link
+                href="/dashboard/author/blogs/new"
+                className="inline-flex items-center gap-2 bg-primary hover:bg-primary-dark text-white font-semibold px-6 py-3 rounded-lg transition-all"
+              >
+                <Plus size={20} />
+                Create Your First Blog Post
+              </Link>
+            </div>
+          )}
         </div>
 
       </div>

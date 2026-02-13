@@ -25,6 +25,7 @@ export default function SecureBookViewer() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
+  const [blobUrl, setBlobUrl] = useState<string | null>(null);
   const viewerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -72,7 +73,7 @@ export default function SecureBookViewer() {
         throw new Error('Failed to get secure PDF access');
       }
 
-      const pdfData = await pdfResponse.json();
+      const pdfData: any = await pdfResponse.json();
       console.log('Raw PDF response:', JSON.stringify(pdfData, null, 2));
       
       // Check if the response is wrapped in a data property
@@ -92,7 +93,24 @@ export default function SecureBookViewer() {
         author: responseData.book.author
       });
       
-      setPdfUrl(responseData.secureUrl);
+      const secureUrl = responseData.secureUrl;
+      setPdfUrl(secureUrl);
+      
+      // Fetch the PDF as a blob to create a local object URL
+      console.log('Fetching PDF blob from:', secureUrl);
+      const pdfBlobResponse = await fetch(secureUrl);
+      
+      if (!pdfBlobResponse.ok) {
+        throw new Error('Failed to fetch PDF file');
+      }
+      
+      const blob = await pdfBlobResponse.blob();
+      console.log('PDF blob size:', blob.size, 'type:', blob.type);
+      
+      // Create a blob URL for the PDF
+      const url = URL.createObjectURL(blob);
+      console.log('Created blob URL:', url);
+      setBlobUrl(url);
 
     } catch (err) {
       console.error('Error fetching book:', err);
@@ -103,6 +121,15 @@ export default function SecureBookViewer() {
   };
 
   // Security measures
+  useEffect(() => {
+    // Cleanup blob URL on unmount
+    return () => {
+      if (blobUrl) {
+        URL.revokeObjectURL(blobUrl);
+      }
+    };
+  }, [blobUrl]);
+
   useEffect(() => {
     // Disable right-click context menu
     const handleContextMenu = (e: MouseEvent) => {
@@ -119,9 +146,17 @@ export default function SecureBookViewer() {
         (e.ctrlKey && e.key === 's') ||
         (e.ctrlKey && e.key === 'p') ||
         (e.ctrlKey && e.shiftKey && e.key === 'J') ||
-        e.key === 'PrintScreen'
+        e.key === 'PrintScreen' ||
+        e.key === 'Print'
       ) {
         e.preventDefault();
+        
+        // Show warning for Print Screen
+        if (e.key === 'PrintScreen' || e.key === 'Print') {
+          alert('⚠️ Screen capture is not allowed. This action has been logged.');
+          console.warn('Print Screen attempt detected');
+        }
+        
         return false;
       }
     };
@@ -139,13 +174,28 @@ export default function SecureBookViewer() {
     // Blur window when focus is lost (security measure)
     const handleBlur = () => {
       if (viewerRef.current) {
-        viewerRef.current.style.filter = 'blur(5px)';
+        viewerRef.current.style.filter = 'blur(10px)';
       }
+      console.warn('Window lost focus - content blurred');
     };
 
     const handleFocus = () => {
       if (viewerRef.current) {
         viewerRef.current.style.filter = 'none';
+      }
+    };
+
+    // Detect visibility change (tab switching, Print Screen often triggers this)
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        if (viewerRef.current) {
+          viewerRef.current.style.filter = 'blur(10px)';
+        }
+        console.warn('Page hidden - possible screen capture attempt');
+      } else {
+        if (viewerRef.current) {
+          viewerRef.current.style.filter = 'none';
+        }
       }
     };
 
@@ -160,6 +210,7 @@ export default function SecureBookViewer() {
     document.addEventListener('selectstart', handleSelectStart);
     document.addEventListener('dragstart', handleDragStart);
     document.addEventListener('copy', handleCopy);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
     window.addEventListener('blur', handleBlur);
     window.addEventListener('focus', handleFocus);
 
@@ -189,6 +240,7 @@ export default function SecureBookViewer() {
       document.removeEventListener('selectstart', handleSelectStart);
       document.removeEventListener('dragstart', handleDragStart);
       document.removeEventListener('copy', handleCopy);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
       window.removeEventListener('blur', handleBlur);
       window.removeEventListener('focus', handleFocus);
     };
@@ -271,7 +323,7 @@ export default function SecureBookViewer() {
 
       {/* PDF Viewer */}
       <div 
-        className="h-[calc(100vh-120px)]" 
+        className="h-[calc(100vh-120px)] relative" 
         ref={viewerRef}
         style={{
           userSelect: 'none',
@@ -280,19 +332,71 @@ export default function SecureBookViewer() {
           msUserSelect: 'none',
         }}
       >
-        {pdfUrl ? (
-          <iframe
-            src={pdfUrl}
-            className="w-full h-full border-0"
-            style={{
-              userSelect: 'none',
-              WebkitUserSelect: 'none',
-              MozUserSelect: 'none',
-              msUserSelect: 'none',
-            }}
-            onContextMenu={(e) => e.preventDefault()}
-            allow="fullscreen"
-          />
+        {blobUrl ? (
+          <>
+            <iframe
+              src={`/pdfjs/web/viewer.html?file=${encodeURIComponent(blobUrl)}`}
+              className="w-full h-full border-0"
+              style={{
+                userSelect: 'none',
+                WebkitUserSelect: 'none',
+                MozUserSelect: 'none',
+                msUserSelect: 'none',
+                backgroundColor: '#1a1a1a',
+              }}
+              onContextMenu={(e) => e.preventDefault()}
+              onLoad={() => console.log('PDF iframe loaded successfully')}
+              onError={(e) => {
+                console.error('PDF iframe error:', e);
+                setError('Failed to load PDF viewer');
+              }}
+              allow="fullscreen"
+            />
+            
+            {/* Watermark overlay - makes screenshots traceable */}
+            <div 
+              className="absolute inset-0 pointer-events-none z-10"
+              style={{
+                background: `repeating-linear-gradient(
+                  45deg,
+                  transparent,
+                  transparent 200px,
+                  rgba(255, 255, 255, 0.03) 200px,
+                  rgba(255, 255, 255, 0.03) 400px
+                )`,
+              }}
+            >
+              {/* User watermark - top */}
+              <div className="absolute top-4 left-1/2 transform -translate-x-1/2 text-white/20 text-xs font-mono">
+                {user?.email} • {new Date().toLocaleString()}
+              </div>
+              
+              {/* User watermark - center */}
+              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white/10 text-2xl font-bold rotate-[-45deg]">
+                {user?.email}
+              </div>
+              
+              {/* User watermark - bottom */}
+              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white/20 text-xs font-mono">
+                Licensed to: {user?.email}
+              </div>
+              
+              {/* Multiple diagonal watermarks */}
+              {[...Array(5)].map((_, i) => (
+                <div
+                  key={i}
+                  className="absolute text-white/5 text-lg font-bold whitespace-nowrap"
+                  style={{
+                    top: `${20 + i * 20}%`,
+                    left: '50%',
+                    transform: 'translateX(-50%) rotate(-45deg)',
+                  }}
+                >
+                  {user?.email} • Protected Content
+                </div>
+              ))}
+            </div>
+          </>
         ) : (
           <div className="flex items-center justify-center h-full text-white">
             <div className="text-center">

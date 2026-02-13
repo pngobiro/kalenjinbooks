@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Plus, Eye, Edit, Trash2, Search, FileText, TrendingUp, Book } from 'lucide-react';
+import { useAuth } from '@/lib/auth-context';
 
 interface BlogPost {
     id: string;
@@ -15,48 +16,6 @@ interface BlogPost {
     createdAt: string;
 }
 
-// Mock data - in production this comes from API
-const mockPosts: BlogPost[] = [
-    {
-        id: '1',
-        title: 'The Rich Heritage of Kalenjin Oral Traditions',
-        slug: 'kalenjin-oral-traditions',
-        coverImage: '/books/folklore-tales.png',
-        isPublished: true,
-        publishedAt: '2024-12-05T10:00:00',
-        viewCount: 1245,
-        createdAt: '2024-12-01T08:00:00',
-    },
-    {
-        id: '2',
-        title: 'Writing Tips for Aspiring African Authors',
-        slug: 'writing-tips-african-authors',
-        coverImage: '/books/traditional-wisdom.png',
-        isPublished: true,
-        publishedAt: '2024-11-28T14:30:00',
-        viewCount: 892,
-        createdAt: '2024-11-25T09:00:00',
-    },
-    {
-        id: '3',
-        title: 'Preserving Indigenous Languages Through Literature',
-        slug: 'preserving-indigenous-languages',
-        isPublished: false,
-        viewCount: 0,
-        createdAt: '2024-12-10T11:00:00',
-    },
-    {
-        id: '4',
-        title: 'My Journey as a Kalenjin Author',
-        slug: 'my-journey-kalenjin-author',
-        coverImage: '/books/immortalknowledge.jpg',
-        isPublished: true,
-        publishedAt: '2024-11-15T09:00:00',
-        viewCount: 2156,
-        createdAt: '2024-11-10T10:00:00',
-    },
-];
-
 function formatBlogDate(dateString: string): string {
     return new Date(dateString).toLocaleDateString('en-US', {
         year: 'numeric',
@@ -66,13 +25,89 @@ function formatBlogDate(dateString: string): string {
 }
 
 export default function BlogsPage() {
-    const [posts, setPosts] = useState<BlogPost[]>(mockPosts);
+    const { user } = useAuth();
+    const [posts, setPosts] = useState<BlogPost[]>([]);
     const [filter, setFilter] = useState<'all' | 'published' | 'draft'>('all');
     const [searchQuery, setSearchQuery] = useState('');
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+    const [authorId, setAuthorId] = useState<string | null>(null);
 
-    const handleDelete = (id: string) => {
+    // Fetch author profile to get authorId
+    useEffect(() => {
+        const fetchAuthorProfile = async () => {
+            try {
+                const token = localStorage.getItem('kaleereads_token');
+                if (!token) return;
+
+                const response = await fetch(
+                    'https://kalenjin-books-worker.pngobiro.workers.dev/api/authors/me',
+                    {
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                        },
+                    }
+                );
+
+                if (response.ok) {
+                    const result: any = await response.json();
+                    setAuthorId(result.data.id);
+                }
+            } catch (err) {
+                console.error('Error fetching author profile:', err);
+            }
+        };
+
+        fetchAuthorProfile();
+    }, []);
+
+    // Fetch blog posts
+    useEffect(() => {
+        if (!authorId) return;
+
+        const fetchPosts = async () => {
+            try {
+                setIsLoading(true);
+                setError(null);
+
+                const response = await fetch(
+                    `/api/blog/posts?authorId=${authorId}&limit=100`
+                );
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch blog posts');
+                }
+
+                const data: any = await response.json();
+                setPosts(data.posts || []);
+            } catch (err) {
+                console.error('Error fetching blog posts:', err);
+                setError(err instanceof Error ? err.message : 'Failed to load blog posts');
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchPosts();
+    }, [authorId]);
+
+    const handleDelete = async (id: string) => {
         if (!confirm('Are you sure you want to delete this blog post?')) return;
-        setPosts(posts.filter(p => p.id !== id));
+
+        try {
+            const response = await fetch(`/api/blog/posts/${id}`, {
+                method: 'DELETE',
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to delete blog post');
+            }
+
+            setPosts(posts.filter(p => p.id !== id));
+        } catch (err) {
+            console.error('Error deleting blog post:', err);
+            alert('Failed to delete blog post. Please try again.');
+        }
     };
 
     const filteredPosts = posts
@@ -91,6 +126,30 @@ export default function BlogsPage() {
         draftPosts: posts.filter((p) => !p.isPublished).length,
         totalViews: posts.reduce((sum, p) => sum + p.viewCount, 0),
     };
+
+    if (isLoading) {
+        return (
+            <div className="min-h-screen bg-neutral-cream flex items-center justify-center">
+                <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="min-h-screen bg-neutral-cream flex items-center justify-center">
+                <div className="text-center">
+                    <p className="text-red-600 mb-4">{error}</p>
+                    <button
+                        onClick={() => window.location.reload()}
+                        className="bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary-dark"
+                    >
+                        Retry
+                    </button>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen bg-neutral-cream">
