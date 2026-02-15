@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { 
   Users, Book, TrendingUp, UserCheck, 
@@ -18,10 +18,7 @@ import { Author, BookData, PendingBook, Stats } from '@/types/admin';
 
 type TabType = 'overview' | 'authors' | 'applications' | 'rejected' | 'books' | 'pending-books';
 
-// Force dynamic rendering for this page
-export const dynamic = 'force-dynamic';
-
-export default function AdminDashboardPage() {
+function AdminDashboardContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [showRejectModal, setShowRejectModal] = useState(false);
@@ -512,5 +509,21 @@ export default function AdminDashboardPage() {
         </div>
       )}
     </div>
+  );
+}
+
+
+export default function AdminDashboardPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-neutral-cream flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-neutral-brown-600">Loading dashboard...</p>
+        </div>
+      </div>
+    }>
+      <AdminDashboardContent />
+    </Suspense>
   );
 }

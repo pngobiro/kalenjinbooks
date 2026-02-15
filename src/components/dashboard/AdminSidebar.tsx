@@ -1,5 +1,6 @@
 'use client';
 
+import { Suspense } from 'react';
 import { Shield, Users, Book, TrendingUp, UserCheck, Settings, LogOut, BarChart3, DollarSign, FileText } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useSearchParams, useRouter } from 'next/navigation';
@@ -17,7 +18,7 @@ const navigation = [
     { name: 'Settings', href: '/dashboard/admin/settings', icon: Settings },
 ];
 
-export function AdminSidebar() {
+function AdminSidebarContent() {
     const pathname = usePathname();
     const searchParams = useSearchParams();
     const router = useRouter();
@@ -135,5 +136,21 @@ export function AdminSidebar() {
                 </button>
             </div>
         </div>
+    );
+}
+
+
+export function AdminSidebar() {
+    return (
+        <Suspense fallback={
+            <div className="w-64 bg-white border-r border-neutral-brown-500/10 min-h-screen flex items-center justify-center">
+                <div className="text-center">
+                    <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
+                    <p className="text-neutral-brown-600 text-sm">Loading...</p>
+                </div>
+            </div>
+        }>
+            <AdminSidebarContent />
+        </Suspense>
     );
 }
