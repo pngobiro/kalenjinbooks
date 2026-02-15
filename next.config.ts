@@ -3,7 +3,6 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   // Disable the development indicator overlay
   devIndicators: {
-    appIsrStatus: false,
     buildActivity: false,
     buildActivityPosition: 'bottom-right',
   },
