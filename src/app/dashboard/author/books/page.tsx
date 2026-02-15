@@ -69,16 +69,52 @@ export default function MyBooksPage() {
                     return;
                 }
 
-                // Get author ID first
-                const authorResponse = await fetch('https://kalenjin-books-worker.pngobiro.workers.dev/api/authors/me', {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json',
-                    },
-                });
+                // Get author ID first with retry logic
+                let authorResponse;
+                let retries = 3;
+                
+                while (retries > 0) {
+                    try {
+                        authorResponse = await fetch('https://kalenjin-books-worker.pngobiro.workers.dev/api/authors/me', {
+                            headers: {
+                                'Authorization': `Bearer ${token}`,
+                                'Content-Type': 'application/json',
+                            },
+                        });
 
-                if (!authorResponse.ok) {
-                    throw new Error('Failed to get author profile');
+                        if (authorResponse.ok) {
+                            break; // Success, exit retry loop
+                        }
+                        
+                        // If user doesn't have an author profile, show empty state
+                        if (authorResponse.status === 404) {
+                            setBooks([]);
+                            setIsLoading(false);
+                            return;
+                        }
+                        
+                        // If it's a server error, retry
+                        if (authorResponse.status >= 500 && retries > 1) {
+                            console.log(`Retrying... (${retries - 1} left)`);
+                            await new Promise(resolve => setTimeout(resolve, 1000));
+                            retries--;
+                            continue;
+                        }
+                        
+                        throw new Error(`Failed to get author profile (${authorResponse.status})`);
+                    } catch (fetchError) {
+                        if (retries > 1) {
+                            console.log(`Network error, retrying... (${retries - 1} left)`);
+                            await new Promise(resolve => setTimeout(resolve, 1000));
+                            retries--;
+                            continue;
+                        }
+                        throw fetchError;
+                    }
+                }
+
+                if (!authorResponse || !authorResponse.ok) {
+                    throw new Error('Failed to get author profile after retries');
                 }
 
                 const authorData: any = await authorResponse.json();

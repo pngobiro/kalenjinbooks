@@ -224,12 +224,8 @@ export default function EditBookPage({ params }: { params: Promise<{ id: string 
 
       alert('Book updated successfully!');
       
-      // Clear cover file state
-      setCoverFile(null);
-      setCoverPreview(null);
-
-      // Refresh book data
-      await fetchBookData(bookId);
+      // Redirect to books list
+      router.push('/dashboard/author/books');
 
     } catch (err) {
       console.error('Error saving book:', err);

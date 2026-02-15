@@ -291,8 +291,16 @@ export default function SecureBookViewer() {
       <div className="bg-neutral-brown-900 text-white p-4 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <button
-            onClick={() => router.back()}
+            onClick={() => {
+              // Try to go back, or fallback to admin dashboard
+              if (window.history.length > 1) {
+                router.back();
+              } else {
+                router.push('/dashboard/admin');
+              }
+            }}
             className="p-2 hover:bg-neutral-brown-700 rounded transition-colors"
+            title="Go back"
           >
             <ArrowLeft size={20} />
           </button>

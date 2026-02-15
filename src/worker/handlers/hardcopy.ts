@@ -49,7 +49,10 @@ export async function handleHardCopyRequest(
 async function getAuthorRequests(request: WorkerRequest, env: Env): Promise<Response> {
     try {
         const userId = request.ctx?.user?.id;
+        console.log('[HardCopy] User ID:', userId);
+        
         if (!userId) {
+            console.log('[HardCopy] No user ID found in request context');
             return errorResponse('User not authenticated', HttpStatus.UNAUTHORIZED);
         }
 
@@ -60,7 +63,10 @@ async function getAuthorRequests(request: WorkerRequest, env: Env): Promise<Resp
             where: { userId },
         });
 
+        console.log('[HardCopy] Author found:', author ? 'yes' : 'no');
+
         if (!author) {
+            console.log('[HardCopy] Author profile not found for userId:', userId);
             return errorResponse('Author profile not found', HttpStatus.NOT_FOUND);
         }
 
@@ -78,6 +84,8 @@ async function getAuthorRequests(request: WorkerRequest, env: Env): Promise<Resp
             },
             orderBy: { createdAt: 'desc' },
         });
+
+        console.log('[HardCopy] Found requests:', requests.length);
 
         return successResponse(requests);
     } catch (error) {
@@ -170,6 +178,8 @@ async function respondToRequest(
 async function createHardCopyRequest(request: WorkerRequest, env: Env): Promise<Response> {
     try {
         const body = await request.json() as any;
+        console.log('[HardCopy] Create request body:', body);
+        
         const {
             bookId,
             requesterName,
@@ -186,6 +196,7 @@ async function createHardCopyRequest(request: WorkerRequest, env: Env): Promise<
         // Validate required fields
         if (!bookId || !requesterName || !requesterEmail || !requesterPhone || 
             !deliveryAddress || !city || !country) {
+            console.log('[HardCopy] Missing required fields');
             return errorResponse('Missing required fields', HttpStatus.BAD_REQUEST);
         }
 
@@ -201,9 +212,13 @@ async function createHardCopyRequest(request: WorkerRequest, env: Env): Promise<
             },
         });
 
+        console.log('[HardCopy] Book found:', book ? 'yes' : 'no');
+
         if (!book) {
             return errorResponse('Book not found', HttpStatus.NOT_FOUND);
         }
+
+        console.log('[HardCopy] Creating request for book:', book.id, 'author:', book.authorId);
 
         // Create the request
         const hardCopyRequest = await prisma.hardCopyRequest.create({
@@ -217,13 +232,59 @@ async function createHardCopyRequest(request: WorkerRequest, env: Env): Promise<
                 city,
                 country,
                 postalCode,
-                quantity: quantity || 1,
+                quantity: parseInt(quantity) || 1,
                 message,
                 status: 'PENDING',
             },
         });
 
-        // TODO: Send email notification to author
+        console.log('[HardCopy] Request created:', hardCopyRequest.id);
+
+        // Send email notifications
+        try {
+            const { sendEmail, createHardCopyRequestEmail, createHardCopyConfirmationEmail } = await import('../utils/email');
+            
+            // Get author details for email
+            const author = await prisma.author.findUnique({
+                where: { id: book.authorId },
+                include: {
+                    user: {
+                        select: {
+                            name: true,
+                            email: true,
+                        },
+                    },
+                },
+            });
+
+            if (author && author.user) {
+                // Send notification to author
+                const authorEmail = createHardCopyRequestEmail(
+                    author.user.name || 'Author',
+                    author.user.email,
+                    book.title,
+                    requesterName,
+                    requesterEmail,
+                    requesterPhone,
+                    parseInt(quantity) || 1,
+                    city,
+                    country
+                );
+                await sendEmail(authorEmail, env);
+
+                // Send confirmation to requester
+                const requesterConfirmation = createHardCopyConfirmationEmail(
+                    requesterName,
+                    requesterEmail,
+                    book.title,
+                    author.user.name || 'the author'
+                );
+                await sendEmail(requesterConfirmation, env);
+            }
+        } catch (emailError) {
+            console.error('[HardCopy] Email notification error:', emailError);
+            // Don't fail the request if email fails
+        }
 
         return successResponse({
             message: 'Request submitted successfully',

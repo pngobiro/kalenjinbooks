@@ -19,15 +19,12 @@ const colorSchemes = [
 ];
 
 export default function BookDetailPage({ params }: { params: Promise<{ id: string }> }) {
-  const [id, setId] = useState<string>('');
   const [book, setBook] = useState<BookType | null>(null);
   const [relatedBooks, setRelatedBooks] = useState<BookType[]>([]);
   const [loading, setLoading] = useState(true);
-  const [purchaseType, setPurchaseType] = useState<'permanent' | 'temporary'>('permanent');
 
   useEffect(() => {
     params.then((p) => {
-      setId(p.id);
       loadBook(p.id);
     });
   }, [params]);
@@ -74,7 +71,6 @@ export default function BookDetailPage({ params }: { params: Promise<{ id: strin
   }
 
   const rentalPrice = Math.floor(book.price * 0.1);
-  const currentPrice = purchaseType === 'permanent' ? book.price : rentalPrice;
   const colorScheme = colorSchemes[book.title.length % colorSchemes.length];
 
   return (
@@ -85,9 +81,22 @@ export default function BookDetailPage({ params }: { params: Promise<{ id: strin
           <div className="flex items-center justify-between h-20">
             <Link href="/" className="flex items-center gap-2">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" width="44" height="44">
-                <path d="M12 2C12 2 8 6 8 10C8 12.5 9.5 14.5 12 15C14.5 14.5 16 12.5 16 10C16 6 12 2 12 2Z" fill="#E07856"></path>
-                <path d="M12 5C12 5 10 7.5 10 10C10 11.5 10.8 12.8 12 13C13.2 12.8 14 11.5 14 10C14 7.5 12 5 12 5Z" fill="#D4AF37"></path>
-                <path d="M12 8C12 8 11 9.5 11 11C11 11.8 11.4 12.4 12 12.5C12.6 12.4 13 11.8 13 11C13 9.5 12 8 12 8Z" fill="#C85D3A"></path>
+                {/* Traditional Kalenjin Calabash */}
+                <path d="M12 3C10 3 8.5 4 8 5.5C7.5 7 7 9 7 11C7 13.5 7.5 16 8.5 18C9.5 20 11 21 12 21C13 21 14.5 20 15.5 18C16.5 16 17 13.5 17 11C17 9 16.5 7 16 5.5C15.5 4 14 3 12 3Z" fill="#8B4513" stroke="#654321" strokeWidth="0.5"/>
+                {/* Calabash neck */}
+                <ellipse cx="12" cy="4" rx="1.5" ry="1.5" fill="#A0522D"/>
+                {/* Traditional patterns */}
+                <path d="M9 8C9 8 10 8.5 12 8.5C14 8.5 15 8 15 8" stroke="#D4AF37" strokeWidth="0.8" fill="none"/>
+                <path d="M9 11C9 11 10 11.5 12 11.5C14 11.5 15 11 15 11" stroke="#D4AF37" strokeWidth="0.8" fill="none"/>
+                <path d="M9 14C9 14 10 14.5 12 14.5C14 14.5 15 14 15 14" stroke="#D4AF37" strokeWidth="0.8" fill="none"/>
+                <path d="M9.5 17C9.5 17 10.5 17.5 12 17.5C13.5 17.5 14.5 17 14.5 17" stroke="#D4AF37" strokeWidth="0.8" fill="none"/>
+                {/* Decorative dots */}
+                <circle cx="10" cy="9.5" r="0.4" fill="#E07856"/>
+                <circle cx="14" cy="9.5" r="0.4" fill="#E07856"/>
+                <circle cx="10" cy="12.5" r="0.4" fill="#E07856"/>
+                <circle cx="14" cy="12.5" r="0.4" fill="#E07856"/>
+                <circle cx="10" cy="15.5" r="0.4" fill="#E07856"/>
+                <circle cx="14" cy="15.5" r="0.4" fill="#E07856"/>
               </svg>
               <span className="text-2xl font-bold text-neutral-brown-900 font-heading">KaleeReads</span>
             </Link>
@@ -206,66 +215,67 @@ export default function BookDetailPage({ params }: { params: Promise<{ id: strin
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               {/* Purchase Options */}
               <div className="lg:col-span-2">
-                <h3 className="font-bold text-2xl text-neutral-brown-900 font-heading mb-6">Choose Your Access</h3>
+                <h3 className="font-bold text-2xl text-neutral-brown-900 font-heading mb-6">Purchase Options</h3>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-                  {/* Permanent */}
-                  <div
-                    onClick={() => setPurchaseType('permanent')}
-                    className={`cursor-pointer rounded-2xl p-6 border-2 transition-all ${purchaseType === 'permanent'
-                        ? 'border-primary bg-primary/5 shadow-lg shadow-primary/10'
-                        : 'border-neutral-brown-200 hover:border-primary/50 hover:shadow-md'
-                      }`}
-                  >
+                  {/* 24-Hour Access */}
+                  <div className="rounded-2xl p-6 border-2 border-accent-green bg-accent-green/5 shadow-lg">
                     <div className="flex items-center gap-3 mb-3">
-                      <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${purchaseType === 'permanent' ? 'bg-primary' : 'bg-neutral-brown-100'}`}>
-                        <Book size={24} className={purchaseType === 'permanent' ? 'text-white' : 'text-neutral-brown-400'} />
-                      </div>
-                      <div>
-                        <span className="font-bold text-lg text-neutral-brown-900">Permanent Access</span>
-                        <p className="text-xs text-neutral-brown-500">Own forever • Download & read anytime</p>
-                      </div>
-                    </div>
-                    <div className={`text-3xl font-bold ${purchaseType === 'permanent' ? 'text-primary' : 'text-neutral-brown-700'}`}>
-                      KES {book.price}
-                    </div>
-                  </div>
-
-                  {/* 24-Hour */}
-                  <div
-                    onClick={() => setPurchaseType('temporary')}
-                    className={`cursor-pointer rounded-2xl p-6 border-2 transition-all ${purchaseType === 'temporary'
-                        ? 'border-accent-green bg-accent-green/5 shadow-lg shadow-accent-green/10'
-                        : 'border-neutral-brown-200 hover:border-accent-green/50 hover:shadow-md'
-                      }`}
-                  >
-                    <div className="flex items-center gap-3 mb-3">
-                      <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${purchaseType === 'temporary' ? 'bg-accent-green' : 'bg-neutral-brown-100'}`}>
-                        <FileText size={24} className={purchaseType === 'temporary' ? 'text-white' : 'text-neutral-brown-400'} />
+                      <div className="w-12 h-12 rounded-xl flex items-center justify-center bg-accent-green">
+                        <FileText size={24} className="text-white" />
                       </div>
                       <div>
                         <span className="font-bold text-lg text-neutral-brown-900">24-Hour Access</span>
                         <p className="text-xs text-neutral-brown-500">Read online • Perfect for sampling</p>
                       </div>
                     </div>
-                    <div className={`text-3xl font-bold ${purchaseType === 'temporary' ? 'text-accent-green' : 'text-neutral-brown-700'}`}>
+                    <div className="text-3xl font-bold text-accent-green mb-4">
                       KES {rentalPrice}
                     </div>
+                    <Link
+                      href={`/payment?bookId=${book.id}&author=${encodeURIComponent(book.author?.user?.name || '')}&type=temporary&price=${rentalPrice}&title=${encodeURIComponent(book.title)}`}
+                      className="w-full inline-flex items-center justify-center gap-2 font-bold py-3 px-6 rounded-full shadow-md text-white transition-all hover:shadow-lg hover:-translate-y-0.5 bg-accent-green hover:bg-[#7A8C74]"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                      </svg>
+                      Buy Now
+                    </Link>
+                  </div>
+
+                  {/* Request Hard Copy */}
+                  <div className="rounded-2xl p-6 border-2 border-primary bg-primary/5 shadow-lg">
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="w-12 h-12 rounded-xl flex items-center justify-center bg-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white">
+                          <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"></path>
+                          <path d="m3.3 7 8.7 5 8.7-5"></path>
+                          <path d="M12 22V12"></path>
+                        </svg>
+                      </div>
+                      <div>
+                        <span className="font-bold text-lg text-neutral-brown-900">Hard Copy</span>
+                        <p className="text-xs text-neutral-brown-500">Physical book • Delivered to you</p>
+                      </div>
+                    </div>
+                    <div className="text-3xl font-bold text-primary mb-4">
+                      Request
+                    </div>
+                    <Link
+                      href={`/request-hard-copy?book=${encodeURIComponent(book.title)}&id=${book.id}`}
+                      className="w-full inline-flex items-center justify-center gap-2 font-bold py-3 px-6 rounded-full shadow-md text-white transition-all hover:shadow-lg hover:-translate-y-0.5 bg-primary hover:bg-primary-dark"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                      </svg>
+                      Request Now
+                    </Link>
                   </div>
                 </div>
-
-                <Link
-                  href={`/payment?bookId=${book.id}&author=${encodeURIComponent(book.author?.user?.name || '')}&type=${purchaseType}&price=${currentPrice}&title=${encodeURIComponent(book.title)}`}
-                  className={`w-full sm:w-auto inline-flex items-center justify-center gap-3 font-bold py-4 px-8 rounded-full shadow-lg text-white transition-all hover:shadow-xl hover:-translate-y-1 ${purchaseType === 'permanent' ? 'bg-primary hover:bg-primary-dark' : 'bg-accent-green hover:bg-[#7A8C74]'
-                    }`}
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="9" cy="21" r="1"></circle>
-                    <circle cx="20" cy="21" r="1"></circle>
-                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                  </svg>
-                  Proceed to Payment - KES {currentPrice}
-                </Link>
               </div>
 
               {/* Book Details */}
@@ -306,18 +316,6 @@ export default function BookDetailPage({ params }: { params: Promise<{ id: strin
                 <div className="mt-6 pt-6 border-t border-neutral-brown-200">
                   <ShareButtons title={`${book.title} - KaleeReads`} />
                 </div>
-
-                <Link
-                  href={`/request-hard-copy?book=${encodeURIComponent(book.title)}&id=${book.id}`}
-                  className="mt-4 w-full inline-flex items-center justify-center gap-2 py-3 bg-neutral-brown-100 hover:bg-neutral-brown-200 text-neutral-brown-700 rounded-full font-semibold transition-colors"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"></path>
-                    <path d="m3.3 7 8.7 5 8.7-5"></path>
-                    <path d="M12 22V12"></path>
-                  </svg>
-                  Request Hard Copy
-                </Link>
               </div>
             </div>
           </div>

@@ -87,9 +87,19 @@ export default function AuthorDashboardPage() {
     async function loadAuthorStatus() {
       if (user?.id) {
         setIsLoadingAuthorStatus(true);
-        try {
-          const token = localStorage.getItem('kaleereads_token');
-          if (token) {
+        
+        const maxRetries = 3;
+        const retryDelay = 1000; // 1 second
+        
+        for (let attempt = 1; attempt <= maxRetries; attempt++) {
+          try {
+            const token = localStorage.getItem('kaleereads_token');
+            if (!token) {
+              console.log('No auth token found');
+              setAuthorStatus(null);
+              break;
+            }
+
             const response = await fetch('https://kalenjin-books-worker.pngobiro.workers.dev/api/authors/me', {
               headers: {
                 'Authorization': `Bearer ${token}`,
@@ -104,21 +114,48 @@ export default function AuthorDashboardPage() {
                 // Load blogs after getting author ID
                 loadBlogs(data.data.id);
               }
+              break; // Success, exit retry loop
             } else if (response.status === 404) {
-              // User doesn't have an author profile yet
+              // User doesn't have an author profile yet - not an error
+              console.log('No author profile found for user');
               setAuthorStatus(null);
+              break; // Don't retry for 404
             } else if (response.status === 401) {
               // Invalid token - user needs to log in again
               console.log('Authentication required');
               setAuthorStatus(null);
+              break; // Don't retry for auth errors
+            } else if (response.status >= 400 && response.status < 500) {
+              // Client errors (400-499) - don't retry, log details
+              const errorText = await response.text().catch(() => 'Unable to read error');
+              console.error(`Client error ${response.status}:`, errorText);
+              setAuthorStatus(null);
+              break; // Don't retry for client errors
+            } else if (response.status >= 500) {
+              // Server error - retry
+              console.log(`Server error (attempt ${attempt}/${maxRetries}):`, response.status);
+              if (attempt < maxRetries) {
+                await new Promise(resolve => setTimeout(resolve, retryDelay));
+                continue;
+              }
+            } else {
+              // Other errors - don't retry
+              console.log('Unexpected response status:', response.status);
+              break;
+            }
+          } catch (e) {
+            // Network error - retry
+            console.log(`Network error loading author status (attempt ${attempt}/${maxRetries}):`, e);
+            if (attempt < maxRetries) {
+              await new Promise(resolve => setTimeout(resolve, retryDelay));
+              continue;
+            } else {
+              console.error('Failed to load author status after retries:', e);
             }
           }
-        } catch (e) {
-          // Silently handle - user might not be authenticated or have author profile
-          console.log('Author status check skipped');
-        } finally {
-          setIsLoadingAuthorStatus(false);
         }
+        
+        setIsLoadingAuthorStatus(false);
       }
     }
 

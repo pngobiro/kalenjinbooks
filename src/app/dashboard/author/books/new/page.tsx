@@ -84,9 +84,15 @@ export default function NewBookPage() {
     setError(null);
 
     try {
-      // Validate required fields
-      if (!formData.title || !formData.description || !formData.category || !formData.bookFile) {
-        throw new Error('Please fill in all required fields and upload a book file.');
+      // Validate required fields with specific messages
+      const missingFields = [];
+      if (!formData.title) missingFields.push('Book Title');
+      if (!formData.description) missingFields.push('Description');
+      if (!formData.category) missingFields.push('Category');
+      if (!formData.bookFile) missingFields.push('Book File');
+      
+      if (missingFields.length > 0) {
+        throw new Error(`Please fill in the following required fields: ${missingFields.join(', ')}`);
       }
 
       const token = localStorage.getItem('kaleereads_token');
@@ -127,8 +133,8 @@ export default function NewBookPage() {
 
       const result = await response.json();
       
-      // Redirect to author dashboard with success message
-      router.push('/dashboard/author?bookUploaded=true');
+      // Redirect to books list with success message
+      router.push('/dashboard/author/books');
 
     } catch (err) {
       console.error('Book upload error:', err);
@@ -188,6 +194,11 @@ export default function NewBookPage() {
           {error && (
             <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
               <p className="text-red-600 font-medium">{error}</p>
+              {error.includes('approved') && (
+                <p className="text-red-500 text-sm mt-2">
+                  Your author account needs to be approved by an admin before you can upload books.
+                </p>
+              )}
             </div>
           )}
 
@@ -371,24 +382,29 @@ export default function NewBookPage() {
 
                 <div>
                   <label className="block text-sm font-medium text-neutral-brown-900 mb-2">
-                    Book File *
+                    Book File * {!formData.bookFile && <span className="text-red-500 text-xs">(Required)</span>}
                   </label>
-                  <div className="border-2 border-dashed border-neutral-brown-200 rounded-xl p-6 text-center hover:border-primary transition-colors">
-                    <Book size={32} className="mx-auto text-neutral-brown-400 mb-2" />
+                  <div className={`border-2 border-dashed rounded-xl p-6 text-center transition-colors ${
+                    !formData.bookFile 
+                      ? 'border-neutral-brown-200 hover:border-primary' 
+                      : 'border-accent-green bg-accent-green/5'
+                  }`}>
+                    <Book size={32} className={`mx-auto mb-2 ${formData.bookFile ? 'text-accent-green' : 'text-neutral-brown-400'}`} />
                     <input
                       type="file"
                       accept=".pdf,.epub,.mobi"
                       onChange={(e) => handleFileChange(e, 'bookFile')}
                       className="hidden"
                       id="bookFile"
-                      required
                     />
                     <label htmlFor="bookFile" className="cursor-pointer">
-                      <span className="text-primary font-medium">Choose book file</span>
+                      <span className="text-primary font-medium">
+                        {formData.bookFile ? 'Change book file' : 'Choose book file'}
+                      </span>
                       <p className="text-sm text-neutral-brown-500 mt-1">PDF, EPUB, MOBI up to 50MB</p>
                     </label>
                     {formData.bookFile && (
-                      <p className="text-sm text-accent-green mt-2">✓ {formData.bookFile.name}</p>
+                      <p className="text-sm text-accent-green font-medium mt-2">✓ {formData.bookFile.name}</p>
                     )}
                   </div>
                 </div>

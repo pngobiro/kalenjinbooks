@@ -240,7 +240,13 @@ async function googleLogin(request: WorkerRequest, env: Env): Promise<Response> 
         const googleResponse = await fetch(`https://oauth2.googleapis.com/tokeninfo?id_token=${token}`);
 
         if (!googleResponse.ok) {
-            return errorResponse('Invalid Google token', HttpStatus.UNAUTHORIZED, ErrorCode.AUTHENTICATION_REQUIRED);
+            const errorText = await googleResponse.text();
+            console.error('Google token validation failed:', googleResponse.status, errorText);
+            return errorResponse(
+                `Invalid Google token: ${errorText}`, 
+                HttpStatus.UNAUTHORIZED, 
+                ErrorCode.AUTHENTICATION_REQUIRED
+            );
         }
 
         const googleUser = await googleResponse.json() as {

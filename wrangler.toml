@@ -28,11 +28,19 @@ binding = "SESSION"
 id = "99d4cf1bf19047c481445f3a3d37d14b"
 preview_id = "0299bf93510c4aab970cd04fbfcb42c5"
 
+# Email Workers binding (Cloudflare Email Sending)
+# To set up:
+# 1. Go to Cloudflare Dashboard > Email Routing
+# 2. Add and verify your domain
+# 3. Create a send email address
+[[send_email]]
+name = "EMAIL"
 
 # Environment variables
 [vars]
 NEXTAUTH_URL = "http://localhost:3000"
 STRIPE_PUBLISHABLE_KEY = ""
+EMAIL_FROM = "noreply@kalenjinbooks.com"
 
 # Secrets (set via wrangler secret put)
 # NEXTAUTH_SECRET

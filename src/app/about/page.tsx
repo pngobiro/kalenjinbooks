@@ -47,9 +47,22 @@ export default function AboutPage() {
           <div className="flex items-center justify-between h-20">
             <Link href="/" className="flex items-center gap-2">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" width="44" height="44">
-                <path d="M12 2C12 2 8 6 8 10C8 12.5 9.5 14.5 12 15C14.5 14.5 16 12.5 16 10C16 6 12 2 12 2Z" fill="#E07856"></path>
-                <path d="M12 5C12 5 10 7.5 10 10C10 11.5 10.8 12.8 12 13C13.2 12.8 14 11.5 14 10C14 7.5 12 5 12 5Z" fill="#D4AF37"></path>
-                <path d="M12 8C12 8 11 9.5 11 11C11 11.8 11.4 12.4 12 12.5C12.6 12.4 13 11.8 13 11C13 9.5 12 8 12 8Z" fill="#C85D3A"></path>
+                {/* Traditional Kalenjin Calabash */}
+                <path d="M12 3C10 3 8.5 4 8 5.5C7.5 7 7 9 7 11C7 13.5 7.5 16 8.5 18C9.5 20 11 21 12 21C13 21 14.5 20 15.5 18C16.5 16 17 13.5 17 11C17 9 16.5 7 16 5.5C15.5 4 14 3 12 3Z" fill="#8B4513" stroke="#654321" strokeWidth="0.5"/>
+                {/* Calabash neck */}
+                <ellipse cx="12" cy="4" rx="1.5" ry="1.5" fill="#A0522D"/>
+                {/* Traditional patterns */}
+                <path d="M9 8C9 8 10 8.5 12 8.5C14 8.5 15 8 15 8" stroke="#D4AF37" strokeWidth="0.8" fill="none"/>
+                <path d="M9 11C9 11 10 11.5 12 11.5C14 11.5 15 11 15 11" stroke="#D4AF37" strokeWidth="0.8" fill="none"/>
+                <path d="M9 14C9 14 10 14.5 12 14.5C14 14.5 15 14 15 14" stroke="#D4AF37" strokeWidth="0.8" fill="none"/>
+                <path d="M9.5 17C9.5 17 10.5 17.5 12 17.5C13.5 17.5 14.5 17 14.5 17" stroke="#D4AF37" strokeWidth="0.8" fill="none"/>
+                {/* Decorative dots */}
+                <circle cx="10" cy="9.5" r="0.4" fill="#E07856"/>
+                <circle cx="14" cy="9.5" r="0.4" fill="#E07856"/>
+                <circle cx="10" cy="12.5" r="0.4" fill="#E07856"/>
+                <circle cx="14" cy="12.5" r="0.4" fill="#E07856"/>
+                <circle cx="10" cy="15.5" r="0.4" fill="#E07856"/>
+                <circle cx="14" cy="15.5" r="0.4" fill="#E07856"/>
               </svg>
               <span className="text-2xl font-bold text-neutral-brown-900 font-heading">KaleeReads</span>
             </Link>

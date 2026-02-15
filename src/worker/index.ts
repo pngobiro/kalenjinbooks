@@ -11,6 +11,7 @@ import { handleAuthRequest } from './handlers/auth';
 import { handleAdminRequest } from './handlers/admin';
 import { handleAnalyticsRequest } from './handlers/analytics';
 import { handleHardCopyRequest } from './handlers/hardcopy';
+import { handleBlogRequest } from './handlers/blog';
 
 /**
  * Handle image proxy requests to serve R2 images with CORS headers
@@ -201,9 +202,20 @@ export default {
                     return handleBooksRequest(request as WorkerRequest, env, ctx);
                 }
 
+                // Hard copy requests - must come BEFORE /api/authors check
+                if (path.startsWith('/api/authors/hard-copy-requests') || path.startsWith('/api/hard-copy-requests')) {
+                    console.log('[Worker] Routing to hard copy handler');
+                    return handleHardCopyRequest(request as WorkerRequest, env, ctx);
+                }
+
                 if (path.startsWith('/api/authors')) {
                     console.log('[Worker] Routing to authors handler');
                     return handleAuthorsRequest(request as WorkerRequest, env, ctx);
+                }
+
+                if (path.startsWith('/api/blog')) {
+                    console.log('[Worker] Routing to blog handler');
+                    return handleBlogRequest(request as WorkerRequest, env, ctx);
                 }
 
                 if (path.startsWith('/api/upload')) {
@@ -224,12 +236,6 @@ export default {
                     return handleAnalyticsRequest(request as WorkerRequest, env, ctx);
                 }
 
-                // Hard copy requests
-                if (path.startsWith('/api/authors/hard-copy-requests') || path.startsWith('/api/hard-copy-requests')) {
-                    console.log('[Worker] Routing to hard copy handler');
-                    return handleHardCopyRequest(request as WorkerRequest, env, ctx);
-                }
-
                 // Image proxy endpoint to serve R2 images with CORS headers
                 if (path.startsWith('/api/images/')) {
                     return handleImageProxy(request, env, path);
@@ -247,6 +253,24 @@ export default {
                         timestamp: new Date().toISOString(),
                         version: '1.0.0',
                     });
+                }
+
+                // Test email endpoint
+                if (path === '/api/test-email' && method === 'POST') {
+                    console.log('[Worker] Test email endpoint');
+                    try {
+                        const { sendEmail, createApprovalEmail } = await import('./utils/email');
+                        const testEmail = createApprovalEmail('Test User', 'pngobiro@gmail.com');
+                        const sent = await sendEmail(testEmail, env);
+                        return successResponse({
+                            message: sent ? 'Test email sent successfully' : 'Email sending failed',
+                            sent,
+                            to: 'pngobiro@gmail.com'
+                        });
+                    } catch (error) {
+                        console.error('[Worker] Test email error:', error);
+                        return errorResponse('Failed to send test email: ' + error, HttpStatus.INTERNAL_SERVER_ERROR);
+                    }
                 }
 
                 // 404 for unknown routes

@@ -16,6 +16,10 @@ export interface Env {
     CACHE: KVNamespace;
     SESSION: KVNamespace;
 
+    // Email Workers (Cloudflare Email Sending)
+    EMAIL?: any; // EmailSender binding
+    EMAIL_FROM?: string; // From address
+
     // Environment Variables
     NEXTAUTH_URL: string;
     NEXTAUTH_SECRET: string;

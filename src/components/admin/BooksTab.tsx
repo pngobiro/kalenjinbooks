@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Search, Filter, Eye, Edit, Ban, Power, Star, Book } from 'lucide-react';
 
 interface BookData {
@@ -40,6 +41,7 @@ export default function BooksTab({
   onToggleBookStatus, 
   onToggleFeatured 
 }: BooksTabProps) {
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
 
   return (
@@ -169,9 +171,6 @@ export default function BooksTab({
                         >
                           <Eye size={16} />
                         </button>
-                        <button className="p-2 text-neutral-brown-600 hover:bg-neutral-brown-100 rounded">
-                          <Eye size={16} />
-                        </button>
                         <button
                           onClick={() => onToggleFeatured(book.id, book.isFeatured)}
                           className={`p-2 rounded transition-colors ${
@@ -194,7 +193,11 @@ export default function BooksTab({
                         >
                           {book.isActive !== false ? <Ban size={16} /> : <Power size={16} />}
                         </button>
-                        <button className="p-2 text-primary hover:bg-primary/10 rounded">
+                        <button
+                          onClick={() => router.push(`/dashboard/author/books/${book.id}/edit`)}
+                          className="p-2 text-primary hover:bg-primary/10 rounded"
+                          title="Edit Book"
+                        >
                           <Edit size={16} />
                         </button>
                       </div>

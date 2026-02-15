@@ -134,8 +134,17 @@ async function listBooks(request: WorkerRequest, env: Env): Promise<Response> {
 
     // Build where clause
     const where: any = {
-        isPublished: true,
+        isActive: true, // Only show active (not disabled) books
     };
+
+    // For public listings, only show published books
+    // For author's own books, show all their books (published and unpublished)
+    if (!authorId) {
+        where.isPublished = true;
+    } else {
+        // If filtering by authorId, show all books (including drafts) for that author
+        // This allows authors to see their own unpublished books
+    }
 
     if (search) {
         where.OR = [
@@ -211,6 +220,12 @@ async function getSecureBookView(request: WorkerRequest, env: Env, bookId: strin
 
         if (!book) {
             return errorResponse('Book not found', HttpStatus.NOT_FOUND, ErrorCode.RESOURCE_NOT_FOUND);
+        }
+
+        // Check if book is active
+        if (!book.isActive) {
+            console.log('[SecureView] Book is disabled');
+            return errorResponse('Book not available', HttpStatus.NOT_FOUND, ErrorCode.RESOURCE_NOT_FOUND);
         }
 
         // Check if user has permission (admin or book author)
@@ -315,7 +330,13 @@ async function getBook(request: WorkerRequest, env: Env, bookId: string): Promis
     const cached = await getCached<any>(env.CACHE, cacheKey);
     
     if (cached) {
-        return successResponse(cached);
+        // Check if book is active for public access
+        // Skip cache if book is disabled (unless user is admin/author)
+        if (!cached.isActive) {
+            // Don't use cache for disabled books - need to check user permissions
+        } else {
+            return successResponse(cached);
+        }
     }
 
     const prisma = createD1PrismaClient(env.DB);
@@ -337,8 +358,21 @@ async function getBook(request: WorkerRequest, env: Env, bookId: string): Promis
         return errorResponse('Book not found', HttpStatus.NOT_FOUND, ErrorCode.RESOURCE_NOT_FOUND);
     }
 
-    // Cache the book data
-    await setCached(env.CACHE, cacheKey, book, CacheTTL.TEN_MINUTES);
+    // Check if book is disabled
+    if (!book.isActive) {
+        // Only allow access if user is admin or the book's author
+        const userId = request.ctx?.userId;
+        const userRole = request.ctx?.role;
+        
+        if (!userId || (userRole !== 'ADMIN' && book.authorId !== userId)) {
+            return errorResponse('Book not found', HttpStatus.NOT_FOUND, ErrorCode.RESOURCE_NOT_FOUND);
+        }
+    }
+
+    // Cache the book data only if active
+    if (book.isActive) {
+        await setCached(env.CACHE, cacheKey, book, CacheTTL.TEN_MINUTES);
+    }
 
     return successResponse(book);
 }
