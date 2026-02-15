@@ -25,6 +25,12 @@ declare global {
 export function GoogleSignInButton({ onSuccess, onError, disabled = false }: GoogleSignInButtonProps) {
     const buttonRef = useRef<HTMLDivElement>(null);
     const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+    
+    // Debug logging
+    useEffect(() => {
+        console.log('Google Client ID:', clientId ? 'Found' : 'Not found');
+        console.log('All NEXT_PUBLIC env vars:', Object.keys(process.env).filter(k => k.startsWith('NEXT_PUBLIC')));
+    }, [clientId]);
 
     useEffect(() => {
         if (!clientId) {

@@ -68,6 +68,8 @@ async function handleImageProxy(request: Request, env: Env, path: string): Promi
             'http://127.0.0.1:3001',
             'https://kalenjin-books.dspop.info',
             'https://kalenjinbooks.com',
+            'https://kalenjinbooks.pages.dev',
+            'https://ab336e39.kalenjinbooks.pages.dev',
         ];
 
         if (origin && allowedOrigins.includes(origin)) {
@@ -290,6 +292,8 @@ export default {
                     'http://127.0.0.1:3001',
                     'https://kalenjin-books.dspop.info',
                     'https://kalenjinbooks.com',
+                    'https://kalenjinbooks.pages.dev',
+                    'https://ab336e39.kalenjinbooks.pages.dev',
                 ],
                 allowedMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
                 allowedHeaders: ['Content-Type', 'Authorization'],
