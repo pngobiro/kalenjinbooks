@@ -45,13 +45,13 @@ export default function BlogPostPage({ params }: { params: { id: string } }) {
                 router.push('/blogs');
                 return;
             }
-            const data = await response.json();
+            const data = await response.json() as BlogPost;
             setPost(data);
 
             // Fetch related posts by same author
             const relatedResponse = await fetch(`/api/blog/posts?authorId=${data.author.id}&published=true&limit=3`);
-            const relatedData = await relatedResponse.json();
-            setRelatedPosts(relatedData.posts.filter((p: any) => p.id !== params.id).slice(0, 3));
+            const relatedData = await relatedResponse.json() as { posts: BlogPost[] };
+            setRelatedPosts(relatedData.posts.filter((p: BlogPost) => p.id !== params.id).slice(0, 3));
         } catch (error) {
             console.error('Error fetching post:', error);
             router.push('/blogs');
