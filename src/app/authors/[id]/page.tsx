@@ -7,30 +7,6 @@ import Link from 'next/link';
 import { getAuthorById, Author } from '@/lib/api/authors';
 
 interface AuthorWithBooks extends Author {
-  dateOfBirth?: string;
-  nationality?: string;
-  location?: string;
-  phoneNumber?: string;
-  education?: string;
-  occupation?: string;
-  writingExperience?: string;
-  previousPublications?: string;
-  awards?: string;
-  genres?: string;
-  languages?: string;
-  writingStyle?: string;
-  inspirations?: string;
-  targetAudience?: string;
-  publishingGoals?: string;
-  website?: string;
-  twitter?: string;
-  facebook?: string;
-  instagram?: string;
-  linkedin?: string;
-  totalEarnings?: number;
-  status?: string;
-  appliedAt?: string;
-  approvedAt?: string;
   books?: Array<{
     id: string;
     title: string;
