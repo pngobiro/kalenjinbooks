@@ -1,5 +1,7 @@
 'use client';
 
+export const runtime = 'edge';
+
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { ArrowLeft, BookOpen, Star, User, Book, Calendar, MapPin, Globe, Award, GraduationCap, Briefcase, Heart, Target, Users, Twitter, Facebook, Instagram, Linkedin, ExternalLink, Sparkles } from 'lucide-react';

@@ -1,5 +1,7 @@
 'use client';
 
+export const runtime = 'edge';
+
 import { Star, Book, ArrowLeft, User, ChevronRight, Sparkles, FileText, Calendar, Globe } from 'lucide-react';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';

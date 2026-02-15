@@ -9,6 +9,8 @@ import BlogCard from '@/components/blog/BlogCard';
 import { formatBlogDate, calculateReadTime } from '@/lib/blog-utils';
 import KaleeReadsLogo from '@/components/KaleeReadsLogo';
 
+export const runtime = 'edge';
+
 interface BlogPost {
     id: string;
     title: string;
