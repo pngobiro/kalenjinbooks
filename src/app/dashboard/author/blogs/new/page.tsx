@@ -48,7 +48,7 @@ export default function NewBlogPostPage() {
         );
 
         if (response.ok) {
-          const result = await response.json();
+          const result = await response.json() as { data: { id: string } };
           setAuthorId(result.data.id);
         } else {
           router.push('/login');
@@ -129,7 +129,7 @@ export default function NewBlogPostPage() {
         });
 
         if (imageResponse.ok) {
-          const imageData = await imageResponse.json();
+          const imageData = await imageResponse.json() as { imageUrl: string };
           coverImageUrl = imageData.imageUrl;
         }
       }
@@ -189,7 +189,7 @@ export default function NewBlogPostPage() {
         });
 
         if (imageResponse.ok) {
-          const imageData = await imageResponse.json();
+          const imageData = await imageResponse.json() as { imageUrl: string };
           coverImageUrl = imageData.imageUrl;
         }
       }

@@ -162,19 +162,25 @@ async function uploadImage(request: WorkerRequest, env: Env): Promise<Response> 
         const { getPublicUrl } = await import('../../lib/cloudflare-r2');
         const url = getPublicUrl(fileKey);
 
-        // If blog image, save to database
+        // If blog image, save to database (if blogPostId is provided)
         if (type === 'blog') {
-            const { createD1PrismaClient } = await import('../../lib/db/d1-client');
-            const prisma = createD1PrismaClient(env.DB);
+            const blogPostId = formData.get('blogPostId') as string | null;
+            
+            if (blogPostId) {
+                const { createD1PrismaClient } = await import('../../lib/db/d1-client');
+                const prisma = createD1PrismaClient(env.DB);
 
-            const blogImage = await prisma.blogImage.create({
-                data: {
-                    imageKey: fileKey,
-                },
-            });
+                await prisma.blogImage.create({
+                    data: {
+                        imageKey: fileKey,
+                        blogPost: {
+                            connect: { id: blogPostId }
+                        }
+                    },
+                });
+            }
 
             return successResponse({
-                id: blogImage.id,
                 imageKey: fileKey,
                 url,
             });

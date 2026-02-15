@@ -36,7 +36,7 @@ export default function BookDetailPage({ params }: { params: Promise<{ id: strin
         fetchBookById(bookId),
         fetchBooks({ limit: 4 })
       ]);
-      setBook(bookResponse.data);
+      setBook(bookResponse.data || null);
       setRelatedBooks(relatedResponse.data?.filter((b: BookType) => b.id !== bookId) || []);
     } catch (error) {
       console.error('Error loading book:', error);

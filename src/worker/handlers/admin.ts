@@ -79,11 +79,6 @@ export async function handleAdminRequest(
         return await makeAuthorAdmin(request, env);
     }
 
-    // GET /api/admin/books - List all books (admin only)
-    if (path === '/api/admin/books' && method === 'GET') {
-        return await listAllBooks(request, env);
-    }
-
     // GET /api/admin/books/pending - List books pending approval
     if (path === '/api/admin/books/pending' && method === 'GET') {
         console.log('[AdminHandler] Routing to listPendingBooks');

@@ -87,7 +87,14 @@ export default function RevenuePage() {
         throw new Error('Failed to fetch revenue data');
       }
 
-      const result = await response.json();
+      const result = await response.json() as { 
+        data: {
+          stats: RevenueStats;
+          authorEarnings: AuthorEarning[];
+          recentTransactions: Transaction[];
+          recentPayouts: Payout[];
+        }
+      };
       const data = result.data;
       
       setStats(data.stats);

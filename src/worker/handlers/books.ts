@@ -361,8 +361,8 @@ async function getBook(request: WorkerRequest, env: Env, bookId: string): Promis
     // Check if book is disabled
     if (!book.isActive) {
         // Only allow access if user is admin or the book's author
-        const userId = request.ctx?.userId;
-        const userRole = request.ctx?.role;
+        const userId = request.ctx?.user?.id;
+        const userRole = request.ctx?.user?.role;
         
         if (!userId || (userRole !== 'ADMIN' && book.authorId !== userId)) {
             return errorResponse('Book not found', HttpStatus.NOT_FOUND, ErrorCode.RESOURCE_NOT_FOUND);

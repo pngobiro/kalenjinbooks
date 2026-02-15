@@ -73,7 +73,7 @@ export default function HardCopyRequestsPage() {
       );
 
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+        const errorData = await response.json().catch(() => ({ error: 'Unknown error' })) as { error?: string };
         console.error('API Error:', response.status, errorData);
         throw new Error(errorData.error || `Failed to fetch requests (${response.status})`);
       }

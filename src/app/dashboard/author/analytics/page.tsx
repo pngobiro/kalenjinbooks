@@ -77,7 +77,7 @@ export default function AuthorAnalyticsPage() {
         throw new Error('Failed to fetch analytics');
       }
 
-      const result = await response.json();
+      const result = await response.json() as { data: AnalyticsData };
       setData(result.data);
     } catch (err) {
       console.error('Error fetching analytics:', err);

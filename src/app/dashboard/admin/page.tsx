@@ -18,6 +18,9 @@ import { Author, BookData, PendingBook, Stats } from '@/types/admin';
 
 type TabType = 'overview' | 'authors' | 'applications' | 'rejected' | 'books' | 'pending-books';
 
+// Force dynamic rendering for this page
+export const dynamic = 'force-dynamic';
+
 export default function AdminDashboardPage() {
   const searchParams = useSearchParams();
   const router = useRouter();

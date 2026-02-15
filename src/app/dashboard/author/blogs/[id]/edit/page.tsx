@@ -24,7 +24,13 @@ export default function EditBlogPostPage({ params }: { params: { id: string } })
     const fetchPost = async () => {
         try {
             const response = await fetch(`/api/blog/posts/${params.id}`);
-            const post = await response.json();
+            const post = await response.json() as {
+                title: string;
+                content: string;
+                excerpt?: string;
+                coverImage?: string;
+                isPublished: boolean;
+            };
 
             setTitle(post.title);
             setContent(post.content);
@@ -49,7 +55,7 @@ export default function EditBlogPostPage({ params }: { params: { id: string } })
             body: formData,
         });
 
-        const data = await response.json();
+        const data = await response.json() as { url: string };
         return data.url;
     };
 

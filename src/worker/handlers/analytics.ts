@@ -74,7 +74,7 @@ async function trackEvent(request: WorkerRequest, env: Env): Promise<Response> {
         // Create analytics event
         const event = await prisma.analyticsEvent.create({
             data: {
-                eventType,
+                eventType: eventType as any,
                 bookId,
                 authorId,
                 userId,

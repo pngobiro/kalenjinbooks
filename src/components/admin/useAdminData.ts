@@ -8,6 +8,11 @@ interface Author {
   status: 'PENDING' | 'APPROVED' | 'REJECTED';
   totalEarnings: number | null;
   createdAt: string;
+  appliedAt: string;
+  updatedAt: string;
+  approvedAt?: string | null;
+  rejectionReason?: string;
+  isActive?: boolean;
   user: {
     id: string;
     email: string;

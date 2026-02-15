@@ -75,7 +75,13 @@ export default function AuthorEarningsPage() {
         throw new Error('Failed to fetch earnings data');
       }
 
-      const result = await response.json();
+      const result = await response.json() as {
+        data: {
+          earnings: EarningsData;
+          sales: Sale[];
+          payouts: Payout[];
+        }
+      };
       const data = result.data;
       
       setEarnings(data.earnings);

@@ -23,7 +23,7 @@ export async function getPendingAuthors(): Promise<{ authors: PendingAuthor[] }>
         throw new Error('Failed to fetch pending authors');
     }
 
-    const json = await response.json();
+    const json = await response.json() as { data: { authors: PendingAuthor[] } };
     return json.data;
 }
 

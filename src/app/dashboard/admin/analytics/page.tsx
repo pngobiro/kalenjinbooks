@@ -60,6 +60,9 @@ interface AnalyticsData {
 
 const COLORS = ['#8B4513', '#D2691E', '#CD853F', '#DEB887', '#F4A460'];
 
+// Force dynamic rendering for this page
+export const dynamic = 'force-dynamic';
+
 export default function AnalyticsPage() {
   const [data, setData] = useState<AnalyticsData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -95,7 +98,7 @@ export default function AnalyticsPage() {
         throw new Error('Failed to fetch analytics');
       }
 
-      const result = await response.json();
+      const result = await response.json() as { data: AnalyticsData };
       setData(result.data);
     } catch (err) {
       console.error('Error fetching analytics:', err);

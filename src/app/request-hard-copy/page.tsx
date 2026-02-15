@@ -43,7 +43,7 @@ function RequestHardCopyContent() {
       });
 
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({ error: 'Failed to submit request' }));
+        const errorData = await response.json().catch(() => ({ error: 'Failed to submit request' })) as { error?: string };
         throw new Error(errorData.error || 'Failed to submit request');
       }
 
