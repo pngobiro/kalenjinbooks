@@ -38,7 +38,7 @@ export default function BlogsPage() {
         setLoading(true);
         try {
             const response = await fetch('/api/blog/posts?published=true');
-            const data = await response.json();
+            const data = await response.json() as { posts: BlogPost[] };
             setPosts(data.posts || []);
         } catch (error) {
             console.error('Error fetching posts:', error);
