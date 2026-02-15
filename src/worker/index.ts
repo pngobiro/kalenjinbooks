@@ -11,7 +11,6 @@ import { handleAuthRequest } from './handlers/auth';
 import { handleAdminRequest } from './handlers/admin';
 import { handleAnalyticsRequest } from './handlers/analytics';
 import { handleHardCopyRequest } from './handlers/hardcopy';
-import { handleBlogRequest } from './handlers/blog';
 
 /**
  * Handle image proxy requests to serve R2 images with CORS headers
@@ -211,11 +210,6 @@ export default {
                 if (path.startsWith('/api/authors')) {
                     console.log('[Worker] Routing to authors handler');
                     return handleAuthorsRequest(request as WorkerRequest, env, ctx);
-                }
-
-                if (path.startsWith('/api/blog')) {
-                    console.log('[Worker] Routing to blog handler');
-                    return handleBlogRequest(request as WorkerRequest, env, ctx);
                 }
 
                 if (path.startsWith('/api/upload')) {

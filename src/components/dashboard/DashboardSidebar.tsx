@@ -9,7 +9,6 @@ import { AuthorProfileHeader } from '@/components/author/AuthorProfileHeader';
 const navigation = [
     { name: 'Dashboard', href: '/dashboard/author', icon: BarChart3 },
     { name: 'My Books', href: '/dashboard/author/books', icon: Book },
-    { name: 'Blogs', href: '/dashboard/author/blogs', icon: FileText },
     { name: 'Hard Copy Requests', href: '/dashboard/author/requests', icon: Package },
     { name: 'Earnings', href: '/dashboard/author/earnings', icon: DollarSign },
     { name: 'Analytics', href: '/dashboard/author/analytics', icon: TrendingUp },

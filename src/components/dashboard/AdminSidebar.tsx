@@ -14,7 +14,6 @@ const navigation = [
     { name: 'Pending Books', tab: 'pending-books', icon: Book },
     { name: 'Analytics', href: '/dashboard/admin/analytics', icon: TrendingUp },
     { name: 'Revenue', href: '/dashboard/admin/revenue', icon: DollarSign },
-    { name: 'Content', href: '/dashboard/admin/content', icon: FileText },
     { name: 'Settings', href: '/dashboard/admin/settings', icon: Settings },
 ];
 
