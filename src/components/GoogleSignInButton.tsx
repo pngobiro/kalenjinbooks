@@ -24,7 +24,8 @@ declare global {
 
 export function GoogleSignInButton({ onSuccess, onError, disabled = false }: GoogleSignInButtonProps) {
     const buttonRef = useRef<HTMLDivElement>(null);
-    const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+    // Google Client ID is public and safe to hardcode
+    const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || '465353510096-rsifs9pc2r1cesh7uucgq2pqs2ne1392.apps.googleusercontent.com';
     
     // Debug logging
     useEffect(() => {

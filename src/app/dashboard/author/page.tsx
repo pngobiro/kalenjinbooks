@@ -180,7 +180,7 @@ export default function AuthorDashboardPage() {
     // Google Sign In Init
     if (typeof window !== 'undefined' && window.google) {
       window.google.accounts.id.initialize({
-        client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || "Add-Your-Client-ID-Here",
+        client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || '465353510096-rsifs9pc2r1cesh7uucgq2pqs2ne1392.apps.googleusercontent.com',
         callback: (response: any) => {
           googleLogin(response.credential);
         }
