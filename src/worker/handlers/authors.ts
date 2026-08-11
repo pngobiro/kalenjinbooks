@@ -158,10 +158,17 @@ async function applyAsAuthor(request: WorkerRequest, env: Env): Promise<Response
                 additionalInfo: formData.additionalInfo,
                 agreeToMarketing: formData.agreeToMarketing || false,
                 
-                // Status
-                status: 'PENDING',
+                // Status - auto-approve
+                status: 'APPROVED',
                 appliedAt: new Date(),
+                approvedAt: new Date(),
             },
+        });
+
+        // Update user role to AUTHOR
+        await prisma.user.update({
+            where: { id: user.id },
+            data: { role: 'AUTHOR' },
         });
 
         // Clear any cached author lists
@@ -169,11 +176,12 @@ async function applyAsAuthor(request: WorkerRequest, env: Env): Promise<Response
         await invalidateCacheByPrefix(env.CACHE, CachePrefix.AUTHORS);
 
         return successResponse({
-            message: 'Author application submitted successfully',
+            message: 'Author account created successfully',
             author: {
                 id: author.id,
                 status: author.status,
                 appliedAt: author.appliedAt,
+                approvedAt: author.approvedAt,
             },
             user: {
                 id: user.id,

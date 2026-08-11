@@ -352,80 +352,8 @@ export default function AuthorDashboardPage() {
 
   // Show author dashboard if user has author profile
   if (user && authorStatus) {
-    // Show status notification if author status is available
-    if (authorStatus) {
-      if (authorStatus.status === 'PENDING') {
-        return (
-          <div className="min-h-screen bg-neutral-cream flex items-center justify-center p-4">
-            <SuccessMessage />
-            <div className="max-w-md w-full bg-white rounded-2xl p-8 shadow-lg text-center">
-              <div className="w-20 h-20 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Clock size={40} className="text-yellow-600" />
-              </div>
-              <h2 className="text-2xl font-bold text-neutral-brown-900 mb-2">Application Pending</h2>
-              <p className="text-neutral-brown-600 mb-6">
-                {authorStatus.statusMessage}
-              </p>
-              <div className="bg-neutral-cream rounded-lg p-4 mb-6">
-                <p className="text-sm text-neutral-brown-600">
-                  <strong>Applied:</strong> {new Date(authorStatus.appliedAt).toLocaleDateString()}
-                </p>
-              </div>
-              <button
-                onClick={() => window.location.reload()}
-                className="text-primary hover:underline text-sm font-medium"
-              >
-                Check Status Again
-              </button>
-            </div>
-          </div>
-        );
-      }
-
-      if (authorStatus.status === 'REJECTED') {
-        return (
-          <div className="min-h-screen bg-neutral-cream flex items-center justify-center p-4">
-            <SuccessMessage />
-            <div className="max-w-md w-full bg-white rounded-2xl p-8 shadow-lg text-center">
-              <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <XCircle size={40} className="text-red-600" />
-              </div>
-              <h2 className="text-2xl font-bold text-neutral-brown-900 mb-2">Application Not Approved</h2>
-              <p className="text-neutral-brown-600 mb-4">
-                We're sorry, but your author application was not approved at this time.
-              </p>
-              {authorStatus.rejectionReason && (
-                <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6 text-left">
-                  <h3 className="font-semibold text-red-900 mb-2">Reason:</h3>
-                  <p className="text-red-700 text-sm">{authorStatus.rejectionReason}</p>
-                </div>
-              )}
-              <div className="bg-neutral-cream rounded-lg p-4 mb-6">
-                <p className="text-sm text-neutral-brown-600">
-                  <strong>Applied:</strong> {new Date(authorStatus.appliedAt).toLocaleDateString()}
-                </p>
-              </div>
-              <div className="space-y-3">
-                <Link
-                  href="/dashboard/author/register"
-                  className="block w-full bg-primary hover:bg-primary-dark text-white font-semibold px-4 py-2 rounded-lg transition-colors"
-                >
-                  Apply Again
-                </Link>
-                <Link
-                  href="/contact"
-                  className="block w-full text-primary hover:underline text-sm font-medium"
-                >
-                  Contact Support
-                </Link>
-              </div>
-            </div>
-          </div>
-        );
-      }
-
-      // If approved but disabled by admin
-      if (authorStatus.status === 'APPROVED' && !authorStatus.isActive) {
+    // If approved but disabled by admin
+    if (authorStatus.status === 'APPROVED' && !authorStatus.isActive) {
         return (
           <div className="min-h-screen bg-neutral-cream flex items-center justify-center p-4">
             <SuccessMessage />

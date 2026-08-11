@@ -915,48 +915,32 @@ export default function AuthorRegisterPage() {
           </div>
         )}
 
-        {/* Step 3: Pending Approval */}
+        {/* Step 3: Success */}
         {step === 'pending' && (
           <div className="bg-white rounded-2xl p-8 shadow-lg text-center">
-            <div className="w-20 h-20 bg-accent-gold/10 rounded-full flex items-center justify-center mx-auto mb-6">
-              <Clock size={40} className="text-accent-gold" />
+            <div className="w-20 h-20 bg-accent-green/10 rounded-full flex items-center justify-center mx-auto mb-6">
+              <CheckCircle size={40} className="text-accent-green" />
             </div>
-            <h1 className="text-3xl font-bold text-neutral-brown-900 font-heading mb-4">Application Submitted!</h1>
+            <h1 className="text-3xl font-bold text-neutral-brown-900 font-heading mb-4">Author Account Created!</h1>
             <p className="text-neutral-brown-600 mb-8 max-w-md mx-auto">
-              Thank you for applying to become an author on KaleeReads. Our team will review your application and get back to you within 24-48 hours.
+              Your author account has been created successfully. You can now start uploading your books and writing blog posts.
             </p>
 
-            <div className="bg-neutral-cream rounded-xl p-6 mb-8">
-              <h3 className="font-bold text-neutral-brown-900 mb-4">What happens next?</h3>
-              <ul className="space-y-3 text-sm text-neutral-brown-600 text-left">
-                <li className="flex items-start gap-3">
-                  <div className="w-6 h-6 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <span className="text-primary font-bold text-xs">1</span>
-                  </div>
-                  <span>Our team reviews your application</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <div className="w-6 h-6 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <span className="text-primary font-bold text-xs">2</span>
-                  </div>
-                  <span>You'll receive an email notification about your status</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <div className="w-6 h-6 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <span className="text-primary font-bold text-xs">3</span>
-                  </div>
-                  <span>Once approved, you can start uploading your books!</span>
-                </li>
-              </ul>
+            <div className="flex items-center justify-center gap-4">
+              <Link
+                href="/dashboard/author/books/new"
+                className="inline-flex items-center gap-2 bg-primary hover:bg-primary-dark text-white font-semibold px-6 py-3 rounded-full transition-all"
+              >
+                Upload Your First Book
+                <ArrowRight size={18} />
+              </Link>
+              <Link
+                href="/dashboard/author"
+                className="inline-flex items-center gap-2 text-primary hover:text-primary-dark font-semibold"
+              >
+                Go to Dashboard
+              </Link>
             </div>
-
-            <Link
-              href="/"
-              className="inline-flex items-center gap-2 text-primary hover:text-primary-dark font-semibold"
-            >
-              Return to Homepage
-              <ArrowRight size={18} />
-            </Link>
           </div>
         )}
       </div>

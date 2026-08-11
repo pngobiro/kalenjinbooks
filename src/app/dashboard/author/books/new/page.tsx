@@ -194,11 +194,6 @@ export default function NewBookPage() {
           {error && (
             <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
               <p className="text-red-600 font-medium">{error}</p>
-              {error.includes('approved') && (
-                <p className="text-red-500 text-sm mt-2">
-                  Your author account needs to be approved by an admin before you can upload books.
-                </p>
-              )}
             </div>
           )}
 

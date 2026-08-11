@@ -3,20 +3,18 @@
 import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { 
-  Users, Book, TrendingUp, UserCheck, 
+  Users, Book, TrendingUp, 
   Star, Eye, Edit, CheckCircle, XCircle, Clock,
   Search, Filter, MoreVertical, Ban, Power
 } from 'lucide-react';
 import AdminOverview from '@/components/admin/AdminOverview';
 import PendingBooksTab from '@/components/admin/PendingBooksTab';
-import ApplicationsTab from '@/components/admin/ApplicationsTab';
-import RejectedTab from '@/components/admin/RejectedTab';
 import AuthorsTab from '@/components/admin/AuthorsTab';
 import BooksTab from '@/components/admin/BooksTab';
 import { useAdminData } from '@/components/admin/useAdminData';
 import { Author, BookData, PendingBook, Stats } from '@/types/admin';
 
-type TabType = 'overview' | 'authors' | 'applications' | 'rejected' | 'books' | 'pending-books';
+type TabType = 'overview' | 'authors' | 'books' | 'pending-books';
 
 function AdminDashboardContent() {
   const searchParams = useSearchParams();
@@ -342,8 +340,6 @@ function AdminDashboardContent() {
 
   const tabs: Array<{id: TabType, label: string, icon: any, badge?: number}> = [
     { id: 'overview', label: 'Overview', icon: TrendingUp },
-    { id: 'applications', label: 'Applications', icon: UserCheck, badge: stats.pendingApplications },
-    { id: 'rejected', label: 'Rejected', icon: XCircle, badge: rejectedAuthors.length },
     { id: 'authors', label: 'Authors', icon: Users },
     { id: 'books', label: 'Books', icon: Book },
     { id: 'pending-books', label: 'Pending Books', icon: Clock, badge: stats.pendingBooks },
@@ -413,11 +409,8 @@ function AdminDashboardContent() {
       {activeTab === 'overview' && (
         <AdminOverview
           stats={stats}
-          pendingAuthors={pendingAuthors}
           pendingBooks={pendingBooks}
           allBooks={allBooks}
-          onApproveAuthor={handleApproveAuthor}
-          onRejectAuthor={handleRejectAuthor}
           onApproveBook={handleApproveBook}
           onRejectBook={handleRejectBook}
           onToggleFeatured={handleToggleFeatured}
@@ -430,20 +423,6 @@ function AdminDashboardContent() {
           pendingBooks={pendingBooks}
           onApproveBook={handleApproveBook}
           onRejectBook={handleRejectBook}
-        />
-      )}
-
-      {activeTab === 'applications' && (
-        <ApplicationsTab
-          pendingAuthors={pendingAuthors}
-          onApproveAuthor={handleApproveAuthor}
-          onRejectAuthor={handleRejectAuthor}
-        />
-      )}
-
-      {activeTab === 'rejected' && (
-        <RejectedTab
-          rejectedAuthors={rejectedAuthors}
         />
       )}
 

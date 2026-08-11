@@ -2,7 +2,7 @@
 
 import { Users, Book, Clock, Star, CheckCircle, XCircle } from 'lucide-react';
 
-type TabType = 'overview' | 'authors' | 'applications' | 'rejected' | 'books' | 'pending-books';
+type TabType = 'overview' | 'authors' | 'books' | 'pending-books';
 
 interface Stats {
   totalAuthors: number;
@@ -44,11 +44,8 @@ interface BookData {
 
 interface AdminOverviewProps {
   stats: Stats;
-  pendingAuthors: Author[];
   pendingBooks: PendingBook[];
   allBooks: BookData[];
-  onApproveAuthor: (authorId: string) => void;
-  onRejectAuthor: (authorId: string) => void;
   onApproveBook: (bookId: string) => void;
   onRejectBook: (bookId: string, reason: string) => void;
   onToggleFeatured: (bookId: string, isFeatured: boolean) => void;
@@ -57,11 +54,8 @@ interface AdminOverviewProps {
 
 export default function AdminOverview({
   stats,
-  pendingAuthors,
   pendingBooks,
   allBooks,
-  onApproveAuthor,
-  onRejectAuthor,
   onApproveBook,
   onRejectBook,
   onToggleFeatured,
@@ -70,7 +64,7 @@ export default function AdminOverview({
   return (
     <div className="space-y-8">
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <div className="bg-white rounded-xl p-6 shadow-sm">
           <div className="flex items-center justify-between mb-4">
             <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
@@ -79,21 +73,6 @@ export default function AdminOverview({
           </div>
           <p className="text-sm text-neutral-brown-600 mb-1">Total Authors</p>
           <p className="text-2xl font-bold text-neutral-brown-900">{stats.totalAuthors}</p>
-        </div>
-
-        <div className="bg-white rounded-xl p-6 shadow-sm">
-          <div className="flex items-center justify-between mb-4">
-            <div className="w-12 h-12 bg-accent-gold/10 rounded-lg flex items-center justify-center">
-              <Clock className="text-accent-gold" size={24} />
-            </div>
-            {stats.pendingApplications > 0 && (
-              <span className="bg-red-500 text-white text-xs px-2 py-1 rounded-full">
-                {stats.pendingApplications}
-              </span>
-            )}
-          </div>
-          <p className="text-sm text-neutral-brown-600 mb-1">Pending Applications</p>
-          <p className="text-2xl font-bold text-neutral-brown-900">{stats.pendingApplications}</p>
         </div>
 
         <div className="bg-white rounded-xl p-6 shadow-sm">
@@ -133,46 +112,7 @@ export default function AdminOverview({
       </div>
 
       {/* Quick Actions */}
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-        {/* Recent Applications */}
-        <div className="bg-white rounded-xl p-6 shadow-sm">
-          <h2 className="text-xl font-bold text-neutral-brown-900 mb-4">Recent Applications</h2>
-          <div className="space-y-3">
-            {pendingAuthors.length > 0 ? (
-              pendingAuthors.slice(0, 3).map((author) => (
-                <div key={author.id} className="flex items-center justify-between p-3 bg-neutral-cream rounded-lg">
-                  <div>
-                    <p className="font-medium text-neutral-brown-900">{author.user.name || 'Unknown'}</p>
-                    <p className="text-sm text-neutral-brown-600">{author.user.email}</p>
-                  </div>
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => onApproveAuthor(author.id)}
-                      className="p-2 text-accent-green hover:bg-accent-green/10 rounded transition-colors"
-                    >
-                      <CheckCircle size={16} />
-                    </button>
-                    <button
-                      onClick={() => onRejectAuthor(author.id)}
-                      className="p-2 text-red-500 hover:bg-red-50 rounded transition-colors"
-                    >
-                      <XCircle size={16} />
-                    </button>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <p className="text-neutral-brown-500 text-center py-4">No pending applications</p>
-            )}
-          </div>
-          <button
-            onClick={() => onSetActiveTab('applications' as any)}
-            className="block w-full text-center text-primary hover:text-primary-dark font-medium mt-4"
-          >
-            View All Applications →
-          </button>
-        </div>
-
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Books Pending Approval */}
         <div className="bg-white rounded-xl p-6 shadow-sm">
           <h2 className="text-xl font-bold text-neutral-brown-900 mb-4">Books Pending Approval</h2>
