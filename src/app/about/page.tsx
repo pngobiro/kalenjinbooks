@@ -1,8 +1,9 @@
 'use client';
 
-import { Users, Heart, Sparkles, ArrowLeft, Book, Globe, Award, Star, ArrowRight } from 'lucide-react';
+import { Users, Heart, Sparkles, Book, Globe, Award, Star, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
-import Image from 'next/image';
+import Navbar from '@/components/layout/Navbar';
+import Footer from '@/components/layout/Footer';
 
 const stats = [
   { number: "500+", label: "Books Published" },
@@ -41,45 +42,7 @@ const values = [
 export default function AboutPage() {
   return (
     <div className="min-h-screen bg-neutral-cream">
-      {/* Navigation */}
-      <nav className="bg-white/95 backdrop-blur-sm sticky top-0 z-50 border-b border-neutral-brown-200 shadow-sm">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="flex items-center justify-between h-20">
-            <Link href="/" className="flex items-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" width="44" height="44">
-                {/* Traditional Kalenjin Calabash */}
-                <path d="M12 3C10 3 8.5 4 8 5.5C7.5 7 7 9 7 11C7 13.5 7.5 16 8.5 18C9.5 20 11 21 12 21C13 21 14.5 20 15.5 18C16.5 16 17 13.5 17 11C17 9 16.5 7 16 5.5C15.5 4 14 3 12 3Z" fill="#8B4513" stroke="#654321" strokeWidth="0.5"/>
-                {/* Calabash neck */}
-                <ellipse cx="12" cy="4" rx="1.5" ry="1.5" fill="#A0522D"/>
-                {/* Traditional patterns */}
-                <path d="M9 8C9 8 10 8.5 12 8.5C14 8.5 15 8 15 8" stroke="#D4AF37" strokeWidth="0.8" fill="none"/>
-                <path d="M9 11C9 11 10 11.5 12 11.5C14 11.5 15 11 15 11" stroke="#D4AF37" strokeWidth="0.8" fill="none"/>
-                <path d="M9 14C9 14 10 14.5 12 14.5C14 14.5 15 14 15 14" stroke="#D4AF37" strokeWidth="0.8" fill="none"/>
-                <path d="M9.5 17C9.5 17 10.5 17.5 12 17.5C13.5 17.5 14.5 17 14.5 17" stroke="#D4AF37" strokeWidth="0.8" fill="none"/>
-                {/* Decorative dots */}
-                <circle cx="10" cy="9.5" r="0.4" fill="#E07856"/>
-                <circle cx="14" cy="9.5" r="0.4" fill="#E07856"/>
-                <circle cx="10" cy="12.5" r="0.4" fill="#E07856"/>
-                <circle cx="14" cy="12.5" r="0.4" fill="#E07856"/>
-                <circle cx="10" cy="15.5" r="0.4" fill="#E07856"/>
-                <circle cx="14" cy="15.5" r="0.4" fill="#E07856"/>
-              </svg>
-              <span className="text-2xl font-bold text-neutral-brown-900 font-heading">KaleeReads</span>
-            </Link>
-
-            <div className="hidden md:flex items-center gap-8">
-              <Link href="/books" className="text-neutral-brown-700 hover:text-primary font-medium">Books</Link>
-              <Link href="/blogs" className="text-neutral-brown-700 hover:text-primary font-medium">Blogs</Link>
-              <Link href="/authors" className="text-neutral-brown-700 hover:text-primary font-medium">Authors</Link>
-              <Link href="/about" className="text-primary font-medium">About</Link>
-            </div>
-
-            <Link href="/books" className="bg-primary hover:bg-primary-dark text-white font-semibold px-6 py-2.5 rounded-full transition-all hover:shadow-lg hover:-translate-y-0.5">
-              Browse Books
-            </Link>
-          </div>
-        </div>
-      </nav>
+      <Navbar />
 
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-neutral-brown-900 via-neutral-brown-800 to-neutral-brown-900 overflow-hidden">
@@ -127,13 +90,11 @@ export default function AboutPage() {
               </p>
             </div>
             <div className="relative">
-              <div className="aspect-square rounded-3xl overflow-hidden shadow-2xl">
-                <Image 
-                  src="/images/kalenjin-spirit.png" 
-                  alt="Kalenjin cultural heritage" 
-                  fill
-                  className="object-cover"
-                />
+              <div className="aspect-square rounded-3xl bg-gradient-to-br from-primary/20 to-accent-green/20 flex items-center justify-center">
+                <div className="text-center p-8">
+                  <Book size={64} className="text-primary mx-auto mb-4" />
+                  <p className="text-neutral-brown-700 font-medium">Kalenjin Cultural Heritage</p>
+                </div>
               </div>
               <div className="absolute -bottom-6 -left-6 bg-white rounded-2xl p-6 shadow-xl">
                 <div className="flex items-center gap-4">
@@ -202,18 +163,20 @@ export default function AboutPage() {
             Join Our Journey
           </h2>
           <p className="text-neutral-brown-600 text-lg mb-10 max-w-2xl mx-auto">
-            Whether you're a reader or an aspiring author, there's a place for you in our community. Together, we're building something meaningful.
+            Whether you&apos;re a reader or an aspiring author, there&apos;s a place for you in our community. Together, we&apos;re building something meaningful.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link href="/books" className="bg-primary hover:bg-primary-dark text-white font-semibold px-10 py-4 rounded-full transition-all hover:shadow-lg hover:-translate-y-1 flex items-center gap-2">
               Browse Books <ArrowRight size={20} />
             </Link>
-            <Link href="/dashboard/author" className="bg-white border-2 border-primary text-primary hover:bg-primary hover:text-white font-semibold px-10 py-4 rounded-full transition-all flex items-center gap-2">
+            <Link href="/dashboard/author/register" className="bg-white border-2 border-primary text-primary hover:bg-primary hover:text-white font-semibold px-10 py-4 rounded-full transition-all flex items-center gap-2">
               Become an Author
             </Link>
           </div>
         </div>
       </section>
+
+      <Footer />
     </div>
   );
 }

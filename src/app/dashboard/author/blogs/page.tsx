@@ -1,0 +1,324 @@
+'use client';
+
+import { useState, useEffect, useCallback } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { Plus, Eye, Edit, Trash2, Search, PlayCircle, Tag } from 'lucide-react';
+import BlogStats from '@/components/blog/BlogStats';
+import { fetchBlogPosts, deleteBlogPost, type BlogPost } from '@/lib/api/blogs';
+import { getMyAuthorProfile } from '@/lib/api/authors';
+
+function formatBlogDate(dateString: string): string {
+    return new Date(dateString).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+    });
+}
+
+type StatusFilter = 'all' | 'published' | 'draft';
+const statusFilters: { id: StatusFilter; label: string }[] = [
+    { id: 'all', label: 'All' },
+    { id: 'published', label: 'Published' },
+    { id: 'draft', label: 'Drafts' },
+];
+
+const categoryFilters = [
+    { id: 'all', label: 'All Categories' },
+    { id: 'Culture', label: 'Culture' },
+    { id: 'Stories', label: 'Stories' },
+    { id: 'News', label: 'News' },
+    { id: 'Guides', label: 'Guides' },
+    { id: 'History', label: 'History' },
+    { id: 'Poetry', label: 'Poetry' },
+];
+
+export default function AuthorBlogsPage() {
+    const router = useRouter();
+    const [posts, setPosts] = useState<BlogPost[]>([]);
+    const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
+    const [categoryFilter, setCategoryFilter] = useState('all');
+    const [searchQuery, setSearchQuery] = useState('');
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+    const [authorId, setAuthorId] = useState<string | null>(null);
+    const [deletingId, setDeletingId] = useState<string | null>(null);
+
+    useEffect(() => {
+        const fetchAuthor = async () => {
+            try {
+                const token = localStorage.getItem('kaleereads_token');
+                if (!token) {
+                    router.push('/login');
+                    return;
+                }
+                const result = await getMyAuthorProfile() as any;
+                setAuthorId(result.data.id);
+            } catch (err) {
+                console.error('Error fetching author profile:', err);
+                router.push('/login');
+            }
+        };
+        fetchAuthor();
+    }, [router]);
+
+    const loadPosts = useCallback(async () => {
+        if (!authorId) return;
+        try {
+            setIsLoading(true);
+            setError(null);
+            const result = await fetchBlogPosts({ authorId, limit: 100 });
+            const all = (result as any).data?.posts || [];
+            setPosts(all);
+            setIsLoading(false);
+        } catch (err) {
+            console.error('Error fetching posts:', err);
+            setError('Failed to load blog posts.');
+            setIsLoading(false);
+        }
+    }, [authorId]);
+
+    useEffect(() => {
+        loadPosts();
+    }, [loadPosts]);
+
+    const filtered = posts.filter((p) => {
+        const matchesStatus = statusFilter === 'all'
+            || (statusFilter === 'published' && p.isPublished)
+            || (statusFilter === 'draft' && !p.isPublished);
+        const matchesCategory = categoryFilter === 'all' || p.category === categoryFilter;
+        const matchesSearch = p.title.toLowerCase().includes(searchQuery.toLowerCase());
+        return matchesStatus && matchesCategory && matchesSearch;
+    });
+
+    const stats = {
+        totalPosts: posts.length,
+        publishedPosts: posts.filter((p) => p.isPublished).length,
+        draftPosts: posts.filter((p) => !p.isPublished).length,
+        totalViews: posts.reduce((sum, p) => sum + p.viewCount, 0),
+    };
+
+    const handleDelete = async (id: string) => {
+        if (!window.confirm('Are you sure you want to delete this blog post? This cannot be undone.')) return;
+        try {
+            setDeletingId(id);
+            await deleteBlogPost(id);
+            setPosts((prev) => prev.filter((p) => p.id !== id));
+        } catch (err: any) {
+            alert(err.message || 'Failed to delete blog post');
+        } finally {
+            setDeletingId(null);
+        }
+    };
+
+    return (
+        <div className="min-h-screen bg-neutral-cream p-6 md:p-8">
+            {/* Header */}
+            <div className="flex items-center justify-between mb-8">
+                <div>
+                    <h1 className="text-2xl md:text-3xl font-heading font-bold text-neutral-brown-900">
+                        My Blog Posts
+                    </h1>
+                    <p className="text-neutral-brown-600 mt-1">
+                        Write and publish articles for your readers
+                    </p>
+                </div>
+                <Link
+                    href="/dashboard/author/blogs/new"
+                    className="inline-flex items-center gap-2 bg-primary hover:bg-primary-dark text-white font-semibold px-5 py-2.5 rounded-full transition-all"
+                >
+                    <Plus size={18} /> New Post
+                </Link>
+            </div>
+
+            {/* Stats */}
+            <BlogStats {...stats} />
+
+            {/* Toolbar */}
+            <div className="bg-white rounded-xl shadow-sm mb-6 overflow-hidden">
+                {/* Row 1: Status filters + Search */}
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 border-b border-neutral-brown-100">
+                    <div className="flex items-center gap-2">
+                        {statusFilters.map((f) => (
+                            <button
+                                key={f.id}
+                                onClick={() => setStatusFilter(f.id)}
+                                className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${statusFilter === f.id
+                                    ? 'bg-primary text-white'
+                                    : 'bg-neutral-cream text-neutral-brown-700 hover:bg-primary/10'
+                                    }`}
+                            >
+                                {f.label}
+                            </button>
+                        ))}
+                    </div>
+
+                    <div className="relative w-full sm:w-64">
+                        <div className="absolute left-3 top-1/2 -translate-y-1/2">
+                            <Search size={16} className="text-neutral-brown-400" />
+                        </div>
+                        <input
+                            type="text"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            placeholder="Search posts..."
+                            className="w-full pl-9 pr-4 py-2 rounded-full bg-neutral-cream focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm"
+                        />
+                    </div>
+                </div>
+
+                {/* Row 2: Category filters */}
+                <div className="flex items-center gap-2 p-4 overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
+                    <Tag size={14} className="text-neutral-brown-500 shrink-0" />
+                    {categoryFilters.map((cat) => (
+                        <button
+                            key={cat.id}
+                            onClick={() => setCategoryFilter(cat.id)}
+                            className={`px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${categoryFilter === cat.id
+                                ? 'bg-accent-green text-white'
+                                : 'bg-neutral-cream text-neutral-brown-600 hover:bg-accent-green/10'
+                                }`}
+                        >
+                            {cat.label}
+                        </button>
+                    ))}
+                </div>
+            </div>
+
+            {/* Error */}
+            {error && (
+                <div className="bg-red-50 border border-red-200 rounded-xl p-6 text-center mb-6">
+                    <p className="text-red-600 font-medium">{error}</p>
+                    <button
+                        onClick={() => loadPosts()}
+                        className="mt-3 bg-red-100 hover:bg-red-200 text-red-700 px-6 py-2 rounded-full text-sm transition-colors"
+                    >
+                        Try Again
+                    </button>
+                </div>
+            )}
+
+            {/* Loading */}
+            {isLoading && !error && (
+                <div className="flex items-center justify-center py-20">
+                    <div className="relative">
+                        <div className="w-12 h-12 border-4 border-neutral-brown-200 rounded-full"></div>
+                        <div className="absolute top-0 left-0 w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+                    </div>
+                </div>
+            )}
+
+            {/* Posts Table */}
+            {!isLoading && !error && (
+                <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+                    {filtered.length === 0 ? (
+                        <div className="p-12 text-center">
+                            <div className="w-16 h-16 bg-neutral-cream rounded-full flex items-center justify-center mx-auto mb-4">
+                                <PlayCircle size={32} className="text-neutral-brown-400" />
+                            </div>
+                            <h3 className="text-xl font-heading font-bold text-neutral-brown-900 mb-2">
+                                {posts.length === 0 ? 'Start blogging' : 'No posts match your filters'}
+                            </h3>
+                            <p className="text-neutral-brown-600 mb-6">
+                                {posts.length === 0
+                                    ? 'Write your first blog post to connect with your readers.'
+                                    : 'Try adjusting your filters or search term.'}
+                            </p>
+                            {posts.length === 0 && (
+                                <Link
+                                    href="/dashboard/author/blogs/new"
+                                    className="inline-flex items-center gap-2 bg-primary hover:bg-primary-dark text-white font-semibold px-6 py-2.5 rounded-full transition-all"
+                                >
+                                    <Plus size={18} /> Create First Post
+                                </Link>
+                            )}
+                        </div>
+                    ) : (
+                        <div className="overflow-x-auto">
+                            <table className="w-full text-left">
+                                <thead>
+                                    <tr className="border-b border-neutral-brown-100 text-sm text-neutral-brown-600">
+                                        <th className="px-5 py-4 font-medium">Title</th>
+                                        <th className="px-5 py-4 font-medium">Category</th>
+                                        <th className="px-5 py-4 font-medium">Status</th>
+                                        <th className="px-5 py-4 font-medium">Views</th>
+                                        <th className="px-5 py-4 font-medium">Published</th>
+                                        <th className="px-5 py-4 font-medium text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {filtered.map((post) => (
+                                        <tr key={post.id} className="border-b border-neutral-brown-50 hover:bg-neutral-cream/50 transition-colors">
+                                            <td className="px-5 py-4">
+                                                <Link
+                                                    href={`/blogs/${post.id}`}
+                                                    className="font-semibold text-neutral-brown-900 hover:text-primary transition-colors line-clamp-1"
+                                                >
+                                                    {post.coverType === 'video' && '▶ '}{post.title}
+                                                </Link>
+                                                <p className="text-xs text-neutral-brown-500 mt-1 line-clamp-1">
+                                                    {post.excerpt}
+                                                </p>
+                                            </td>
+                                            <td className="px-5 py-4">
+                                                {post.category ? (
+                                                    <span className="inline-block px-3 py-1 bg-accent-green/10 text-accent-green text-xs font-medium rounded-full">
+                                                        {post.category}
+                                                    </span>
+                                                ) : (
+                                                    <span className="text-xs text-neutral-brown-400">—</span>
+                                                )}
+                                            </td>
+                                            <td className="px-5 py-4">
+                                                <span className={`inline-block px-3 py-1 rounded-full text-xs font-medium ${post.isPublished
+                                                    ? 'bg-accent-green/10 text-accent-green'
+                                                    : 'bg-neutral-brown-500/10 text-neutral-brown-600'
+                                                    }`}>
+                                                    {post.isPublished ? 'Published' : 'Draft'}
+                                                </span>
+                                            </td>
+                                            <td className="px-5 py-4 text-neutral-brown-700">
+                                                {post.viewCount}
+                                            </td>
+                                            <td className="px-5 py-4 text-neutral-brown-700 text-sm">
+                                                {post.publishedAt
+                                                    ? formatBlogDate(String(post.publishedAt))
+                                                    : '—'}
+                                            </td>
+                                            <td className="px-5 py-4">
+                                                <div className="flex items-center justify-end gap-2">
+                                                    <Link
+                                                        href={`/blogs/${post.id}`}
+                                                        className="p-2 rounded-lg hover:bg-neutral-cream text-neutral-brown-700 transition-colors"
+                                                        title="View"
+                                                    >
+                                                        <Eye size={16} />
+                                                    </Link>
+                                                    <Link
+                                                        href={`/dashboard/author/blogs/${post.id}/edit`}
+                                                        className="p-2 rounded-lg hover:bg-primary/10 text-primary transition-colors"
+                                                        title="Edit"
+                                                    >
+                                                        <Edit size={16} />
+                                                    </Link>
+                                                    <button
+                                                        onClick={() => handleDelete(post.id)}
+                                                        disabled={deletingId === post.id}
+                                                        className="p-2 rounded-lg hover:bg-red-50 text-red-500 transition-colors disabled:opacity-50"
+                                                        title="Delete"
+                                                    >
+                                                        <Trash2 size={16} />
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    )}
+                </div>
+            )}
+        </div>
+    );
+}

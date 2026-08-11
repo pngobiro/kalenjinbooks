@@ -1,11 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { DollarSign, Book, ShoppingCart, TrendingUp, Plus, Clock, CheckCircle, XCircle, User, ArrowRight, FileText, Eye, Edit } from 'lucide-react';
+import { DollarSign, Book, Plus, Clock, CheckCircle, XCircle, User, ArrowRight, FileText, Eye, Edit, PenTool, Star, Sparkles, Target, Users, PlayCircle, TrendingUp } from 'lucide-react';
 import Link from 'next/link';
 import { useAuth } from '@/lib/auth-context';
 import { useRouter } from 'next/navigation';
-import { getAuthorById } from '@/lib/api/authors';
 import { AuthorProfileHeader } from '@/components/author/AuthorProfileHeader';
 
 interface BlogPost {
@@ -13,21 +12,30 @@ interface BlogPost {
   title: string;
   slug: string;
   coverImage?: string;
+  coverType?: string;
   isPublished: boolean;
   publishedAt?: string;
   viewCount: number;
   createdAt: string;
 }
 
-// This would come from API/database
+interface BookItem {
+  id: string;
+  title: string;
+  description: string | null;
+  coverImage: string | null;
+  price: number;
+  category: string | null;
+  isPublished: boolean;
+  rating: number;
+  publishedAt: string | null;
+}
+
 const initialStats = {
   totalEarnings: 0,
-  earningsTrend: 0,
   booksPublished: 0,
   totalSales: 0,
-  salesTrend: 0,
-  pendingPayouts: 0,
-  rating: 0
+  pendingPayouts: 0
 };
 
 export default function AuthorDashboardPage() {
@@ -40,6 +48,8 @@ export default function AuthorDashboardPage() {
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [recentBlogs, setRecentBlogs] = useState<BlogPost[]>([]);
   const [isLoadingBlogs, setIsLoadingBlogs] = useState(false);
+  const [books, setBooks] = useState<BookItem[]>([]);
+  const [isLoadingBooks, setIsLoadingBooks] = useState(false);
 
   // Check for success parameter from book upload
   useEffect(() => {
@@ -113,6 +123,7 @@ export default function AuthorDashboardPage() {
                 setAuthorStatus(data.data);
                 // Load blogs after getting author ID
                 loadBlogs(data.data.id);
+                loadBooks(data.data.id);
               }
               break; // Success, exit retry loop
             } else if (response.status === 404) {
@@ -162,7 +173,8 @@ export default function AuthorDashboardPage() {
     async function loadBlogs(authorId: string) {
       setIsLoadingBlogs(true);
       try {
-        const response = await fetch(`/api/blog/posts?authorId=${authorId}&limit=5`);
+        const { getApiBaseUrl } = await import('@/lib/api/blogs');
+        const response = await fetch(`${getApiBaseUrl()}/api/blog/posts?authorId=${authorId}&limit=5`);
         if (response.ok) {
           const data: any = await response.json();
           setRecentBlogs(data.posts || []);
@@ -171,6 +183,32 @@ export default function AuthorDashboardPage() {
         console.error('Failed to load blogs', e);
       } finally {
         setIsLoadingBlogs(false);
+      }
+    }
+
+    async function loadBooks(authorId: string) {
+      setIsLoadingBooks(true);
+      try {
+        const response = await fetch(`https://kalenjin-books-worker.pngobiro.workers.dev/api/books?authorId=${authorId}&limit=4`);
+        if (response.ok) {
+          const data: any = await response.json();
+          const items = (data.data || []).map((b: any) => ({
+            id: b.id,
+            title: b.title,
+            description: b.description,
+            coverImage: b.coverImage,
+            price: b.price,
+            category: b.category,
+            isPublished: b.isPublished,
+            rating: b.rating || 0,
+            publishedAt: b.publishedAt,
+          }));
+          setBooks(items);
+        }
+      } catch (e) {
+        console.error('Failed to load books', e);
+      } finally {
+        setIsLoadingBooks(false);
       }
     }
 
@@ -436,237 +474,352 @@ export default function AuthorDashboardPage() {
     }
 
     // If approved (or undefined/legacy), show dashboard
+    const totalBlogViews = recentBlogs.reduce((sum, p) => sum + (p.viewCount || 0), 0);
+    const publishedBooks = books.filter((b) => b.isPublished).length;
+    const authorName = authorStatus?.user?.name || authorStatus?.name || user?.name || 'Author';
+    const authorBio = authorStatus?.bio || 'Storyteller on KaleeReads.';
+
     return (
-      <div className="p-8 max-w-7xl mx-auto">
+      <div className="p-4 md:p-6 lg:p-8 max-w-7xl mx-auto">
         <SuccessMessage />
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex-1">
-            <AuthorProfileHeader 
-              variant="page" 
-              showEmail={true} 
-              showStatus={true}
-              className="mb-4"
-            />
-            <h1 className="text-3xl font-bold text-neutral-brown-900">Dashboard</h1>
-            <p className="text-neutral-brown-700 mt-1">
-              Here's your author overview and recent activity
-            </p>
-          </div>
-          <div className="flex items-center gap-3">
-            {user.role === 'ADMIN' && (
-              <Link
-                href="/dashboard/admin"
-                className="bg-neutral-brown-800 hover:bg-neutral-brown-900 text-white font-semibold px-6 py-3 rounded-lg flex items-center gap-2 transition-all hover:-translate-y-0.5"
-              >
-                <User size={20} />
-                Admin Panel
-              </Link>
-            )}
-            <Link
-              href="/dashboard/author/blogs/new"
-              className="bg-white hover:bg-neutral-cream text-primary border-2 border-primary font-semibold px-6 py-3 rounded-lg flex items-center gap-2 transition-all hover:-translate-y-0.5"
-            >
-              <FileText size={20} />
-              New Blog Post
-            </Link>
-            <Link
-              href="/dashboard/author/books/new"
-              className="bg-primary hover:bg-primary-dark text-white font-semibold px-6 py-3 rounded-lg flex items-center gap-2 transition-all hover:-translate-y-0.5"
-            >
-              <Plus size={20} />
-              Upload New Book
-            </Link>
-          </div>
-        </div>
 
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
-          {/* Total Earnings */}
-          <div className="bg-white rounded-xl p-6 shadow-sm border-l-4 border-primary">
-            <div className="flex items-center justify-between mb-4">
-              <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-                <DollarSign className="text-primary" size={24} />
-              </div>
-              <span className="text-accent-green text-sm font-medium flex items-center gap-1">
-                <TrendingUp size={16} />
-                Coming Soon
-              </span>
-            </div>
-            <p className="text-sm text-neutral-brown-700 mb-1">Total Earnings</p>
-            <p className="text-2xl font-bold text-neutral-brown-900">
-              KES {stats.totalEarnings.toLocaleString()}
-            </p>
+        {/* Author Spotlight Hero */}
+        <div className="relative overflow-hidden bg-gradient-to-br from-neutral-brown-900 via-neutral-brown-800 to-primary-dark rounded-2xl text-white mb-6">
+          <div className="absolute inset-0 opacity-10">
+            <div className="absolute -top-20 -right-20 w-72 h-72 bg-primary rounded-full blur-3xl" />
+            <div className="absolute -bottom-24 -left-16 w-72 h-72 bg-accent-gold rounded-full blur-3xl" />
           </div>
-
-          {/* Books Published */}
-          <div className="bg-white rounded-xl p-6 shadow-sm">
-            <div className="flex items-center justify-between mb-4">
-              <div className="w-12 h-12 bg-accent-green/10 rounded-lg flex items-center justify-center">
-                <Book className="text-accent-green" size={24} />
-              </div>
-            </div>
-            <p className="text-sm text-neutral-brown-700 mb-1">Books Published</p>
-            <p className="text-2xl font-bold text-neutral-brown-900">{stats.booksPublished}</p>
-          </div>
-
-          {/* Blog Posts */}
-          <div className="bg-white rounded-xl p-6 shadow-sm">
-            <div className="flex items-center justify-between mb-4">
-              <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                <FileText className="text-blue-600" size={24} />
-              </div>
-            </div>
-            <p className="text-sm text-neutral-brown-700 mb-1">Blog Posts</p>
-            <p className="text-2xl font-bold text-neutral-brown-900">{recentBlogs.length}</p>
-            <Link
-              href="/dashboard/author/blogs"
-              className="text-sm text-primary hover:text-primary-dark font-medium mt-2 inline-block"
-            >
-              Manage Blogs →
-            </Link>
-          </div>
-
-          {/* Total Sales */}
-          <div className="bg-white rounded-xl p-6 shadow-sm">
-            <div className="flex items-center justify-between mb-4">
-              <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-                <ShoppingCart className="text-primary" size={24} />
-              </div>
-              <span className="text-accent-green text-sm font-medium flex items-center gap-1">
-                <TrendingUp size={16} />
-                Coming Soon
-              </span>
-            </div>
-            <p className="text-sm text-neutral-brown-700 mb-1">Total Sales</p>
-            <p className="text-2xl font-bold text-neutral-brown-900">{stats.totalSales}</p>
-          </div>
-
-          {/* Pending Payouts */}
-          <div className="bg-white rounded-xl p-6 shadow-sm">
-            <div className="flex items-center justify-between mb-4">
-              <div className="w-12 h-12 bg-accent-gold/10 rounded-lg flex items-center justify-center">
-                <DollarSign className="text-accent-gold" size={24} />
-              </div>
-            </div>
-            <p className="text-sm text-neutral-brown-700 mb-1">Available Balance</p>
-            <p className="text-2xl font-bold text-neutral-brown-900">
-              KES {stats.pendingPayouts.toLocaleString()}
-            </p>
-            <Link
-              href="/dashboard/author/earnings"
-              className="text-sm text-primary hover:text-primary-dark font-medium mt-2 inline-block"
-            >
-              Request Payout →
-            </Link>
-          </div>
-        </div>
-
-        <div className="bg-neutral-cream p-4 rounded-lg border border-neutral-brown-200 mb-8">
-          <p className="text-sm text-neutral-brown-600 text-center">
-            More analytics and sales data will be available soon as we connect to the payment processing system.
-          </p>
-        </div>
-
-        {/* Recent Blog Posts Section */}
-        <div className="bg-white rounded-xl shadow-sm p-6 mb-8">
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <h2 className="text-2xl font-bold text-neutral-brown-900 flex items-center gap-2">
-                <FileText size={24} className="text-primary" />
-                Recent Blog Posts
-              </h2>
-              <p className="text-neutral-brown-600 text-sm mt-1">
-                Your latest published and draft blog posts
-              </p>
-            </div>
-            <Link
-              href="/dashboard/author/blogs"
-              className="text-primary hover:text-primary-dark font-medium flex items-center gap-1"
-            >
-              View All <ArrowRight size={16} />
-            </Link>
-          </div>
-
-          {isLoadingBlogs ? (
-            <div className="flex items-center justify-center py-12">
-              <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
-            </div>
-          ) : recentBlogs.length > 0 ? (
-            <div className="space-y-4">
-              {recentBlogs.map((post) => (
-                <div
-                  key={post.id}
-                  className="flex items-center gap-4 p-4 rounded-lg border border-neutral-brown-100 hover:border-primary/30 hover:bg-neutral-cream/30 transition-all"
-                >
-                  {post.coverImage ? (
-                    <img
-                      src={post.coverImage}
-                      alt={post.title}
-                      className="w-20 h-16 object-cover rounded-lg flex-shrink-0"
-                    />
-                  ) : (
-                    <div className="w-20 h-16 bg-neutral-cream rounded-lg flex items-center justify-center flex-shrink-0">
-                      <FileText size={24} className="text-neutral-brown-400" />
+          <div className="relative p-6 md:p-8">
+            <div className="flex flex-col md:flex-row md:items-center gap-6">
+              {/* Author identity */}
+              <div className="flex items-center gap-4 flex-1 min-w-0">
+                <div className="relative flex-shrink-0">
+                  <div className="w-20 h-20 md:w-24 md:h-24 rounded-2xl overflow-hidden ring-4 ring-white/20 bg-white/10 flex items-center justify-center">
+                    {authorStatus?.profileImage || authorStatus?.user?.image ? (
+                      <img
+                        src={authorStatus.profileImage || authorStatus.user.image}
+                        alt={authorName}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <User size={40} className="text-white/70" />
+                    )}
+                  </div>
+                  {authorStatus?.status === 'APPROVED' && (
+                    <div className="absolute -bottom-1 -right-1 w-7 h-7 bg-accent-green rounded-full flex items-center justify-center ring-2 ring-white">
+                      <CheckCircle size={16} className="text-white" />
                     </div>
                   )}
-                  
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-neutral-brown-900 truncate">
-                      {post.title}
-                    </h3>
-                    <div className="flex items-center gap-4 mt-1">
-                      <span className={`text-xs px-2 py-1 rounded-full ${
-                        post.isPublished 
-                          ? 'bg-accent-green/10 text-accent-green' 
-                          : 'bg-neutral-brown-100 text-neutral-brown-600'
-                      }`}>
-                        {post.isPublished ? 'Published' : 'Draft'}
-                      </span>
-                      <span className="text-sm text-neutral-brown-500 flex items-center gap-1">
-                        <Eye size={14} />
-                        {post.viewCount.toLocaleString()} views
-                      </span>
-                      <span className="text-sm text-neutral-brown-500">
-                        {new Date(post.createdAt).toLocaleDateString()}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-2 flex-shrink-0">
-                    <Link
-                      href={`/blogs/${post.slug}`}
-                      className="p-2 text-neutral-brown-600 hover:bg-primary/10 hover:text-primary rounded-lg transition-colors"
-                      title="View"
-                    >
-                      <Eye size={18} />
-                    </Link>
-                    <Link
-                      href={`/dashboard/author/blogs/${post.id}/edit`}
-                      className="p-2 text-neutral-brown-600 hover:bg-primary/10 hover:text-primary rounded-lg transition-colors"
-                      title="Edit"
-                    >
-                      <Edit size={18} />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-sm text-primary-light/80 font-medium">Welcome back,</p>
+                  <h1 className="text-2xl md:text-3xl font-heading font-bold truncate">{authorName}</h1>
+                  <p className="text-white/70 text-sm mt-1 line-clamp-2">{authorBio}</p>
+                  <div className="flex items-center gap-2 mt-3">
+                    <span className={`inline-flex items-center gap-1.5 text-xs px-3 py-1 rounded-full font-medium ${
+                      authorStatus?.status === 'APPROVED' ? 'bg-accent-green/20 text-accent-green-light' :
+                      authorStatus?.status === 'PENDING' ? 'bg-yellow-400/20 text-yellow-300' :
+                      'bg-red-400/20 text-red-300'
+                    }`}>
+                      {authorStatus?.status === 'APPROVED' ? <CheckCircle size={12} /> : null}
+                      {authorStatus?.status || 'Author'}
+                    </span>
+                    <Link href="/dashboard/author/profile" className="text-xs text-white/70 hover:text-white underline underline-offset-2 transition-colors">
+                      Edit profile
                     </Link>
                   </div>
                 </div>
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-12">
-              <div className="w-16 h-16 bg-neutral-cream rounded-full flex items-center justify-center mx-auto mb-4">
-                <FileText size={32} className="text-neutral-brown-400" />
               </div>
-              <p className="text-neutral-brown-600 mb-4">No blog posts yet</p>
-              <Link
-                href="/dashboard/author/blogs/new"
-                className="inline-flex items-center gap-2 bg-primary hover:bg-primary-dark text-white font-semibold px-6 py-3 rounded-lg transition-all"
-              >
-                <Plus size={20} />
-                Create Your First Blog Post
+
+              {/* Quick actions */}
+              <div className="flex flex-wrap gap-3 flex-shrink-0">
+                <Link
+                  href="/dashboard/author/blogs/new"
+                  className="inline-flex items-center gap-2 bg-white text-neutral-brown-900 font-semibold px-5 py-2.5 rounded-xl hover:bg-neutral-cream transition-all"
+                >
+                  <PenTool size={18} />
+                  Write a Post
+                </Link>
+                <Link
+                  href="/dashboard/author/books/new"
+                  className="inline-flex items-center gap-2 bg-primary hover:bg-primary-dark text-white font-semibold px-5 py-2.5 rounded-xl transition-all"
+                >
+                  <Plus size={18} />
+                  Upload Book
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Stats Strip - real data */}
+        <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 mb-6">
+          <div className="bg-white rounded-xl p-4 shadow-sm border-b-2 border-primary flex items-center gap-3">
+            <div className="w-11 h-11 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
+              <Book className="text-primary" size={22} />
+            </div>
+            <div className="min-w-0">
+              <p className="text-xs text-neutral-brown-600 truncate">Books</p>
+              <p className="text-xl font-bold text-neutral-brown-900">{books.length}</p>
+            </div>
+          </div>
+          <div className="bg-white rounded-xl p-4 shadow-sm border-b-2 border-accent-green flex items-center gap-3">
+            <div className="w-11 h-11 bg-accent-green/10 rounded-lg flex items-center justify-center flex-shrink-0">
+              <CheckCircle className="text-accent-green" size={22} />
+            </div>
+            <div className="min-w-0">
+              <p className="text-xs text-neutral-brown-600 truncate">Published</p>
+              <p className="text-xl font-bold text-accent-green">{publishedBooks}</p>
+            </div>
+          </div>
+          <div className="bg-white rounded-xl p-4 shadow-sm border-b-2 border-blue-500 flex items-center gap-3">
+            <div className="w-11 h-11 bg-blue-50 rounded-lg flex items-center justify-center flex-shrink-0">
+              <FileText className="text-blue-600" size={22} />
+            </div>
+            <div className="min-w-0">
+              <p className="text-xs text-neutral-brown-600 truncate">Blog Posts</p>
+              <p className="text-xl font-bold text-neutral-brown-900">{recentBlogs.length}</p>
+            </div>
+          </div>
+          <div className="bg-white rounded-xl p-4 shadow-sm border-b-2 border-accent-gold flex items-center gap-3">
+            <div className="w-11 h-11 bg-accent-gold/10 rounded-lg flex items-center justify-center flex-shrink-0">
+              <Eye className="text-accent-gold" size={22} />
+            </div>
+            <div className="min-w-0">
+              <p className="text-xs text-neutral-brown-600 truncate">Blog Views</p>
+              <p className="text-xl font-bold text-neutral-brown-900">{totalBlogViews.toLocaleString()}</p>
+            </div>
+          </div>
+          <div className="col-span-2 lg:col-span-1 bg-gradient-to-br from-accent-green to-emerald-700 rounded-xl p-4 shadow-sm flex items-center gap-3">
+            <div className="w-11 h-11 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0">
+              <DollarSign className="text-white" size={22} />
+            </div>
+            <div className="min-w-0">
+              <p className="text-xs text-white/80 truncate">Earnings</p>
+              <p className="text-xl font-bold text-white">KES {stats.totalEarnings?.toLocaleString() || 0}</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Action hero banner when empty */}
+        {books.length === 0 && recentBlogs.length === 0 && (
+          <div className="bg-white rounded-xl shadow-sm p-8 mb-6 flex flex-col md:flex-row items-center gap-6 text-center md:text-left">
+            <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center flex-shrink-0">
+              <Sparkles className="text-primary" size={32} />
+            </div>
+            <div className="flex-1">
+              <h3 className="text-xl font-heading font-bold text-neutral-brown-900">Your readers are waiting</h3>
+              <p className="text-neutral-brown-600 mt-1 text-sm max-w-xl">
+                Publish your first book or write a blog post to start building your audience on KaleeReads.
+                Authors keep 70% of every sale.
+              </p>
+            </div>
+            <div className="flex gap-3 flex-shrink-0">
+              <Link href="/dashboard/author/books/new" className="bg-primary hover:bg-primary-dark text-white font-semibold px-5 py-2.5 rounded-xl transition-all inline-flex items-center gap-2">
+                <Plus size={18} /> Publish a Book
+              </Link>
+              <Link href="/dashboard/author/blogs/new" className="border-2 border-primary text-primary hover:bg-primary/5 font-semibold px-5 py-2.5 rounded-xl transition-all inline-flex items-center gap-2">
+                <PenTool size={18} /> Start Blogging
               </Link>
             </div>
-          )}
+          </div>
+        )}
+
+        {/* Recent Blog Posts + Recent Books */}
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-6">
+          {/* Recent Blog Posts */}
+          <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+            <div className="flex items-center justify-between px-5 py-4 border-b border-neutral-brown-100">
+              <div>
+                <h2 className="text-lg font-heading font-bold text-neutral-brown-900 flex items-center gap-2">
+                  <FileText size={20} className="text-primary" />
+                  Recent Blog Posts
+                </h2>
+              </div>
+              <Link
+                href="/dashboard/author/blogs"
+                className="text-sm text-primary hover:text-primary-dark font-medium flex items-center gap-1"
+              >
+                View All <ArrowRight size={16} />
+              </Link>
+            </div>
+
+            {isLoadingBlogs ? (
+              <div className="flex items-center justify-center py-16">
+                <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+              </div>
+            ) : recentBlogs.length > 0 ? (
+              <div className="divide-y divide-neutral-brown-100">
+                {recentBlogs.map((post) => (
+                  <div key={post.id} className="flex items-center gap-4 px-5 py-4 hover:bg-neutral-cream/40 transition-colors">
+                    <div className="w-16 h-14 rounded-lg overflow-hidden flex-shrink-0 bg-neutral-cream relative">
+                      {post.coverImage ? (
+                        <img src={post.coverImage} alt={post.title} className="w-full h-full object-cover" />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center">
+                          {post.coverType === 'video' ? (
+                            <PlayCircle className="text-primary" size={22} />
+                          ) : (
+                            <FileText size={22} className="text-neutral-brown-400" />
+                          )}
+                        </div>
+                      )}
+                      {post.coverType === 'video' && (
+                        <div className="absolute inset-0 flex items-center justify-center bg-black/30">
+                          <PlayCircle className="text-white" size={24} />
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-semibold text-neutral-brown-900 truncate text-sm">{post.title}</h3>
+                      <div className="flex items-center gap-3 mt-1.5">
+                        <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
+                          post.isPublished ? 'bg-accent-green/10 text-accent-green' : 'bg-neutral-brown-100 text-neutral-brown-600'
+                        }`}>
+                          {post.isPublished ? 'Published' : 'Draft'}
+                        </span>
+                        <span className="text-xs text-neutral-brown-500 flex items-center gap-1">
+                          <Eye size={12} /> {post.viewCount.toLocaleString()}
+                        </span>
+                        <span className="text-xs text-neutral-brown-500">
+                          {new Date(post.createdAt).toLocaleDateString()}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-1 flex-shrink-0">
+                      <Link href={`/blogs/${post.id}`} className="p-2 text-neutral-brown-600 hover:bg-primary/10 hover:text-primary rounded-lg" title="View">
+                        <Eye size={16} />
+                      </Link>
+                      <Link href={`/dashboard/author/blogs/${post.id}/edit`} className="p-2 text-neutral-brown-600 hover:bg-primary/10 hover:text-primary rounded-lg" title="Edit">
+                        <Edit size={16} />
+                      </Link>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-14 px-6">
+                <div className="w-14 h-14 bg-neutral-cream rounded-full flex items-center justify-center mx-auto mb-3">
+                  <FileText size={24} className="text-neutral-brown-400" />
+                </div>
+                <p className="text-neutral-brown-600 text-sm mb-4">No blog posts yet — share your journey with readers</p>
+                <Link href="/dashboard/author/blogs/new" className="inline-flex items-center gap-2 bg-primary hover:bg-primary-dark text-white font-semibold text-sm px-5 py-2.5 rounded-xl transition-all">
+                  <Plus size={16} /> Create First Post
+                </Link>
+              </div>
+            )}
+          </div>
+
+          {/* Recent Books */}
+          <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+            <div className="flex items-center justify-between px-5 py-4 border-b border-neutral-brown-100">
+              <div>
+                <h2 className="text-lg font-heading font-bold text-neutral-brown-900 flex items-center gap-2">
+                  <Book size={20} className="text-primary" />
+                  My Books
+                </h2>
+              </div>
+              <Link
+                href="/dashboard/author/books"
+                className="text-sm text-primary hover:text-primary-dark font-medium flex items-center gap-1"
+              >
+                View All <ArrowRight size={16} />
+              </Link>
+            </div>
+
+            {isLoadingBooks ? (
+              <div className="flex items-center justify-center py-16">
+                <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+              </div>
+            ) : books.length > 0 ? (
+              <div className="divide-y divide-neutral-brown-100">
+                {books.map((book) => (
+                  <div key={book.id} className="flex items-center gap-4 px-5 py-4 hover:bg-neutral-cream/40 transition-colors">
+                    <div className="w-12 h-16 rounded-lg overflow-hidden flex-shrink-0 bg-neutral-cream">
+                      {book.coverImage ? (
+                        <img src={book.coverImage} alt={book.title} className="w-full h-full object-cover" />
+                      ) : (
+                        <div className="w-full h-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
+                          <Book size={18} className="text-primary/50" />
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-semibold text-neutral-brown-900 truncate text-sm">{book.title}</h3>
+                      <div className="flex items-center gap-3 mt-1.5">
+                        <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
+                          book.isPublished ? 'bg-accent-green/10 text-accent-green' : 'bg-neutral-brown-100 text-neutral-brown-600'
+                        }`}>
+                          {book.isPublished ? 'Published' : 'Draft'}
+                        </span>
+                        <span className="text-xs text-neutral-brown-500 flex items-center gap-1">
+                          <Star size={12} className="text-accent-gold" /> {book.rating ? book.rating.toFixed(1) : 'New'}
+                        </span>
+                        <span className="text-xs text-neutral-brown-500 font-medium">
+                          KES {book.price.toLocaleString()}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-1 flex-shrink-0">
+                      <Link href={`/books/${book.id}`} className="p-2 text-neutral-brown-600 hover:bg-primary/10 hover:text-primary rounded-lg" title="View">
+                        <Eye size={16} />
+                      </Link>
+                      <Link href={`/dashboard/author/books/${book.id}/edit`} className="p-2 text-neutral-brown-600 hover:bg-primary/10 hover:text-primary rounded-lg" title="Edit">
+                        <Edit size={16} />
+                      </Link>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-14 px-6">
+                <div className="w-14 h-14 bg-neutral-cream rounded-full flex items-center justify-center mx-auto mb-3">
+                  <Book size={24} className="text-neutral-brown-400" />
+                </div>
+                <p className="text-neutral-brown-600 text-sm mb-4">No books yet — start sharing your stories</p>
+                <Link href="/dashboard/author/books/new" className="inline-flex items-center gap-2 bg-primary hover:bg-primary-dark text-white font-semibold text-sm px-5 py-2.5 rounded-xl transition-all">
+                  <Plus size={16} /> Upload First Book
+                </Link>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Growth tips strip */}
+        <div className="bg-white rounded-xl shadow-sm p-6 mb-2">
+          <h3 className="text-base font-heading font-bold text-neutral-brown-900 flex items-center gap-2 mb-4">
+            <Sparkles size={18} className="text-accent-gold" />
+            Grow your readership
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="flex gap-3 items-start">
+              <div className="w-9 h-9 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                <PenTool size={18} className="text-primary" />
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-neutral-brown-900">Write consistently</p>
+                <p className="text-xs text-neutral-brown-600 mt-0.5">Post weekly blogs to keep readers engaged with your voice.</p>
+              </div>
+            </div>
+            <div className="flex gap-3 items-start">
+              <div className="w-9 h-9 bg-accent-green/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                <Target size={18} className="text-accent-green" />
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-neutral-brown-900">Publish thoughtful books</p>
+                <p className="text-xs text-neutral-brown-600 mt-0.5">High-quality stories earn the best ratings and repeat readers.</p>
+              </div>
+            </div>
+            <div className="flex gap-3 items-start">
+              <div className="w-9 h-9 bg-accent-gold/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                <Users size={18} className="text-accent-gold" />
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-neutral-brown-900">Earn 70% of every sale</p>
+                <p className="text-xs text-neutral-brown-600 mt-0.5">Your work pays off — track performance in Analytics as it connects.</p>
+              </div>
+            </div>
+          </div>
         </div>
 
       </div>

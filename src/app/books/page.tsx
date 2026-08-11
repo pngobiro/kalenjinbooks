@@ -3,13 +3,13 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Search, BookOpen, Star, ArrowRight, Sparkles } from 'lucide-react';
-import KaleeReadsLogo from '@/components/KaleeReadsLogo';
+import Navbar from '@/components/layout/Navbar';
+import Footer from '@/components/layout/Footer';
 import { fetchBooks, type Book as BookType } from '@/lib/api/books';
 import { trackBookClick } from '@/lib/analytics';
 
 const categories = ['All', 'Fiction', 'Non-Fiction', 'Folklore', 'History', 'Poetry', 'Children', 'Education'];
 
-// Vibrant color schemes for book cards (fallback if no image)
 const colorSchemes = [
   'from-emerald-500 to-teal-600',
   'from-rose-500 to-pink-600',
@@ -54,32 +54,10 @@ export default function BooksPage() {
 
   return (
     <div className="min-h-screen bg-neutral-cream">
-      {/* Navigation */}
-      <nav className="bg-white/95 backdrop-blur-sm sticky top-0 z-50 border-b border-neutral-brown-200 shadow-sm">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="flex items-center justify-between h-20">
-            <Link href="/" className="flex items-center gap-2">
-              <KaleeReadsLogo size={44} />
-              <span className="text-2xl font-bold text-neutral-brown-900 font-heading">KaleeReads</span>
-            </Link>
-
-            <div className="hidden md:flex items-center gap-8">
-              <Link href="/books" className="text-primary font-medium">Books</Link>
-              <Link href="/blogs" className="text-neutral-brown-700 hover:text-primary font-medium transition-colors">Blogs</Link>
-              <Link href="/authors" className="text-neutral-brown-700 hover:text-primary font-medium transition-colors">Authors</Link>
-              <Link href="/about" className="text-neutral-brown-700 hover:text-primary font-medium transition-colors">About</Link>
-            </div>
-
-            <Link href="/dashboard/author" className="bg-primary hover:bg-primary-dark text-white font-semibold px-6 py-2.5 rounded-full transition-all hover:shadow-lg hover:-translate-y-0.5">
-              Author Dashboard
-            </Link>
-          </div>
-        </div>
-      </nav>
+      <Navbar />
 
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-neutral-brown-900 via-neutral-brown-800 to-neutral-brown-900 overflow-hidden">
-        {/* Decorative elements */}
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-0 left-0 w-96 h-96 bg-primary rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
           <div className="absolute bottom-0 right-0 w-80 h-80 bg-accent-green rounded-full blur-3xl translate-x-1/2 translate-y-1/2"></div>
@@ -114,7 +92,6 @@ export default function BooksPage() {
           </div>
         </div>
 
-        {/* Wave divider */}
         <div className="absolute bottom-0 left-0 right-0">
           <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-16">
             <path d="M0 120L60 105C120 90 240 60 360 45C480 30 600 30 720 37.5C840 45 960 60 1080 67.5C1200 75 1320 75 1380 75L1440 75V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z" fill="#F5F1E8"/>
@@ -126,7 +103,7 @@ export default function BooksPage() {
       <section className="py-12">
         <div className="max-w-7xl mx-auto px-6">
           {/* Categories */}
-          <div className="flex items-center gap-3 mb-10 overflow-x-auto pb-2 scrollbar-hide">
+          <div className="flex items-center gap-3 mb-10 overflow-x-auto pb-2" style={{ scrollbarWidth: 'none' }}>
             {categories.map((category) => (
               <button
                 key={category}
@@ -268,7 +245,7 @@ export default function BooksPage() {
                 <BookOpen size={36} className="text-neutral-brown-400" />
               </div>
               <h3 className="text-2xl font-bold text-neutral-brown-900 mb-2 font-heading">No books found</h3>
-              <p className="text-neutral-brown-600 mb-6">Try adjusting your search or filters to find what you're looking for</p>
+              <p className="text-neutral-brown-600 mb-6">Try adjusting your search or filters to find what you&apos;re looking for</p>
               <div className="flex items-center justify-center gap-4">
                 <button
                   onClick={() => { setSelectedCategory('All'); setSearchQuery(''); }}
@@ -287,6 +264,8 @@ export default function BooksPage() {
           )}
         </div>
       </section>
+
+      <Footer />
     </div>
   );
 }

@@ -4,9 +4,15 @@ export const runtime = 'edge';
 
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
-import { ArrowLeft, BookOpen, Star, User, Book, Calendar, MapPin, Globe, Award, GraduationCap, Briefcase, Heart, Target, Users, Twitter, Facebook, Instagram, Linkedin, ExternalLink, Sparkles } from 'lucide-react';
+import {
+  ArrowLeft, BookOpen, Star, User, Calendar, MapPin, Globe,
+  Twitter, Facebook, Instagram, Linkedin, Sparkles,
+  PlayCircle, Clock, Eye, ArrowRight, FileText, Users,
+} from 'lucide-react';
 import Link from 'next/link';
 import { getAuthorById, Author } from '@/lib/api/authors';
+import { fetchBlogPosts, type BlogPost } from '@/lib/api/blogs';
+import { calculateReadTime, formatBlogDate } from '@/lib/blog-utils';
 
 interface AuthorWithBooks extends Author {
   books?: Array<{
@@ -21,6 +27,8 @@ interface AuthorWithBooks extends Author {
     publishedAt: string;
     rating: number;
     tags?: string;
+    amazonUrl?: string | null;
+    readOnlineUrl?: string | null;
   }>;
 }
 
@@ -38,8 +46,9 @@ const colorSchemes = [
 export default function AuthorDetailPage() {
   const params = useParams();
   const authorId = params.id as string;
-  
+
   const [author, setAuthor] = useState<AuthorWithBooks | null>(null);
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -48,8 +57,12 @@ export default function AuthorDetailPage() {
       try {
         setLoading(true);
         setError(null);
-        const response = await getAuthorById(authorId);
-        setAuthor(response.data || null);
+        const [authorRes, blogsRes] = await Promise.all([
+          getAuthorById(authorId),
+          fetchBlogPosts({ authorId, published: true, limit: 20 }).catch(() => null),
+        ]);
+        setAuthor(authorRes.data || null);
+        setBlogPosts(blogsRes?.data?.posts || []);
       } catch (e) {
         console.error('Failed to fetch author:', e);
         setError(e instanceof Error ? e.message : 'Failed to load author');
@@ -57,10 +70,7 @@ export default function AuthorDetailPage() {
         setLoading(false);
       }
     }
-
-    if (authorId) {
-      loadAuthor();
-    }
+    if (authorId) loadAuthor();
   }, [authorId]);
 
   if (loading) {
@@ -92,416 +102,269 @@ export default function AuthorDetailPage() {
   }
 
   const colorScheme = colorSchemes[(author.name?.length || 0) % colorSchemes.length];
+  const allBooks = author.books || [];
+  const topByViews = [...blogPosts].sort((a, b) => b.viewCount - a.viewCount).slice(0, 5);
 
   return (
     <div className="min-h-screen bg-neutral-cream">
       {/* Navigation */}
       <nav className="bg-white/95 backdrop-blur-sm sticky top-0 z-50 border-b border-neutral-brown-200 shadow-sm">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="flex items-center justify-between h-20">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="flex items-center justify-between h-16">
             <Link href="/" className="flex items-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" width="44" height="44">
-                {/* Traditional Kalenjin Calabash */}
-                <path d="M12 3C10 3 8.5 4 8 5.5C7.5 7 7 9 7 11C7 13.5 7.5 16 8.5 18C9.5 20 11 21 12 21C13 21 14.5 20 15.5 18C16.5 16 17 13.5 17 11C17 9 16.5 7 16 5.5C15.5 4 14 3 12 3Z" fill="#8B4513" stroke="#654321" strokeWidth="0.5"/>
-                {/* Calabash neck */}
-                <ellipse cx="12" cy="4" rx="1.5" ry="1.5" fill="#A0522D"/>
-                {/* Traditional patterns */}
-                <path d="M9 8C9 8 10 8.5 12 8.5C14 8.5 15 8 15 8" stroke="#D4AF37" strokeWidth="0.8" fill="none"/>
-                <path d="M9 11C9 11 10 11.5 12 11.5C14 11.5 15 11 15 11" stroke="#D4AF37" strokeWidth="0.8" fill="none"/>
-                <path d="M9 14C9 14 10 14.5 12 14.5C14 14.5 15 14 15 14" stroke="#D4AF37" strokeWidth="0.8" fill="none"/>
-                <path d="M9.5 17C9.5 17 10.5 17.5 12 17.5C13.5 17.5 14.5 17 14.5 17" stroke="#D4AF37" strokeWidth="0.8" fill="none"/>
-                {/* Decorative dots */}
-                <circle cx="10" cy="9.5" r="0.4" fill="#E07856"/>
-                <circle cx="14" cy="9.5" r="0.4" fill="#E07856"/>
-                <circle cx="10" cy="12.5" r="0.4" fill="#E07856"/>
-                <circle cx="14" cy="12.5" r="0.4" fill="#E07856"/>
-                <circle cx="10" cy="15.5" r="0.4" fill="#E07856"/>
-                <circle cx="14" cy="15.5" r="0.4" fill="#E07856"/>
-              </svg>
-              <span className="text-2xl font-bold text-neutral-brown-900 font-heading">KaleeReads</span>
+              <span className="text-xl font-bold text-neutral-brown-900 font-heading">KaleeReads</span>
             </Link>
-
-            <Link href="/authors" className="flex items-center gap-2 text-neutral-brown-700 hover:text-primary transition-colors">
-              <ArrowLeft size={20} />
-              <span className="hidden sm:inline">Back to Authors</span>
+            <Link href="/authors" className="flex items-center gap-2 text-neutral-brown-700 hover:text-primary transition-colors text-sm">
+              <ArrowLeft size={16} />
+              <span>All Authors</span>
             </Link>
           </div>
         </div>
       </nav>
 
-      {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-neutral-brown-900 via-neutral-brown-800 to-neutral-brown-900 overflow-hidden">
-        <div className="absolute inset-0 opacity-30">
-          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary rounded-full blur-3xl translate-x-1/2 -translate-y-1/2"></div>
-          <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-accent-green rounded-full blur-3xl -translate-x-1/2 translate-y-1/2"></div>
-        </div>
-
-        <div className="relative max-w-7xl mx-auto px-6 py-16">
-          <div className="flex flex-col lg:flex-row gap-12 items-center">
-            {/* Avatar */}
+      {/* Hero */}
+      <section className="bg-gradient-to-br from-neutral-brown-900 via-neutral-brown-800 to-neutral-brown-900">
+        <div className="max-w-6xl mx-auto px-6 py-12">
+          <div className="flex flex-col md:flex-row gap-8 items-center md:items-start">
             <div className="flex-shrink-0">
-              <div className="relative">
-                <div className="w-40 h-40 rounded-3xl overflow-hidden bg-white shadow-2xl">
-                  {author.profileImage ? (
-                    <img src={author.profileImage} alt={author.name || 'Author'} className="w-full h-full object-cover" />
-                  ) : (
-                    <div className={`w-full h-full bg-gradient-to-br ${colorScheme} flex items-center justify-center`}>
-                      <User size={64} className="text-white/80" />
-                    </div>
-                  )}
-                </div>
-                <div className="absolute -bottom-3 -right-3 w-12 h-12 bg-accent-green rounded-xl flex items-center justify-center shadow-lg">
-                  <BookOpen size={24} className="text-white" />
-                </div>
+              <div className="w-28 h-28 rounded-2xl overflow-hidden bg-white shadow-2xl">
+                {author.profileImage ? (
+                  <img src={author.profileImage} alt={author.name || 'Author'} className="w-full h-full object-cover" />
+                ) : (
+                  <div className={`w-full h-full bg-gradient-to-br ${colorScheme} flex items-center justify-center`}>
+                    <User size={48} className="text-white/80" />
+                  </div>
+                )}
               </div>
             </div>
 
-            {/* Info */}
-            <div className="text-center lg:text-left flex-1">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 rounded-full mb-4">
-                <Sparkles size={16} className="text-accent-gold" />
-                <span className="text-white/90 text-sm font-medium">Author</span>
-                {author.status && (
-                  <span className={`ml-2 px-2 py-0.5 rounded-full text-xs font-medium ${
-                    author.status === 'APPROVED' ? 'bg-green-500/20 text-green-400' :
-                    'bg-yellow-500/20 text-yellow-400'
-                  }`}>
-                    {author.status}
-                  </span>
-                )}
+            <div className="text-center md:text-left flex-1">
+              <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/10 rounded-full mb-3">
+                <Sparkles size={13} className="text-accent-gold" />
+                <span className="text-white/90 text-xs font-medium">Author</span>
               </div>
-              
-              <h1 className="text-4xl md:text-5xl font-bold text-white font-heading mb-4">
+
+              <h1 className="text-3xl md:text-4xl font-bold text-white font-heading mb-3">
                 {author.name || 'Unknown Author'}
               </h1>
 
               {author.bio && (
-                <p className="text-neutral-brown-200 text-lg mb-6 max-w-2xl">
+                <p className="text-neutral-brown-200 leading-relaxed max-w-2xl mb-4">
                   {author.bio}
                 </p>
               )}
 
-              {/* Stats */}
-              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-8">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center">
-                    <BookOpen size={24} className="text-accent-green" />
-                  </div>
-                  <div className="text-left">
-                    <p className="text-2xl font-bold text-white">{author.booksCount}</p>
-                    <p className="text-neutral-brown-400 text-sm">Books</p>
-                  </div>
+              <div className="flex flex-wrap items-center justify-center md:justify-start gap-5 text-sm">
+                <div className="flex items-center gap-1.5 text-white/80">
+                  <BookOpen size={15} />
+                  <span className="font-semibold">{author.booksCount}</span> books
                 </div>
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center">
-                    <Star size={24} className="text-accent-gold" />
-                  </div>
-                  <div className="text-left">
-                    <p className="text-2xl font-bold text-white">{author.rating?.toFixed(1) || '0.0'}</p>
-                    <p className="text-neutral-brown-400 text-sm">Rating</p>
-                  </div>
+                <div className="flex items-center gap-1.5 text-white/80">
+                  <Star size={15} className="text-accent-gold" />
+                  <span className="font-semibold">{author.rating?.toFixed(1) || '0.0'}</span> rating
                 </div>
-                {author.totalEarnings !== undefined && (
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center">
-                      <Award size={24} className="text-primary" />
-                    </div>
-                    <div className="text-left">
-                      <p className="text-2xl font-bold text-white">KES {author.totalEarnings.toLocaleString()}</p>
-                      <p className="text-neutral-brown-400 text-sm">Earned</p>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Location & Join Date */}
-              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-6 mt-6">
                 {(author.location || author.nationality) && (
-                  <div className="flex items-center gap-2 text-neutral-brown-300">
-                    <MapPin size={16} />
-                    <span>{author.location || author.nationality}</span>
-                  </div>
-                )}
-                {author.approvedAt && (
-                  <div className="flex items-center gap-2 text-neutral-brown-300">
-                    <Calendar size={16} />
-                    <span>Joined {new Date(author.approvedAt).toLocaleDateString()}</span>
+                  <div className="flex items-center gap-1.5 text-neutral-brown-400">
+                    <MapPin size={14} />
+                    {author.location || author.nationality}
                   </div>
                 )}
               </div>
-            </div>
 
-            {/* Social Links */}
-            <div className="flex items-center gap-3">
-              {author.website && (
-                <a href={author.website} target="_blank" rel="noopener noreferrer" 
-                   className="w-12 h-12 bg-white/10 hover:bg-white/20 rounded-xl flex items-center justify-center transition-colors">
-                  <Globe size={20} className="text-white" />
-                </a>
-              )}
-              {author.twitter && (
-                <a href={`https://twitter.com/${author.twitter}`} target="_blank" rel="noopener noreferrer"
-                   className="w-12 h-12 bg-white/10 hover:bg-[#1DA1F2] rounded-xl flex items-center justify-center transition-colors">
-                  <Twitter size={20} className="text-white" />
-                </a>
-              )}
-              {author.facebook && (
-                <a href={`https://facebook.com/${author.facebook}`} target="_blank" rel="noopener noreferrer"
-                   className="w-12 h-12 bg-white/10 hover:bg-[#1877F2] rounded-xl flex items-center justify-center transition-colors">
-                  <Facebook size={20} className="text-white" />
-                </a>
-              )}
-              {author.instagram && (
-                <a href={`https://instagram.com/${author.instagram}`} target="_blank" rel="noopener noreferrer"
-                   className="w-12 h-12 bg-white/10 hover:bg-[#E4405F] rounded-xl flex items-center justify-center transition-colors">
-                  <Instagram size={20} className="text-white" />
-                </a>
-              )}
-              {author.linkedin && (
-                <a href={`https://linkedin.com/in/${author.linkedin}`} target="_blank" rel="noopener noreferrer"
-                   className="w-12 h-12 bg-white/10 hover:bg-[#0A66C2] rounded-xl flex items-center justify-center transition-colors">
-                  <Linkedin size={20} className="text-white" />
-                </a>
-              )}
-            </div>
-          </div>
-        </div>
-
-        <div className="absolute bottom-0 left-0 right-0">
-          <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-16">
-            <path d="M0 120L60 105C120 90 240 60 360 45C480 30 600 30 720 37.5C840 45 960 60 1080 67.5C1200 75 1320 75 1380 75L1440 75V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z" fill="#F5F1E8"/>
-          </svg>
-        </div>
-      </section>
-
-      {/* Details Section */}
-      <section className="py-12">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Professional Background */}
-            <div className="bg-white rounded-3xl p-8 shadow-sm">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center">
-                  <GraduationCap size={24} className="text-primary" />
-                </div>
-                <h3 className="text-xl font-bold text-neutral-brown-900 font-heading">Background</h3>
-              </div>
-              
-              <div className="space-y-5">
-                {author.education && (
-                  <div>
-                    <h4 className="font-medium text-neutral-brown-800 mb-1">Education</h4>
-                    <p className="text-sm text-neutral-brown-600">{author.education}</p>
-                  </div>
+              <div className="flex items-center gap-2 mt-4 justify-center md:justify-start">
+                {author.website && (
+                  <a href={author.website} target="_blank" rel="noopener noreferrer"
+                     className="w-9 h-9 bg-white/10 hover:bg-white/20 rounded-lg flex items-center justify-center transition-colors">
+                    <Globe size={16} className="text-white" />
+                  </a>
                 )}
-                
-                {author.occupation && (
-                  <div>
-                    <h4 className="font-medium text-neutral-brown-800 mb-1">Occupation</h4>
-                    <p className="text-sm text-neutral-brown-600">{author.occupation}</p>
-                  </div>
+                {author.twitter && (
+                  <a href={`https://twitter.com/${author.twitter}`} target="_blank" rel="noopener noreferrer"
+                     className="w-9 h-9 bg-white/10 hover:bg-[#1DA1F2] rounded-lg flex items-center justify-center transition-colors">
+                    <Twitter size={16} className="text-white" />
+                  </a>
                 )}
-                
-                {author.writingExperience && (
-                  <div>
-                    <h4 className="font-medium text-neutral-brown-800 mb-1">Writing Experience</h4>
-                    <p className="text-sm text-neutral-brown-600">{author.writingExperience}</p>
-                  </div>
+                {author.facebook && (
+                  <a href={`https://facebook.com/${author.facebook}`} target="_blank" rel="noopener noreferrer"
+                     className="w-9 h-9 bg-white/10 hover:bg-[#1877F2] rounded-lg flex items-center justify-center transition-colors">
+                    <Facebook size={16} className="text-white" />
+                  </a>
                 )}
-                
-                {author.previousPublications && (
-                  <div>
-                    <h4 className="font-medium text-neutral-brown-800 mb-1">Previous Publications</h4>
-                    <p className="text-sm text-neutral-brown-600">{author.previousPublications}</p>
-                  </div>
+                {author.instagram && (
+                  <a href={`https://instagram.com/${author.instagram}`} target="_blank" rel="noopener noreferrer"
+                     className="w-9 h-9 bg-white/10 hover:bg-[#E4405F] rounded-lg flex items-center justify-center transition-colors">
+                    <Instagram size={16} className="text-white" />
+                  </a>
                 )}
-                
-                {author.awards && (
-                  <div>
-                    <h4 className="font-medium text-neutral-brown-800 mb-1 flex items-center gap-1">
-                      <Award size={16} className="text-accent-gold" />
-                      Awards
-                    </h4>
-                    <p className="text-sm text-neutral-brown-600">{author.awards}</p>
-                  </div>
+                {author.linkedin && (
+                  <a href={`https://linkedin.com/in/${author.linkedin}`} target="_blank" rel="noopener noreferrer"
+                     className="w-9 h-9 bg-white/10 hover:bg-[#0A66C2] rounded-lg flex items-center justify-center transition-colors">
+                    <Linkedin size={16} className="text-white" />
+                  </a>
                 )}
-              </div>
-            </div>
-
-            {/* Writing Style */}
-            <div className="bg-white rounded-3xl p-8 shadow-sm">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-12 h-12 bg-accent-green/10 rounded-xl flex items-center justify-center">
-                  <Heart size={24} className="text-accent-green" />
-                </div>
-                <h3 className="text-xl font-bold text-neutral-brown-900 font-heading">Writing</h3>
-              </div>
-              
-              <div className="space-y-5">
-                {author.genres && (
-                  <div>
-                    <h4 className="font-medium text-neutral-brown-800 mb-2">Genres</h4>
-                    <div className="flex flex-wrap gap-2">
-                      {(() => {
-                        try {
-                          const genres = JSON.parse(author.genres);
-                          return genres.length > 0 ? genres.map((genre: string, index: number) => (
-                            <span key={index} className="bg-primary/10 text-primary px-3 py-1.5 rounded-full text-sm font-medium">
-                              {genre}
-                            </span>
-                          )) : <span className="text-sm text-neutral-brown-500">Not specified</span>;
-                        } catch {
-                          return <span className="text-sm text-neutral-brown-500">Not specified</span>;
-                        }
-                      })()}
-                    </div>
-                  </div>
-                )}
-                
-                {author.languages && (
-                  <div>
-                    <h4 className="font-medium text-neutral-brown-800 mb-2">Languages</h4>
-                    <div className="flex flex-wrap gap-2">
-                      {(() => {
-                        try {
-                          const languages = JSON.parse(author.languages);
-                          return languages.map((language: string, index: number) => (
-                            <span key={index} className="bg-accent-green/10 text-accent-green px-3 py-1.5 rounded-full text-sm font-medium">
-                              {language}
-                            </span>
-                          ));
-                        } catch {
-                          return <span className="text-sm text-neutral-brown-500">Not specified</span>;
-                        }
-                      })()}
-                    </div>
-                  </div>
-                )}
-                
-                {author.writingStyle && (
-                  <div>
-                    <h4 className="font-medium text-neutral-brown-800 mb-1">Style</h4>
-                    <p className="text-sm text-neutral-brown-600">{author.writingStyle}</p>
-                  </div>
-                )}
-                
-                {author.inspirations && (
-                  <div>
-                    <h4 className="font-medium text-neutral-brown-800 mb-1">Inspirations</h4>
-                    <p className="text-sm text-neutral-brown-600">{author.inspirations}</p>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Goals & Audience */}
-            <div className="bg-white rounded-3xl p-8 shadow-sm">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-12 h-12 bg-accent-gold/10 rounded-xl flex items-center justify-center">
-                  <Target size={24} className="text-accent-gold" />
-                </div>
-                <h3 className="text-xl font-bold text-neutral-brown-900 font-heading">Goals</h3>
-              </div>
-              
-              <div className="space-y-5">
-                {author.targetAudience && (
-                  <div>
-                    <h4 className="font-medium text-neutral-brown-800 mb-1 flex items-center gap-1">
-                      <Users size={16} />
-                      Target Audience
-                    </h4>
-                    <p className="text-sm text-neutral-brown-600">{author.targetAudience}</p>
-                  </div>
-                )}
-                
-                {author.publishingGoals && (
-                  <div>
-                    <h4 className="font-medium text-neutral-brown-800 mb-1">Publishing Goals</h4>
-                    <p className="text-sm text-neutral-brown-600">{author.publishingGoals}</p>
-                  </div>
-                )}
-
-                {/* Connect */}
-                <div className="pt-5 border-t border-neutral-brown-100">
-                  <h4 className="font-medium text-neutral-brown-800 mb-4">Connect</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {author.website && (
-                      <a href={author.website} target="_blank" rel="noopener noreferrer" 
-                         className="flex items-center gap-2 px-4 py-2 bg-neutral-cream rounded-full text-sm text-neutral-brown-700 hover:bg-primary/10 hover:text-primary transition-colors">
-                        <ExternalLink size={14} />
-                        Website
-                      </a>
-                    )}
-                    {author.twitter && (
-                      <a href={`https://twitter.com/${author.twitter}`} target="_blank" rel="noopener noreferrer"
-                         className="flex items-center gap-2 px-4 py-2 bg-neutral-cream rounded-full text-sm text-neutral-brown-700 hover:bg-[#1DA1F2]/10 hover:text-[#1DA1F2] transition-colors">
-                        <Twitter size={14} />
-                        Twitter
-                      </a>
-                    )}
-                    {author.linkedin && (
-                      <a href={`https://linkedin.com/in/${author.linkedin}`} target="_blank" rel="noopener noreferrer"
-                         className="flex items-center gap-2 px-4 py-2 bg-neutral-cream rounded-full text-sm text-neutral-brown-700 hover:bg-[#0A66C2]/10 hover:text-[#0A66C2] transition-colors">
-                        <Linkedin size={14} />
-                        LinkedIn
-                      </a>
-                    )}
-                  </div>
-                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Books Section */}
-      <section className="py-12 bg-white">
-        <div className="max-w-7xl mx-auto px-6">
-          <h2 className="text-3xl font-bold text-neutral-brown-900 font-heading mb-8 text-center">
-            Books by {author.name}
-          </h2>
+      <main className="max-w-6xl mx-auto px-6 py-10">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
 
-          {author.books && author.books.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {author.books.map((book, index) => {
-                const bookColorScheme = colorSchemes[index % colorSchemes.length];
-                return (
-                  <Link key={book.id} href={`/books/${book.id}`} className="group">
-                    <div className="bg-neutral-cream rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
-                      <div className={`aspect-[2/3] relative overflow-hidden ${!book.coverImage ? `bg-gradient-to-br ${bookColorScheme}` : ''}`}>
-                        {book.coverImage ? (
-                          <img src={book.coverImage} alt={book.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
-                        ) : (
-                          <div className="absolute inset-0 opacity-30 bg-[radial-gradient(circle_at_50%_120%,rgba(255,255,255,0.8),transparent)]"></div>
-                        )}
-                      </div>
-                      <div className="p-4">
-                        <h3 className="font-bold text-neutral-brown-900 mb-1 line-clamp-2 group-hover:text-primary transition-colors">
-                          {book.title}
-                        </h3>
-                        <div className="flex items-center justify-between mt-3">
-                          <span className="text-xl font-bold text-primary">KES {book.price.toLocaleString()}</span>
-                          <div className="flex items-center gap-1">
-                            <Star size={14} className="fill-accent-gold text-accent-gold" />
-                            <span className="text-sm font-medium">{book.rating?.toFixed(1) || '0.0'}</span>
+          {/* Main Content: Books */}
+          <section className="lg:col-span-2">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold text-neutral-brown-900 font-heading">Books</h2>
+              {allBooks.length > 0 && (
+                <Link href={`/books?author=${authorId}`} className="text-primary font-semibold text-sm flex items-center gap-1 hover:gap-2 transition-all">
+                  View All <ArrowRight size={14} />
+                </Link>
+              )}
+            </div>
+
+            {allBooks.length > 0 ? (
+              <div className="space-y-5">
+                {allBooks.map((book, index) => {
+                  const bookColor = colorSchemes[index % colorSchemes.length];
+                  return (
+                    <Link key={book.id} href={`/books/${book.id}`} className="group">
+                      <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 grid grid-cols-[120px_1fr] sm:grid-cols-[160px_1fr]">
+                        <div className={`relative aspect-[2/3] sm:h-full overflow-hidden ${!book.coverImage ? `bg-gradient-to-br ${bookColor}` : ''}`}>
+                          {book.coverImage ? (
+                            <img src={book.coverImage} alt={book.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center">
+                              <BookOpen size={28} className="text-white/50" />
+                            </div>
+                          )}
+                        </div>
+                        <div className="p-5 flex flex-col justify-between">
+                          <div>
+                            <h3 className="font-bold text-base text-neutral-brown-900 line-clamp-1 group-hover:text-primary transition-colors mb-1">
+                              {book.title}
+                            </h3>
+                            {book.description && (
+                              <p className="text-sm text-neutral-brown-600 line-clamp-2 mb-2">{book.description}</p>
+                            )}
+                            <div className="flex items-center gap-2 text-xs text-neutral-brown-500">
+                              {book.category && (
+                                <span className="px-2 py-0.5 bg-primary/10 text-primary rounded-full font-medium">{book.category}</span>
+                              )}
+                              <span className="flex items-center gap-1">
+                                <Star size={12} className="fill-accent-gold text-accent-gold" /> {book.rating?.toFixed(1) || '0.0'}
+                              </span>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-3 mt-3">
+                            <span className="text-lg font-bold text-primary">KES {book.price.toLocaleString()}</span>
+                            {book.amazonUrl && (
+                              <span className="px-2 py-0.5 bg-accent-gold/10 text-accent-gold text-xs font-semibold rounded-full">
+                                Amazon
+                              </span>
+                            )}
                           </div>
                         </div>
                       </div>
+                    </Link>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="bg-white rounded-2xl p-10 text-center shadow-sm">
+                <BookOpen size={32} className="text-neutral-brown-300 mx-auto mb-3" />
+                <p className="text-neutral-brown-600">No published books yet.</p>
+              </div>
+            )}
+          </section>
+
+          {/* Sidebar: Blog Posts + Popular */}
+          <aside className="lg:col-span-1 space-y-6">
+            {/* Blog Posts */}
+            <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
+              <div className="px-5 py-4 bg-primary rounded-t-2xl">
+                <h3 className="text-white font-heading font-bold flex items-center gap-2">
+                  <FileText size={16} />
+                  Blog Posts
+                </h3>
+              </div>
+              <div className="divide-y divide-neutral-brown-100">
+                {blogPosts.length > 0 ? blogPosts.slice(0, 6).map((post, i) => (
+                  <Link key={post.id} href={`/blogs/${post.id}`} className="flex items-start gap-3 p-4 hover:bg-neutral-cream/60 transition-colors group">
+                    <div className={`w-10 h-10 shrink-0 rounded-lg bg-gradient-to-br ${colorSchemes[i % colorSchemes.length]} flex items-center justify-center overflow-hidden`}>
+                      {post.coverImage ? (
+                        <img src={post.coverImage} alt="" className="w-full h-full object-cover" />
+                      ) : (
+                        <FileText size={16} className="text-white/70" />
+                      )}
+                    </div>
+                    <div className="min-w-0">
+                      <h4 className="text-sm font-semibold text-neutral-brown-900 line-clamp-1 group-hover:text-primary transition-colors">
+                        {post.title}
+                      </h4>
+                      <p className="text-xs text-neutral-brown-500 mt-1 flex items-center gap-2">
+                        <span>{formatBlogDate(post.publishedAt || post.createdAt)}</span>
+                        <span className="flex items-center gap-1"><Eye size={11} /> {post.viewCount}</span>
+                      </p>
                     </div>
                   </Link>
-                );
-              })}
-            </div>
-          ) : (
-            <div className="text-center py-16">
-              <div className="w-20 h-20 bg-neutral-cream rounded-full flex items-center justify-center mx-auto mb-4">
-                <BookOpen size={36} className="text-neutral-brown-300" />
+                )) : (
+                  <p className="text-sm text-neutral-brown-500 p-6">No posts yet.</p>
+                )}
               </div>
-              <p className="text-neutral-brown-600">No published books yet.</p>
             </div>
-          )}
+
+            {/* Popular Posts */}
+            {topByViews.length > 0 && (
+              <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
+                <div className="px-5 py-4 bg-neutral-brown-900 rounded-t-2xl">
+                  <h3 className="text-white font-heading font-bold flex items-center gap-2">
+                    <Eye size={16} className="text-accent-gold" />
+                    Popular Posts
+                  </h3>
+                </div>
+                <div className="divide-y divide-neutral-brown-100">
+                  {topByViews.map((post, i) => (
+                    <Link key={post.id} href={`/blogs/${post.id}`} className="flex items-start gap-3 p-4 hover:bg-neutral-cream/60 transition-colors group">
+                      <span className="w-8 h-8 shrink-0 rounded-lg bg-primary/10 text-primary font-heading font-bold flex items-center justify-center text-sm">
+                        {i + 1}
+                      </span>
+                      <div className="min-w-0">
+                        <h4 className="text-sm font-semibold text-neutral-brown-900 line-clamp-1 group-hover:text-primary transition-colors">
+                          {post.title}
+                        </h4>
+                        <p className="text-xs text-neutral-brown-500 mt-1 flex items-center gap-2">
+                          <span>{formatBlogDate(post.publishedAt || post.createdAt)}</span>
+                          <span className="flex items-center gap-1"><Eye size={11} /> {post.viewCount}</span>
+                        </p>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Write for us */}
+            <div className="bg-gradient-to-br from-primary to-primary-dark rounded-2xl p-6 text-white">
+              <div className="w-10 h-10 bg-white/15 rounded-xl flex items-center justify-center mb-3">
+                <Users size={18} />
+              </div>
+              <h3 className="font-heading font-bold text-base mb-2">Read More</h3>
+              <p className="text-white/80 text-sm leading-relaxed mb-4">
+                Explore more books and posts from Kalenjin authors.
+              </p>
+              <Link href="/books" className="inline-flex items-center gap-2 bg-white text-primary font-semibold px-4 py-2 rounded-xl hover:bg-neutral-cream transition-all text-sm">
+                Browse Books <ArrowRight size={14} />
+              </Link>
+            </div>
+          </aside>
         </div>
-      </section>
+      </main>
+
+      <footer className="bg-neutral-brown-900 text-white py-6">
+        <div className="max-w-6xl mx-auto px-6 text-center">
+          <p className="text-neutral-brown-400 text-sm">&copy; {new Date().getFullYear()} KaleeReads</p>
+        </div>
+      </footer>
     </div>
   );
 }

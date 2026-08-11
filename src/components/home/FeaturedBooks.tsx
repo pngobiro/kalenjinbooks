@@ -50,7 +50,7 @@ export function FeaturedBooks({ books }: FeaturedBooksProps) {
 
     return (
         <div className="bg-white py-20">
-            <div className="container mx-auto px-6 lg:px-12">
+            <div className="max-w-7xl mx-auto px-6">
                 {/* Centered Header */}
                 <div className="text-center mb-12">
                     <h2 className="text-4xl md:text-5xl font-bold text-neutral-brown-900 font-heading mb-3">Featured Books</h2>
@@ -61,14 +61,14 @@ export function FeaturedBooks({ books }: FeaturedBooksProps) {
                 <div className="flex items-center justify-center gap-3 mb-10">
                     <button
                         onClick={prevSlide}
-                        className="bg-accent-green hover:bg-[#7A8C74] text-white rounded-xl p-3.5 transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5"
+                        className="bg-accent-green hover:opacity-90 text-white rounded-xl p-3.5 transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5"
                         aria-label="Previous books"
                     >
                         <ChevronLeft size={24} />
                     </button>
                     <button
                         onClick={nextSlide}
-                        className="bg-accent-green hover:bg-[#7A8C74] text-white rounded-xl p-3.5 transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5"
+                        className="bg-accent-green hover:opacity-90 text-white rounded-xl p-3.5 transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5"
                         aria-label="Next books"
                     >
                         <ChevronRight size={24} />
