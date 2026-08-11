@@ -3,18 +3,25 @@
 import { useState, useEffect } from 'react';
 import { Share2, Twitter, Facebook, Link2, Check, MessageCircle } from 'lucide-react';
 
+const SITE_URL = 'https://kalenjinbooks.pages.dev';
+
 interface ShareButtonsProps {
   title: string;
   url?: string;
+  type?: 'blog' | 'book' | 'author';
 }
 
-export default function ShareButtons({ title, url }: ShareButtonsProps) {
+export default function ShareButtons({ title, url, type = 'blog' }: ShareButtonsProps) {
   const [copied, setCopied] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const [currentUrl, setCurrentUrl] = useState('');
 
   useEffect(() => {
-    setCurrentUrl(url || window.location.href);
+    if (url) {
+      setCurrentUrl(url);
+    } else if (typeof window !== 'undefined') {
+      setCurrentUrl(`${SITE_URL}${window.location.pathname}`);
+    }
   }, [url]);
 
   const encodedUrl = encodeURIComponent(currentUrl);

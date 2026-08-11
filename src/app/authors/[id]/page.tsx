@@ -10,6 +10,7 @@ import {
   PlayCircle, Clock, Eye, ArrowRight, FileText, Users,
 } from 'lucide-react';
 import Link from 'next/link';
+import ShareButtons from '@/components/ShareButtons';
 import { getAuthorById, Author } from '@/lib/api/authors';
 import { fetchBlogPosts, type BlogPost } from '@/lib/api/blogs';
 import { calculateReadTime, formatBlogDate } from '@/lib/blog-utils';
@@ -172,6 +173,7 @@ export default function AuthorDetailPage() {
               </div>
 
               <div className="flex items-center gap-2 mt-4 justify-center md:justify-start">
+                <ShareButtons title={author.name || 'Author'} type="author" />
                 {author.website && (
                   <a href={author.website} target="_blank" rel="noopener noreferrer"
                      className="w-9 h-9 bg-white/10 hover:bg-white/20 rounded-lg flex items-center justify-center transition-colors">

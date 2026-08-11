@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { Clock, Eye, ArrowLeft, User } from 'lucide-react';
+import ShareButtons from '@/components/ShareButtons';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import BlogPostRenderer from '@/components/blog/BlogPostRenderer';
@@ -118,32 +119,35 @@ export default function BlogDetailPage() {
                 </h1>
 
                 {/* Author Meta */}
-                <div className="flex items-center gap-4 pb-8 mb-10 border-b border-neutral-brown-200">
-                    {authorImage ? (
-                        <img
-                            src={authorImage}
-                            alt={authorName}
-                            className="w-12 h-12 rounded-full object-cover"
-                        />
-                    ) : (
-                        <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center">
-                            <User size={24} className="text-primary" />
-                        </div>
-                    )}
-                    <div>
-                        <p className="font-semibold text-neutral-brown-900">{authorName}</p>
-                        <div className="flex items-center gap-3 text-sm text-neutral-brown-600 mt-0.5">
-                            <span>{formatBlogDate(post.publishedAt || post.createdAt)}</span>
-                            <span className="flex items-center gap-1">
-                                <Clock size={14} />
-                                {readTime.text}
-                            </span>
-                            <span className="flex items-center gap-1">
-                                <Eye size={14} />
-                                {post.viewCount} views
-                            </span>
+                <div className="flex items-center justify-between pb-8 mb-10 border-b border-neutral-brown-200">
+                    <div className="flex items-center gap-4">
+                        {authorImage ? (
+                            <img
+                                src={authorImage}
+                                alt={authorName}
+                                className="w-12 h-12 rounded-full object-cover"
+                            />
+                        ) : (
+                            <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center">
+                                <User size={24} className="text-primary" />
+                            </div>
+                        )}
+                        <div>
+                            <p className="font-semibold text-neutral-brown-900">{authorName}</p>
+                            <div className="flex items-center gap-3 text-sm text-neutral-brown-600 mt-0.5">
+                                <span>{formatBlogDate(post.publishedAt || post.createdAt)}</span>
+                                <span className="flex items-center gap-1">
+                                    <Clock size={14} />
+                                    {readTime.text}
+                                </span>
+                                <span className="flex items-center gap-1">
+                                    <Eye size={14} />
+                                    {post.viewCount} views
+                                </span>
+                            </div>
                         </div>
                     </div>
+                    <ShareButtons title={post.title} type="blog" />
                 </div>
 
                 {/* Content */}
