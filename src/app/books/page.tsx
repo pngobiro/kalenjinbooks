@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Search, BookOpen, Star, ArrowRight, Sparkles } from 'lucide-react';
+import { Search, BookOpen, Star, ArrowRight, Sparkles, ShoppingCart, Package } from 'lucide-react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import { fetchBooks, type Book as BookType } from '@/lib/api/books';
@@ -218,7 +218,7 @@ export default function BooksPage() {
                           </div>
                         </div>
                         
-                        <div className="flex gap-2 mt-4">
+                        <div className="flex gap-2 mt-3">
                           {book.category && (
                             <span className="text-xs px-3 py-1.5 bg-accent-green/10 text-accent-green rounded-full font-medium">
                               {book.category}
@@ -229,6 +229,25 @@ export default function BooksPage() {
                               {book.language}
                             </span>
                           )}
+                        </div>
+
+                        <div className="flex gap-2 mt-4">
+                          <Link
+                            href={`/payment?bookId=${book.id}&author=${encodeURIComponent(book.author?.user?.name || '')}&type=temporary&price=${Math.floor(book.price * 0.1)}&title=${encodeURIComponent(book.title)}`}
+                            className="flex-1 inline-flex items-center justify-center gap-1.5 bg-accent-green text-white py-2.5 rounded-xl font-bold text-xs hover:bg-[#7A8C74] transition-colors shadow-sm"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <ShoppingCart size={13} />
+                            Buy Now
+                          </Link>
+                          <Link
+                            href={`/request-hard-copy?book=${encodeURIComponent(book.title)}&id=${book.id}`}
+                            className="flex-1 inline-flex items-center justify-center gap-1.5 bg-primary text-white py-2.5 rounded-xl font-bold text-xs hover:bg-primary-dark transition-colors shadow-sm"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <Package size={13} />
+                            Hard Copy
+                          </Link>
                         </div>
                       </div>
                     </div>

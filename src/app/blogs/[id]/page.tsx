@@ -3,17 +3,16 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import { Clock, Eye, ArrowLeft, ArrowRight, User } from 'lucide-react';
+import { Clock, Eye, ArrowLeft, User } from 'lucide-react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import BlogPostRenderer from '@/components/blog/BlogPostRenderer';
-import { fetchBlogPost, fetchBlogPosts, type BlogPost } from '@/lib/api/blogs';
+import { fetchBlogPost, type BlogPost } from '@/lib/api/blogs';
 import { calculateReadTime, formatBlogDate, getYouTubeEmbedUrl } from '@/lib/blog-utils';
 
 export default function BlogDetailPage() {
     const params = useParams<{ id: string }>();
     const [post, setPost] = useState<BlogPost | null>(null);
-    const [related, setRelated] = useState<BlogPost[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -23,22 +22,6 @@ export default function BlogDetailPage() {
                 setLoading(true);
                 const result = await fetchBlogPost(params.id);
                 setPost(result.data || null);
-                if (result.data) {
-                    try {
-                        const relatedResult = await fetchBlogPosts({
-                            published: true,
-                            limit: 3,
-                            sort: 'latest',
-                        });
-                        setRelated(
-                            relatedResult.data?.posts
-                                .filter((p) => p.id !== result.data?.id)
-                                .slice(0, 3)
-                        );
-                    } catch {
-                        setRelated([]);
-                    }
-                }
                 setError(null);
             } catch (err: any) {
                 setError(err.message || 'Failed to load blog post');
@@ -165,46 +148,6 @@ export default function BlogDetailPage() {
 
                 {/* Content */}
                 <BlogPostRenderer content={post.content} />
-
-                {/* Related Posts */}
-                {related.length > 0 && (
-                    <div className="mt-16">
-                        <h2 className="font-heading font-bold text-2xl text-neutral-brown-900 mb-6">
-                            More from KaleeReads
-                        </h2>
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                            {related.map((p) => (
-                                <Link
-                                    key={p.id}
-                                    href={`/blogs/${p.id}`}
-                                    className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300"
-                                >
-                                    <div className="aspect-[16/10] bg-gradient-to-br from-neutral-brown-900 to-neutral-brown-800">
-                                        {p.coverImage ? (
-                                            <img
-                                                src={p.coverImage}
-                                                alt={p.title}
-                                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                                            />
-                                        ) : (
-                                            <div className="w-full h-full flex items-center justify-center">
-                                                <span className="text-4xl text-white/30 font-heading font-bold">K</span>
-                                            </div>
-                                        )}
-                                    </div>
-                                    <div className="p-5">
-                                        <h3 className="font-heading font-bold text-neutral-brown-900 group-hover:text-primary transition-colors line-clamp-2">
-                                            {p.title}
-                                        </h3>
-                                        <span className="mt-3 inline-flex items-center gap-1 text-primary text-sm font-semibold">
-                                            Read More <ArrowRight size={14} />
-                                        </span>
-                                    </div>
-                                </Link>
-                            ))}
-                        </div>
-                    </div>
-                )}
             </main>
 
             <Footer />
