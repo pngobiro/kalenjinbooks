@@ -57,19 +57,19 @@ export default function HomePage() {
 
       {/* Hero - simple welcome */}
       <section className="bg-gradient-to-br from-neutral-brown-900 via-neutral-brown-800 to-neutral-brown-900">
-        <div className="max-w-6xl mx-auto px-6 py-14 md:py-16">
+        <div className="max-w-6xl mx-auto px-6 py-8 md:py-10">
           <div className="text-center max-w-3xl mx-auto">
-            <h1 className="text-4xl md:text-5xl font-bold text-white font-heading mb-4">
+            <h1 className="text-3xl md:text-4xl font-bold text-white font-heading mb-3">
               KaleeReads
             </h1>
-            <p className="text-lg text-neutral-brown-200 mb-6">
-              Stories, culture, and heritage from Kalenjin authors. Read, explore, and support local writers.
+            <p className="text-base text-neutral-brown-200 mb-5">
+              Books, stories, culture, and heritage from Kalenjin authors. Read, explore, and support local writers.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-              <Link href="/blogs" className="bg-primary hover:bg-primary-dark text-white font-semibold px-8 py-3 rounded-full transition-all hover:shadow-lg flex items-center gap-2">
-                Read the Blog <ArrowRight size={18} />
+              <Link href="/blogs" className="bg-white hover:bg-neutral-cream text-neutral-brown-900 font-semibold px-6 py-2.5 rounded-full transition-all text-sm">
+                Read the Blog
               </Link>
-              <Link href="/books" className="border-2 border-white/30 hover:border-white text-white font-semibold px-8 py-3 rounded-full transition-all hover:bg-white/10">
+              <Link href="/books" className="bg-white/20 hover:bg-white/30 text-white font-semibold px-6 py-2.5 rounded-full transition-all text-sm">
                 Browse Books
               </Link>
             </div>

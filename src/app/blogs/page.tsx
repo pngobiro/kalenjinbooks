@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
-import { Clock, Eye, ArrowRight, FileText, PenTool, Users, BookOpen, Tag } from 'lucide-react';
+import { Clock, Eye, ArrowRight, FileText, Users, BookOpen, Tag, Search, SlidersHorizontal, X } from 'lucide-react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import { fetchBlogPosts, type BlogPost } from '@/lib/api/blogs';
@@ -18,6 +18,11 @@ const blogCategories = [
   { id: 'Guides', label: 'Guides' },
   { id: 'History', label: 'History' },
   { id: 'Poetry', label: 'Poetry' },
+];
+
+const sortOptions = [
+  { id: 'latest', label: 'Latest' },
+  { id: 'most-viewed', label: 'Most Viewed' },
 ];
 
 function colorSchemeFor(index: number): string {
@@ -40,17 +45,27 @@ export default function BlogsPage() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [selectedCategory, setSelectedCategory] = useState('all');
+    const [selectedAuthor, setSelectedAuthor] = useState('all');
+    const [searchQuery, setSearchQuery] = useState('');
+    const [sortBy, setSortBy] = useState('latest');
+    const [showFilters, setShowFilters] = useState(false);
 
     const loadPosts = useCallback(async () => {
         try {
             setLoading(true);
-            const params: any = { published: true, limit: 24, sort: 'latest' };
+            const params: any = { published: true, limit: 24, sort: sortBy };
             if (selectedCategory !== 'all') {
                 params.category = selectedCategory;
             }
+            if (selectedAuthor !== 'all') {
+                params.authorId = selectedAuthor;
+            }
+            if (searchQuery.trim()) {
+                params.search = searchQuery.trim();
+            }
             const [blogRes, authorRes] = await Promise.all([
                 fetchBlogPosts(params).catch(() => null),
-                fetchAuthors({ limit: 6 }).catch(() => null),
+                fetchAuthors({ limit: 50 }).catch(() => null),
             ]);
             setPosts(blogRes?.data?.posts || []);
             setAuthors(authorRes?.data || []);
@@ -61,11 +76,25 @@ export default function BlogsPage() {
         } finally {
             setLoading(false);
         }
-    }, [selectedCategory]);
+    }, [selectedCategory, selectedAuthor, searchQuery, sortBy]);
 
     useEffect(() => {
         loadPosts();
     }, [loadPosts]);
+
+    const handleSearch = (e: React.FormEvent) => {
+        e.preventDefault();
+        loadPosts();
+    };
+
+    const clearFilters = () => {
+        setSelectedCategory('all');
+        setSelectedAuthor('all');
+        setSearchQuery('');
+        setSortBy('latest');
+    };
+
+    const hasActiveFilters = selectedCategory !== 'all' || selectedAuthor !== 'all' || searchQuery !== '' || sortBy !== 'latest';
 
     const [featured, ...rest] = posts;
     const topByViews = [...posts].sort((a, b) => b.viewCount - a.viewCount).slice(0, 5);
@@ -76,33 +105,101 @@ export default function BlogsPage() {
 
             {/* Page header */}
             <header className="bg-white border-b border-neutral-brown-200">
-                <div className="max-w-6xl mx-auto px-6 py-10">
-                    <p className="text-sm font-medium text-primary uppercase tracking-widest mb-2">KaleeReads Blog</p>
-                    <h1 className="text-4xl md:text-5xl font-heading font-bold text-neutral-brown-900">
+                <div className="max-w-6xl mx-auto px-6 py-6">
+                    <p className="text-xs font-medium text-primary uppercase tracking-widest mb-1">KaleeReads Blog</p>
+                    <h1 className="text-2xl md:text-3xl font-heading font-bold text-neutral-brown-900">
                         News &amp; Articles
                     </h1>
-                    <p className="mt-3 text-lg text-neutral-brown-600 max-w-2xl">
+                    <p className="mt-1 text-sm text-neutral-brown-600">
                         Stories, insights and culture from our Kalenjin authors
                     </p>
                 </div>
             </header>
 
             <main className="max-w-6xl mx-auto px-6 py-12">
-                {/* Category Filter */}
-                <div className="flex items-center gap-3 mb-10 overflow-x-auto pb-2" style={{ scrollbarWidth: 'none' }}>
-                    {blogCategories.map((cat) => (
-                        <button
-                            key={cat.id}
-                            onClick={() => setSelectedCategory(cat.id)}
-                            className={`px-5 py-2 rounded-full font-medium whitespace-nowrap transition-all text-sm ${
-                                selectedCategory === cat.id
-                                    ? 'bg-primary text-white shadow-md'
-                                    : 'bg-white text-neutral-brown-700 hover:bg-primary/5 border border-neutral-brown-200'
-                            }`}
-                        >
-                            {cat.label}
-                        </button>
-                    ))}
+                {/* Filter Bar */}
+                <div className="bg-white rounded-2xl shadow-sm p-4 mb-8">
+                    <div className="flex flex-col md:flex-row md:items-center gap-4">
+                        {/* Search */}
+                        <form onSubmit={handleSearch} className="flex-1 relative">
+                            <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-brown-400" />
+                            <input
+                                type="text"
+                                placeholder="Search posts..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                className="w-full pl-10 pr-4 py-2.5 bg-neutral-cream border border-neutral-brown-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors"
+                            />
+                            {searchQuery && (
+                                <button
+                                    type="button"
+                                    onClick={() => setSearchQuery('')}
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-brown-400 hover:text-neutral-brown-600"
+                                >
+                                    <X size={16} />
+                                </button>
+                            )}
+                        </form>
+
+                        {/* Author Filter */}
+                        <div className="relative min-w-[180px]">
+                            <select
+                                value={selectedAuthor}
+                                onChange={(e) => setSelectedAuthor(e.target.value)}
+                                className="w-full px-4 py-2.5 bg-neutral-cream border border-neutral-brown-200 rounded-xl text-sm appearance-none focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors cursor-pointer"
+                            >
+                                <option value="all">All Authors</option>
+                                {authors.map((author) => (
+                                    <option key={author.id} value={author.id}>
+                                        {author.name || 'Unknown'}
+                                    </option>
+                                ))}
+                            </select>
+                            <Users size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-brown-400 pointer-events-none" />
+                        </div>
+
+                        {/* Sort */}
+                        <div className="relative min-w-[140px]">
+                            <select
+                                value={sortBy}
+                                onChange={(e) => setSortBy(e.target.value)}
+                                className="w-full px-4 py-2.5 bg-neutral-cream border border-neutral-brown-200 rounded-xl text-sm appearance-none focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors cursor-pointer"
+                            >
+                                {sortOptions.map((opt) => (
+                                    <option key={opt.id} value={opt.id}>{opt.label}</option>
+                                ))}
+                            </select>
+                            <SlidersHorizontal size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-brown-400 pointer-events-none" />
+                        </div>
+
+                        {/* Clear Filters */}
+                        {hasActiveFilters && (
+                            <button
+                                onClick={clearFilters}
+                                className="flex items-center gap-1.5 px-4 py-2.5 text-sm text-primary hover:text-primary-dark font-medium transition-colors"
+                            >
+                                <X size={16} />
+                                Clear
+                            </button>
+                        )}
+                    </div>
+
+                    {/* Category Pills */}
+                    <div className="flex items-center gap-2 mt-4 overflow-x-auto pb-1" style={{ scrollbarWidth: 'none' }}>
+                        {blogCategories.map((cat) => (
+                            <button
+                                key={cat.id}
+                                onClick={() => setSelectedCategory(cat.id)}
+                                className={`px-4 py-1.5 rounded-full font-medium whitespace-nowrap transition-all text-sm ${
+                                    selectedCategory === cat.id
+                                        ? 'bg-primary text-white shadow-md'
+                                        : 'bg-neutral-cream text-neutral-brown-700 hover:bg-primary/10 border border-neutral-brown-200'
+                                }`}
+                            >
+                                {cat.label}
+                            </button>
+                        ))}
+                    </div>
                 </div>
 
                 {/* Error State */}
@@ -266,19 +363,19 @@ export default function BlogsPage() {
                                         <FileText size={28} className="text-neutral-brown-400" />
                                     </div>
                                     <h3 className="text-2xl font-heading font-bold text-neutral-brown-900 mb-2">
-                                        {selectedCategory !== 'all' ? `No ${selectedCategory} posts yet` : 'No blog posts yet'}
+                                        {hasActiveFilters ? 'No matching posts found' : 'No blog posts yet'}
                                     </h3>
                                     <p className="text-neutral-brown-600 mb-6">
-                                        {selectedCategory !== 'all'
-                                            ? 'Try selecting a different category.'
+                                        {hasActiveFilters
+                                            ? 'Try adjusting your filters or search query.'
                                             : 'Our authors haven\'t published anything yet. Check back soon!'}
                                     </p>
-                                    {selectedCategory !== 'all' ? (
+                                    {hasActiveFilters ? (
                                         <button
-                                            onClick={() => setSelectedCategory('all')}
+                                            onClick={clearFilters}
                                             className="inline-block bg-primary hover:bg-primary-dark text-white font-semibold px-8 py-3 rounded-full transition-all"
                                         >
-                                            View All Posts
+                                            Clear Filters
                                         </button>
                                     ) : (
                                         <Link
@@ -365,22 +462,6 @@ export default function BlogsPage() {
                                 </div>
                             </div>
 
-                            {/* Write for us prompt */}
-                            <div className="bg-gradient-to-br from-primary to-primary-dark rounded-2xl p-6 text-white">
-                                <div className="w-12 h-12 bg-white/15 rounded-xl flex items-center justify-center mb-4">
-                                    <PenTool size={22} />
-                                </div>
-                                <h3 className="font-heading font-bold text-lg mb-2">Become an Author</h3>
-                                <p className="text-white/80 text-sm leading-relaxed mb-4">
-                                    Share your stories and insights with our community. Reach readers who love Kalenjin literature.
-                                </p>
-                                <Link
-                                    href="/dashboard/author/register"
-                                    className="inline-flex items-center gap-2 bg-white text-primary font-semibold px-5 py-2.5 rounded-xl hover:bg-neutral-cream transition-all"
-                                >
-                                    Get Started <ArrowRight size={16} />
-                                </Link>
-                            </div>
                         </aside>
                     </div>
                 )}
