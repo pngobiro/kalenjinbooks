@@ -19,6 +19,8 @@ export default function EditBlogPostPage() {
     const [content, setContent] = useState('');
     const [category, setCategory] = useState('');
     const [tags, setTags] = useState('');
+    const [scheduledAt, setScheduledAt] = useState('');
+    const [isFeatured, setIsFeatured] = useState(false);
     const [coverType, setCoverType] = useState<'image' | 'video'>('image');
     const [coverImage, setCoverImage] = useState<string | null>(null);
     const [coverVideoUrl, setCoverVideoUrl] = useState('');
@@ -49,6 +51,8 @@ export default function EditBlogPostPage() {
                 setCoverVideoUrl(post.coverVideoUrl || '');
                 setCategory(post.category || '');
                 setTags(post.tags || '');
+                setScheduledAt(post.scheduledAt ? new Date(post.scheduledAt).toISOString().slice(0, 16) : '');
+                setIsFeatured(post.isFeatured || false);
                 setIsPublished(post.isPublished);
 
                 // Verify ownership (non-admin): the worker enforces this, so just surface it
@@ -100,7 +104,9 @@ export default function EditBlogPostPage() {
                 coverVideoUrl: coverType === 'video' ? coverVideoUrl.trim() : '',
                 category: category || '',
                 tags: tags.trim() || '',
+                scheduledAt: scheduledAt || '',
                 isPublished: publish !== undefined ? publish : isPublished,
+                isFeatured,
             });
             router.push('/dashboard/author/blogs');
         } catch (err: any) {
@@ -248,6 +254,34 @@ export default function EditBlogPostPage() {
                         placeholder="e.g., culture, history, kalenjin"
                         className="w-full px-4 py-3 rounded-xl border border-neutral-brown-200 focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none text-neutral-brown-700"
                     />
+                </div>
+
+                {/* Schedule */}
+                <div>
+                    <label className="block text-sm font-medium text-neutral-brown-700 mb-2">
+                        Schedule Publish <span className="text-neutral-brown-400 font-normal">(optional)</span>
+                    </label>
+                    <input
+                        type="datetime-local"
+                        value={scheduledAt}
+                        onChange={(e) => setScheduledAt(e.target.value)}
+                        min={new Date().toISOString().slice(0, 16)}
+                        className="w-full px-4 py-3 rounded-xl border border-neutral-brown-200 focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none text-neutral-brown-700"
+                    />
+                </div>
+
+                {/* Featured Post */}
+                <div className="flex items-center gap-3">
+                    <input
+                        type="checkbox"
+                        id="isFeatured"
+                        checked={isFeatured}
+                        onChange={(e) => setIsFeatured(e.target.checked)}
+                        className="w-4 h-4 text-primary rounded border-neutral-brown-300 focus:ring-primary"
+                    />
+                    <label htmlFor="isFeatured" className="text-sm font-medium text-neutral-brown-700">
+                        Featured post (shown prominently on blog page)
+                    </label>
                 </div>
 
                 {/* Featured Media */}

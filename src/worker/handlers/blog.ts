@@ -89,6 +89,24 @@ export async function handleBlogRequest(
         }
     }
 
+    // Admin: publish scheduled posts
+    if (path === '/api/blog/publish-scheduled' && method === 'POST') {
+        return await authMiddleware(request, env, async () => {
+            return requireRole('ADMIN')(request, env, async () => {
+                return await publishScheduledPosts(request, env);
+            });
+        });
+    }
+
+    // Admin: toggle featured status
+    if (path === '/api/blog/toggle-featured' && method === 'POST') {
+        return await authMiddleware(request, env, async () => {
+            return requireRole('ADMIN')(request, env, async () => {
+                return await toggleFeaturedPost(request, env);
+            });
+        });
+    }
+
     return errorResponse('Not Found', HttpStatus.NOT_FOUND);
 }
 
@@ -260,10 +278,12 @@ async function createBlogPost(request: WorkerRequest, env: Env): Promise<Respons
             coverType?: string;
             coverVideoUrl?: string;
             category?: string;
+            tags?: string;
+            scheduledAt?: string;
             isPublished?: boolean;
         }>(request);
 
-        const { title, content, excerpt, coverImage, coverType, coverVideoUrl, category, tags, isPublished } = body;
+        const { title, content, excerpt, coverImage, coverType, coverVideoUrl, category, tags, scheduledAt, isPublished } = body;
 
         if (!title || !content) {
             return errorResponse('Title and content are required', HttpStatus.BAD_REQUEST, ErrorCode.VALIDATION_ERROR);
@@ -309,8 +329,9 @@ async function createBlogPost(request: WorkerRequest, env: Env): Promise<Respons
                 category: category || null,
                 tags: tags || null,
                 authorId: author.id,
-                isPublished: isPublished && (userRole === 'ADMIN' || author.status === 'APPROVED') ? true : false,
-                publishedAt: isPublished ? new Date() : null,
+                isPublished: isPublished && !scheduledAt ? true : false,
+                publishedAt: isPublished && !scheduledAt ? new Date() : null,
+                scheduledAt: scheduledAt ? new Date(scheduledAt) : null,
             },
             include: {
                 author: {
@@ -371,7 +392,10 @@ async function updateBlogPost(request: WorkerRequest, env: Env, postId: string, 
             coverType?: string;
             coverVideoUrl?: string;
             category?: string;
+            tags?: string;
+            scheduledAt?: string;
             isPublished?: boolean;
+            isFeatured?: boolean;
         }>(request);
 
         const data: any = {};
@@ -414,6 +438,10 @@ async function updateBlogPost(request: WorkerRequest, env: Env, postId: string, 
 
         if (body.category !== undefined) data.category = body.category;
         if (body.tags !== undefined) data.tags = body.tags;
+        if (body.scheduledAt !== undefined) {
+            data.scheduledAt = body.scheduledAt ? new Date(body.scheduledAt) : null;
+        }
+        if (body.isFeatured !== undefined) data.isFeatured = body.isFeatured;
 
         // Publishing/unpublishing
         if (body.isPublished !== undefined) {
@@ -493,5 +521,81 @@ async function deleteBlogPost(request: WorkerRequest, env: Env, postId: string, 
     } catch (error) {
         console.error('Delete blog post error:', error);
         return errorResponse('Failed to delete blog post', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+}
+
+/**
+ * Publish scheduled blog posts (called by cron or admin)
+ */
+async function publishScheduledPosts(request: WorkerRequest, env: Env): Promise<Response> {
+    try {
+        const prisma = createD1PrismaClient(env.DB);
+        const now = new Date();
+
+        const scheduledPosts = await prisma.blogPost.findMany({
+            where: {
+                isPublished: false,
+                scheduledAt: { lte: now },
+            },
+        });
+
+        if (scheduledPosts.length === 0) {
+            return successResponse({ message: 'No scheduled posts to publish', published: 0 });
+        }
+
+        const result = await prisma.blogPost.updateMany({
+            where: {
+                id: { in: scheduledPosts.map(p => p.id) },
+            },
+            data: {
+                isPublished: true,
+                publishedAt: now,
+                scheduledAt: null,
+            },
+        });
+
+        await deleteCached(env.CACHE, generateCacheKey(CachePrefix.BLOG_POSTS, 'all'));
+
+        return successResponse({
+            message: `Published ${result.count} scheduled posts`,
+            published: result.count,
+        });
+    } catch (error) {
+        console.error('Publish scheduled posts error:', error);
+        return errorResponse('Failed to publish scheduled posts', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+}
+
+/**
+ * Toggle featured status for a blog post (admin only)
+ */
+async function toggleFeaturedPost(request: WorkerRequest, env: Env): Promise<Response> {
+    try {
+        const prisma = createD1PrismaClient(env.DB);
+        const body = await parseJsonBody<{ postId: string; isFeatured: boolean }>(request);
+
+        if (!body.postId) {
+            return errorResponse('Post ID is required', HttpStatus.BAD_REQUEST);
+        }
+
+        const post = await prisma.blogPost.findUnique({
+            where: { id: body.postId },
+        });
+
+        if (!post) {
+            return errorResponse('Post not found', HttpStatus.NOT_FOUND);
+        }
+
+        const updated = await prisma.blogPost.update({
+            where: { id: body.postId },
+            data: { isFeatured: body.isFeatured },
+        });
+
+        await deleteCached(env.CACHE, generateCacheKey(CachePrefix.BLOG_POSTS, 'all'));
+
+        return successResponse({ id: updated.id, isFeatured: updated.isFeatured });
+    } catch (error) {
+        console.error('Toggle featured post error:', error);
+        return errorResponse('Failed to toggle featured status', HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

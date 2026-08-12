@@ -15,7 +15,9 @@ export interface BlogPost {
     tags: string | null;
     authorId: string;
     isPublished: boolean;
+    isFeatured: boolean;
     publishedAt: Date | string | null;
+    scheduledAt: Date | string | null;
     viewCount: number;
     createdAt: Date | string;
     updatedAt: Date | string;
@@ -180,6 +182,7 @@ export async function createBlogPost(post: {
     coverVideoUrl?: string;
     category?: string;
     tags?: string;
+    scheduledAt?: string;
     isPublished?: boolean;
 }): Promise<ApiResponse<BlogPost>> {
     const baseUrl = getApiBaseUrl();
@@ -211,7 +214,9 @@ export async function updateBlogPost(id: string, post: Partial<{
     coverVideoUrl: string;
     category: string;
     tags: string;
+    scheduledAt: string;
     isPublished: boolean;
+    isFeatured: boolean;
 }>): Promise<ApiResponse<BlogPost>> {
     const baseUrl = getApiBaseUrl();
     const response = await fetchWithRetry(`${baseUrl}/api/blog/posts/${id}`, {

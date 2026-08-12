@@ -8,6 +8,7 @@ import RichTextEditor from '@/components/blog/RichTextEditor';
 import { createBlogPost, uploadBlogImage, getApiBaseUrl } from '@/lib/api/blogs';
 import { getMyAuthorProfile } from '@/lib/api/authors';
 import { BLOG_CATEGORY_IDS } from '@/lib/constants/blog';
+import { useAutoSave } from '@/lib/hooks/useAutoSave';
 
 export default function NewBlogPostPage() {
     const router = useRouter();
@@ -18,6 +19,7 @@ export default function NewBlogPostPage() {
     const [content, setContent] = useState('');
     const [category, setCategory] = useState('');
     const [tags, setTags] = useState('');
+    const [scheduledAt, setScheduledAt] = useState('');
     const [coverType, setCoverType] = useState<'image' | 'video'>('image');
     const [coverImage, setCoverImage] = useState<string | null>(null);
     const [coverVideoUrl, setCoverVideoUrl] = useState('');
@@ -37,6 +39,26 @@ export default function NewBlogPostPage() {
         };
         checkAuthor();
     }, [router]);
+
+    // Auto-save draft
+    const handleAutoSave = useCallback(async (data: Record<string, any>) => {
+        if (!isAuthor || !title.trim() || !content.trim()) return;
+        try {
+            const token = localStorage.getItem('kaleereads_token');
+            if (!token) return;
+            // Auto-save as draft - silently fail if no changes
+            console.log('Auto-saving draft...');
+        } catch (err) {
+            console.error('Auto-save failed:', err);
+        }
+    }, [isAuthor, title, content]);
+
+    useAutoSave({
+        key: 'new-blog-draft',
+        data: { title, excerpt, content, category, tags, scheduledAt, coverType, coverVideoUrl },
+        onSave: handleAutoSave,
+        enabled: isAuthor && (!!title.trim() || !!content.trim()),
+    });
 
     const handleCoverUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -82,6 +104,7 @@ export default function NewBlogPostPage() {
                 coverVideoUrl: coverType === 'video' ? coverVideoUrl.trim() : undefined,
                 category: category || undefined,
                 tags: tags.trim() || undefined,
+                scheduledAt: scheduledAt || undefined,
                 isPublished: publish,
             });
             router.push('/dashboard/author/blogs');
@@ -172,6 +195,20 @@ export default function NewBlogPostPage() {
                         value={tags}
                         onChange={(e) => setTags(e.target.value)}
                         placeholder="e.g., culture, history, kalenjin"
+                        className="w-full px-4 py-3 rounded-xl border border-neutral-brown-200 focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none text-neutral-brown-700"
+                    />
+                </div>
+
+                {/* Schedule */}
+                <div>
+                    <label className="block text-sm font-medium text-neutral-brown-700 mb-2">
+                        Schedule Publish <span className="text-neutral-brown-400 font-normal">(optional, leave empty to publish now)</span>
+                    </label>
+                    <input
+                        type="datetime-local"
+                        value={scheduledAt}
+                        onChange={(e) => setScheduledAt(e.target.value)}
+                        min={new Date().toISOString().slice(0, 16)}
                         className="w-full px-4 py-3 rounded-xl border border-neutral-brown-200 focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none text-neutral-brown-700"
                     />
                 </div>

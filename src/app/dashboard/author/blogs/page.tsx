@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Plus, Eye, Edit, Trash2, Search, PlayCircle, Tag, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Plus, Eye, Edit, Trash2, Search, PlayCircle, Tag, ChevronLeft, ChevronRight, CheckSquare, Square, Trash } from 'lucide-react';
 import BlogStats from '@/components/blog/BlogStats';
 import { fetchBlogPosts, deleteBlogPost, type BlogPost } from '@/lib/api/blogs';
 import { getMyAuthorProfile } from '@/lib/api/authors';
@@ -40,6 +40,7 @@ export default function AuthorBlogsPage() {
     const [authorId, setAuthorId] = useState<string | null>(null);
     const [deletingId, setDeletingId] = useState<string | null>(null);
     const [currentPage, setCurrentPage] = useState(1);
+    const [selectedPosts, setSelectedPosts] = useState<Set<string>>(new Set());
     const postsPerPage = 10;
 
     useEffect(() => {
@@ -122,6 +123,37 @@ export default function AuthorBlogsPage() {
     const handleFilterChange = (setter: (v: any) => void) => (value: any) => {
         setter(value);
         setCurrentPage(1);
+    };
+
+    const toggleSelectAll = () => {
+        if (selectedPosts.size === paginatedPosts.length) {
+            setSelectedPosts(new Set());
+        } else {
+            setSelectedPosts(new Set(paginatedPosts.map(p => p.id)));
+        }
+    };
+
+    const toggleSelectPost = (id: string) => {
+        const newSelected = new Set(selectedPosts);
+        if (newSelected.has(id)) {
+            newSelected.delete(id);
+        } else {
+            newSelected.add(id);
+        }
+        setSelectedPosts(newSelected);
+    };
+
+    const handleBulkDelete = async () => {
+        if (!window.confirm(`Delete ${selectedPosts.size} posts? This cannot be undone.`)) return;
+        try {
+            for (const id of selectedPosts) {
+                await deleteBlogPost(id);
+            }
+            setPosts(prev => prev.filter(p => !selectedPosts.has(p.id)));
+            setSelectedPosts(new Set());
+        } catch (err: any) {
+            alert(err.message || 'Failed to delete posts');
+        }
     };
 
     return (
@@ -251,9 +283,37 @@ export default function AuthorBlogsPage() {
                         </div>
                     ) : (
                         <div className="overflow-x-auto">
+                            {/* Bulk Actions */}
+                            {selectedPosts.size > 0 && (
+                                <div className="flex items-center gap-3 px-5 py-3 bg-primary/5 border-b border-primary/20">
+                                    <span className="text-sm text-primary font-medium">{selectedPosts.size} selected</span>
+                                    <button
+                                        onClick={handleBulkDelete}
+                                        className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-red-500 text-white text-sm font-medium rounded-lg hover:bg-red-600 transition-colors"
+                                    >
+                                        <Trash size={14} />
+                                        Delete Selected
+                                    </button>
+                                    <button
+                                        onClick={() => setSelectedPosts(new Set())}
+                                        className="text-sm text-neutral-brown-600 hover:text-neutral-brown-900"
+                                    >
+                                        Clear selection
+                                    </button>
+                                </div>
+                            )}
                             <table className="w-full text-left">
                                 <thead>
                                     <tr className="border-b border-neutral-brown-100 text-sm text-neutral-brown-600">
+                                        <th className="px-5 py-4 font-medium w-10">
+                                            <button onClick={toggleSelectAll} className="text-neutral-brown-400 hover:text-primary">
+                                                {selectedPosts.size === paginatedPosts.length && paginatedPosts.length > 0 ? (
+                                                    <CheckSquare size={18} />
+                                                ) : (
+                                                    <Square size={18} />
+                                                )}
+                                            </button>
+                                        </th>
                                         <th className="px-5 py-4 font-medium">Title</th>
                                         <th className="px-5 py-4 font-medium">Category</th>
                                         <th className="px-5 py-4 font-medium">Status</th>
@@ -264,7 +324,16 @@ export default function AuthorBlogsPage() {
                                 </thead>
                                 <tbody>
                                     {paginatedPosts.map((post) => (
-                                        <tr key={post.id} className="border-b border-neutral-brown-50 hover:bg-neutral-cream/50 transition-colors">
+                                        <tr key={post.id} className={`border-b border-neutral-brown-50 hover:bg-neutral-cream/50 transition-colors ${selectedPosts.has(post.id) ? 'bg-primary/5' : ''}`}>
+                                            <td className="px-5 py-4">
+                                                <button onClick={() => toggleSelectPost(post.id)} className="text-neutral-brown-400 hover:text-primary">
+                                                    {selectedPosts.has(post.id) ? (
+                                                        <CheckSquare size={18} />
+                                                    ) : (
+                                                        <Square size={18} />
+                                                    )}
+                                                </button>
+                                            </td>
                                             <td className="px-5 py-4">
                                                 <Link
                                                     href={`/blogs/${post.slug || post.id}`}
