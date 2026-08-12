@@ -18,6 +18,7 @@ export default function EditBlogPostPage() {
     const [excerpt, setExcerpt] = useState('');
     const [content, setContent] = useState('');
     const [category, setCategory] = useState('');
+    const [tags, setTags] = useState('');
     const [coverType, setCoverType] = useState<'image' | 'video'>('image');
     const [coverImage, setCoverImage] = useState<string | null>(null);
     const [coverVideoUrl, setCoverVideoUrl] = useState('');
@@ -47,6 +48,7 @@ export default function EditBlogPostPage() {
                 setCoverImage(post.coverImage || null);
                 setCoverVideoUrl(post.coverVideoUrl || '');
                 setCategory(post.category || '');
+                setTags(post.tags || '');
                 setIsPublished(post.isPublished);
 
                 // Verify ownership (non-admin): the worker enforces this, so just surface it
@@ -97,6 +99,7 @@ export default function EditBlogPostPage() {
                 coverType,
                 coverVideoUrl: coverType === 'video' ? coverVideoUrl.trim() : '',
                 category: category || '',
+                tags: tags.trim() || '',
                 isPublished: publish !== undefined ? publish : isPublished,
             });
             router.push('/dashboard/author/blogs');
@@ -231,6 +234,20 @@ export default function EditBlogPostPage() {
                             <option key={cat} value={cat}>{cat}</option>
                         ))}
                     </select>
+                </div>
+
+                {/* Tags */}
+                <div>
+                    <label className="block text-sm font-medium text-neutral-brown-700 mb-2">
+                        Tags <span className="text-neutral-brown-400 font-normal">(comma-separated, optional)</span>
+                    </label>
+                    <input
+                        type="text"
+                        value={tags}
+                        onChange={(e) => setTags(e.target.value)}
+                        placeholder="e.g., culture, history, kalenjin"
+                        className="w-full px-4 py-3 rounded-xl border border-neutral-brown-200 focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none text-neutral-brown-700"
+                    />
                 </div>
 
                 {/* Featured Media */}

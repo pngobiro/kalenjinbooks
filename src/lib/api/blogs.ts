@@ -12,6 +12,7 @@ export interface BlogPost {
     coverType: string;
     coverVideoUrl: string | null;
     category: string | null;
+    tags: string | null;
     authorId: string;
     isPublished: boolean;
     publishedAt: Date | string | null;
@@ -178,6 +179,7 @@ export async function createBlogPost(post: {
     coverType?: string;
     coverVideoUrl?: string;
     category?: string;
+    tags?: string;
     isPublished?: boolean;
 }): Promise<ApiResponse<BlogPost>> {
     const baseUrl = getApiBaseUrl();
@@ -208,6 +210,7 @@ export async function updateBlogPost(id: string, post: Partial<{
     coverType: string;
     coverVideoUrl: string;
     category: string;
+    tags: string;
     isPublished: boolean;
 }>): Promise<ApiResponse<BlogPost>> {
     const baseUrl = getApiBaseUrl();

@@ -263,7 +263,7 @@ async function createBlogPost(request: WorkerRequest, env: Env): Promise<Respons
             isPublished?: boolean;
         }>(request);
 
-        const { title, content, excerpt, coverImage, coverType, coverVideoUrl, category, isPublished } = body;
+        const { title, content, excerpt, coverImage, coverType, coverVideoUrl, category, tags, isPublished } = body;
 
         if (!title || !content) {
             return errorResponse('Title and content are required', HttpStatus.BAD_REQUEST, ErrorCode.VALIDATION_ERROR);
@@ -307,6 +307,7 @@ async function createBlogPost(request: WorkerRequest, env: Env): Promise<Respons
                 coverType: coverType === 'video' ? 'video' : 'image',
                 coverVideoUrl: coverType === 'video' ? coverVideoUrl || null : null,
                 category: category || null,
+                tags: tags || null,
                 authorId: author.id,
                 isPublished: isPublished && (userRole === 'ADMIN' || author.status === 'APPROVED') ? true : false,
                 publishedAt: isPublished ? new Date() : null,
@@ -412,6 +413,7 @@ async function updateBlogPost(request: WorkerRequest, env: Env, postId: string, 
         }
 
         if (body.category !== undefined) data.category = body.category;
+        if (body.tags !== undefined) data.tags = body.tags;
 
         // Publishing/unpublishing
         if (body.isPublished !== undefined) {

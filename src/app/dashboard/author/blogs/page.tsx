@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Plus, Eye, Edit, Trash2, Search, PlayCircle, Tag } from 'lucide-react';
+import { Plus, Eye, Edit, Trash2, Search, PlayCircle, Tag, ChevronLeft, ChevronRight } from 'lucide-react';
 import BlogStats from '@/components/blog/BlogStats';
 import { fetchBlogPosts, deleteBlogPost, type BlogPost } from '@/lib/api/blogs';
 import { getMyAuthorProfile } from '@/lib/api/authors';
@@ -39,6 +39,8 @@ export default function AuthorBlogsPage() {
     const [error, setError] = useState<string | null>(null);
     const [authorId, setAuthorId] = useState<string | null>(null);
     const [deletingId, setDeletingId] = useState<string | null>(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const postsPerPage = 10;
 
     useEffect(() => {
         const fetchAuthor = async () => {
@@ -87,6 +89,16 @@ export default function AuthorBlogsPage() {
         return matchesStatus && matchesCategory && matchesSearch;
     });
 
+    const totalPages = Math.ceil(filtered.length / postsPerPage);
+    const paginatedPosts = filtered.slice(
+        (currentPage - 1) * postsPerPage,
+        currentPage * postsPerPage
+    );
+
+    const handlePageChange = (page: number) => {
+        setCurrentPage(page);
+    };
+
     const stats = {
         totalPosts: posts.length,
         publishedPosts: posts.filter((p) => p.isPublished).length,
@@ -105,6 +117,11 @@ export default function AuthorBlogsPage() {
         } finally {
             setDeletingId(null);
         }
+    };
+
+    const handleFilterChange = (setter: (v: any) => void) => (value: any) => {
+        setter(value);
+        setCurrentPage(1);
     };
 
     return (
@@ -138,7 +155,7 @@ export default function AuthorBlogsPage() {
                         {statusFilters.map((f) => (
                             <button
                                 key={f.id}
-                                onClick={() => setStatusFilter(f.id)}
+                                onClick={() => handleFilterChange(setStatusFilter)(f.id)}
                                 className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${statusFilter === f.id
                                     ? 'bg-primary text-white'
                                     : 'bg-neutral-cream text-neutral-brown-700 hover:bg-primary/10'
@@ -156,7 +173,10 @@ export default function AuthorBlogsPage() {
                         <input
                             type="text"
                             value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
+                            onChange={(e) => {
+                                setSearchQuery(e.target.value);
+                                setCurrentPage(1);
+                            }}
                             placeholder="Search posts..."
                             className="w-full pl-9 pr-4 py-2 rounded-full bg-neutral-cream focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm"
                         />
@@ -169,7 +189,7 @@ export default function AuthorBlogsPage() {
                     {categoryFilters.map((cat) => (
                         <button
                             key={cat.id}
-                            onClick={() => setCategoryFilter(cat.id)}
+                            onClick={() => handleFilterChange(setCategoryFilter)(cat.id)}
                             className={`px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${categoryFilter === cat.id
                                 ? 'bg-accent-green text-white'
                                 : 'bg-neutral-cream text-neutral-brown-600 hover:bg-accent-green/10'
@@ -243,7 +263,7 @@ export default function AuthorBlogsPage() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {filtered.map((post) => (
+                                    {paginatedPosts.map((post) => (
                                         <tr key={post.id} className="border-b border-neutral-brown-50 hover:bg-neutral-cream/50 transition-colors">
                                             <td className="px-5 py-4">
                                                 <Link
@@ -312,7 +332,46 @@ export default function AuthorBlogsPage() {
                                 </tbody>
                             </table>
                         </div>
-                    )}
+
+                        {/* Pagination */}
+                        {totalPages > 1 && (
+                            <div className="flex items-center justify-between px-5 py-4 border-t border-neutral-brown-100">
+                                <p className="text-sm text-neutral-brown-600">
+                                    Showing {((currentPage - 1) * postsPerPage) + 1} to {Math.min(currentPage * postsPerPage, filtered.length)} of {filtered.length} posts
+                                </p>
+                                <div className="flex items-center gap-2">
+                                    <button
+                                        onClick={() => handlePageChange(currentPage - 1)}
+                                        disabled={currentPage === 1}
+                                        className="p-2 rounded-lg hover:bg-neutral-cream text-neutral-brown-700 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                                    >
+                                        <ChevronLeft size={18} />
+                                    </button>
+                                    {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                                        <button
+                                            key={page}
+                                            onClick={() => handlePageChange(page)}
+                                            className={`w-8 h-8 rounded-lg text-sm font-medium transition-colors ${
+                                                currentPage === page
+                                                    ? 'bg-primary text-white'
+                                                    : 'text-neutral-brown-700 hover:bg-neutral-cream'
+                                            }`}
+                                        >
+                                            {page}
+                                        </button>
+                                    ))}
+                                    <button
+                                        onClick={() => handlePageChange(currentPage + 1)}
+                                        disabled={currentPage === totalPages}
+                                        className="p-2 rounded-lg hover:bg-neutral-cream text-neutral-brown-700 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                                    >
+                                        <ChevronRight size={18} />
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                )}
                 </div>
             )}
         </div>
