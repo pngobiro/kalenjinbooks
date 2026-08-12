@@ -11,6 +11,7 @@ import {
   Compass,
   Mountain,
   MapPin,
+  Flag,
 } from 'lucide-react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
@@ -34,7 +35,7 @@ const trailGradients = [
 const waypoints = {
   authors: { label: 'THE STORYTELLERS', meta: '2,400M · ITEN RIDGE' },
   books: { label: 'THE GRANARY', meta: '1,800M · KERIO VALLEY' },
-  blog: { label: 'FIELD NOTES', meta: '2,100M · CHERANGANI HILLS' },
+  blog: { label: '[BLOGS]', meta: '2,100M · CHERANGANI HILLS' },
 };
 
 function TrailDivider({
@@ -201,35 +202,75 @@ export default function HomePage() {
             />
           </svg>
 
-          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 pt-4 pb-10 md:pt-6 md:pb-14">
-            <div className="max-w-2xl kr-rise">
-              <div className="inline-flex items-center gap-2 mb-2.5 px-3 py-1 rounded-full bg-white/10 border border-white/10">
-                <Compass size={13} className="text-[#E0A83E]" />
-                <span className="kr-mono text-[10px] tracking-[0.25em] text-[#E0A83E]">
-                  A JOURNEY THROUGH KALENJIN LITERATURE
-                </span>
+          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 pt-4 pb-12 md:pt-8 md:pb-16">
+            <div className="grid md:grid-cols-[1fr_360px] xl:grid-cols-[1fr_400px] gap-8 md:gap-12 items-center kr-rise">
+              <div className="max-w-2xl">
+                <div className="inline-flex items-center gap-2 mb-2.5 px-3 py-1 rounded-full bg-white/10 border border-white/10">
+                  <Compass size={13} className="text-[#E0A83E]" />
+                  <span className="kr-mono text-[10px] tracking-[0.25em] text-[#E0A83E]">
+                    A JOURNEY THROUGH KALENJIN LITERATURE
+                  </span>
+                </div>
+                <h1 className="kr-display italic text-3xl md:text-[2.6rem] lg:text-5xl text-white leading-[1.08] mb-3">
+                  Every story here has walked a long way to reach you.
+                </h1>
+                <p className="text-sm md:text-base text-[#D8CFE8] leading-relaxed mb-4 max-w-xl">
+                  KaleeReads is a highland home for Kalenjin literature — folklore carried by
+                  firelight, cultural history, and the everyday lives of a people who have always
+                  known how to cover distance. Local authors write it, we help it travel.
+                </p>
+                <div className="flex flex-wrap gap-3">
+                  <Link
+                    href="/books"
+                    className="bg-[#E0A83E] text-[#1B1730] px-5 py-2.5 rounded-full font-semibold text-sm hover:bg-[#f0bc57] transition-colors"
+                  >
+                    Browse the Shelf
+                  </Link>
+                  <Link
+                    href="/authors"
+                    className="bg-[#FBF7EE] text-[#241E1A] px-5 py-2.5 rounded-full font-semibold text-sm hover:bg-white transition-colors border border-white/30"
+                  >
+                    Meet the Storytellers
+                  </Link>
+                </div>
               </div>
-              <h1 className="kr-display italic text-3xl md:text-[2.6rem] text-white leading-[1.08] mb-3">
-                Every story here has walked a long way to reach you.
-              </h1>
-              <p className="text-sm md:text-base text-[#D8CFE8] leading-relaxed mb-4 max-w-xl">
-                KaleeReads is a highland home for Kalenjin literature — folklore carried by
-                firelight, cultural history, and the everyday lives of a people who have always
-                known how to cover distance. Local authors write it, we help it travel.
-              </p>
-              <div className="flex flex-wrap gap-3">
-                <Link
-                  href="/books"
-                  className="bg-[#E0A83E] text-[#1B1730] px-5 py-2.5 rounded-full font-semibold text-sm hover:bg-[#f0bc57] transition-colors"
-                >
-                  Browse the Shelf
-                </Link>
-                <Link
-                  href="/authors"
-                  className="bg-white/10 text-white px-5 py-2.5 rounded-full font-semibold text-sm hover:bg-white/20 transition-colors border border-white/15"
-                >
-                  Meet the Storytellers
-                </Link>
+
+              {/* Trail's end — invitation, camped beside the trailhead */}
+              <div className="relative rounded-3xl bg-[#FBF7EE] p-6 md:p-8 text-center shadow-2xl rotate-[0.6deg] hover:rotate-0 transition-transform duration-300">
+                {/* Contour rings */}
+                <div className="absolute -top-4 -right-3 w-20 h-20 opacity-25 pointer-events-none" aria-hidden="true">
+                  <div className="absolute inset-0 rounded-full border-2 border-[#A8451F]" />
+                  <div className="absolute inset-2.5 rounded-full border-2 border-[#A8451F]" />
+                  <div className="absolute inset-5 rounded-full border-2 border-[#A8451F]" />
+                </div>
+                {/* Pinned waypoint */}
+                <div className="absolute -top-3 -left-3 w-8 h-8 rounded-full bg-[#E0A83E] border-2 border-dashed border-[#A8451F]/50 flex items-center justify-center shadow-lg">
+                  <Flag size={14} className="text-[#1B1730]" />
+                </div>
+                <span className="kr-mono text-[9px] tracking-[0.3em] text-[#A8451F]">
+                  END OF THE MARKED TRAIL — YOURS STARTS HERE
+                </span>
+                <h2 className="kr-display italic text-2xl md:text-3xl text-[#241E1A] mt-3 mb-3">
+                  Add your voice to the route.
+                </h2>
+                <p className="text-[#5B4F42] text-sm mb-6 leading-relaxed">
+                  Are you a Kalenjin author? Mark your own waypoint — bring your books and
+                  dispatches to readers who are already walking this way.
+                </p>
+                <div className="flex flex-col sm:flex-row md:flex-col xl:flex-row items-center justify-center gap-3">
+                  <Link
+                    href="/dashboard/author/register"
+                    className="bg-[#A8451F] text-white px-5 py-2.5 rounded-full font-semibold text-sm hover:bg-[#8C3B2E] transition-colors"
+                  >
+                    Become an Author
+                  </Link>
+                  <Link
+                    href="/about"
+                    className="bg-white text-[#241E1A] px-5 py-2.5 rounded-full font-semibold text-sm hover:bg-[#EDE4D0] transition-colors border border-[#E4D9C4]"
+                  >
+                    Learn More
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
@@ -437,7 +478,7 @@ export default function HomePage() {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <MapPin size={14} className="text-[#A8451F]" />
-                        <span className="kr-mono text-[10px] tracking-[0.3em] text-[#A8451F]">FIELD NOTES</span>
+                        <span className="kr-mono text-[10px] tracking-[0.3em] text-[#A8451F]">[BLOGS]</span>
                       </div>
                       <span className="kr-mono text-[9px] tracking-[0.2em] text-[#8A7B68]">2,100M · CHERANGANI</span>
                     </div>
@@ -595,32 +636,7 @@ export default function HomePage() {
                 </div>
               </section>
 
-              {/* Trail's end — invitation */}
-              <section className="relative overflow-hidden rounded-3xl bg-[radial-gradient(ellipse_at_bottom,_#3A2E57_0%,_#1B1730_60%,_#140F24_100%)] p-8 md:p-12 text-center">
-                <span className="kr-mono text-[10px] tracking-[0.3em] text-[#E0A83E]">END OF THE MARKED TRAIL — YOURS STARTS HERE</span>
-                <h2 className="kr-display italic text-2xl md:text-4xl text-white mt-3 mb-3">
-                  Add your voice to the route.
-                </h2>
-                <p className="text-[#D8CFE8] text-sm mb-6 max-w-lg mx-auto leading-relaxed">
-                  Are you a Kalenjin author? Mark your own waypoint — bring your books and
-                  dispatches to readers who are already walking this way.
-                </p>
-                <div className="flex flex-wrap items-center justify-center gap-3">
-                  <Link
-                    href="/dashboard/author/register"
-                    className="bg-[#E0A83E] text-[#1B1730] px-5 py-2.5 rounded-full font-semibold text-sm hover:bg-[#f0bc57] transition-colors"
-                  >
-                    Become an Author
-                  </Link>
-                  <Link
-                    href="/about"
-                    className="bg-white/10 text-white px-5 py-2.5 rounded-full font-semibold text-sm hover:bg-white/20 transition-colors border border-white/15"
-                  >
-                    Learn More
-                  </Link>
-                </div>
-              </section>
-            </div>
+              </div>
           )}
         </main>
 

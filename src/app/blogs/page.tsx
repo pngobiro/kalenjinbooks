@@ -97,12 +97,12 @@ export default function BlogsPage() {
             {/* Page header */}
             <header className="bg-white border-b border-neutral-brown-200">
                 <div className="max-w-6xl mx-auto px-6 py-6">
-                    <p className="text-xs font-medium text-primary uppercase tracking-widest mb-1">KaleeReads Blog</p>
+                    <p className="text-xs font-medium text-primary uppercase tracking-widest mb-1">BLOGS</p>
                     <h1 className="text-2xl md:text-3xl font-heading font-bold text-neutral-brown-900">
-                        News &amp; Articles
+                        The Field Notes
                     </h1>
                     <p className="mt-1 text-sm text-neutral-brown-600">
-                        Stories, insights and culture from our Kalenjin authors
+                        Dispatches from our Kalenjin authors
                     </p>
                 </div>
             </header>
@@ -226,9 +226,9 @@ export default function BlogsPage() {
                                 <article className="mb-12">
                                     <Link
                                         href={`/blogs/${featured.slug || featured.id}`}
-                                        className="group grid grid-cols-1 md:grid-cols-2 gap-6 bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300"
+                                        className="group grid grid-cols-1 md:grid-cols-[2fr_3fr] gap-6 bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300"
                                     >
-                                        <div className="relative aspect-[16/10] md:h-full bg-gradient-to-br from-neutral-brown-900 to-neutral-brown-800 overflow-hidden">
+                                        <div className="relative aspect-[16/10] md:aspect-auto md:h-64 bg-gradient-to-br from-neutral-brown-900 to-neutral-brown-800 overflow-hidden">
                                             {featured.coverType === 'video' && featured.coverVideoUrl ? (
                                                 <VideoThumbnail
                                                     videoUrl={featured.coverVideoUrl}
@@ -392,14 +392,31 @@ export default function BlogsPage() {
                                 </div>
                                 <div className="divide-y divide-neutral-brown-100">
                                     {topByViews.length > 0 ? topByViews.map((post, i) => (
-                                        <Link key={post.id} href={`/blogs/${post.slug || post.id}`} className="flex items-start gap-3 p-4 hover:bg-neutral-cream/60 transition-colors group">
-                                            <span className="w-8 h-8 shrink-0 rounded-lg bg-primary/10 text-primary font-heading font-bold flex items-center justify-center text-sm">
-                                                {i + 1}
-                                            </span>
-                                            <div className="min-w-0">
-                                                <h4 className="text-sm font-semibold text-neutral-brown-900 line-clamp-1 group-hover:text-primary transition-colors">
-                                                    {post.title}
-                                                </h4>
+                                        <Link key={post.id} href={`/blogs/${post.slug || post.id}`} className="flex items-center gap-3 p-3 hover:bg-neutral-cream/60 transition-colors group">
+                                            <div className="w-20 h-[60px] rounded-lg overflow-hidden bg-primary/10 shrink-0">
+                                                {post.coverType === 'video' && post.coverVideoUrl ? (
+                                                    <VideoThumbnail videoUrl={post.coverVideoUrl} title={post.title} />
+                                                ) : post.coverImage ? (
+                                                    <img
+                                                        src={post.coverImage}
+                                                        alt={post.title}
+                                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                                    />
+                                                ) : (
+                                                    <div className="w-full h-full flex items-center justify-center font-heading font-bold text-primary/40">
+                                                        {post.title.charAt(0)}
+                                                    </div>
+                                                )}
+                                            </div>
+                                            <div className="min-w-0 flex-1">
+                                                <div className="flex items-center gap-2">
+                                                    <span className="w-6 h-6 shrink-0 rounded-md bg-primary/10 text-primary font-heading font-bold flex items-center justify-center text-xs">
+                                                        {i + 1}
+                                                    </span>
+                                                    <h4 className="text-sm font-semibold text-neutral-brown-900 line-clamp-2 group-hover:text-primary transition-colors leading-snug">
+                                                        {post.title}
+                                                    </h4>
+                                                </div>
                                                 <p className="text-xs text-neutral-brown-500 mt-1 flex items-center gap-2">
                                                     <span>{formatBlogDate(post.publishedAt || post.createdAt)}</span>
                                                     <span className="flex items-center gap-1">

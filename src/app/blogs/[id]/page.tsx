@@ -8,12 +8,14 @@ import ShareButtons from '@/components/ShareButtons';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import BlogPostRenderer from '@/components/blog/BlogPostRenderer';
-import { fetchBlogPost, type BlogPost } from '@/lib/api/blogs';
+import VideoThumbnail from '@/components/blog/VideoThumbnail';
+import { fetchBlogPost, fetchBlogPosts, type BlogPost } from '@/lib/api/blogs';
 import { calculateReadTime, formatBlogDate, getYouTubeEmbedUrl } from '@/lib/blog-utils';
 
 export default function BlogDetailPage() {
     const params = useParams<{ id: string }>();
     const [post, setPost] = useState<BlogPost | null>(null);
+    const [authorPosts, setAuthorPosts] = useState<BlogPost[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -24,6 +26,15 @@ export default function BlogDetailPage() {
                 const result = await fetchBlogPost(params.id);
                 setPost(result.data || null);
                 setError(null);
+                if (result.data) {
+                    const authorPostsRes = await fetchBlogPosts({
+                        authorId: result.data.authorId,
+                        published: true,
+                        limit: 8,
+                    }).catch(() => null);
+                    const other = (authorPostsRes?.data?.posts || []).filter((p) => p.id !== result.data!.id);
+                    setAuthorPosts(other.slice(0, 6));
+                }
             } catch (err: any) {
                 setError(err.message || 'Failed to load blog post');
             } finally {
@@ -92,66 +103,119 @@ export default function BlogDetailPage() {
                 </div>
             </div>
 
-            <main className="max-w-3xl mx-auto px-6 py-12">
-                {/* Hero Media */}
-                {isVideo && (
-                    <div className="relative overflow-hidden rounded-xl mb-8 shadow-sm">
-                        <iframe
-                            src={getYouTubeEmbedUrl(post.coverVideoUrl!)}
-                            title={post.title}
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowFullScreen
-                            className="w-full aspect-video"
-                        />
-                    </div>
-                )}
-                {!isVideo && post.coverImage && (
-                    <img
-                        src={post.coverImage}
-                        alt={post.title}
-                        className="w-full rounded-xl mb-8 shadow-sm aspect-[16/9] object-cover"
-                    />
-                )}
-
-                {/* Title */}
-                <h1 className="font-heading font-bold text-3xl md:text-5xl text-neutral-brown-900 leading-tight mb-6">
-                    {post.title}
-                </h1>
-
-                {/* Author Meta */}
-                <div className="flex items-center justify-between pb-8 mb-10 border-b border-neutral-brown-200">
-                    <div className="flex items-center gap-4">
-                        {authorImage ? (
-                            <img
-                                src={authorImage}
-                                alt={authorName}
-                                className="w-12 h-12 rounded-full object-cover"
-                            />
-                        ) : (
-                            <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center">
-                                <User size={24} className="text-primary" />
+            <main className="max-w-7xl mx-auto px-6 py-12">
+                <div className="lg:grid lg:grid-cols-[1fr_320px] lg:gap-12">
+                    <article className="max-w-3xl">
+                        {/* Hero Media */}
+                        {isVideo && (
+                            <div className="relative overflow-hidden rounded-xl mb-8 shadow-sm">
+                                <iframe
+                                    src={getYouTubeEmbedUrl(post.coverVideoUrl!)}
+                                    title={post.title}
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowFullScreen
+                                    className="w-full aspect-video"
+                                />
                             </div>
                         )}
-                        <div>
-                            <p className="font-semibold text-neutral-brown-900">{authorName}</p>
-                            <div className="flex items-center gap-3 text-sm text-neutral-brown-600 mt-0.5">
-                                <span>{formatBlogDate(post.publishedAt || post.createdAt)}</span>
-                                <span className="flex items-center gap-1">
-                                    <Clock size={14} />
-                                    {readTime.text}
-                                </span>
-                                <span className="flex items-center gap-1">
-                                    <Eye size={14} />
-                                    {post.viewCount} views
-                                </span>
+                        {!isVideo && post.coverImage && (
+                            <img
+                                src={post.coverImage}
+                                alt={post.title}
+                                className="w-full rounded-xl mb-8 shadow-sm aspect-[16/9] object-cover"
+                            />
+                        )}
+
+                        {/* Title */}
+                        <h1 className="font-heading font-bold text-3xl md:text-5xl text-neutral-brown-900 leading-tight mb-6">
+                            {post.title}
+                        </h1>
+
+                        {/* Author Meta */}
+                        <div className="flex items-center justify-between pb-8 mb-10 border-b border-neutral-brown-200">
+                            <div className="flex items-center gap-4">
+                                {authorImage ? (
+                                    <img
+                                        src={authorImage}
+                                        alt={authorName}
+                                        className="w-12 h-12 rounded-full object-cover"
+                                    />
+                                ) : (
+                                    <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center">
+                                        <User size={24} className="text-primary" />
+                                    </div>
+                                )}
+                                <div>
+                                    <p className="font-semibold text-neutral-brown-900">{authorName}</p>
+                                    <div className="flex items-center gap-3 text-sm text-neutral-brown-600 mt-0.5">
+                                        <span>{formatBlogDate(post.publishedAt || post.createdAt)}</span>
+                                        <span className="flex items-center gap-1">
+                                            <Clock size={14} />
+                                            {readTime.text}
+                                        </span>
+                                        <span className="flex items-center gap-1">
+                                            <Eye size={14} />
+                                            {post.viewCount} views
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <ShareButtons title={post.title} type="blog" />
+                        </div>
+
+                        {/* Content */}
+                        <BlogPostRenderer content={post.content} />
+                    </article>
+
+                    {/* Right sidebar — more from this author */}
+                    <aside className="mt-12 lg:mt-0">
+                        <div className="bg-white rounded-2xl p-5 md:p-6 shadow-sm lg:sticky lg:top-6">
+                            <h3 className="font-heading font-bold text-neutral-brown-900 flex items-center gap-2">
+                                More from {authorName.split(' ')[0]}
+                            </h3>
+                            <p className="text-xs text-neutral-brown-600 mt-0.5 mb-4">
+                                {authorPosts.length > 0 ? 'Other dispatches by this author' : 'No other blogs by this author yet.'}
+                            </p>
+                            <div className="space-y-4">
+                                {authorPosts.map((p) => (
+                                    <Link
+                                        key={p.id}
+                                        href={`/blogs/${p.slug || p.id}`}
+                                        className="group flex gap-3"
+                                    >
+                                        <div className="w-24 h-[64px] rounded-lg overflow-hidden bg-primary/10 shrink-0">
+                                            {p.coverType === 'video' && p.coverVideoUrl ? (
+                                                <VideoThumbnail videoUrl={p.coverVideoUrl} title={p.title} />
+                                            ) : p.coverImage ? (
+                                                <img
+                                                    src={p.coverImage}
+                                                    alt={p.title}
+                                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                                />
+                                            ) : (
+                                                <div className={`w-full h-full bg-gradient-to-br from-primary/25 to-accent-green/25 flex items-center justify-center font-heading font-bold text-primary/40 text-xl`}>
+                                                    {p.title.charAt(0)}
+                                                </div>
+                                            )}
+                                        </div>
+                                        <div className="min-w-0">
+                                            <h4 className="font-semibold text-sm text-neutral-brown-900 line-clamp-2 group-hover:text-primary transition-colors leading-snug">
+                                                {p.title}
+                                            </h4>
+                                            <div className="flex items-center gap-3 text-xs text-neutral-brown-600 mt-1">
+                                                <span className="flex items-center gap-1">
+                                                    <Clock size={11} />
+                                                    {calculateReadTime(p.content).text}
+                                                </span>
+                                                <span>{formatBlogDate(p.publishedAt || p.createdAt)}</span>
+                                            </div>
+                                        </div>
+                                    </Link>
+                                ))}
                             </div>
                         </div>
-                    </div>
-                    <ShareButtons title={post.title} type="blog" />
+                    </aside>
                 </div>
-
-                {/* Content */}
-                <BlogPostRenderer content={post.content} />
             </main>
 
             <Footer />
