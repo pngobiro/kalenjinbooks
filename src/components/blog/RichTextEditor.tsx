@@ -6,6 +6,7 @@ import Image from '@tiptap/extension-image';
 import Link from '@tiptap/extension-link';
 import Youtube from '@tiptap/extension-youtube';
 import Placeholder from '@tiptap/extension-placeholder';
+import CharacterCount from '@tiptap/extension-character-count';
 import {
     Bold, Italic, Strikethrough, Code, Heading1, Heading2, Heading3,
     List, ListOrdered, Quote, Undo, Redo, Link as LinkIcon, Image as ImageIcon,
@@ -52,6 +53,7 @@ export default function RichTextEditor({
             Placeholder.configure({
                 placeholder,
             }),
+            CharacterCount,
         ],
         content,
         editorProps: {

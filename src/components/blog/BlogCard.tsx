@@ -35,7 +35,7 @@ export default function BlogCard({
     viewCount,
     readTime,
 }: BlogCardProps) {
-    const href = `/blogs/${id}`;
+    const href = slug ? `/blogs/${slug}` : `/blogs/${id}`;
     const isVideo = coverType === 'video' && coverVideoUrl;
 
     return (

@@ -8,17 +8,8 @@ import Footer from '@/components/layout/Footer';
 import { fetchBlogPosts, type BlogPost } from '@/lib/api/blogs';
 import { fetchAuthors, type Author } from '@/lib/api/authors';
 import { calculateReadTime, formatBlogDate } from '@/lib/blog-utils';
+import { BLOG_CATEGORIES } from '@/lib/constants/blog';
 import VideoThumbnail from '@/components/blog/VideoThumbnail';
-
-const blogCategories = [
-  { id: 'all', label: 'All Posts' },
-  { id: 'Culture', label: 'Culture' },
-  { id: 'Stories', label: 'Stories' },
-  { id: 'News', label: 'News' },
-  { id: 'Guides', label: 'Guides' },
-  { id: 'History', label: 'History' },
-  { id: 'Poetry', label: 'Poetry' },
-];
 
 const sortOptions = [
   { id: 'latest', label: 'Latest' },
@@ -186,7 +177,7 @@ export default function BlogsPage() {
 
                     {/* Category Pills */}
                     <div className="flex items-center gap-2 mt-4 overflow-x-auto pb-1" style={{ scrollbarWidth: 'none' }}>
-                        {blogCategories.map((cat) => (
+                        {BLOG_CATEGORIES.map((cat) => (
                             <button
                                 key={cat.id}
                                 onClick={() => setSelectedCategory(cat.id)}
@@ -234,7 +225,7 @@ export default function BlogsPage() {
                             {featured && (
                                 <article className="mb-12">
                                     <Link
-                                        href={`/blogs/${featured.id}`}
+                                        href={`/blogs/${featured.slug || featured.id}`}
                                         className="group grid grid-cols-1 md:grid-cols-2 gap-6 bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300"
                                     >
                                         <div className="relative aspect-[16/10] md:h-full bg-gradient-to-br from-neutral-brown-900 to-neutral-brown-800 overflow-hidden">
@@ -300,7 +291,7 @@ export default function BlogsPage() {
                                     {rest.map((post, index) => (
                                         <article key={post.id}>
                                             <Link
-                                                href={`/blogs/${post.id}`}
+                                                href={`/blogs/${post.slug || post.id}`}
                                                 className="group grid grid-cols-1 sm:grid-cols-[220px_1fr] gap-6 bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300"
                                             >
                                                 <div className={`relative aspect-[16/10] sm:aspect-auto sm:h-full bg-gradient-to-br ${colorSchemeFor(index)} overflow-hidden`}>
@@ -401,7 +392,7 @@ export default function BlogsPage() {
                                 </div>
                                 <div className="divide-y divide-neutral-brown-100">
                                     {topByViews.length > 0 ? topByViews.map((post, i) => (
-                                        <Link key={post.id} href={`/blogs/${post.id}`} className="flex items-start gap-3 p-4 hover:bg-neutral-cream/60 transition-colors group">
+                                        <Link key={post.id} href={`/blogs/${post.slug || post.id}`} className="flex items-start gap-3 p-4 hover:bg-neutral-cream/60 transition-colors group">
                                             <span className="w-8 h-8 shrink-0 rounded-lg bg-primary/10 text-primary font-heading font-bold flex items-center justify-center text-sm">
                                                 {i + 1}
                                             </span>

@@ -7,6 +7,7 @@ import { ArrowLeft, Save, Send, Upload, X } from 'lucide-react';
 import RichTextEditor from '@/components/blog/RichTextEditor';
 import { createBlogPost, uploadBlogImage, getApiBaseUrl } from '@/lib/api/blogs';
 import { getMyAuthorProfile } from '@/lib/api/authors';
+import { BLOG_CATEGORY_IDS } from '@/lib/constants/blog';
 
 export default function NewBlogPostPage() {
     const router = useRouter();
@@ -153,12 +154,9 @@ export default function NewBlogPostPage() {
                         className="w-full px-4 py-3 rounded-xl border border-neutral-brown-200 focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none text-neutral-brown-700 bg-white"
                     >
                         <option value="">No category</option>
-                        <option value="Culture">Culture</option>
-                        <option value="Stories">Stories</option>
-                        <option value="News">News</option>
-                        <option value="Guides">Guides</option>
-                        <option value="History">History</option>
-                        <option value="Poetry">Poetry</option>
+                        {BLOG_CATEGORY_IDS.map((cat) => (
+                            <option key={cat} value={cat}>{cat}</option>
+                        ))}
                     </select>
                 </div>
 

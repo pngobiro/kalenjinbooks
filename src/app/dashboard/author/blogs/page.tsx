@@ -7,6 +7,7 @@ import { Plus, Eye, Edit, Trash2, Search, PlayCircle, Tag } from 'lucide-react';
 import BlogStats from '@/components/blog/BlogStats';
 import { fetchBlogPosts, deleteBlogPost, type BlogPost } from '@/lib/api/blogs';
 import { getMyAuthorProfile } from '@/lib/api/authors';
+import { BLOG_CATEGORIES } from '@/lib/constants/blog';
 
 function formatBlogDate(dateString: string): string {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -23,15 +24,10 @@ const statusFilters: { id: StatusFilter; label: string }[] = [
     { id: 'draft', label: 'Drafts' },
 ];
 
-const categoryFilters = [
-    { id: 'all', label: 'All Categories' },
-    { id: 'Culture', label: 'Culture' },
-    { id: 'Stories', label: 'Stories' },
-    { id: 'News', label: 'News' },
-    { id: 'Guides', label: 'Guides' },
-    { id: 'History', label: 'History' },
-    { id: 'Poetry', label: 'Poetry' },
-];
+const categoryFilters = BLOG_CATEGORIES.map(c => ({
+    id: c.id === 'all' ? 'all' : c.id,
+    label: c.id === 'all' ? 'All Categories' : c.label,
+}));
 
 export default function AuthorBlogsPage() {
     const router = useRouter();
@@ -251,7 +247,7 @@ export default function AuthorBlogsPage() {
                                         <tr key={post.id} className="border-b border-neutral-brown-50 hover:bg-neutral-cream/50 transition-colors">
                                             <td className="px-5 py-4">
                                                 <Link
-                                                    href={`/blogs/${post.id}`}
+                                                    href={`/blogs/${post.slug || post.id}`}
                                                     className="font-semibold text-neutral-brown-900 hover:text-primary transition-colors line-clamp-1"
                                                 >
                                                     {post.coverType === 'video' && '▶ '}{post.title}
@@ -288,7 +284,7 @@ export default function AuthorBlogsPage() {
                                             <td className="px-5 py-4">
                                                 <div className="flex items-center justify-end gap-2">
                                                     <Link
-                                                        href={`/blogs/${post.id}`}
+                                                        href={`/blogs/${post.slug || post.id}`}
                                                         className="p-2 rounded-lg hover:bg-neutral-cream text-neutral-brown-700 transition-colors"
                                                         title="View"
                                                     >
