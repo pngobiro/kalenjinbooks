@@ -282,6 +282,7 @@ export default function AuthorBlogsPage() {
                             )}
                         </div>
                     ) : (
+                        <>
                         <div className="overflow-x-auto">
                             {/* Bulk Actions */}
                             {selectedPosts.size > 0 && (
@@ -439,7 +440,7 @@ export default function AuthorBlogsPage() {
                                 </div>
                             </div>
                         )}
-                    </div>
+                    </>
                 )}
                 </div>
             )}

@@ -375,7 +375,6 @@ export default function AuthorDashboardPage() {
           </div>
         );
       }
-    }
 
     // Legacy check for old authorStatus field
     if (user.authorStatus === 'PENDING') {
