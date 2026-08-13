@@ -3,7 +3,7 @@
 import { Star, Book, ArrowLeft, User, ChevronRight, Sparkles, FileText, Calendar, Globe } from 'lucide-react';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import { fetchBookById, fetchBooks, type Book as BookType } from '@/lib/api/books';
+import { fetchBookById, type Book as BookType } from '@/lib/api/books';
 import ShareButtons from '@/components/ShareButtons';
 
 // Color schemes for book covers
@@ -20,7 +20,6 @@ const colorSchemes = [
 
 export default function BookDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const [book, setBook] = useState<BookType | null>(null);
-  const [relatedBooks, setRelatedBooks] = useState<BookType[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -32,12 +31,8 @@ export default function BookDetailPage({ params }: { params: Promise<{ id: strin
   async function loadBook(bookId: string) {
     try {
       setLoading(true);
-      const [bookResponse, relatedResponse] = await Promise.all([
-        fetchBookById(bookId),
-        fetchBooks({ limit: 4 })
-      ]);
+      const bookResponse = await fetchBookById(bookId);
       setBook(bookResponse.data || null);
-      setRelatedBooks(relatedResponse.data?.filter((b: BookType) => b.id !== bookId) || []);
     } catch (error) {
       console.error('Error loading book:', error);
     } finally {
@@ -335,48 +330,6 @@ export default function BookDetailPage({ params }: { params: Promise<{ id: strin
           </div>
         </div>
       </section>
-
-      {/* Related Books */}
-      {relatedBooks.length > 0 && (
-        <section className="bg-white py-16">
-          <div className="max-w-7xl mx-auto px-6">
-            <h3 className="font-bold text-3xl text-neutral-brown-900 font-heading mb-8 text-center">
-              You May Also Like
-            </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {relatedBooks.slice(0, 4).map((relatedBook, index) => {
-                const relatedColorScheme = colorSchemes[index % colorSchemes.length];
-                return (
-                  <Link key={relatedBook.id} href={`/books/${relatedBook.id}`} className="group">
-                    <div className="bg-neutral-cream rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
-                      <div className={`aspect-[2/3] relative overflow-hidden ${!relatedBook.coverImage ? `bg-gradient-to-br ${relatedColorScheme}` : ''}`}>
-                        {relatedBook.coverImage ? (
-                          <img src={relatedBook.coverImage} alt={relatedBook.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
-                        ) : (
-                          <div className="absolute inset-0 opacity-30 bg-[radial-gradient(circle_at_50%_120%,rgba(255,255,255,0.8),transparent)]"></div>
-                        )}
-                      </div>
-                      <div className="p-4">
-                        <h4 className="font-bold text-neutral-brown-900 mb-1 line-clamp-2 group-hover:text-primary transition-colors">
-                          {relatedBook.title}
-                        </h4>
-                        <p className="text-sm text-neutral-brown-600 mb-3">{relatedBook.author?.user?.name || 'Unknown Author'}</p>
-                        <div className="flex items-center justify-between">
-                          <span className="text-xl font-bold text-primary">KES {relatedBook.price}</span>
-                          <div className="flex items-center gap-1">
-                            <Star size={14} className="fill-accent-gold text-accent-gold" />
-                            <span className="text-sm">{relatedBook.rating?.toFixed(1) || '0.0'}</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </Link>
-                );
-              })}
-            </div>
-          </div>
-        </section>
-      )}
     </div>
   );
 }
