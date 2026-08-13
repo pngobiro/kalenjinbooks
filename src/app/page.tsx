@@ -191,7 +191,7 @@ export default function HomePage() {
         {/* Hero — dusk over the escarpment */}
         <section className="relative overflow-hidden bg-[radial-gradient(ellipse_at_top,_#3A2E57_0%,_#1B1730_55%,_#140F24_100%)]">
           <svg
-            className="absolute inset-x-0 bottom-0 w-full h-10 md:h-12 text-[#140F24]"
+            className="absolute inset-x-0 bottom-0 w-full h-8 md:h-10 text-[#140F24]"
             viewBox="0 0 1200 120"
             preserveAspectRatio="none"
           >
@@ -201,18 +201,18 @@ export default function HomePage() {
             />
           </svg>
 
-          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 pt-12 pb-14 md:pt-16 md:pb-20">
+          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 pt-8 pb-8 md:pt-10 md:pb-10">
             <div className="max-w-3xl mx-auto text-center kr-rise">
-              <div className="inline-flex items-center gap-2 mb-3 px-3 py-1 rounded-full bg-white/10 border border-white/10">
+              <div className="inline-flex items-center gap-2 mb-2.5 px-3 py-1 rounded-full bg-white/10 border border-white/10">
                 <Compass size={13} className="text-[#E0A83E]" />
                 <span className="kr-mono text-[10px] tracking-[0.25em] text-[#E0A83E]">
                   A JOURNEY THROUGH KALENJIN LITERATURE
                 </span>
               </div>
-              <h1 className="kr-display italic text-3xl md:text-[2.6rem] lg:text-5xl text-white leading-[1.08] mb-3">
+              <h1 className="kr-display italic text-3xl md:text-[2.6rem] lg:text-5xl text-white leading-[1.08] mb-2">
                 Every story here has walked a long way to reach you.
               </h1>
-              <p className="text-sm md:text-base text-[#D8CFE8] leading-relaxed mb-6 max-w-2xl mx-auto">
+              <p className="text-sm md:text-base text-[#D8CFE8] leading-relaxed mb-5 max-w-2xl mx-auto">
                 KaleeReads is a highland home for Kalenjin literature — folklore carried by
                 firelight, cultural history, and the everyday lives of a people who have always
                 known how to cover distance. Local authors write it, we help it travel.
