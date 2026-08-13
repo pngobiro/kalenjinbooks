@@ -1,6 +1,6 @@
 import slugify from 'slugify';
 import readingTime from 'reading-time';
-import DOMPurify from 'isomorphic-dompurify';
+import DOMPurify from 'dompurify';
 
 /**
  * Generate a URL-friendly slug from a title
