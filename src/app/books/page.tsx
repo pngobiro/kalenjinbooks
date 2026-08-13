@@ -1,14 +1,38 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
-import { Search, BookOpen, Star, ArrowRight, Sparkles, ShoppingCart, Package } from 'lucide-react';
+import { Search, BookOpen, Star, ArrowRight, Sparkles, ShoppingCart, Package, SlidersHorizontal, ChevronDown } from 'lucide-react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import { fetchBooks, type Book as BookType } from '@/lib/api/books';
 import { trackBookClick } from '@/lib/analytics';
 
 const categories = ['All', 'Fiction', 'Non-Fiction', 'Folklore', 'History', 'Poetry', 'Children', 'Education'];
+
+type SortKey = 'newest' | 'price-asc' | 'price-desc' | 'rating';
+
+const sortOptions: { value: SortKey; label: string }[] = [
+  { value: 'newest', label: 'Newest' },
+  { value: 'price-asc', label: 'Price: Low to High' },
+  { value: 'price-desc', label: 'Price: High to Low' },
+  { value: 'rating', label: 'Top Rated' },
+];
+
+const priceRanges = [
+  { value: 'all', label: 'Any price' },
+  { value: 'under-500', label: 'Under KES 500' },
+  { value: '500-1000', label: 'KES 500 – 1,000' },
+  { value: '1000-3000', label: 'KES 1,000 – 3,000' },
+  { value: 'over-3000', label: 'Over KES 3,000' },
+];
+
+const ratingOptions = [
+  { value: 0, label: 'Any rating' },
+  { value: 3, label: '3★ & up' },
+  { value: 4, label: '4★ & up' },
+  { value: 4.5, label: '4.5★ & up' },
+];
 
 const colorSchemes = [
   'from-emerald-500 to-teal-600',
@@ -24,6 +48,10 @@ const colorSchemes = [
 export default function BooksPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const [sortBy, setSortBy] = useState<SortKey>('newest');
+  const [selectedLanguage, setSelectedLanguage] = useState('All');
+  const [priceRange, setPriceRange] = useState('all');
+  const [minRating, setMinRating] = useState(0);
   const [books, setBooks] = useState<BookType[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -32,7 +60,7 @@ export default function BooksPage() {
     async function loadBooks() {
       try {
         setLoading(true);
-        const params: any = { limit: 50 };
+        const params: any = { limit: 100 };
 
         if (searchQuery) params.search = searchQuery;
         if (selectedCategory !== 'All') params.category = selectedCategory;
@@ -51,6 +79,66 @@ export default function BooksPage() {
     const debounce = setTimeout(loadBooks, 300);
     return () => clearTimeout(debounce);
   }, [searchQuery, selectedCategory]);
+
+  const languages = useMemo(() => {
+    const set = new Set<string>();
+    books.forEach((b) => {
+      if (b.language) set.add(b.language);
+    });
+    return Array.from(set).sort();
+  }, [books]);
+
+  const visibleBooks = useMemo(() => {
+    let result = books;
+
+    if (selectedLanguage !== 'All') {
+      result = result.filter((b) => b.language === selectedLanguage);
+    }
+
+    if (priceRange !== 'all') {
+      const [min, max] = priceRange.split('-').map(Number);
+      if (priceRange === 'under-500') {
+        result = result.filter((b) => b.price < 500);
+      } else if (priceRange === 'over-3000') {
+        result = result.filter((b) => b.price > 3000);
+      } else {
+        result = result.filter((b) => b.price >= min && b.price <= max);
+      }
+    }
+
+    if (minRating > 0) {
+      result = result.filter((b) => (b.rating || 0) >= minRating);
+    }
+
+    const sorted = [...result];
+    switch (sortBy) {
+      case 'price-asc':
+        sorted.sort((a, b) => a.price - b.price);
+        break;
+      case 'price-desc':
+        sorted.sort((a, b) => b.price - a.price);
+        break;
+      case 'rating':
+        sorted.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+        break;
+      default:
+        sorted.sort((a, b) => {
+          const at = a.publishedAt ? new Date(a.publishedAt).getTime() : 0;
+          const bt = b.publishedAt ? new Date(b.publishedAt).getTime() : 0;
+          return bt - at;
+        });
+    }
+    return sorted;
+  }, [books, selectedLanguage, priceRange, minRating, sortBy]);
+
+  const hasClientFilters = selectedLanguage !== 'All' || priceRange !== 'all' || minRating > 0;
+
+  function resetClientFilters() {
+    setSelectedLanguage('All');
+    setPriceRange('all');
+    setMinRating(0);
+    setSortBy('newest');
+  }
 
   return (
     <div className="min-h-screen bg-neutral-cream">
@@ -122,19 +210,82 @@ export default function BooksPage() {
           {!loading && (
             <div className="flex items-center justify-between mb-8">
               <p className="text-neutral-brown-700">
-                Showing <strong className="text-neutral-brown-900">{books.length}</strong> books
+                Showing <strong className="text-neutral-brown-900">{visibleBooks.length}</strong> books
                 {selectedCategory !== 'All' && (
                   <span className="ml-1"> in <span className="text-primary font-medium">{selectedCategory}</span></span>
                 )}
               </p>
-              {searchQuery && (
+              {(searchQuery || hasClientFilters) && (
                 <button 
-                  onClick={() => setSearchQuery('')}
+                  onClick={() => { setSearchQuery(''); resetClientFilters(); }}
                   className="text-sm text-neutral-brown-500 hover:text-primary flex items-center gap-1"
                 >
-                  Clear search
+                  Clear filters
                 </button>
               )}
+            </div>
+          )}
+
+          {/* Filter toolbar */}
+          {!loading && !error && (
+            <div className="flex flex-wrap items-center gap-3 mb-8">
+              <div className="inline-flex items-center gap-2 text-neutral-brown-600">
+                <SlidersHorizontal size={16} />
+                <span className="text-sm font-medium">Filters</span>
+              </div>
+
+              <div className="relative">
+                <select
+                  value={selectedLanguage}
+                  onChange={(e) => setSelectedLanguage(e.target.value)}
+                  className="appearance-none pl-4 pr-9 py-2.5 bg-white rounded-full border border-neutral-brown-200 text-sm font-medium text-neutral-brown-700 focus:outline-none focus:ring-2 focus:ring-primary/20 hover:border-neutral-brown-300 transition-colors"
+                >
+                  <option value="All">All Languages</option>
+                  {languages.map((lang) => (
+                    <option key={lang} value={lang}>{lang}</option>
+                  ))}
+                </select>
+                <ChevronDown size={14} className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-neutral-brown-400" />
+              </div>
+
+              <div className="relative">
+                <select
+                  value={priceRange}
+                  onChange={(e) => setPriceRange(e.target.value)}
+                  className="appearance-none pl-4 pr-9 py-2.5 bg-white rounded-full border border-neutral-brown-200 text-sm font-medium text-neutral-brown-700 focus:outline-none focus:ring-2 focus:ring-primary/20 hover:border-neutral-brown-300 transition-colors"
+                >
+                  {priceRanges.map((range) => (
+                    <option key={range.value} value={range.value}>{range.label}</option>
+                  ))}
+                </select>
+                <ChevronDown size={14} className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-neutral-brown-400" />
+              </div>
+
+              <div className="relative">
+                <select
+                  value={minRating}
+                  onChange={(e) => setMinRating(Number(e.target.value))}
+                  className="appearance-none pl-4 pr-9 py-2.5 bg-white rounded-full border border-neutral-brown-200 text-sm font-medium text-neutral-brown-700 focus:outline-none focus:ring-2 focus:ring-primary/20 hover:border-neutral-brown-300 transition-colors"
+                >
+                  {ratingOptions.map((rating) => (
+                    <option key={rating.value} value={rating.value}>{rating.label}</option>
+                  ))}
+                </select>
+                <ChevronDown size={14} className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-neutral-brown-400" />
+              </div>
+
+              <div className="relative ml-auto">
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value as SortKey)}
+                  className="appearance-none pl-4 pr-9 py-2.5 bg-white rounded-full border border-neutral-brown-200 text-sm font-medium text-neutral-brown-700 focus:outline-none focus:ring-2 focus:ring-primary/20 hover:border-neutral-brown-300 transition-colors"
+                >
+                  {sortOptions.map((option) => (
+                    <option key={option.value} value={option.value}>{option.label}</option>
+                  ))}
+                </select>
+                <ChevronDown size={14} className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-neutral-brown-400" />
+              </div>
             </div>
           )}
 
@@ -163,9 +314,9 @@ export default function BooksPage() {
           )}
 
           {/* Books Grid */}
-          {!loading && !error && books.length > 0 && (
+          {!loading && !error && visibleBooks.length > 0 && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-              {books.map((book, index) => {
+              {visibleBooks.map((book, index) => {
                 const colorScheme = colorSchemes[index % colorSchemes.length];
                 return (
                   <Link 
@@ -258,7 +409,7 @@ export default function BooksPage() {
           )}
 
           {/* Empty State */}
-          {!loading && !error && books.length === 0 && (
+          {!loading && !error && visibleBooks.length === 0 && (
             <div className="bg-white rounded-2xl p-12 text-center shadow-sm">
               <div className="w-20 h-20 bg-neutral-cream rounded-full flex items-center justify-center mx-auto mb-6">
                 <BookOpen size={36} className="text-neutral-brown-400" />
@@ -267,7 +418,7 @@ export default function BooksPage() {
               <p className="text-neutral-brown-600 mb-6">Try adjusting your search or filters to find what you&apos;re looking for</p>
               <div className="flex items-center justify-center gap-4">
                 <button
-                  onClick={() => { setSelectedCategory('All'); setSearchQuery(''); }}
+                  onClick={() => { setSelectedCategory('All'); setSearchQuery(''); resetClientFilters(); }}
                   className="bg-primary hover:bg-primary-dark text-white font-semibold px-8 py-3 rounded-full transition-all hover:shadow-lg"
                 >
                   Clear Filters
