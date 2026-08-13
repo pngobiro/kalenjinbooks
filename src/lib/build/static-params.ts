@@ -42,7 +42,7 @@ function httpsGetJson(urlString: string): Promise<unknown> {
   });
 }
 
-async function fetchIds(path: string): Promise<string[]> {
+async function fetchItems(path: string, param: 'id' | 'slug'): Promise<string[]> {
   let lastErr: unknown;
   for (let attempt = 1; attempt <= 4; attempt++) {
     try {
@@ -56,8 +56,12 @@ async function fetchIds(path: string): Promise<string[]> {
           : [];
       if (!Array.isArray(list)) return [];
       return list
-        .map((item) => String((item as { id?: unknown }).id))
-        .filter((id): id is string => Boolean(id));
+        .map((item) => {
+          const id = String((item as { id?: unknown }).id ?? '');
+          const slug = String((item as { slug?: unknown }).slug ?? '');
+          return param === 'slug' ? slug || id : id;
+        })
+        .filter((value): value is string => Boolean(value));
     } catch (err) {
       lastErr = err;
       if (attempt < 4) {
@@ -70,13 +74,13 @@ async function fetchIds(path: string): Promise<string[]> {
 }
 
 export async function getBookIds(): Promise<string[]> {
-  return fetchIds('/api/books?limit=1000');
+  return fetchItems('/api/books?limit=1000', 'id');
 }
 
 export async function getAuthorIds(): Promise<string[]> {
-  return fetchIds('/api/authors?limit=1000');
+  return fetchItems('/api/authors?limit=1000', 'id');
 }
 
 export async function getBlogPostIds(): Promise<string[]> {
-  return fetchIds('/api/blog/posts?limit=1000');
+  return fetchItems('/api/blog/posts?limit=1000', 'slug');
 }
