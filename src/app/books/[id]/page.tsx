@@ -263,11 +263,11 @@ export default function BookDetailPage({ params }: { params: Promise<{ id: strin
                 </p>
               </div>
 
-              {book.tags && (
+              {('tags' in book && typeof book.tags === 'string') && (
                 <div className="mt-8 pt-6 border-t" style={{ borderColor: '#E5D5C3' }}>
                   <h4 className="font-bold text-sm mb-3" style={{ color: '#2C2416' }}>Tags</h4>
                   <div className="flex flex-wrap gap-2">
-                    {book.tags.split(',').map((tag) => (
+                    {book.tags.split(',').map((tag: string) => (
                       <span 
                         key={tag.trim()} 
                         className="px-3 py-1 rounded-full text-sm font-medium"

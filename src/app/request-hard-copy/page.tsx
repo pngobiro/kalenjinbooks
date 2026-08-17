@@ -62,20 +62,22 @@ function RequestHardCopyContent() {
 
   if (submitted) {
     return (
-      <main className="min-h-screen bg-neutral-cream flex items-center justify-center px-6 py-12">
+      <main className="min-h-screen flex items-center justify-center px-6 py-12" style={{ backgroundColor: '#FFFCF5' }}>
         <div className="max-w-md w-full">
-          <div className="bg-white rounded-3xl shadow-xl overflow-hidden">
-            <div className="bg-gradient-to-br from-accent-green/20 to-accent-green/5 p-12 text-center">
-              <div className="w-20 h-20 bg-accent-green rounded-full flex items-center justify-center mx-auto mb-6">
-                <CheckCircle size={40} className="text-white" />
+          <div className="rounded-xl shadow-2xl overflow-hidden" style={{ backgroundColor: '#FFFCF5', border: '1px solid #E5D5C3' }}>
+            <div className="p-12 text-center" style={{ backgroundColor: '#E8F5E9' }}>
+              <div className="w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6" style={{ backgroundColor: '#7A9B76' }}>
+                <CheckCircle size={48} className="text-white" />
               </div>
-              <h1 className="text-3xl font-bold text-neutral-brown-900 font-heading mb-3">Request Submitted!</h1>
-              <p className="text-neutral-brown-600 text-lg">
-                We'll contact you within 2-3 business days about <strong className="text-primary">{bookTitle}</strong>.
+              <h1 className="text-3xl font-bold mb-4" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>
+                Request Submitted!
+              </h1>
+              <p className="text-lg text-gray-700">
+                We'll contact you within 2-3 business days about <strong style={{ color: '#D97846' }}>{bookTitle}</strong>.
               </p>
             </div>
             <div className="p-8 text-center">
-              <Link href={bookId ? `/books/${bookId}` : '/books'} className="bg-primary hover:bg-primary-dark text-white font-semibold px-8 py-3 rounded-full inline-block transition-all hover:shadow-lg hover:-translate-y-0.5">
+              <Link href={bookId ? `/books/${bookId}` : '/books'} className="inline-block px-8 py-4 rounded-xl font-bold text-white transition-all hover:shadow-lg" style={{ backgroundColor: '#D97846' }}>
                 Back to Book
               </Link>
             </div>
@@ -86,123 +88,124 @@ function RequestHardCopyContent() {
   }
 
   return (
-    <main className="min-h-screen bg-neutral-cream">
+    <main className="min-h-screen" style={{ backgroundColor: '#FFFCF5' }}>
       {/* Navigation */}
-      <nav className="bg-white/95 backdrop-blur-sm sticky top-0 z-50 border-b border-neutral-brown-200 shadow-sm">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="flex items-center justify-between h-20">
+      <nav className="bg-white/95 backdrop-blur-sm sticky top-0 z-50 border-b shadow-sm" style={{ borderColor: '#E5D5C3' }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="flex items-center justify-between h-16">
             <Link href="/" className="flex items-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" width="44" height="44">
-                <path d="M12 2C12 2 8 6 8 10C8 12.5 9.5 14.5 12 15C14.5 14.5 16 12.5 16 10C16 6 12 2 12 2Z" fill="#E07856"></path>
-                <path d="M12 5C12 5 10 7.5 10 10C10 11.5 10.8 12.8 12 13C13.2 12.8 14 11.5 14 10C14 7.5 12 5 12 5Z" fill="#D4AF37"></path>
-                <path d="M12 8C12 8 11 9.5 11 11C11 11.8 11.4 12.4 12 12.5C12.6 12.4 13 11.8 13 11C13 9.5 12 8 12 8Z" fill="#C85D3A"></path>
-              </svg>
-              <span className="text-2xl font-bold text-neutral-brown-900 font-heading">KaleeReads</span>
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: '#D97846' }}>
+                <Book size={22} className="text-white" />
+              </div>
+              <span className="text-xl font-bold hidden sm:inline" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>KaleeReads</span>
             </Link>
 
-            <Link href={bookId ? `/books/${bookId}` : '/books'} className="flex items-center gap-2 text-neutral-brown-700 hover:text-primary transition-colors">
+            <Link href={bookId ? `/books/${bookId}` : '/books'} className="flex items-center gap-2 text-gray-700 hover:text-orange-600 transition-colors font-medium">
               <ArrowLeft size={20} />
-              <span>Back</span>
+              <span className="hidden sm:inline">Back</span>
             </Link>
           </div>
         </div>
       </nav>
 
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-neutral-brown-900 via-neutral-brown-800 to-neutral-brown-900 overflow-hidden">
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute top-0 left-0 w-64 h-64 bg-primary rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
-          <div className="absolute bottom-0 right-0 w-56 h-56 bg-accent-green rounded-full blur-3xl translate-x-1/2 translate-y-1/2"></div>
-        </div>
+      <section className="relative bg-gradient-to-br from-violet-500 to-purple-600 overflow-hidden">
+        <div className="absolute inset-0 bg-black/10"></div>
         
-        <div className="relative max-w-7xl mx-auto px-6 py-16 text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 rounded-full mb-6">
-            <Package size={16} className="text-accent-gold" />
-            <span className="text-white/90 text-sm font-medium">Hard Copy Request</span>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 py-16 text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6" style={{ backgroundColor: 'rgba(255,255,255,0.2)' }}>
+            <Package size={18} style={{ color: '#C9A354' }} />
+            <span className="text-white/95 text-sm font-bold">Hard Copy Request</span>
           </div>
           
-          <h1 className="text-4xl md:text-5xl font-bold text-white font-heading mb-4">
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 leading-tight" style={{ fontFamily: 'Playfair Display, serif' }}>
             Request Physical Copy
           </h1>
-          <p className="text-lg text-neutral-brown-200 max-w-2xl mx-auto">
-            Get a physical copy of <strong className="text-primary">{bookTitle}</strong> delivered to your doorstep
+          <p className="text-lg text-white/95 max-w-2xl mx-auto mb-8">
+            Get a physical copy of <strong style={{ color: '#C9A354' }}>{bookTitle}</strong> delivered to your doorstep
           </p>
 
           {/* Delivery Info Cards */}
-          <div className="flex flex-wrap items-center justify-center gap-6 mt-8">
-            <div className="flex items-center gap-3 bg-white/10 rounded-2xl px-5 py-3">
-              <Truck size={24} className="text-accent-green" />
-              <span className="text-white font-medium">Island-wide Delivery</span>
+          <div className="flex flex-wrap items-center justify-center gap-4">
+            <div className="flex items-center gap-3 rounded-xl px-5 py-3" style={{ backgroundColor: 'rgba(255,255,255,0.2)' }}>
+              <Truck size={24} style={{ color: '#7A9B76' }} />
+              <span className="text-white font-semibold">Kenya-wide Delivery</span>
             </div>
-            <div className="flex items-center gap-3 bg-white/10 rounded-2xl px-5 py-3">
-              <Package size={24} className="text-primary" />
-              <span className="text-white font-medium">Quality Packaging</span>
+            <div className="flex items-center gap-3 rounded-xl px-5 py-3" style={{ backgroundColor: 'rgba(255,255,255,0.2)' }}>
+              <Package size={24} style={{ color: '#D97846' }} />
+              <span className="text-white font-semibold">Quality Packaging</span>
             </div>
           </div>
-        </div>
-
-        <div className="absolute bottom-0 left-0 right-0">
-          <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-16">
-            <path d="M0 120L60 105C120 90 240 60 360 45C480 30 600 30 720 37.5C840 45 960 60 1080 67.5C1200 75 1320 75 1380 75L1440 75V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z" fill="#F5F1E8"/>
-          </svg>
         </div>
       </section>
 
       {/* Form */}
       <section className="py-12">
-        <div className="max-w-2xl mx-auto px-6">
-          <form onSubmit={handleSubmit} className="bg-white rounded-3xl shadow-xl overflow-hidden">
+        <div className="max-w-2xl mx-auto px-4 sm:px-6">
+          <form onSubmit={handleSubmit} className="rounded-xl shadow-xl overflow-hidden" style={{ backgroundColor: '#FFFCF5', border: '1px solid #E5D5C3' }}>
             {/* Personal Info */}
-            <div className="p-8 border-b border-neutral-brown-100">
-              <h2 className="font-bold text-xl text-neutral-brown-900 font-heading mb-6 flex items-center gap-3">
-                <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
-                  <User size={20} className="text-primary" />
+            <div className="p-8 border-b" style={{ borderColor: '#E5D5C3' }}>
+              <h2 className="font-bold text-2xl mb-6 flex items-center gap-3" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>
+                <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: '#FEF3E7' }}>
+                  <User size={24} style={{ color: '#D97846' }} />
                 </div>
                 Personal Information
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div>
-                  <label className="text-sm font-medium text-neutral-brown-700 mb-2 block">Full Name *</label>
+                  <label className="text-sm font-bold mb-2 block" style={{ color: '#2C2416' }}>Full Name *</label>
                   <input type="text" name="fullName" value={formData.fullName} onChange={handleChange} required
-                    className="w-full px-4 py-3.5 rounded-xl border-2 border-neutral-brown-100 focus:border-primary focus:outline-none transition-colors bg-neutral-cream/30" placeholder="John Doe" />
+                    className="w-full px-4 py-3.5 rounded-xl border-2 focus:outline-none transition-all"
+                    style={{ borderColor: '#E5D5C3', backgroundColor: '#FFFFFF' }}
+                    placeholder="John Doe" />
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-neutral-brown-700 mb-2 block">Email *</label>
+                  <label className="text-sm font-bold mb-2 block" style={{ color: '#2C2416' }}>Email *</label>
                   <input type="email" name="email" value={formData.email} onChange={handleChange} required
-                    className="w-full px-4 py-3.5 rounded-xl border-2 border-neutral-brown-100 focus:border-primary focus:outline-none transition-colors bg-neutral-cream/30" placeholder="john@example.com" />
+                    className="w-full px-4 py-3.5 rounded-xl border-2 focus:outline-none transition-all"
+                    style={{ borderColor: '#E5D5C3', backgroundColor: '#FFFFFF' }}
+                    placeholder="john@example.com" />
                 </div>
                 <div className="md:col-span-2">
-                  <label className="text-sm font-medium text-neutral-brown-700 mb-2 block">Phone *</label>
+                  <label className="text-sm font-bold mb-2 block" style={{ color: '#2C2416' }}>Phone *</label>
                   <input type="tel" name="phone" value={formData.phone} onChange={handleChange} required
-                    className="w-full px-4 py-3.5 rounded-xl border-2 border-neutral-brown-100 focus:border-primary focus:outline-none transition-colors bg-neutral-cream/30" placeholder="+254 700 000 000" />
+                    className="w-full px-4 py-3.5 rounded-xl border-2 focus:outline-none transition-all"
+                    style={{ borderColor: '#E5D5C3', backgroundColor: '#FFFFFF' }}
+                    placeholder="+254 700 000 000" />
                 </div>
               </div>
             </div>
 
             {/* Shipping */}
-            <div className="p-8 border-b border-neutral-brown-100 bg-neutral-cream/30">
-              <h2 className="font-bold text-xl text-neutral-brown-900 font-heading mb-6 flex items-center gap-3">
-                <div className="w-10 h-10 bg-accent-green/10 rounded-xl flex items-center justify-center">
-                  <MapPin size={20} className="text-accent-green" />
+            <div className="p-8 border-b" style={{ borderColor: '#E5D5C3', backgroundColor: '#F5E6D3' }}>
+              <h2 className="font-bold text-2xl mb-6 flex items-center gap-3" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>
+                <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: '#E8F5E9' }}>
+                  <MapPin size={24} style={{ color: '#7A9B76' }} />
                 </div>
                 Shipping Address
               </h2>
               <div className="space-y-5">
                 <div>
-                  <label className="text-sm font-medium text-neutral-brown-700 mb-2 block">Street Address *</label>
+                  <label className="text-sm font-bold mb-2 block" style={{ color: '#2C2416' }}>Street Address *</label>
                   <input type="text" name="address" value={formData.address} onChange={handleChange} required
-                    className="w-full px-4 py-3.5 rounded-xl border-2 border-neutral-brown-100 focus:border-primary focus:outline-none transition-colors bg-white" placeholder="123 Main Street" />
+                    className="w-full px-4 py-3.5 rounded-xl border-2 focus:outline-none transition-all"
+                    style={{ borderColor: '#E5D5C3', backgroundColor: '#FFFFFF' }}
+                    placeholder="123 Main Street" />
                 </div>
                 <div className="grid grid-cols-2 gap-5">
                   <div>
-                    <label className="text-sm font-medium text-neutral-brown-700 mb-2 block">City *</label>
+                    <label className="text-sm font-bold mb-2 block" style={{ color: '#2C2416' }}>City *</label>
                     <input type="text" name="city" value={formData.city} onChange={handleChange} required
-                      className="w-full px-4 py-3.5 rounded-xl border-2 border-neutral-brown-100 focus:border-primary focus:outline-none transition-colors bg-white" placeholder="Eldoret" />
+                      className="w-full px-4 py-3.5 rounded-xl border-2 focus:outline-none transition-all"
+                      style={{ borderColor: '#E5D5C3', backgroundColor: '#FFFFFF' }}
+                      placeholder="Eldoret" />
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-neutral-brown-700 mb-2 block">County *</label>
+                    <label className="text-sm font-bold mb-2 block" style={{ color: '#2C2416' }}>County *</label>
                     <input type="text" name="county" value={formData.county} onChange={handleChange} required
-                      className="w-full px-4 py-3.5 rounded-xl border-2 border-neutral-brown-100 focus:border-primary focus:outline-none transition-colors bg-white" placeholder="Uasin Gishu" />
+                      className="w-full px-4 py-3.5 rounded-xl border-2 focus:outline-none transition-all"
+                      style={{ borderColor: '#E5D5C3', backgroundColor: '#FFFFFF' }}
+                      placeholder="Uasin Gishu" />
                   </div>
                 </div>
               </div>
@@ -210,44 +213,48 @@ function RequestHardCopyContent() {
 
             {/* Order */}
             <div className="p-8">
-              <h2 className="font-bold text-xl text-neutral-brown-900 font-heading mb-6 flex items-center gap-3">
-                <div className="w-10 h-10 bg-accent-gold/10 rounded-xl flex items-center justify-center">
-                  <BookOpen size={20} className="text-accent-gold" />
+              <h2 className="font-bold text-2xl mb-6 flex items-center gap-3" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>
+                <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: '#FFF9E5' }}>
+                  <BookOpen size={24} style={{ color: '#C9A354' }} />
                 </div>
                 Order Details
               </h2>
               <div className="grid grid-cols-2 gap-5 mb-5">
                 <div>
-                  <label className="text-sm font-medium text-neutral-brown-700 mb-2 block">Quantity</label>
+                  <label className="text-sm font-bold mb-2 block" style={{ color: '#2C2416' }}>Quantity</label>
                   <select name="quantity" value={formData.quantity} onChange={handleChange}
-                    className="w-full px-4 py-3.5 rounded-xl border-2 border-neutral-brown-100 focus:border-primary focus:outline-none transition-colors bg-white appearance-none cursor-pointer">
+                    className="w-full px-4 py-3.5 rounded-xl border-2 focus:outline-none transition-all cursor-pointer"
+                    style={{ borderColor: '#E5D5C3', backgroundColor: '#FFFFFF' }}>
                     {[1, 2, 3, 5, 10].map(n => <option key={n} value={n}>{n} {n === 1 ? 'copy' : 'copies'}</option>)}
                   </select>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-neutral-brown-700 mb-2 block">Book</label>
-                  <div className="w-full px-4 py-3.5 rounded-xl bg-neutral-cream text-neutral-brown-700 font-medium truncate">
+                  <label className="text-sm font-bold mb-2 block" style={{ color: '#2C2416' }}>Book</label>
+                  <div className="w-full px-4 py-3.5 rounded-xl font-medium truncate" style={{ backgroundColor: '#F5E6D3', color: '#2C2416' }}>
                     {bookTitle}
                   </div>
                 </div>
               </div>
               <div>
-                <label className="text-sm font-medium text-neutral-brown-700 mb-2 block">Notes (Optional)</label>
+                <label className="text-sm font-bold mb-2 block" style={{ color: '#2C2416' }}>Notes (Optional)</label>
                 <textarea name="notes" value={formData.notes} onChange={handleChange} rows={3}
-                  className="w-full px-4 py-3.5 rounded-xl border-2 border-neutral-brown-100 focus:border-primary focus:outline-none transition-colors bg-neutral-cream/30 resize-none" placeholder="Special delivery instructions..."></textarea>
+                  className="w-full px-4 py-3.5 rounded-xl border-2 focus:outline-none transition-all resize-none"
+                  style={{ borderColor: '#E5D5C3', backgroundColor: '#FFFFFF' }}
+                  placeholder="Special delivery instructions..."></textarea>
               </div>
             </div>
 
             <div className="px-8 pb-8">
               {error && (
-                <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-xl text-red-600 text-sm">
+                <div className="mb-4 p-4 rounded-xl text-red-600 text-sm font-medium" style={{ backgroundColor: '#FEF2F2', border: '1px solid #FCA5A5' }}>
                   {error}
                 </div>
               )}
               <button 
                 type="submit" 
                 disabled={isSubmitting}
-                className="w-full bg-primary hover:bg-primary-dark text-white font-bold py-4 rounded-2xl flex items-center justify-center gap-3 transition-all hover:shadow-xl hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full text-white font-bold py-4 rounded-xl flex items-center justify-center gap-3 transition-all hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+                style={{ backgroundColor: '#D97846' }}
               >
                 {isSubmitting ? (
                   <>
@@ -261,7 +268,7 @@ function RequestHardCopyContent() {
                   </>
                 )}
               </button>
-              <p className="text-center text-neutral-brown-500 text-sm mt-4">
+              <p className="text-center text-gray-600 text-sm mt-4">
                 We'll contact you within 2-3 business days with delivery details
               </p>
             </div>

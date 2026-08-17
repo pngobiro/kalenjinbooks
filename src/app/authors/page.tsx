@@ -152,7 +152,7 @@ export default function AuthorsPage() {
                       {/* Content */}
                       <div className="relative px-6 pb-6 -mt-12 flex flex-col items-center text-center flex-1">
                         {/* Avatar */}
-                        <div className="w-24 h-24 rounded-full overflow-hidden shadow-xl mb-4 ring-4" style={{ ringColor: '#FFFCF5' }}>
+                        <div className="w-24 h-24 rounded-full overflow-hidden shadow-xl mb-4" style={{ boxShadow: '0 0 0 4px #FFFCF5' }}>
                           {author.profileImage ? (
                             <img src={author.profileImage} alt={author.name || 'Author'} className="w-full h-full object-cover" />
                           ) : (

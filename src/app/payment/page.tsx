@@ -40,65 +40,69 @@ function PaymentContent() {
   };
 
   return (
-    <div className="min-h-screen bg-neutral-cream">
+    <div className="min-h-screen" style={{ backgroundColor: '#FFFCF5' }}>
       {/* Navigation */}
-      <nav className="bg-white/90 backdrop-blur-sm sticky top-0 z-50 border-b border-neutral-brown-500/10">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="flex items-center justify-between h-20">
-            <Link href="/" className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-primary/10">
-                <Book className="text-primary" size={24} />
+      <nav className="bg-white/95 backdrop-blur-sm sticky top-0 z-50 border-b" style={{ borderColor: '#E5D5C3' }}>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="flex items-center justify-between h-16">
+            <Link href="/" className="flex items-center gap-2">
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: '#D97846' }}>
+                <Book className="text-white" size={22} />
               </div>
-              <span className="text-2xl font-bold text-neutral-brown-900 font-heading">KaleeReads</span>
+              <span className="text-xl font-bold hidden sm:inline" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>KaleeReads</span>
             </Link>
 
-            <button onClick={() => router.back()} className="flex items-center gap-2 text-neutral-brown-700 hover:text-primary transition-colors">
-              <div className="w-10 h-10 rounded-lg bg-white border border-neutral-brown-200 flex items-center justify-center shadow-sm">
-                <ArrowLeft size={20} />
-              </div>
+            <button onClick={() => router.back()} className="flex items-center gap-2 text-gray-700 hover:text-orange-600 transition-colors font-medium">
+              <ArrowLeft size={20} />
               <span className="hidden sm:inline">Back</span>
             </button>
           </div>
         </div>
       </nav>
 
-      <div className="max-w-2xl mx-auto px-6 py-12">
+      <div className="max-w-2xl mx-auto px-4 sm:px-6 py-12">
         {/* Header */}
         <div className="text-center mb-10">
-          <h1 className="text-4xl font-bold text-neutral-brown-900 font-heading mb-2">Choose Payment</h1>
-          <p className="text-neutral-brown-600">Select how you'd like to pay</p>
+          <h1 className="text-4xl font-bold mb-3" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>
+            Choose Payment Method
+          </h1>
+          <p className="text-lg text-gray-600">Select how you'd like to complete your purchase</p>
         </div>
 
         {/* Order Summary */}
-        <div className="bg-white rounded-2xl p-6 shadow-lg mb-6">
-          <h2 className="font-bold text-neutral-brown-900 mb-4">Order Summary</h2>
+        <div className="rounded-xl p-6 shadow-lg mb-6" style={{ backgroundColor: '#FFFCF5', border: '1px solid #E5D5C3' }}>
+          <h2 className="font-bold text-xl mb-4" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>Order Summary</h2>
           
-          <div className="flex justify-between items-start mb-4 pb-4 border-b border-neutral-brown-100">
+          <div className="flex justify-between items-start mb-4 pb-4 border-b" style={{ borderColor: '#E5D5C3' }}>
             <div>
-              <div className="font-semibold text-neutral-brown-900">{title}</div>
-              <div className="text-sm text-neutral-brown-500">by {author}</div>
+              <div className="font-bold text-lg" style={{ color: '#2C2416' }}>{title}</div>
+              <div className="text-sm text-gray-600">by {author}</div>
             </div>
-            <div className="text-2xl font-bold text-primary">KES {price}</div>
+            <div className="text-3xl font-bold" style={{ color: '#D97846' }}>KES {price}</div>
           </div>
           
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             {type === 'permanent' ? (
               <>
-                <BookOpen size={18} className="text-primary" />
-                <span className="text-sm text-neutral-brown-600">Permanent Purchase</span>
+                <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#FEF3E7' }}>
+                  <BookOpen size={20} style={{ color: '#D97846' }} />
+                </div>
+                <span className="font-medium" style={{ color: '#2C2416' }}>Permanent Purchase</span>
               </>
             ) : (
               <>
-                <Clock size={18} className="text-accent-green" />
-                <span className="text-sm text-neutral-brown-600">24-Hour Access</span>
+                <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#E8F5E9' }}>
+                  <Clock size={20} style={{ color: '#7A9B76' }} />
+                </div>
+                <span className="font-medium" style={{ color: '#2C2416' }}>24-Hour Access</span>
               </>
             )}
           </div>
         </div>
 
         {/* Payment Methods */}
-        <div className="bg-white rounded-2xl p-6 shadow-lg mb-6">
-          <h2 className="font-bold text-neutral-brown-900 mb-4">Payment Methods</h2>
+        <div className="rounded-xl p-6 shadow-lg mb-6" style={{ backgroundColor: '#FFFCF5', border: '1px solid #E5D5C3' }}>
+          <h2 className="font-bold text-xl mb-5" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>Payment Methods</h2>
           
           <div className="space-y-3 mb-6">
             {availableMethods.map((methodKey) => {
@@ -106,39 +110,32 @@ function PaymentContent() {
               const Icon = method.icon;
               const isSelected = selectedMethod === methodKey;
               
-              const colorClasses: Record<string, string> = {
-                green: isSelected ? 'border-green-500 bg-green-50' : '',
-                blue: isSelected ? 'border-blue-500 bg-blue-50' : '',
-                indigo: isSelected ? 'border-indigo-500 bg-indigo-50' : '',
-                gray: isSelected ? 'border-gray-500 bg-gray-50' : '',
-              };
-
               return (
                 <div
                   key={methodKey}
                   onClick={() => setSelectedMethod(methodKey)}
-                  className={`cursor-pointer rounded-xl p-4 border-2 transition-all flex items-center gap-4 ${
-                    isSelected ? colorClasses[method.color] : 'border-neutral-brown-200 hover:border-neutral-brown-300'
-                  }`}
+                  className="cursor-pointer rounded-xl p-5 border-2 transition-all flex items-center gap-4 hover:shadow-md"
+                  style={{
+                    borderColor: isSelected ? '#D97846' : '#E5D5C3',
+                    backgroundColor: isSelected ? '#FEF3E7' : '#FFFFFF'
+                  }}
                 >
-                  <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${
-                    isSelected ? 'bg-white' : 'bg-neutral-brown-100'
-                  }`}>
+                  <div className="w-14 h-14 rounded-xl flex items-center justify-center" style={{ backgroundColor: isSelected ? '#FFFFFF' : '#F5E6D3' }}>
                     {method.logo ? (
-                      <Image src={method.logo} alt={method.name} width={32} height={32} className="object-contain" />
+                      <Image src={method.logo} alt={method.name} width={36} height={36} className="object-contain" />
                     ) : Icon ? (
-                      <Icon size={24} className={isSelected ? 'text-primary' : 'text-neutral-brown-400'} />
+                      <Icon size={28} style={{ color: isSelected ? '#D97846' : '#9CA3AF' }} />
                     ) : null}
                   </div>
                   
                   <div className="flex-1">
-                    <div className="font-semibold text-neutral-brown-900">{method.name}</div>
-                    <div className="text-sm text-neutral-brown-500">{method.description}</div>
+                    <div className="font-bold" style={{ color: '#2C2416' }}>{method.name}</div>
+                    <div className="text-sm text-gray-600">{method.description}</div>
                   </div>
 
                   {isSelected && (
-                    <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center">
-                      <Check size={14} className="text-white" />
+                    <div className="w-7 h-7 rounded-full flex items-center justify-center" style={{ backgroundColor: '#D97846' }}>
+                      <Check size={16} className="text-white" />
                     </div>
                   )}
                 </div>
@@ -149,21 +146,20 @@ function PaymentContent() {
           <button
             onClick={handleProceed}
             disabled={!selectedMethod}
-            className={`w-full font-bold py-4 rounded-full transition-all flex items-center justify-center gap-2 text-white ${
-              selectedMethod ? 'bg-primary hover:bg-primary-dark' : 'bg-neutral-brown-300 cursor-not-allowed'
-            }`}
+            className="w-full font-bold py-4 rounded-xl transition-all flex items-center justify-center gap-2 text-white hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+            style={{ backgroundColor: selectedMethod ? '#D97846' : '#D1D5DB' }}
           >
             {selectedMethod ? `Pay with ${paymentMethodsInfo[selectedMethod].name}` : 'Select a payment method'}
           </button>
         </div>
 
         {/* Security */}
-        <div className="bg-accent-green/10 rounded-xl p-4 text-center">
-          <div className="flex items-center justify-center gap-2 text-accent-green mb-1">
-            <Check size={18} />
-            <span className="font-semibold text-sm">Secure Payment</span>
+        <div className="rounded-xl p-5 text-center" style={{ backgroundColor: '#E8F5E9', border: '1px solid #7A9B76' }}>
+          <div className="flex items-center justify-center gap-2 mb-2" style={{ color: '#7A9B76' }}>
+            <Check size={20} />
+            <span className="font-bold">Secure Payment</span>
           </div>
-          <p className="text-xs text-neutral-brown-600">Your payment is encrypted and secure</p>
+          <p className="text-sm text-gray-700">Your payment is encrypted and secure</p>
         </div>
       </div>
     </div>
@@ -173,10 +169,10 @@ function PaymentContent() {
 export default function PaymentPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-neutral-cream flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-neutral-brown-600">Loading payment options...</p>
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#FFFCF5' }}>
+        <div className="relative">
+          <div className="w-16 h-16 border-4 rounded-full" style={{ borderColor: '#F5E6D3' }}></div>
+          <div className="absolute top-0 left-0 w-16 h-16 border-4 border-t-transparent rounded-full animate-spin" style={{ borderColor: '#D97846' }}></div>
         </div>
       </div>
     }>
