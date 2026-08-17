@@ -3,11 +3,13 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import {
-  ArrowLeft, BookOpen, Star, User, Calendar, MapPin, Globe,
-  Twitter, Facebook, Instagram, Linkedin, Sparkles,
-  PlayCircle, Clock, Eye, ArrowRight, FileText, Users,
+  ArrowLeft, BookOpen, Star, User, MapPin, Globe,
+  Twitter, Facebook, Instagram, Linkedin,
+  Clock, Eye, ArrowRight, FileText, Share2,
 } from 'lucide-react';
 import Link from 'next/link';
+import Navbar from '@/components/layout/Navbar';
+import Footer from '@/components/layout/Footer';
 import ShareButtons from '@/components/ShareButtons';
 import { getAuthorById, Author } from '@/lib/api/authors';
 import { fetchBlogPosts, type BlogPost } from '@/lib/api/blogs';
@@ -74,10 +76,10 @@ export default function AuthorDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-neutral-cream flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#FFFCF5' }}>
         <div className="relative">
-          <div className="w-16 h-16 border-4 border-neutral-brown-200 rounded-full"></div>
-          <div className="absolute top-0 left-0 w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+          <div className="w-16 h-16 border-4 rounded-full" style={{ borderColor: '#F5E6D3' }}></div>
+          <div className="absolute top-0 left-0 w-16 h-16 border-4 border-t-transparent rounded-full animate-spin" style={{ borderColor: '#D97846' }}></div>
         </div>
       </div>
     );
@@ -85,14 +87,18 @@ export default function AuthorDetailPage() {
 
   if (error || !author) {
     return (
-      <div className="min-h-screen bg-neutral-cream flex items-center justify-center">
-        <div className="bg-red-50 border border-red-200 rounded-2xl p-8 text-center max-w-md">
-          <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <User size={32} className="text-red-500" />
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#FFFCF5' }}>
+        <div className="rounded-xl p-12 text-center max-w-md shadow-lg" style={{ backgroundColor: '#FEF2F2', border: '1px solid #FCA5A5' }}>
+          <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6" style={{ backgroundColor: '#FEE2E2' }}>
+            <User size={40} className="text-red-500" />
           </div>
-          <p className="text-red-600 font-medium mb-2">Error loading author</p>
-          <p className="text-red-500 text-sm mb-6">{error || 'Author not found'}</p>
-          <Link href="/authors" className="bg-red-600 text-white px-6 py-3 rounded-full hover:bg-red-700 transition-colors">
+          <p className="text-red-600 font-bold text-xl mb-3">Author Not Found</p>
+          <p className="text-red-500 mb-8">{error || 'The author you\'re looking for doesn\'t exist.'}</p>
+          <Link 
+            href="/authors" 
+            className="inline-block px-8 py-3 rounded-xl font-bold transition-all hover:shadow-lg"
+            style={{ backgroundColor: '#DC2626', color: '#FFFFFF' }}
+          >
             Back to Authors
           </Link>
         </div>
@@ -103,103 +109,125 @@ export default function AuthorDetailPage() {
   const colorScheme = colorSchemes[(author.name?.length || 0) % colorSchemes.length];
   const allBooks = author.books || [];
   const topByViews = [...blogPosts].sort((a, b) => b.viewCount - a.viewCount).slice(0, 5);
+  const initials = (author.name || 'A')
+    .split(' ')
+    .map((w) => w[0])
+    .slice(0, 2)
+    .join('')
+    .toUpperCase();
 
   return (
-    <div className="min-h-screen bg-neutral-cream">
-      {/* Navigation */}
-      <nav className="bg-white/95 backdrop-blur-sm sticky top-0 z-50 border-b border-neutral-brown-200 shadow-sm">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="flex items-center justify-between h-16">
-            <Link href="/" className="flex items-center gap-2">
-              <span className="text-xl font-bold text-neutral-brown-900 font-heading">KaleeReads</span>
-            </Link>
-            <Link href="/authors" className="flex items-center gap-2 text-neutral-brown-700 hover:text-primary transition-colors text-sm">
-              <ArrowLeft size={16} />
-              <span>All Authors</span>
-            </Link>
-          </div>
-        </div>
-      </nav>
+    <div className="min-h-screen" style={{ backgroundColor: '#FFFCF5' }}>
+      <Navbar />
 
-      {/* Hero */}
-      <section className="bg-gradient-to-br from-neutral-brown-900 via-neutral-brown-800 to-neutral-brown-900">
-        <div className="max-w-6xl mx-auto px-6 py-12">
+      {/* Hero Section */}
+      <section className={`relative bg-gradient-to-br ${colorScheme} overflow-hidden`}>
+        <div className="absolute inset-0 bg-black/10"></div>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          <Link 
+            href="/authors" 
+            className="inline-flex items-center gap-2 text-white/90 hover:text-white mb-8 transition-colors"
+          >
+            <ArrowLeft size={20} />
+            <span className="font-medium">Back to Authors</span>
+          </Link>
+
           <div className="flex flex-col md:flex-row gap-8 items-center md:items-start">
+            {/* Avatar */}
             <div className="flex-shrink-0">
-              <div className="w-28 h-28 rounded-2xl overflow-hidden bg-white shadow-2xl">
+              <div className="w-32 h-32 rounded-2xl overflow-hidden shadow-2xl ring-4 ring-white/50">
                 {author.profileImage ? (
                   <img src={author.profileImage} alt={author.name || 'Author'} className="w-full h-full object-cover" />
                 ) : (
-                  <div className={`w-full h-full bg-gradient-to-br ${colorScheme} flex items-center justify-center`}>
-                    <User size={48} className="text-white/80" />
+                  <div className="w-full h-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                    <span className="text-5xl font-bold text-white" style={{ fontFamily: 'Playfair Display, serif' }}>{initials}</span>
                   </div>
                 )}
               </div>
             </div>
 
+            {/* Info */}
             <div className="text-center md:text-left flex-1">
-              <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/10 rounded-full mb-3">
-                <Sparkles size={13} className="text-accent-gold" />
-                <span className="text-white/90 text-xs font-medium">Author</span>
-              </div>
-
-              <h1 className="text-3xl md:text-4xl font-bold text-white font-heading mb-3">
+              <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 leading-tight" style={{ fontFamily: 'Playfair Display, serif' }}>
                 {author.name || 'Unknown Author'}
               </h1>
 
               {author.bio && (
-                <p className="text-neutral-brown-200 leading-relaxed max-w-2xl mb-4">
+                <p className="text-lg text-white/95 leading-relaxed max-w-3xl mb-6">
                   {author.bio}
                 </p>
               )}
 
-              <div className="flex flex-wrap items-center justify-center md:justify-start gap-5 text-sm">
-                <div className="flex items-center gap-1.5 text-white/80">
-                  <BookOpen size={15} />
-                  <span className="font-semibold">{author.booksCount}</span> books
+              <div className="flex flex-wrap items-center justify-center md:justify-start gap-6 text-white/90 mb-6">
+                <div className="flex items-center gap-2">
+                  <BookOpen size={20} />
+                  <span className="font-bold text-xl">{author.booksCount || 0}</span>
+                  <span>Books</span>
                 </div>
-                <div className="flex items-center gap-1.5 text-white/80">
-                  <Star size={15} className="text-accent-gold" />
-                  <span className="font-semibold">{author.rating?.toFixed(1) || '0.0'}</span> rating
+                <div className="flex items-center gap-2">
+                  <Star size={20} className="fill-yellow-300 text-yellow-300" />
+                  <span className="font-bold text-xl">{author.rating?.toFixed(1) || '0.0'}</span>
+                  <span>Rating</span>
                 </div>
                 {(author.location || author.nationality) && (
-                  <div className="flex items-center gap-1.5 text-neutral-brown-400">
-                    <MapPin size={14} />
-                    {author.location || author.nationality}
+                  <div className="flex items-center gap-2">
+                    <MapPin size={18} />
+                    <span>{author.location || author.nationality}</span>
                   </div>
                 )}
               </div>
 
-              <div className="flex items-center gap-2 mt-4 justify-center md:justify-start">
+              {/* Social Links */}
+              <div className="flex items-center gap-3 justify-center md:justify-start">
                 <ShareButtons title={author.name || 'Author'} type="author" />
                 {author.website && (
-                  <a href={author.website} target="_blank" rel="noopener noreferrer"
-                     className="w-9 h-9 bg-white/10 hover:bg-white/20 rounded-lg flex items-center justify-center transition-colors">
-                    <Globe size={16} className="text-white" />
+                  <a 
+                    href={author.website} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="w-10 h-10 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-lg flex items-center justify-center transition-all"
+                  >
+                    <Globe size={18} className="text-white" />
                   </a>
                 )}
                 {author.twitter && (
-                  <a href={`https://twitter.com/${author.twitter}`} target="_blank" rel="noopener noreferrer"
-                     className="w-9 h-9 bg-white/10 hover:bg-[#1DA1F2] rounded-lg flex items-center justify-center transition-colors">
-                    <Twitter size={16} className="text-white" />
+                  <a 
+                    href={`https://twitter.com/${author.twitter}`} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="w-10 h-10 bg-white/20 hover:bg-[#1DA1F2] backdrop-blur-sm rounded-lg flex items-center justify-center transition-all"
+                  >
+                    <Twitter size={18} className="text-white" />
                   </a>
                 )}
                 {author.facebook && (
-                  <a href={`https://facebook.com/${author.facebook}`} target="_blank" rel="noopener noreferrer"
-                     className="w-9 h-9 bg-white/10 hover:bg-[#1877F2] rounded-lg flex items-center justify-center transition-colors">
-                    <Facebook size={16} className="text-white" />
+                  <a 
+                    href={`https://facebook.com/${author.facebook}`} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="w-10 h-10 bg-white/20 hover:bg-[#1877F2] backdrop-blur-sm rounded-lg flex items-center justify-center transition-all"
+                  >
+                    <Facebook size={18} className="text-white" />
                   </a>
                 )}
                 {author.instagram && (
-                  <a href={`https://instagram.com/${author.instagram}`} target="_blank" rel="noopener noreferrer"
-                     className="w-9 h-9 bg-white/10 hover:bg-[#E4405F] rounded-lg flex items-center justify-center transition-colors">
-                    <Instagram size={16} className="text-white" />
+                  <a 
+                    href={`https://instagram.com/${author.instagram}`} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="w-10 h-10 bg-white/20 hover:bg-[#E4405F] backdrop-blur-sm rounded-lg flex items-center justify-center transition-all"
+                  >
+                    <Instagram size={18} className="text-white" />
                   </a>
                 )}
                 {author.linkedin && (
-                  <a href={`https://linkedin.com/in/${author.linkedin}`} target="_blank" rel="noopener noreferrer"
-                     className="w-9 h-9 bg-white/10 hover:bg-[#0A66C2] rounded-lg flex items-center justify-center transition-colors">
-                    <Linkedin size={16} className="text-white" />
+                  <a 
+                    href={`https://linkedin.com/in/${author.linkedin}`} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="w-10 h-10 bg-white/20 hover:bg-[#0A66C2] backdrop-blur-sm rounded-lg flex items-center justify-center transition-all"
+                  >
+                    <Linkedin size={18} className="text-white" />
                   </a>
                 )}
               </div>
@@ -208,60 +236,56 @@ export default function AuthorDetailPage() {
         </div>
       </section>
 
-      <main className="max-w-6xl mx-auto px-6 py-10">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
           {/* Main Content: Books */}
           <section className="lg:col-span-2">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-neutral-brown-900 font-heading">Books</h2>
-              {allBooks.length > 0 && (
-                <Link href={`/books?author=${authorId}`} className="text-primary font-semibold text-sm flex items-center gap-1 hover:gap-2 transition-all">
-                  View All <ArrowRight size={14} />
+              <h2 className="text-3xl font-bold" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>
+                Books by {author.name?.split(' ')[0]}
+              </h2>
+              {allBooks.length > 6 && (
+                <Link 
+                  href={`/books?author=${authorId}`} 
+                  className="flex items-center gap-2 text-orange-600 font-bold hover:gap-3 transition-all"
+                >
+                  View All <ArrowRight size={16} />
                 </Link>
               )}
             </div>
 
             {allBooks.length > 0 ? (
-              <div className="space-y-5">
-                {allBooks.map((book, index) => {
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                {allBooks.slice(0, 6).map((book, index) => {
                   const bookColor = colorSchemes[index % colorSchemes.length];
                   return (
                     <Link key={book.id} href={`/books/${book.id}`} className="group">
-                      <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 grid grid-cols-[120px_1fr] sm:grid-cols-[160px_1fr]">
-                        <div className={`relative aspect-[2/3] sm:h-full overflow-hidden ${!book.coverImage ? `bg-gradient-to-br ${bookColor}` : ''}`}>
+                      <div className="rounded-xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 h-full flex flex-col" style={{ backgroundColor: '#FFFCF5' }}>
+                        <div className={`relative aspect-[3/4] overflow-hidden ${!book.coverImage ? `bg-gradient-to-br ${bookColor}` : ''}`}>
                           {book.coverImage ? (
                             <img src={book.coverImage} alt={book.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                           ) : (
                             <div className="w-full h-full flex items-center justify-center">
-                              <BookOpen size={28} className="text-white/50" />
+                              <BookOpen size={48} className="text-white/40" />
                             </div>
                           )}
                         </div>
-                        <div className="p-5 flex flex-col justify-between">
-                          <div>
-                            <h3 className="font-bold text-base text-neutral-brown-900 line-clamp-1 group-hover:text-primary transition-colors mb-1">
-                              {book.title}
-                            </h3>
-                            {book.description && (
-                              <p className="text-sm text-neutral-brown-600 line-clamp-2 mb-2">{book.description}</p>
-                            )}
-                            <div className="flex items-center gap-2 text-xs text-neutral-brown-500">
-                              {book.category && (
-                                <span className="px-2 py-0.5 bg-primary/10 text-primary rounded-full font-medium">{book.category}</span>
-                              )}
-                              <span className="flex items-center gap-1">
-                                <Star size={12} className="fill-accent-gold text-accent-gold" /> {book.rating?.toFixed(1) || '0.0'}
-                              </span>
+                        <div className="p-5 flex-1 flex flex-col">
+                          <h3 className="font-bold text-lg mb-2 line-clamp-2 group-hover:text-orange-600 transition-colors" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>
+                            {book.title}
+                          </h3>
+                          {book.description && (
+                            <p className="text-sm text-gray-700 line-clamp-2 mb-3 flex-1">{book.description}</p>
+                          )}
+                          <div className="flex items-center justify-between">
+                            <span className="text-xl font-bold" style={{ color: '#D97846' }}>
+                              KES {book.price.toLocaleString()}
+                            </span>
+                            <div className="flex items-center gap-1 text-sm">
+                              <Star size={14} className="fill-yellow-400 text-yellow-400" />
+                              <span className="font-semibold" style={{ color: '#2C2416' }}>{book.rating?.toFixed(1) || '0.0'}</span>
                             </div>
-                          </div>
-                          <div className="flex items-center gap-3 mt-3">
-                            <span className="text-lg font-bold text-primary">KES {book.price.toLocaleString()}</span>
-                            {book.amazonUrl && (
-                              <span className="px-2 py-0.5 bg-accent-gold/10 text-accent-gold text-xs font-semibold rounded-full">
-                                Amazon
-                              </span>
-                            )}
                           </div>
                         </div>
                       </div>
@@ -270,70 +294,76 @@ export default function AuthorDetailPage() {
                 })}
               </div>
             ) : (
-              <div className="bg-white rounded-2xl p-10 text-center shadow-sm">
-                <BookOpen size={32} className="text-neutral-brown-300 mx-auto mb-3" />
-                <p className="text-neutral-brown-600">No published books yet.</p>
+              <div className="rounded-xl p-16 text-center shadow-md" style={{ backgroundColor: '#FFFCF5' }}>
+                <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6" style={{ backgroundColor: '#F5E6D3' }}>
+                  <BookOpen size={40} className="text-gray-400" />
+                </div>
+                <h3 className="text-2xl font-bold mb-3" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>
+                  No Books Yet
+                </h3>
+                <p className="text-gray-600 max-w-md mx-auto">
+                  This author hasn&apos;t published any books yet. Check back soon for new releases!
+                </p>
               </div>
             )}
           </section>
 
-          {/* Sidebar: Blog Posts + Popular */}
+          {/* Sidebar: Blog Posts */}
           <aside className="lg:col-span-1 space-y-6">
-            {/* Blog Posts */}
-            <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
-              <div className="px-5 py-4 bg-primary rounded-t-2xl">
-                <h3 className="text-white font-heading font-bold flex items-center gap-2">
-                  <FileText size={16} />
+            {/* Recent Blog Posts */}
+            <div className="rounded-xl overflow-hidden shadow-lg" style={{ backgroundColor: '#FFFCF5' }}>
+              <div className="px-6 py-4" style={{ backgroundColor: '#D97846' }}>
+                <h3 className="text-white font-bold text-lg flex items-center gap-2" style={{ fontFamily: 'Playfair Display, serif' }}>
+                  <FileText size={18} />
                   Blog Posts
                 </h3>
               </div>
-              <div className="divide-y divide-neutral-brown-100">
-                {blogPosts.length > 0 ? blogPosts.slice(0, 6).map((post, i) => (
-                  <Link key={post.id} href={`/blogs/${post.id}`} className="flex items-start gap-3 p-4 hover:bg-neutral-cream/60 transition-colors group">
-                    <div className={`w-10 h-10 shrink-0 rounded-lg bg-gradient-to-br ${colorSchemes[i % colorSchemes.length]} flex items-center justify-center overflow-hidden`}>
+              <div className="divide-y" style={{ borderColor: '#E5D5C3' }}>
+                {blogPosts.length > 0 ? blogPosts.slice(0, 5).map((post, i) => (
+                  <Link key={post.id} href={`/blogs/${post.id}`} className="flex items-start gap-3 p-4 hover:bg-orange-50 transition-colors group">
+                    <div className={`w-16 h-16 shrink-0 rounded-lg bg-gradient-to-br ${colorSchemes[i % colorSchemes.length]} flex items-center justify-center overflow-hidden`}>
                       {post.coverImage ? (
                         <img src={post.coverImage} alt="" className="w-full h-full object-cover" />
                       ) : (
-                        <FileText size={16} className="text-white/70" />
+                        <FileText size={20} className="text-white/70" />
                       )}
                     </div>
-                    <div className="min-w-0">
-                      <h4 className="text-sm font-semibold text-neutral-brown-900 line-clamp-1 group-hover:text-primary transition-colors">
+                    <div className="min-w-0 flex-1">
+                      <h4 className="text-sm font-bold line-clamp-2 group-hover:text-orange-600 transition-colors mb-2" style={{ color: '#2C2416' }}>
                         {post.title}
                       </h4>
-                      <p className="text-xs text-neutral-brown-500 mt-1 flex items-center gap-2">
+                      <p className="text-xs text-gray-600 flex items-center gap-3">
                         <span>{formatBlogDate(post.publishedAt || post.createdAt)}</span>
                         <span className="flex items-center gap-1"><Eye size={11} /> {post.viewCount}</span>
                       </p>
                     </div>
                   </Link>
                 )) : (
-                  <p className="text-sm text-neutral-brown-500 p-6">No posts yet.</p>
+                  <p className="text-sm text-gray-500 p-6">No blog posts yet.</p>
                 )}
               </div>
             </div>
 
             {/* Popular Posts */}
             {topByViews.length > 0 && (
-              <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
-                <div className="px-5 py-4 bg-neutral-brown-900 rounded-t-2xl">
-                  <h3 className="text-white font-heading font-bold flex items-center gap-2">
-                    <Eye size={16} className="text-accent-gold" />
-                    Popular Posts
+              <div className="rounded-xl overflow-hidden shadow-lg" style={{ backgroundColor: '#FFFCF5' }}>
+                <div className="px-6 py-4" style={{ backgroundColor: '#2C2416' }}>
+                  <h3 className="text-white font-bold text-lg flex items-center gap-2" style={{ fontFamily: 'Playfair Display, serif' }}>
+                    <Eye size={18} style={{ color: '#C9A354' }} />
+                    Most Read
                   </h3>
                 </div>
-                <div className="divide-y divide-neutral-brown-100">
+                <div className="divide-y" style={{ borderColor: '#E5D5C3' }}>
                   {topByViews.map((post, i) => (
-                    <Link key={post.id} href={`/blogs/${post.id}`} className="flex items-start gap-3 p-4 hover:bg-neutral-cream/60 transition-colors group">
-                      <span className="w-8 h-8 shrink-0 rounded-lg bg-primary/10 text-primary font-heading font-bold flex items-center justify-center text-sm">
+                    <Link key={post.id} href={`/blogs/${post.id}`} className="flex items-start gap-3 p-4 hover:bg-orange-50 transition-colors group">
+                      <span className="w-8 h-8 shrink-0 rounded-lg flex items-center justify-center text-sm font-bold" style={{ backgroundColor: '#FEF3E7', color: '#D97846' }}>
                         {i + 1}
                       </span>
-                      <div className="min-w-0">
-                        <h4 className="text-sm font-semibold text-neutral-brown-900 line-clamp-1 group-hover:text-primary transition-colors">
+                      <div className="min-w-0 flex-1">
+                        <h4 className="text-sm font-bold line-clamp-2 group-hover:text-orange-600 transition-colors mb-1" style={{ color: '#2C2416' }}>
                           {post.title}
                         </h4>
-                        <p className="text-xs text-neutral-brown-500 mt-1 flex items-center gap-2">
-                          <span>{formatBlogDate(post.publishedAt || post.createdAt)}</span>
+                        <p className="text-xs text-gray-600 flex items-center gap-3">
                           <span className="flex items-center gap-1"><Eye size={11} /> {post.viewCount}</span>
                         </p>
                       </div>
@@ -343,28 +373,27 @@ export default function AuthorDetailPage() {
               </div>
             )}
 
-            {/* Write for us */}
-            <div className="bg-gradient-to-br from-primary to-primary-dark rounded-2xl p-6 text-white">
-              <div className="w-10 h-10 bg-white/15 rounded-xl flex items-center justify-center mb-3">
-                <Users size={18} />
-              </div>
-              <h3 className="font-heading font-bold text-base mb-2">Read More</h3>
-              <p className="text-white/80 text-sm leading-relaxed mb-4">
-                Explore more books and posts from Kalenjin authors.
+            {/* CTA */}
+            <div className="rounded-xl p-6 shadow-lg" style={{ backgroundColor: '#2C2416' }}>
+              <h3 className="text-white font-bold text-xl mb-3" style={{ fontFamily: 'Playfair Display, serif' }}>
+                Explore More
+              </h3>
+              <p className="text-gray-300 text-sm leading-relaxed mb-6">
+                Discover more books and stories from talented Kalenjin authors.
               </p>
-              <Link href="/books" className="inline-flex items-center gap-2 bg-white text-primary font-semibold px-4 py-2 rounded-xl hover:bg-neutral-cream transition-all text-sm">
-                Browse Books <ArrowRight size={14} />
+              <Link 
+                href="/books" 
+                className="inline-flex items-center gap-2 w-full justify-center px-6 py-3 rounded-lg font-bold transition-all hover:shadow-lg"
+                style={{ backgroundColor: '#D97846', color: '#FFFFFF' }}
+              >
+                Browse All Books <ArrowRight size={18} />
               </Link>
             </div>
           </aside>
         </div>
       </main>
 
-      <footer className="bg-neutral-brown-900 text-white py-6">
-        <div className="max-w-6xl mx-auto px-6 text-center">
-          <p className="text-neutral-brown-400 text-sm">&copy; {new Date().getFullYear()} KaleeReads</p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

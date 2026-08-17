@@ -2,28 +2,20 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Search, Compass, MapPin, BookOpen, Star, Mountain, Feather, ChevronRight } from 'lucide-react';
+import { Search, MapPin, BookOpen, Star, Feather, ArrowRight, X } from 'lucide-react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import { fetchAuthors, Author } from '@/lib/api/authors';
 
-// Gradients pulled from the Rift Valley highlands — matches the homepage trail.
-const trailGradients = [
-  'from-[#A8451F] to-[#E0A83E]',
-  'from-[#33502F] to-[#5C7A4E]',
-  'from-[#2A2244] to-[#4A3B6B]',
-  'from-[#8C3B2E] to-[#C97B3D]',
-  'from-[#1F4D3D] to-[#3D7A5C]',
-  'from-[#5B3A29] to-[#9C6B3E]',
-];
-
-const ridgeLabels = [
-  '2,400M · ITEN RIDGE',
-  '1,800M · KERIO VALLEY',
-  '2,100M · CHERANGANI HILLS',
-  '2,700M · TUGEN HILLS',
-  '1,500M · NANDI ESCARPMENT',
-  '2,000M · KIPSIGIS HIGHLANDS',
+const colorGradients = [
+  'from-emerald-500 to-teal-600',
+  'from-rose-500 to-pink-600',
+  'from-amber-500 to-orange-600',
+  'from-violet-500 to-purple-600',
+  'from-blue-500 to-indigo-600',
+  'from-red-500 to-rose-600',
+  'from-cyan-500 to-blue-600',
+  'from-fuchsia-500 to-purple-600',
 ];
 
 export default function AuthorsPage() {
@@ -61,242 +53,203 @@ export default function AuthorsPage() {
   });
 
   return (
-    <div className="min-h-screen bg-[#F3EEE2]">
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap');
+    <div className="min-h-screen" style={{ backgroundColor: '#FFFCF5' }}>
+      <Navbar />
 
-        .kr-display { font-family: 'Instrument Serif', Georgia, serif; }
-        .kr-body { font-family: 'Manrope', system-ui, sans-serif; }
-        .kr-mono { font-family: 'IBM Plex Mono', ui-monospace, monospace; }
-        .kr-root, .kr-root * { font-family: 'Manrope', system-ui, sans-serif; }
-
-        @keyframes krRise {
-          from { opacity: 0; transform: translateY(14px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        .kr-rise { animation: krRise 0.7s ease-out both; }
-        @media (prefers-reduced-motion: reduce) {
-          .kr-rise { animation: none; }
-        }
-      `}</style>
-
-      <div className="kr-root">
-        <Navbar />
-
-        {/* Hero — dusk over the escarpment */}
-        <section className="relative overflow-hidden bg-[radial-gradient(ellipse_at_top,_#3A2E57_0%,_#1B1730_55%,_#140F24_100%)]">
-          <svg
-            className="absolute inset-x-0 bottom-0 w-full h-8 md:h-10 text-[#140F24]"
-            viewBox="0 0 1200 120"
-            preserveAspectRatio="none"
-          >
-            <path
-              d="M0,80 L120,55 L240,90 L360,40 L480,70 L600,20 L720,60 L840,35 L960,75 L1080,45 L1200,65 L1200,120 L0,120 Z"
-              fill="currentColor"
-            />
-          </svg>
-
-          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 pt-10 pb-10 md:pt-14 md:pb-12">
-            <div className="max-w-3xl mx-auto text-center kr-rise">
-              <div className="inline-flex items-center gap-2 mb-3 px-3 py-1 rounded-full bg-white/10 border border-white/10">
-                <Compass size={13} className="text-[#E0A83E]" />
-                <span className="kr-mono text-[10px] tracking-[0.25em] text-[#E0A83E]">
-                  THE STORYTELLERS · WAYPOINT
-                </span>
-              </div>
-              <h1 className="kr-display italic text-3xl md:text-[2.6rem] lg:text-5xl text-white leading-[1.08] mb-3">
-                The voices behind the shelf.
-              </h1>
-              <p className="text-sm md:text-base text-[#D8CFE8] leading-relaxed mb-6 max-w-2xl mx-auto">
-                Every trail has its guides. These are the Kalenjin storytellers, scholars, and
-                keepers of memory who mark the route you&apos;re walking.
-              </p>
-
-              {/* Search */}
-              <div className="relative max-w-xl mx-auto">
-                <Search size={18} className="absolute left-5 top-1/2 -translate-y-1/2 text-[#8A7B68]" />
-                <input
-                  type="text"
-                  placeholder="Find a storyteller, a ridge, a genre..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-14 pr-5 py-3.5 bg-[#FBF7EE] rounded-full focus:outline-none focus:ring-2 focus:ring-[#E0A83E]/40 text-[#241E1A] text-sm shadow-xl"
-                />
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 py-10 md:py-14">
-          {/* Waypoint header */}
-          <div className="relative py-2 select-none mb-8">
-            <svg
-              viewBox="0 0 800 44"
-              className="w-full h-10 text-[#A8451F]/25"
-              preserveAspectRatio="none"
-            >
-              <path
-                d="M0,24 L260,24 L300,8 L336,36 L372,14 L404,24 L800,24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              />
-              <circle cx="336" cy="24" r="5" fill="#A8451F" />
-              <circle cx="336" cy="24" r="9" fill="none" stroke="#A8451F" strokeOpacity="0.35" strokeWidth="1.5" />
-            </svg>
-            <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 -mt-3">
-              <span className="kr-mono text-[10px] tracking-[0.3em] text-[#8A7B68]">CAMP DIRECTORY</span>
-              <Mountain size={16} className="text-[#A8451F]" />
-              <h2 className="kr-display italic text-3xl md:text-[2.6rem] leading-none text-[#241E1A]">
-                Meet the Storytellers
-              </h2>
-              <span className="kr-mono text-[10px] tracking-[0.3em] text-[#8A7B68]">2,400M · ITEN RIDGE</span>
-            </div>
-          </div>
-
-          {!loading && !error && (
-            <p className="text-center kr-mono text-[10px] tracking-[0.25em] text-[#8A7B68] mb-10">
-              {filteredAuthors.length} STORYTELLER{filteredAuthors.length === 1 ? '' : 'S'} ON THE TRAIL
-              {searchQuery && ` · MATCHING “${searchQuery.toUpperCase()}”`}
+      {/* Hero Section */}
+      <section className="relative bg-gradient-to-br from-violet-400 via-purple-400 to-indigo-500 overflow-hidden">
+        <div className="absolute inset-0 bg-black/10"></div>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
+          <div className="max-w-3xl">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight" style={{ fontFamily: 'Playfair Display, serif' }}>
+              Meet Our Authors
+            </h1>
+            <p className="text-lg sm:text-xl text-white/95 leading-relaxed mb-8">
+              Discover the voices and talents behind our collection of Kalenjin literature
             </p>
-          )}
+            
+            {/* Search Bar */}
+            <form onSubmit={(e) => e.preventDefault()} className="relative max-w-2xl">
+              <Search size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search by author name, genre, or location..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-12 pr-12 py-4 rounded-xl border-0 shadow-lg focus:ring-2 focus:ring-white/50 text-gray-900 placeholder-gray-500"
+                style={{ backgroundColor: '#FFFCF5' }}
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                >
+                  <X size={20} />
+                </button>
+              )}
+            </form>
+          </div>
+        </div>
+      </section>
 
-          {/* Loading */}
-          {loading && (
-            <div className="flex flex-col items-center justify-center py-24 gap-3">
-              <div className="relative w-10 h-10">
-                <div className="absolute inset-0 border-4 border-[#e6ded0] rounded-full"></div>
-                <div className="absolute inset-0 border-4 border-[#A8451F] border-t-transparent rounded-full animate-spin"></div>
-              </div>
-              <span className="kr-mono text-[10px] tracking-[0.3em] text-[#8A7B68]">
-                MARKING THE WAYPOINTS…
-              </span>
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Results Count */}
+        {!loading && !error && (
+          <div className="mb-8 text-center">
+            <p className="text-gray-600 font-medium">
+              {filteredAuthors.length} {filteredAuthors.length === 1 ? 'Author' : 'Authors'} Found
+              {searchQuery && ` for "${searchQuery}"`}
+            </p>
+          </div>
+        )}
+
+        {/* Loading */}
+        {loading && (
+          <div className="flex flex-col items-center justify-center py-24">
+            <div className="relative">
+              <div className="w-16 h-16 border-4 rounded-full" style={{ borderColor: '#F5E6D3' }}></div>
+              <div className="absolute top-0 left-0 w-16 h-16 border-4 border-t-transparent rounded-full animate-spin" style={{ borderColor: '#D97846' }}></div>
             </div>
-          )}
+            <p className="mt-6 text-gray-600 font-medium">Loading authors...</p>
+          </div>
+        )}
 
-          {/* Error */}
-          {error && (
-            <div className="bg-red-50 border border-red-200 rounded-2xl p-8 text-center">
-              <p className="text-red-600 font-medium mb-2">Error loading authors</p>
-              <p className="text-red-500 text-sm mb-4">{error}</p>
-              <button
-                onClick={() => window.location.reload()}
-                className="bg-red-600 text-white px-5 py-2 rounded-full hover:bg-red-700 transition-colors text-sm"
-              >
-                Try Again
-              </button>
-            </div>
-          )}
+        {/* Error */}
+        {error && (
+          <div className="rounded-xl p-12 text-center shadow-lg" style={{ backgroundColor: '#FEF2F2', border: '1px solid #FCA5A5' }}>
+            <p className="text-red-600 font-semibold text-lg mb-4">{error}</p>
+            <button
+              onClick={() => window.location.reload()}
+              className="px-6 py-3 rounded-xl font-semibold transition-all hover:shadow-md"
+              style={{ backgroundColor: '#DC2626', color: '#FFFFFF' }}
+            >
+              Try Again
+            </button>
+          </div>
+        )}
 
-          {/* Authors Grid */}
-          {!loading && !error && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredAuthors.length > 0 ? (
-                filteredAuthors.map((author, index) => {
-                  const scheme = trailGradients[index % trailGradients.length];
-                  const ridge = ridgeLabels[index % ridgeLabels.length];
-                  const initials = (author.name || 'A')
-                    .split(' ')
-                    .map((w) => w[0])
-                    .slice(0, 2)
-                    .join('')
-                    .toUpperCase();
-                  return (
-                    <Link key={author.id} href={`/authors/${author.id}`} className="group">
-                      <div className="relative h-full rounded-3xl bg-[#FBF7EE] border border-[#E4D9C4] shadow-sm hover:shadow-2xl transition-all duration-300 hover:-translate-y-1.5 overflow-hidden flex flex-col">
-                        {/* Gradient headband */}
-                        <div className={`h-20 bg-gradient-to-br ${scheme} opacity-90`}>
-                          <div className="absolute inset-x-0 top-0 h-20 bg-gradient-to-t from-[#FBF7EE]/10 to-transparent" />
-                        </div>
+        {/* Authors Grid */}
+        {!loading && !error && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredAuthors.length > 0 ? (
+              filteredAuthors.map((author, index) => {
+                const gradient = colorGradients[index % colorGradients.length];
+                const initials = (author.name || 'A')
+                  .split(' ')
+                  .map((w) => w[0])
+                  .slice(0, 2)
+                  .join('')
+                  .toUpperCase();
+                return (
+                  <Link key={author.id} href={`/authors/${author.id}`} className="group">
+                    <div className="h-full rounded-xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 flex flex-col" style={{ backgroundColor: '#FFFCF5' }}>
+                      {/* Gradient Header */}
+                      <div className={`h-24 bg-gradient-to-br ${gradient} relative`}>
+                        <div className="absolute inset-0 bg-black/5"></div>
+                      </div>
 
-                        {/* Contour ring badge */}
-                        <div className="absolute -top-5 right-5 w-16 h-16 opacity-25 pointer-events-none" aria-hidden="true">
-                          <div className="absolute inset-0 rounded-full border-2 border-white" />
-                          <div className="absolute inset-2.5 rounded-full border-2 border-white" />
-                          <div className="absolute inset-5 rounded-full border-2 border-white" />
-                        </div>
-
+                      {/* Content */}
+                      <div className="relative px-6 pb-6 -mt-12 flex flex-col items-center text-center flex-1">
                         {/* Avatar */}
-                        <div className="relative px-6 pb-6 -mt-10 flex flex-col items-center text-center">
-                          <div className="w-20 h-20 rounded-full overflow-hidden ring-4 ring-[#FBF7EE] shadow-lg mb-3">
-                            {author.profileImage ? (
-                              <img src={author.profileImage} alt={author.name || 'Author'} className="w-full h-full object-cover" />
-                            ) : (
-                              <div className={`w-full h-full bg-gradient-to-br ${scheme} flex items-center justify-center`}>
-                                <span className="kr-display italic text-3xl text-white">{initials}</span>
-                              </div>
-                            )}
-                          </div>
-
-                          <h3 className="kr-display italic text-2xl text-[#241E1A] leading-tight group-hover:text-[#A8451F] transition-colors mb-1">
-                            {author.name || 'Unknown Author'}
-                          </h3>
-
-                          <span className="kr-mono text-[9px] tracking-[0.25em] text-[#A8451F] mb-3">{ridge}</span>
-
-                          <p className="text-xs text-[#5B4F42] leading-relaxed line-clamp-3 mb-4">
-                            {author.bio || 'A storyteller on KaleeReads, marking their waypoint on the trail.'}
-                          </p>
-
-                          {author.genres && (
-                            <div className="flex flex-wrap items-center justify-center gap-1.5 mb-4">
-                              {author.genres.split(',').slice(0, 3).map((genre) => (
-                                <span key={genre.trim()} className="px-2.5 py-1 bg-[#EDE4D0] text-[#5B4F42] rounded-full text-[10px] font-medium">
-                                  {genre.trim()}
-                                </span>
-                              ))}
+                        <div className="w-24 h-24 rounded-full overflow-hidden shadow-xl mb-4 ring-4" style={{ ringColor: '#FFFCF5' }}>
+                          {author.profileImage ? (
+                            <img src={author.profileImage} alt={author.name || 'Author'} className="w-full h-full object-cover" />
+                          ) : (
+                            <div className={`w-full h-full bg-gradient-to-br ${gradient} flex items-center justify-center`}>
+                              <span className="text-3xl font-bold text-white" style={{ fontFamily: 'Playfair Display, serif' }}>{initials}</span>
                             </div>
                           )}
+                        </div>
 
-                          {/* Meta row */}
-                          <div className="w-full mt-auto pt-4 border-t border-dashed border-[#E4D9C4] flex items-center justify-between">
-                            <span className="flex items-center gap-1.5 text-xs text-[#5B4F42]">
-                              <BookOpen size={13} className="text-[#A8451F]" />
-                              {author.booksCount} {author.booksCount === 1 ? 'book' : 'books'}
-                            </span>
-                            <span className="flex items-center gap-1.5 text-xs text-[#5B4F42]">
-                              <Star size={13} className="fill-[#E0A83E] text-[#E0A83E]" />
-                              {author.rating?.toFixed(1) || '0.0'}
-                            </span>
-                            <span className="flex items-center gap-1 text-[#8A7B68]">
-                              <MapPin size={12} />
-                              <span className="text-[11px]">{author.location || author.nationality || 'Highlands'}</span>
-                            </span>
+                        {/* Name */}
+                        <h3 className="text-2xl font-bold mb-2 leading-tight group-hover:text-orange-600 transition-colors" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>
+                          {author.name || 'Unknown Author'}
+                        </h3>
+
+                        {/* Location */}
+                        {(author.location || author.nationality) && (
+                          <p className="flex items-center gap-1.5 text-sm text-gray-600 mb-4">
+                            <MapPin size={14} />
+                            {author.location || author.nationality}
+                          </p>
+                        )}
+
+                        {/* Bio */}
+                        <p className="text-sm text-gray-700 leading-relaxed line-clamp-3 mb-4 flex-1">
+                          {author.bio || 'A talented storyteller on KaleeReads, sharing their unique voice and perspective.'}
+                        </p>
+
+                        {/* Genres */}
+                        {author.genres && (
+                          <div className="flex flex-wrap items-center justify-center gap-2 mb-4">
+                            {author.genres.split(',').slice(0, 3).map((genre) => (
+                              <span key={genre.trim()} className="px-3 py-1 rounded-full text-xs font-semibold" style={{ backgroundColor: '#FEF3E7', color: '#D97846' }}>
+                                {genre.trim()}
+                              </span>
+                            ))}
                           </div>
+                        )}
 
-                          <div className="mt-4 inline-flex items-center gap-1 text-xs font-semibold text-[#A8451F] group-hover:gap-2 transition-all">
-                            View trail <ChevronRight size={14} />
+                        {/* Stats */}
+                        <div className="w-full pt-4 border-t flex items-center justify-around" style={{ borderColor: '#E5D5C3' }}>
+                          <div className="flex items-center gap-1.5 text-sm">
+                            <BookOpen size={16} style={{ color: '#D97846' }} />
+                            <span className="font-semibold" style={{ color: '#2C2416' }}>{author.booksCount || 0}</span>
+                            <span className="text-gray-600">books</span>
+                          </div>
+                          <div className="flex items-center gap-1.5 text-sm">
+                            <Star size={16} className="fill-yellow-400 text-yellow-400" />
+                            <span className="font-semibold" style={{ color: '#2C2416' }}>{author.rating?.toFixed(1) || '0.0'}</span>
                           </div>
                         </div>
-                      </div>
-                    </Link>
-                  );
-                })
-              ) : (
-                <div className="col-span-full text-center py-20">
-                  <div className="w-20 h-20 rounded-full bg-[#EDE4D0] flex items-center justify-center mx-auto mb-5">
-                    <Feather size={28} className="text-[#A8451F]" />
-                  </div>
-                  <h3 className="kr-display italic text-2xl text-[#241E1A] mb-2">
-                    No trail leads here yet.
-                  </h3>
-                  <p className="text-sm text-[#8A7B68] mb-6">
-                    {searchQuery ? 'No storytellers found matching your search.' : 'No authors available yet.'}
-                  </p>
-                  <Link
-                    href="/dashboard/author/register"
-                    className="inline-flex items-center gap-1 bg-[#A8451F] text-white px-5 py-2.5 rounded-full font-semibold text-sm hover:bg-[#8C3B2E] transition-colors"
-                  >
-                    Become an Author
-                  </Link>
-                </div>
-              )}
-            </div>
-          )}
-        </main>
 
-        <Footer />
-      </div>
+                        {/* CTA */}
+                        <div className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-orange-600 group-hover:gap-3 transition-all">
+                          View Profile <ArrowRight size={16} />
+                        </div>
+                      </div>
+                    </div>
+                  </Link>
+                );
+              })
+            ) : (
+              <div className="col-span-full text-center py-20">
+                <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6" style={{ backgroundColor: '#F5E6D3' }}>
+                  <Feather size={36} className="text-gray-400" />
+                </div>
+                <h3 className="text-3xl font-bold mb-3" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>
+                  {searchQuery ? 'No Authors Found' : 'No Authors Yet'}
+                </h3>
+                <p className="text-gray-600 mb-8 max-w-md mx-auto">
+                  {searchQuery 
+                    ? 'Try adjusting your search query or browse all authors.' 
+                    : 'No authors have joined yet. Check back soon for new voices!'}
+                </p>
+                {searchQuery ? (
+                  <button
+                    onClick={() => setSearchQuery('')}
+                    className="px-8 py-3 rounded-xl font-bold transition-all hover:shadow-lg"
+                    style={{ backgroundColor: '#D97846', color: '#FFFFFF' }}
+                  >
+                    Clear Search
+                  </button>
+                ) : (
+                  <Link
+                    href="/books"
+                    className="inline-block px-8 py-3 rounded-xl font-bold transition-all hover:shadow-lg"
+                    style={{ backgroundColor: '#D97846', color: '#FFFFFF' }}
+                  >
+                    Browse Books
+                  </Link>
+                )}
+              </div>
+            )}
+          </div>
+        )}
+      </main>
+
+      <Footer />
     </div>
   );
 }

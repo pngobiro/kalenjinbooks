@@ -146,8 +146,11 @@ export default function NewBookPage() {
 
   if (authLoading) {
     return (
-      <div className="min-h-screen bg-neutral-cream flex items-center justify-center">
-        <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#FFFCF5' }}>
+        <div className="relative">
+          <div className="w-16 h-16 border-4 rounded-full" style={{ borderColor: '#F5E6D3' }}></div>
+          <div className="absolute top-0 left-0 w-16 h-16 border-4 border-t-transparent rounded-full animate-spin" style={{ borderColor: '#D97846' }}></div>
+        </div>
       </div>
     );
   }
@@ -157,57 +160,53 @@ export default function NewBookPage() {
   }
 
   return (
-    <div className="min-h-screen bg-neutral-cream">
+    <div className="min-h-screen" style={{ backgroundColor: '#FFFCF5' }}>
       {/* Navigation */}
-      <nav className="bg-white/90 backdrop-blur-sm sticky top-0 z-50 border-b border-neutral-brown-500/10">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="flex items-center justify-between h-20">
-            <Link href="/dashboard/author" className="flex items-center gap-3 text-neutral-brown-600 hover:text-primary">
+      <nav className="bg-white/95 backdrop-blur-sm sticky top-0 z-50 border-b" style={{ borderColor: '#E5D5C3' }}>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="flex items-center justify-between h-16">
+            <Link href="/dashboard/author" className="flex items-center gap-2 text-gray-600 hover:text-orange-600 transition-colors">
               <ArrowLeft size={20} />
-              <span>Back to Dashboard</span>
+              <span className="font-medium">Back to Dashboard</span>
             </Link>
             
-            <div className="flex items-center gap-3">
-              <Book className="text-primary" size={24} />
-              <span className="text-xl font-bold text-neutral-brown-900 font-heading">Upload New Book</span>
+            <div className="flex items-center gap-2">
+              <Book style={{ color: '#D97846' }} size={24} />
+              <span className="text-xl font-bold hidden sm:inline" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>Upload New Book</span>
             </div>
           </div>
         </div>
       </nav>
 
-      <div className="max-w-4xl mx-auto px-6 py-12">
-        <div className="bg-white rounded-2xl p-8 shadow-lg">
-          <div className="text-center mb-8">
-            <AuthorProfileHeader 
-              variant="compact" 
-              showEmail={false} 
-              showStatus={true}
-              className="mb-6 justify-center"
-            />
-            <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Upload size={40} className="text-primary" />
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12">
+        <div className="rounded-xl p-8 shadow-lg" style={{ backgroundColor: '#FFFCF5', border: '1px solid #E5D5C3' }}>
+          <div className="text-center mb-10">
+            <div className="w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6" style={{ backgroundColor: '#FEF3E7' }}>
+              <Upload size={48} style={{ color: '#D97846' }} />
             </div>
-            <h1 className="text-3xl font-bold text-neutral-brown-900 font-heading mb-2">Upload Your Book</h1>
-            <p className="text-neutral-brown-600">Share your story with thousands of readers</p>
+            <h1 className="text-4xl font-bold mb-3" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>
+              Upload Your Book
+            </h1>
+            <p className="text-lg text-gray-600">Share your story with thousands of readers worldwide</p>
           </div>
 
           {error && (
-            <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
-              <p className="text-red-600 font-medium">{error}</p>
+            <div className="rounded-xl p-6 mb-8 shadow-md" style={{ backgroundColor: '#FEF2F2', border: '1px solid #FCA5A5' }}>
+              <p className="text-red-600 font-semibold text-center">{error}</p>
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-8">
+          <form onSubmit={handleSubmit} className="space-y-10">
             {/* Basic Information */}
             <div className="space-y-6">
-              <h2 className="text-xl font-bold text-neutral-brown-900 flex items-center gap-2">
-                <FileText size={20} />
+              <h2 className="text-2xl font-bold flex items-center gap-3" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>
+                <FileText size={24} style={{ color: '#D97846' }} />
                 Book Information
               </h2>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-neutral-brown-900 mb-2">
+                  <label className="block text-sm font-bold mb-2" style={{ color: '#2C2416' }}>
                     Book Title *
                   </label>
                   <input
@@ -216,13 +215,14 @@ export default function NewBookPage() {
                     value={formData.title}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-4 py-3 border border-neutral-brown-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
+                    className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-orange-400/50 focus:border-orange-400 focus:outline-none transition-all"
+                    style={{ backgroundColor: '#FFFFFF', borderColor: '#E5D5C3', color: '#2C2416' }}
                     placeholder="Enter your book title"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-neutral-brown-900 mb-2">
+                  <label className="block text-sm font-bold mb-2" style={{ color: '#2C2416' }}>
                     ISBN (Optional)
                   </label>
                   <input
@@ -230,14 +230,15 @@ export default function NewBookPage() {
                     name="isbn"
                     value={formData.isbn}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-neutral-brown-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
+                    className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-orange-400/50 focus:border-orange-400 focus:outline-none transition-all"
+                    style={{ backgroundColor: '#FFFFFF', borderColor: '#E5D5C3', color: '#2C2416' }}
                     placeholder="978-0-123456-78-9"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-neutral-brown-900 mb-2">
+                <label className="block text-sm font-bold mb-2" style={{ color: '#2C2416' }}>
                   Description *
                 </label>
                 <textarea
@@ -245,15 +246,16 @@ export default function NewBookPage() {
                   value={formData.description}
                   onChange={handleInputChange}
                   required
-                  rows={4}
-                  className="w-full px-4 py-3 border border-neutral-brown-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent resize-none"
+                  rows={5}
+                  className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-orange-400/50 focus:border-orange-400 focus:outline-none resize-none transition-all"
+                  style={{ backgroundColor: '#FFFFFF', borderColor: '#E5D5C3', color: '#2C2416' }}
                   placeholder="Describe your book, its themes, and what readers can expect..."
                 />
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-neutral-brown-900 mb-2">
+                  <label className="block text-sm font-bold mb-2" style={{ color: '#2C2416' }}>
                     Category *
                   </label>
                   <select
@@ -261,7 +263,8 @@ export default function NewBookPage() {
                     value={formData.category}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-4 py-3 border border-neutral-brown-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
+                    className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-orange-400/50 focus:border-orange-400 focus:outline-none transition-all"
+                    style={{ backgroundColor: '#FFFFFF', borderColor: '#E5D5C3', color: '#2C2416' }}
                   >
                     <option value="">Select category</option>
                     {categories.map((category) => (
@@ -271,7 +274,7 @@ export default function NewBookPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-neutral-brown-900 mb-2">
+                  <label className="block text-sm font-bold mb-2" style={{ color: '#2C2416' }}>
                     Language *
                   </label>
                   <select
@@ -279,7 +282,8 @@ export default function NewBookPage() {
                     value={formData.language}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-4 py-3 border border-neutral-brown-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
+                    className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-orange-400/50 focus:border-orange-400 focus:outline-none transition-all"
+                    style={{ backgroundColor: '#FFFFFF', borderColor: '#E5D5C3', color: '#2C2416' }}
                   >
                     {languages.map((language) => (
                       <option key={language} value={language}>{language}</option>
@@ -288,14 +292,15 @@ export default function NewBookPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-neutral-brown-900 mb-2">
+                  <label className="block text-sm font-bold mb-2" style={{ color: '#2C2416' }}>
                     Tags
                   </label>
                   <input
                     type="text"
                     onChange={handleTagsChange}
-                    className="w-full px-4 py-3 border border-neutral-brown-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
-                    placeholder="culture, tradition, story (comma separated)"
+                    className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-orange-400/50 focus:border-orange-400 focus:outline-none transition-all"
+                    style={{ backgroundColor: '#FFFFFF', borderColor: '#E5D5C3', color: '#2C2416' }}
+                    placeholder="culture, tradition, story"
                   />
                 </div>
               </div>
@@ -303,14 +308,14 @@ export default function NewBookPage() {
 
             {/* Pricing */}
             <div className="space-y-6">
-              <h2 className="text-xl font-bold text-neutral-brown-900 flex items-center gap-2">
-                <DollarSign size={20} />
+              <h2 className="text-2xl font-bold flex items-center gap-3" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>
+                <DollarSign size={24} style={{ color: '#D97846' }} />
                 Pricing
               </h2>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-neutral-brown-900 mb-2">
+                  <label className="block text-sm font-bold mb-2" style={{ color: '#2C2416' }}>
                     Purchase Price (KES) *
                   </label>
                   <input
@@ -321,14 +326,15 @@ export default function NewBookPage() {
                     min="0"
                     step="0.01"
                     required
-                    className="w-full px-4 py-3 border border-neutral-brown-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
+                    className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-orange-400/50 focus:border-orange-400 focus:outline-none transition-all"
+                    style={{ backgroundColor: '#FFFFFF', borderColor: '#E5D5C3', color: '#2C2416' }}
                     placeholder="299.00"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-neutral-brown-900 mb-2">
-                    Rental Price (KES/day) - Optional
+                  <label className="block text-sm font-bold mb-2" style={{ color: '#2C2416' }}>
+                    Rental Price (KES/day)
                   </label>
                   <input
                     type="number"
@@ -337,7 +343,8 @@ export default function NewBookPage() {
                     onChange={handleInputChange}
                     min="0"
                     step="0.01"
-                    className="w-full px-4 py-3 border border-neutral-brown-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
+                    className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-orange-400/50 focus:border-orange-400 focus:outline-none transition-all"
+                    style={{ backgroundColor: '#FFFFFF', borderColor: '#E5D5C3', color: '#2C2416' }}
                     placeholder="29.00"
                   />
                 </div>
@@ -346,18 +353,18 @@ export default function NewBookPage() {
 
             {/* File Uploads */}
             <div className="space-y-6">
-              <h2 className="text-xl font-bold text-neutral-brown-900 flex items-center gap-2">
-                <Upload size={20} />
+              <h2 className="text-2xl font-bold flex items-center gap-3" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>
+                <Upload size={24} style={{ color: '#D97846' }} />
                 Files
               </h2>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-neutral-brown-900 mb-2">
+                  <label className="block text-sm font-bold mb-3" style={{ color: '#2C2416' }}>
                     Cover Image
                   </label>
-                  <div className="border-2 border-dashed border-neutral-brown-200 rounded-xl p-6 text-center hover:border-primary transition-colors">
-                    <Image size={32} className="mx-auto text-neutral-brown-400 mb-2" />
+                  <div className="border-2 border-dashed rounded-xl p-8 text-center hover:border-orange-400 transition-colors cursor-pointer" style={{ borderColor: formData.coverImage ? '#7A9B76' : '#E5D5C3', backgroundColor: formData.coverImage ? '#E8F5E9' : '#FFFCF5' }}>
+                    <Image size={40} className="mx-auto mb-3" style={{ color: formData.coverImage ? '#7A9B76' : '#D97846' }} />
                     <input
                       type="file"
                       accept="image/*"
@@ -366,25 +373,23 @@ export default function NewBookPage() {
                       id="coverImage"
                     />
                     <label htmlFor="coverImage" className="cursor-pointer">
-                      <span className="text-primary font-medium">Choose cover image</span>
-                      <p className="text-sm text-neutral-brown-500 mt-1">PNG, JPG up to 5MB</p>
+                      <span className="font-bold block mb-1" style={{ color: '#D97846' }}>
+                        {formData.coverImage ? 'Change cover image' : 'Choose cover image'}
+                      </span>
+                      <p className="text-sm text-gray-600">PNG, JPG up to 5MB</p>
                     </label>
                     {formData.coverImage && (
-                      <p className="text-sm text-accent-green mt-2">✓ {formData.coverImage.name}</p>
+                      <p className="text-sm font-semibold mt-3" style={{ color: '#7A9B76' }}>✓ {formData.coverImage.name}</p>
                     )}
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-neutral-brown-900 mb-2">
+                  <label className="block text-sm font-bold mb-3" style={{ color: '#2C2416' }}>
                     Book File * {!formData.bookFile && <span className="text-red-500 text-xs">(Required)</span>}
                   </label>
-                  <div className={`border-2 border-dashed rounded-xl p-6 text-center transition-colors ${
-                    !formData.bookFile 
-                      ? 'border-neutral-brown-200 hover:border-primary' 
-                      : 'border-accent-green bg-accent-green/5'
-                  }`}>
-                    <Book size={32} className={`mx-auto mb-2 ${formData.bookFile ? 'text-accent-green' : 'text-neutral-brown-400'}`} />
+                  <div className="border-2 border-dashed rounded-xl p-8 text-center hover:border-orange-400 transition-colors cursor-pointer" style={{ borderColor: formData.bookFile ? '#7A9B76' : '#E5D5C3', backgroundColor: formData.bookFile ? '#E8F5E9' : '#FFFCF5' }}>
+                    <Book size={40} className="mx-auto mb-3" style={{ color: formData.bookFile ? '#7A9B76' : '#D97846' }} />
                     <input
                       type="file"
                       accept=".pdf,.epub,.mobi"
@@ -393,13 +398,13 @@ export default function NewBookPage() {
                       id="bookFile"
                     />
                     <label htmlFor="bookFile" className="cursor-pointer">
-                      <span className="text-primary font-medium">
+                      <span className="font-bold block mb-1" style={{ color: '#D97846' }}>
                         {formData.bookFile ? 'Change book file' : 'Choose book file'}
                       </span>
-                      <p className="text-sm text-neutral-brown-500 mt-1">PDF, EPUB, MOBI up to 50MB</p>
+                      <p className="text-sm text-gray-600">PDF, EPUB, MOBI up to 50MB</p>
                     </label>
                     {formData.bookFile && (
-                      <p className="text-sm text-accent-green font-medium mt-2">✓ {formData.bookFile.name}</p>
+                      <p className="text-sm font-semibold mt-3" style={{ color: '#7A9B76' }}>✓ {formData.bookFile.name}</p>
                     )}
                   </div>
                 </div>
@@ -407,17 +412,19 @@ export default function NewBookPage() {
             </div>
 
             {/* Submit */}
-            <div className="flex gap-4 pt-6">
+            <div className="flex flex-col sm:flex-row gap-4 pt-6">
               <Link
                 href="/dashboard/author"
-                className="flex-1 bg-neutral-brown-100 hover:bg-neutral-brown-200 text-neutral-brown-900 font-semibold px-6 py-4 rounded-xl transition-all text-center"
+                className="flex-1 text-center px-6 py-4 rounded-xl font-bold transition-all hover:shadow-md"
+                style={{ backgroundColor: '#F5E6D3', color: '#2C2416' }}
               >
                 Cancel
               </Link>
               <button
                 type="submit"
                 disabled={isLoading}
-                className="flex-1 bg-primary hover:bg-primary-dark text-white font-semibold px-6 py-4 rounded-xl transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                className="flex-1 px-6 py-4 rounded-xl font-bold transition-all hover:shadow-lg flex items-center justify-center gap-2 disabled:opacity-50"
+                style={{ backgroundColor: '#D97846', color: '#FFFFFF' }}
               >
                 {isLoading ? (
                   <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin" />

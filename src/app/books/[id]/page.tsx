@@ -1,8 +1,10 @@
 'use client';
 
-import { Star, Book, ArrowLeft, User, ChevronRight, Sparkles, FileText, Calendar, Globe } from 'lucide-react';
+import { Star, Book, ArrowLeft, User, ShoppingCart, Package, FileText, Calendar, Globe, Share2 } from 'lucide-react';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
+import Navbar from '@/components/layout/Navbar';
+import Footer from '@/components/layout/Footer';
 import { fetchBookById, type Book as BookType } from '@/lib/api/books';
 import ShareButtons from '@/components/ShareButtons';
 
@@ -42,12 +44,10 @@ export default function BookDetailPage({ params }: { params: Promise<{ id: strin
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-neutral-cream flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-neutral-brown-200 rounded-full mx-auto mb-4">
-            <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
-          </div>
-          <p className="text-neutral-brown-600">Loading book...</p>
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#FFFCF5' }}>
+        <div className="relative">
+          <div className="w-16 h-16 border-4 rounded-full" style={{ borderColor: '#F5E6D3' }}></div>
+          <div className="absolute top-0 left-0 w-16 h-16 border-4 border-t-transparent rounded-full animate-spin" style={{ borderColor: '#D97846' }}></div>
         </div>
       </div>
     );
@@ -55,11 +55,22 @@ export default function BookDetailPage({ params }: { params: Promise<{ id: strin
 
   if (!book) {
     return (
-      <div className="min-h-screen bg-neutral-cream flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#FFFCF5' }}>
         <div className="text-center">
-          <Book size={64} className="text-neutral-brown-300 mx-auto mb-4" />
-          <h1 className="text-2xl font-bold text-neutral-brown-900 mb-2 font-heading">Book Not Found</h1>
-          <Link href="/books" className="text-primary hover:underline">Browse all books</Link>
+          <div className="w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6" style={{ backgroundColor: '#F5E6D3' }}>
+            <Book size={48} className="text-gray-400" />
+          </div>
+          <h1 className="text-3xl font-bold mb-3" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>
+            Book Not Found
+          </h1>
+          <p className="text-gray-600 mb-8">The book you're looking for doesn't exist.</p>
+          <Link 
+            href="/books" 
+            className="inline-block px-8 py-3 rounded-xl font-bold transition-all hover:shadow-lg"
+            style={{ backgroundColor: '#D97846', color: '#FFFFFF' }}
+          >
+            Browse All Books
+          </Link>
         </div>
       </div>
     );
@@ -69,124 +80,98 @@ export default function BookDetailPage({ params }: { params: Promise<{ id: strin
   const colorScheme = colorSchemes[book.title.length % colorSchemes.length];
 
   return (
-    <div className="min-h-screen bg-neutral-cream">
-      {/* Navigation */}
-      <nav className="bg-white/95 backdrop-blur-sm sticky top-0 z-50 border-b border-neutral-brown-200 shadow-sm">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="flex items-center justify-between h-20">
-            <Link href="/" className="flex items-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" width="44" height="44">
-                {/* Traditional Kalenjin Calabash */}
-                <path d="M12 3C10 3 8.5 4 8 5.5C7.5 7 7 9 7 11C7 13.5 7.5 16 8.5 18C9.5 20 11 21 12 21C13 21 14.5 20 15.5 18C16.5 16 17 13.5 17 11C17 9 16.5 7 16 5.5C15.5 4 14 3 12 3Z" fill="#8B4513" stroke="#654321" strokeWidth="0.5"/>
-                {/* Calabash neck */}
-                <ellipse cx="12" cy="4" rx="1.5" ry="1.5" fill="#A0522D"/>
-                {/* Traditional patterns */}
-                <path d="M9 8C9 8 10 8.5 12 8.5C14 8.5 15 8 15 8" stroke="#D4AF37" strokeWidth="0.8" fill="none"/>
-                <path d="M9 11C9 11 10 11.5 12 11.5C14 11.5 15 11 15 11" stroke="#D4AF37" strokeWidth="0.8" fill="none"/>
-                <path d="M9 14C9 14 10 14.5 12 14.5C14 14.5 15 14 15 14" stroke="#D4AF37" strokeWidth="0.8" fill="none"/>
-                <path d="M9.5 17C9.5 17 10.5 17.5 12 17.5C13.5 17.5 14.5 17 14.5 17" stroke="#D4AF37" strokeWidth="0.8" fill="none"/>
-                {/* Decorative dots */}
-                <circle cx="10" cy="9.5" r="0.4" fill="#E07856"/>
-                <circle cx="14" cy="9.5" r="0.4" fill="#E07856"/>
-                <circle cx="10" cy="12.5" r="0.4" fill="#E07856"/>
-                <circle cx="14" cy="12.5" r="0.4" fill="#E07856"/>
-                <circle cx="10" cy="15.5" r="0.4" fill="#E07856"/>
-                <circle cx="14" cy="15.5" r="0.4" fill="#E07856"/>
-              </svg>
-              <span className="text-2xl font-bold text-neutral-brown-900 font-heading">KaleeReads</span>
-            </Link>
-
-            <div className="hidden md:flex items-center gap-8">
-              <Link href="/books" className="text-primary font-medium">Books</Link>
-              <Link href="/blogs" className="text-neutral-brown-700 hover:text-primary font-medium transition-colors">Blogs</Link>
-              <Link href="/authors" className="text-neutral-brown-700 hover:text-primary font-medium transition-colors">Authors</Link>
-              <Link href="/about" className="text-neutral-brown-700 hover:text-primary font-medium transition-colors">About</Link>
-            </div>
-
-            <Link href="/books" className="flex items-center gap-2 text-neutral-brown-700 hover:text-primary transition-colors">
-              <ArrowLeft size={20} />
-              <span className="hidden sm:inline">Back to Books</span>
-            </Link>
-          </div>
-        </div>
-      </nav>
+    <div className="min-h-screen" style={{ backgroundColor: '#FFFCF5' }}>
+      <Navbar />
 
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-neutral-brown-900 via-neutral-brown-800 to-neutral-brown-900 overflow-hidden">
-        {/* Decorative elements */}
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary rounded-full blur-3xl translate-x-1/2 -translate-y-1/2"></div>
-          <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-accent-green rounded-full blur-3xl -translate-x-1/2 translate-y-1/2"></div>
-        </div>
-
-        <div className="relative max-w-7xl mx-auto px-6 py-12">
-          {/* Breadcrumb */}
-          <div className="flex items-center gap-2 text-sm text-neutral-brown-300 mb-8">
-            <Link href="/" className="hover:text-white">Home</Link>
-            <ChevronRight size={14} />
-            <Link href="/books" className="hover:text-white">Books</Link>
-            <ChevronRight size={14} />
-            <span className="text-white font-medium truncate max-w-[200px]">{book.title}</span>
-          </div>
+      <section className={`relative bg-gradient-to-br ${colorScheme} overflow-hidden`}>
+        <div className="absolute inset-0 bg-black/10"></div>
+        
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <Link 
+            href="/books" 
+            className="inline-flex items-center gap-2 text-white/90 hover:text-white mb-8 transition-colors"
+          >
+            <ArrowLeft size={20} />
+            <span className="font-medium">Back to Books</span>
+          </Link>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Book Cover */}
             <div className="flex justify-center lg:justify-start">
               <div className="relative">
-                <div className="relative w-64 md:w-80 aspect-[3/4] rounded-2xl shadow-2xl overflow-hidden">
+                <div className="relative w-72 md:w-96 aspect-[3/4] rounded-2xl shadow-2xl overflow-hidden ring-4 ring-white/30">
                   {book.coverImage ? (
                     <img src={book.coverImage} alt={book.title} className="w-full h-full object-cover" />
                   ) : (
-                    <div className={`w-full h-full bg-gradient-to-br ${colorScheme} flex items-center justify-center`}>
-                      <div className="text-center p-6">
-                        <Book size={64} className="text-white/80 mx-auto mb-2" />
-                        <p className="text-white font-heading font-bold text-xl line-clamp-3">{book.title}</p>
+                    <div className="w-full h-full bg-white/20 backdrop-blur-sm flex items-center justify-center p-8">
+                      <div className="text-center">
+                        <Book size={80} className="text-white/60 mx-auto mb-4" />
+                        <p className="text-white font-bold text-2xl line-clamp-4" style={{ fontFamily: 'Playfair Display, serif' }}>
+                          {book.title}
+                        </p>
                       </div>
                     </div>
                   )}
                 </div>
-                {/* Decorative shadow */}
-                <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-3/4 h-8 bg-black/20 blur-xl rounded-full"></div>
+                <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-3/4 h-12 bg-black/30 blur-2xl rounded-full"></div>
               </div>
             </div>
 
             {/* Book Info */}
             <div className="text-center lg:text-left">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 rounded-full mb-6">
-                <Sparkles size={16} className="text-accent-gold" />
-                <span className="text-white/90 text-sm font-medium">{book.category || 'Kalenjin Literature'}</span>
-              </div>
+              {book.category && (
+                <span className="inline-block px-4 py-2 rounded-full text-sm font-bold mb-4" style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: '#FFFFFF' }}>
+                  {book.category}
+                </span>
+              )}
 
-              <h1 className="text-4xl md:text-5xl font-bold text-white font-heading mb-4 leading-tight">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight" style={{ fontFamily: 'Playfair Display, serif' }}>
                 {book.title}
               </h1>
 
-              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-6 mb-6">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center">
-                    <User size={20} className="text-primary" />
+              {/* Author */}
+              {book.author?.user?.name && (
+                <Link 
+                  href={`/authors/${book.author.id}`}
+                  className="inline-flex items-center gap-3 mb-6 group"
+                >
+                  <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(255,255,255,0.2)' }}>
+                    <User size={24} className="text-white" />
                   </div>
                   <div className="text-left">
-                    <p className="text-neutral-brown-300 text-sm">Author</p>
-                    <p className="text-white font-semibold">{book.author?.user?.name || 'Unknown Author'}</p>
+                    <p className="text-white/80 text-sm">by</p>
+                    <p className="text-white font-bold text-lg group-hover:underline">{book.author.user.name}</p>
                   </div>
-                </div>
+                </Link>
+              )}
+
+              {/* Rating */}
+              <div className="flex items-center justify-center lg:justify-start gap-3 mb-6">
                 <div className="flex items-center gap-2">
-                  <Star size={20} className="fill-accent-gold text-accent-gold" />
-                  <span className="text-white font-bold">{book.rating?.toFixed(1) || '0.0'}</span>
-                  <span className="text-neutral-brown-400">({book.reviewCount || 0} reviews)</span>
+                  {[...Array(5)].map((_, i) => (
+                    <Star 
+                      key={i} 
+                      size={24} 
+                      className={i < Math.floor(book.rating || 0) ? 'fill-yellow-300 text-yellow-300' : 'text-white/30'}
+                    />
+                  ))}
                 </div>
+                <span className="text-white font-bold text-xl">{book.rating?.toFixed(1) || '0.0'}</span>
+                <span className="text-white/80">({book.reviewCount || 0} reviews)</span>
               </div>
 
-              <p className="text-neutral-brown-200 text-lg mb-8 max-w-xl">
-                {book.description?.slice(0, 200) || 'Discover the rich cultural heritage and stories through this captivating piece of Kalenjin literature.'}
-                {book.description && book.description.length > 200 && '...'}
+              {/* Description */}
+              <p className="text-white/95 text-lg leading-relaxed mb-8 max-w-2xl">
+                {book.description?.slice(0, 250) || 'Discover the rich cultural heritage and stories through this captivating piece of Kalenjin literature.'}
+                {book.description && book.description.length > 250 && '...'}
               </p>
 
-              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4">
-                <div className="text-4xl font-bold text-white">KES {book.price}</div>
+              {/* Price */}
+              <div className="flex items-baseline justify-center lg:justify-start gap-3 mb-8">
+                <span className="text-5xl font-bold text-white">KES {book.price.toLocaleString()}</span>
                 {book.price > 100 && (
-                  <span className="px-3 py-1 bg-accent-green/20 text-accent-green rounded-full text-sm font-medium">
+                  <span className="px-3 py-1 rounded-full text-sm font-bold" style={{ backgroundColor: '#7A9B76', color: '#FFFFFF' }}>
                     Best Value
                   </span>
                 )}
@@ -194,142 +179,181 @@ export default function BookDetailPage({ params }: { params: Promise<{ id: strin
             </div>
           </div>
         </div>
-
-        {/* Wave divider */}
-        <div className="absolute bottom-0 left-0 right-0">
-          <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-16">
-            <path d="M0 120L60 105C120 90 240 60 360 45C480 30 600 30 720 37.5C840 45 960 60 1080 67.5C1200 75 1320 75 1380 75L1440 75V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z" fill="#F5F1E8"/>
-          </svg>
-        </div>
       </section>
 
-      {/* Purchase Section */}
-      <section className="py-8 -mt-4 relative z-10">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="bg-white rounded-3xl shadow-xl p-8">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              {/* Purchase Options */}
-              <div className="lg:col-span-2">
-                <h3 className="font-bold text-2xl text-neutral-brown-900 font-heading mb-6">Purchase Options</h3>
+      {/* Purchase Options */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <h2 className="text-3xl font-bold mb-8 text-center" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>
+          Purchase Options
+        </h2>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-                  {/* 24-Hour Access */}
-                  <div className="rounded-2xl p-6 border-2 border-accent-green bg-accent-green/5 shadow-lg">
-                    <div className="flex items-center gap-3 mb-3">
-                      <div className="w-12 h-12 rounded-xl flex items-center justify-center bg-accent-green">
-                        <FileText size={24} className="text-white" />
-                      </div>
-                      <div>
-                        <span className="font-bold text-lg text-neutral-brown-900">24-Hour Access</span>
-                        <p className="text-xs text-neutral-brown-500">Read online • Perfect for sampling</p>
-                      </div>
-                    </div>
-                    <div className="text-3xl font-bold text-accent-green mb-4">
-                      KES {rentalPrice}
-                    </div>
-                    <Link
-                      href={`/payment?bookId=${book.id}&author=${encodeURIComponent(book.author?.user?.name || '')}&type=temporary&price=${rentalPrice}&title=${encodeURIComponent(book.title)}`}
-                      className="w-full inline-flex items-center justify-center gap-2 font-bold py-3 px-6 rounded-full shadow-md text-white transition-all hover:shadow-lg hover:-translate-y-0.5 bg-accent-green hover:bg-[#7A8C74]"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <circle cx="9" cy="21" r="1"></circle>
-                        <circle cx="20" cy="21" r="1"></circle>
-                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                      </svg>
-                      Buy Now
-                    </Link>
-                  </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+          {/* 24-Hour Access */}
+          <div className="rounded-xl p-8 shadow-lg border-2 transition-all hover:shadow-2xl" style={{ backgroundColor: '#FFFCF5', borderColor: '#7A9B76' }}>
+            <div className="flex items-center gap-4 mb-6">
+              <div className="w-16 h-16 rounded-xl flex items-center justify-center" style={{ backgroundColor: '#7A9B76' }}>
+                <FileText size={32} className="text-white" />
+              </div>
+              <div>
+                <h3 className="text-2xl font-bold" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>
+                  24-Hour Access
+                </h3>
+                <p className="text-sm text-gray-600">Read online • Perfect for sampling</p>
+              </div>
+            </div>
+            
+            <div className="mb-6">
+              <span className="text-4xl font-bold" style={{ color: '#7A9B76' }}>
+                KES {rentalPrice.toLocaleString()}
+              </span>
+            </div>
 
-                  {/* Request Hard Copy */}
-                  <div className="rounded-2xl p-6 border-2 border-primary bg-primary/5 shadow-lg">
-                    <div className="flex items-center gap-3 mb-3">
-                      <div className="w-12 h-12 rounded-xl flex items-center justify-center bg-primary">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white">
-                          <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"></path>
-                          <path d="m3.3 7 8.7 5 8.7-5"></path>
-                          <path d="M12 22V12"></path>
-                        </svg>
-                      </div>
-                      <div>
-                        <span className="font-bold text-lg text-neutral-brown-900">Hard Copy</span>
-                        <p className="text-xs text-neutral-brown-500">Physical book • Delivered to you</p>
-                      </div>
-                    </div>
-                    <div className="text-3xl font-bold text-primary mb-4">
-                      Request
-                    </div>
-                    <Link
-                      href={`/request-hard-copy?book=${encodeURIComponent(book.title)}&id=${book.id}`}
-                      className="w-full inline-flex items-center justify-center gap-2 font-bold py-3 px-6 rounded-full shadow-md text-white transition-all hover:shadow-lg hover:-translate-y-0.5 bg-primary hover:bg-primary-dark"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                        <polyline points="7 10 12 15 17 10"></polyline>
-                        <line x1="12" y1="15" x2="12" y2="3"></line>
-                      </svg>
-                      Request Now
-                    </Link>
-                  </div>
-                </div>
+            <Link
+              href={`/payment?bookId=${book.id}&author=${encodeURIComponent(book.author?.user?.name || '')}&type=temporary&price=${rentalPrice}&title=${encodeURIComponent(book.title)}`}
+              className="w-full inline-flex items-center justify-center gap-2 font-bold py-4 px-6 rounded-xl shadow-md transition-all hover:shadow-lg hover:-translate-y-1"
+              style={{ backgroundColor: '#7A9B76', color: '#FFFFFF' }}
+            >
+              <ShoppingCart size={20} />
+              Buy Now
+            </Link>
+          </div>
+
+          {/* Hard Copy */}
+          <div className="rounded-xl p-8 shadow-lg border-2 transition-all hover:shadow-2xl" style={{ backgroundColor: '#FFFCF5', borderColor: '#D97846' }}>
+            <div className="flex items-center gap-4 mb-6">
+              <div className="w-16 h-16 rounded-xl flex items-center justify-center" style={{ backgroundColor: '#D97846' }}>
+                <Package size={32} className="text-white" />
+              </div>
+              <div>
+                <h3 className="text-2xl font-bold" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>
+                  Hard Copy
+                </h3>
+                <p className="text-sm text-gray-600">Physical book • Delivered to you</p>
+              </div>
+            </div>
+            
+            <div className="mb-6">
+              <span className="text-4xl font-bold" style={{ color: '#D97846' }}>
+                Request
+              </span>
+            </div>
+
+            <Link
+              href={`/request-hard-copy?book=${encodeURIComponent(book.title)}&id=${book.id}`}
+              className="w-full inline-flex items-center justify-center gap-2 font-bold py-4 px-6 rounded-xl shadow-md transition-all hover:shadow-lg hover:-translate-y-1"
+              style={{ backgroundColor: '#D97846', color: '#FFFFFF' }}
+            >
+              <Package size={20} />
+              Request Now
+            </Link>
+          </div>
+        </div>
+
+        {/* Book Details & Description */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Description */}
+          <div className="lg:col-span-2">
+            <div className="rounded-xl p-8 shadow-lg" style={{ backgroundColor: '#FFFCF5', border: '1px solid #E5D5C3' }}>
+              <h3 className="text-2xl font-bold mb-6" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>
+                About This Book
+              </h3>
+              <div className="prose prose-lg max-w-none">
+                <p className="text-gray-700 leading-relaxed text-lg whitespace-pre-line">
+                  {book.description || 'No description available for this book. Discover the rich cultural heritage and stories through this captivating piece of Kalenjin literature. This book offers a unique perspective on Kalenjin culture, traditions, and contemporary life.'}
+                </p>
               </div>
 
-              {/* Book Details */}
-              <div className="border-l border-neutral-brown-200 pl-8">
-                <h4 className="font-bold text-neutral-brown-900 mb-4">Book Details</h4>
-                <div className="space-y-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-neutral-cream flex items-center justify-center">
-                      <FileText size={18} className="text-primary" />
-                    </div>
-                    <div>
-                      <p className="text-xs text-neutral-brown-500">Pages</p>
-                      <p className="font-semibold text-neutral-brown-900">{book.previewPages * 5 || '~150'}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-neutral-cream flex items-center justify-center">
-                      <Globe size={18} className="text-primary" />
-                    </div>
-                    <div>
-                      <p className="text-xs text-neutral-brown-500">Language</p>
-                      <p className="font-semibold text-neutral-brown-900">{book.language || 'English'}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-neutral-cream flex items-center justify-center">
-                      <Calendar size={18} className="text-primary" />
-                    </div>
-                    <div>
-                      <p className="text-xs text-neutral-brown-500">Published</p>
-                      <p className="font-semibold text-neutral-brown-900">
-                        {book.publishedAt ? new Date(book.publishedAt).getFullYear() : '2024'}
-                      </p>
-                    </div>
+              {book.tags && (
+                <div className="mt-8 pt-6 border-t" style={{ borderColor: '#E5D5C3' }}>
+                  <h4 className="font-bold text-sm mb-3" style={{ color: '#2C2416' }}>Tags</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {book.tags.split(',').map((tag) => (
+                      <span 
+                        key={tag.trim()} 
+                        className="px-3 py-1 rounded-full text-sm font-medium"
+                        style={{ backgroundColor: '#FEF3E7', color: '#D97846' }}
+                      >
+                        {tag.trim()}
+                      </span>
+                    ))}
                   </div>
                 </div>
+              )}
+            </div>
+          </div>
 
-                <div className="mt-6 pt-6 border-t border-neutral-brown-200">
-                  <ShareButtons title={`${book.title} - KaleeReads`} />
+          {/* Sidebar */}
+          <div className="space-y-6">
+            {/* Details */}
+            <div className="rounded-xl p-6 shadow-lg" style={{ backgroundColor: '#FFFCF5', border: '1px solid #E5D5C3' }}>
+              <h4 className="font-bold mb-6" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>
+                Book Details
+              </h4>
+              <div className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#F5E6D3' }}>
+                    <FileText size={20} style={{ color: '#D97846' }} />
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-600">Pages</p>
+                    <p className="font-bold" style={{ color: '#2C2416' }}>{book.previewPages * 5 || '~150'}</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#F5E6D3' }}>
+                    <Globe size={20} style={{ color: '#D97846' }} />
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-600">Language</p>
+                    <p className="font-bold" style={{ color: '#2C2416' }}>{book.language || 'English'}</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#F5E6D3' }}>
+                    <Calendar size={20} style={{ color: '#D97846' }} />
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-600">Published</p>
+                    <p className="font-bold" style={{ color: '#2C2416' }}>
+                      {book.publishedAt ? new Date(book.publishedAt).getFullYear() : '2024'}
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
+
+            {/* Share */}
+            <div className="rounded-xl p-6 shadow-lg" style={{ backgroundColor: '#FFFCF5', border: '1px solid #E5D5C3' }}>
+              <h4 className="font-bold mb-4 flex items-center gap-2" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>
+                <Share2 size={18} />
+                Share This Book
+              </h4>
+              <ShareButtons title={`${book.title} - KaleeReads`} />
+            </div>
+
+            {/* Author CTA */}
+            {book.author?.user?.name && (
+              <div className="rounded-xl p-6 shadow-lg" style={{ backgroundColor: '#2C2416' }}>
+                <h4 className="text-white font-bold mb-3" style={{ fontFamily: 'Playfair Display, serif' }}>
+                  More from {book.author.user.name.split(' ')[0]}
+                </h4>
+                <p className="text-gray-300 text-sm mb-4">
+                  Discover more books and stories from this author.
+                </p>
+                <Link 
+                  href={`/authors/${book.author.id}`}
+                  className="inline-flex items-center justify-center w-full gap-2 px-6 py-3 rounded-lg font-bold transition-all hover:shadow-lg"
+                  style={{ backgroundColor: '#D97846', color: '#FFFFFF' }}
+                >
+                  View Profile <ArrowLeft size={18} className="rotate-180" />
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       </section>
 
-      {/* Description Section */}
-      <section className="py-12">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="bg-white rounded-3xl shadow-sm p-8">
-            <h3 className="font-bold text-2xl text-neutral-brown-900 font-heading mb-6">About This Book</h3>
-            <div className="prose prose-brown max-w-none">
-              <p className="text-neutral-brown-700 leading-relaxed text-lg whitespace-pre-line">
-                {book.description || 'No description available for this book. Discover the rich cultural heritage and stories through this captivating piece of Kalenjin literature.'}
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
+      <Footer />
     </div>
   );
 }

@@ -3,13 +3,15 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Menu, X, BookOpen, Feather, Users } from 'lucide-react';
+import { Menu, X, BookOpen, Feather, Users, Info, Mail } from 'lucide-react';
 import KaleeReadsLogo from '@/components/KaleeReadsLogo';
 
 const navLinks = [
   { href: '/books', label: 'Books', icon: BookOpen },
   { href: '/blogs', label: 'Blog', icon: Feather },
   { href: '/authors', label: 'Authors', icon: Users },
+  { href: '/about', label: 'About', icon: Info },
+  { href: '/contact', label: 'Contact', icon: Mail },
 ];
 
 export default function Navbar() {

@@ -25,35 +25,36 @@ export function DashboardSidebar() {
     const isAdmin = user?.role === 'ADMIN' || user?.isAdmin;
 
     return (
-        <div className="w-64 bg-white border-r border-neutral-brown-500/10 min-h-screen flex flex-col">
+        <div className="w-64 bg-white border-r min-h-screen flex flex-col" style={{ borderColor: '#E5D5C3' }}>
             {/* Logo */}
-            <div className="px-5 py-4 border-b border-neutral-brown-500/10">
-                <Link href="/" className="flex items-center gap-2">
-                    <div className="w-9 h-9 bg-primary rounded-lg flex items-center justify-center">
-                        <Book className="text-white" size={20} />
+            <div className="px-5 py-5 border-b" style={{ borderColor: '#E5D5C3' }}>
+                <Link href="/" className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: '#D97846' }}>
+                        <Book className="text-white" size={22} />
                     </div>
                     <div>
-                        <h1 className="font-bold text-base text-neutral-brown-900">KaleeReads</h1>
-                        <p className="text-xs text-neutral-brown-700">Author Portal</p>
+                        <h1 className="font-bold text-base" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>KaleeReads</h1>
+                        <p className="text-xs text-gray-600">Author Portal</p>
                     </div>
                 </Link>
             </div>
 
             {/* Admin Panel Link */}
             {isAdmin && (
-                <div className="px-4 py-3 border-b border-neutral-brown-500/10">
+                <div className="px-4 py-4 border-b" style={{ borderColor: '#E5D5C3' }}>
                     <Link
                         href="/dashboard/admin"
-                        className="flex items-center gap-3 px-4 py-2.5 rounded-lg bg-purple-50 text-purple-700 hover:bg-purple-100 transition-all"
+                        className="flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-medium text-sm"
+                        style={{ backgroundColor: '#F3E8FF', color: '#7C3AED' }}
                     >
                         <Shield size={18} />
-                        <span className="font-medium text-sm">Admin Panel</span>
+                        <span>Admin Panel</span>
                     </Link>
                 </div>
             )}
 
             {/* Navigation */}
-            <nav className="flex-1 px-3 py-3 space-y-0.5">
+            <nav className="flex-1 px-3 py-4 space-y-1">
                 {navigation.map((item) => {
                     const isActive = pathname === item.href;
                     const Icon = item.icon;
@@ -62,20 +63,21 @@ export function DashboardSidebar() {
                         <Link
                             key={item.name}
                             href={item.href}
-                            className={`flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all text-sm ${isActive
-                                ? 'bg-primary text-white'
-                                : 'text-neutral-brown-700 hover:bg-neutral-cream'
-                                }`}
+                            className="flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-sm font-medium"
+                            style={{
+                                backgroundColor: isActive ? '#D97846' : 'transparent',
+                                color: isActive ? '#FFFFFF' : '#2C2416'
+                            }}
                         >
                             <Icon size={18} />
-                            <span className="font-medium">{item.name}</span>
+                            <span>{item.name}</span>
                         </Link>
                     );
                 })}
             </nav>
 
             {/* Author Profile */}
-            <div className="border-t border-neutral-brown-500/10">
+            <div className="border-t" style={{ borderColor: '#E5D5C3' }}>
                 <AuthorProfileHeader 
                     variant="sidebar" 
                     showEmail={true} 
@@ -84,13 +86,13 @@ export function DashboardSidebar() {
             </div>
 
             {/* Logout */}
-            <div className="p-3 border-t border-neutral-brown-500/10">
+            <div className="p-3 border-t" style={{ borderColor: '#E5D5C3' }}>
                 <button
                     onClick={() => logout()}
-                    className="flex items-center gap-3 px-4 py-2.5 rounded-lg text-neutral-brown-700 hover:bg-neutral-cream w-full transition-all text-sm"
+                    className="flex items-center gap-3 px-4 py-3 rounded-xl w-full transition-all text-sm font-medium text-gray-700 hover:bg-gray-100"
                 >
                     <LogOut size={18} />
-                    <span className="font-medium">Logout</span>
+                    <span>Logout</span>
                 </button>
             </div>
         </div>
