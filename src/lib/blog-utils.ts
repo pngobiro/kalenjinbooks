@@ -1,5 +1,4 @@
 import slugify from 'slugify';
-import readingTime from 'reading-time';
 import DOMPurify from 'dompurify';
 
 /**
@@ -19,11 +18,12 @@ export function generateSlug(title: string): string {
 export function calculateReadTime(content: string): { text: string; minutes: number } {
     // Strip HTML tags for word count
     const plainText = content.replace(/<[^>]*>/g, '');
-    const stats = readingTime(plainText);
+    const words = plainText.trim() ? plainText.trim().split(/\s+/).length : 0;
+    const minutes = Math.max(1, Math.round(words / 200));
 
     return {
-        text: stats.text,
-        minutes: Math.ceil(stats.minutes),
+        text: `${minutes} min read`,
+        minutes,
     };
 }
 
