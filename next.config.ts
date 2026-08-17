@@ -1,10 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  output: 'export',
   // Image optimization settings
   images: {
-    unoptimized: true, // Required for static export
+    unoptimized: true, // For Cloudflare Pages
     remotePatterns: [
       {
         protocol: 'https',
