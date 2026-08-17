@@ -48,3 +48,11 @@ EMAIL_FROM = "noreply@kalenjinbooks.com"
 # DATABASE_URL
 # R2_ACCESS_KEY_ID
 # R2_SECRET_ACCESS_KEY
+
+# Cloudflare Pages configuration
+[build]
+command = "npm install --legacy-peer-deps && npm run pages:build"
+cwd = ""
+
+[build.environment]
+NODE_VERSION = "22"
