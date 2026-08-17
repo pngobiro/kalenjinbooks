@@ -1,6 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  output: 'export', // Static export for Cloudflare Pages
+  
   // Image optimization settings
   images: {
     unoptimized: true, // For Cloudflare Pages
