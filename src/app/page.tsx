@@ -189,15 +189,15 @@ export default function HomePage() {
                 </p>
               </div>
 
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                {books.slice(0, 8).map((book, index) => (
+              <div className="flex flex-wrap justify-center gap-6">
+                {books.slice(0, 8).map((book) => (
                   <Link
                     key={book.id}
                     href={`/books/${book.id}`}
-                    className="group"
+                    className="group w-full max-w-[220px]"
                   >
                     <div className="relative aspect-[3/4] rounded-lg overflow-hidden mb-3 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-                      <div className={`absolute inset-0 bg-gradient-to-br ${colorSchemes[index % colorSchemes.length]}`}>
+                      <div className="absolute inset-0 bg-gradient-to-br" style={{ backgroundColor: '#E4D9C4' }}>
                         {book.coverImage ? (
                           <img
                             src={book.coverImage}

@@ -35,16 +35,6 @@ const ratingOptions = [
 ];
 
 // Rift Valley highlands gradients — matches the rest of the trail.
-const colorSchemes = [
-  'from-emerald-500 to-teal-600',
-  'from-rose-500 to-pink-600',
-  'from-amber-500 to-orange-600',
-  'from-violet-500 to-purple-600',
-  'from-blue-500 to-indigo-600',
-  'from-red-500 to-rose-600',
-  'from-cyan-500 to-blue-600',
-  'from-fuchsia-500 to-purple-600',
-];
 
 export default function BooksPage() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -341,19 +331,18 @@ export default function BooksPage() {
 
         {/* Books Grid */}
         {!loading && !error && visibleBooks.length > 0 && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {visibleBooks.map((book, index) => {
-                const scheme = colorSchemes[index % colorSchemes.length];
+            <div className="flex flex-wrap justify-center gap-6">
+              {visibleBooks.map((book) => {
                 return (
                   <Link
                     key={book.id}
                     href={`/books/${book.id}`}
-                    className="group"
+                    className="group w-full max-w-[270px]"
                     onClick={() => trackBookClick(book.id, { category: book.category, price: book.price })}
                   >
                     <div className="h-full rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex flex-col" style={{ backgroundColor: '#FFFCF5' }}>
                       {/* Book Cover */}
-                      <div className={`relative aspect-[2/3] overflow-hidden ${!book.coverImage ? `bg-gradient-to-br ${scheme}` : ''}`}>
+                      <div className="relative aspect-[2/3] overflow-hidden" style={{ backgroundColor: '#E4D9C4' }}>
                         {book.coverImage ? (
                           <img
                             src={book.coverImage}
