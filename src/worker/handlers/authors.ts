@@ -230,6 +230,10 @@ async function listAuthors(request: WorkerRequest, env: Env): Promise<Response> 
                 where: { isPublished: true },
                 select: { id: true, rating: true },
             },
+            blogPosts: {
+                where: { isPublished: true },
+                select: { id: true },
+            },
         },
         skip: (page - 1) * limit,
         take: limit,
@@ -242,6 +246,7 @@ async function listAuthors(request: WorkerRequest, env: Env): Promise<Response> 
         bio: author.bio,
         profileImage: author.profileImage,
         booksCount: author.books.length,
+        blogsCount: author.blogPosts.length,
         rating: author.books.length > 0
             ? author.books.reduce((sum, book) => sum + (book.rating || 0), 0) / author.books.length
             : 0,

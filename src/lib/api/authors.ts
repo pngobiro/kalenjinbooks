@@ -8,6 +8,7 @@ export interface Author {
     bio: string | null;
     profileImage: string | null;
     booksCount: number;
+    blogsCount?: number;
     rating: number | null | undefined;
     books?: any[];
     

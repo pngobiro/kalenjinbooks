@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { BookOpen, Star, Clock, Eye, Users, TrendingUp } from 'lucide-react';
+import { BookOpen, Star, Clock, Eye, Users, TrendingUp, FileText } from 'lucide-react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import { fetchBooks, type Book as BookType } from '@/lib/api/books';
@@ -156,9 +156,22 @@ export default function HomePage() {
                           {author.bio}
                         </p>
                       )}
-                      <div className="inline-flex items-center gap-2 text-sm font-medium px-4 py-1.5 rounded-full" style={{ color: '#7A9B76', backgroundColor: '#F5F1E8' }}>
-                        <BookOpen size={16} />
-                        <span>{author.booksCount} {author.booksCount === 1 ? 'book' : 'books'}</span>
+                      <div className="flex items-center justify-center gap-2 text-sm font-medium">
+                        <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full" style={{ color: '#7A9B76', backgroundColor: '#F5F1E8' }}>
+                          <BookOpen size={16} />
+                          <span>{author.booksCount} {author.booksCount === 1 ? 'book' : 'books'}</span>
+                        </span>
+                        {(author.blogsCount ?? 0) > 0 && (
+                          <Link
+                            href={`/blogs?author=${author.id}`}
+                            onClick={(e) => e.stopPropagation()}
+                            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full transition-all hover:shadow-md"
+                            style={{ color: '#D97846', backgroundColor: '#FEF3E7' }}
+                          >
+                            <FileText size={16} />
+                            <span>{author.blogsCount} {author.blogsCount === 1 ? 'blog' : 'blogs'}</span>
+                          </Link>
+                        )}
                       </div>
                     </div>
                   </Link>

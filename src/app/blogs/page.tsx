@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, Suspense } from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { Clock, Eye, ArrowRight, FileText, Users, BookOpen, Search, X } from 'lucide-react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
@@ -45,6 +46,25 @@ function getGradientForIndex(index: number): string {
 }
 
 export default function BlogsPage() {
+    return (
+        <Suspense fallback={
+            <div className="min-h-screen" style={{ backgroundColor: '#FFFCF5' }}>
+                <Navbar />
+                <div className="flex justify-center py-32">
+                    <div className="relative w-12 h-12">
+                        <div className="absolute inset-0 border-4 rounded-full" style={{ borderColor: '#E4D9C4' }}></div>
+                        <div className="absolute inset-0 border-4 rounded-full animate-spin" style={{ borderColor: '#D97846', borderTopColor: 'transparent' }}></div>
+                    </div>
+                </div>
+                <Footer />
+            </div>
+        }>
+            <BlogsContent />
+        </Suspense>
+    );
+}
+
+function BlogsContent() {
     const [posts, setPosts] = useState<BlogPost[]>([]);
     const [authors, setAuthors] = useState<Author[]>([]);
     const [loading, setLoading] = useState(true);
@@ -52,6 +72,13 @@ export default function BlogsPage() {
     const [selectedCategory, setSelectedCategory] = useState('all');
     const [selectedAuthor, setSelectedAuthor] = useState('all');
     const [searchQuery, setSearchQuery] = useState('');
+    const searchParams = useSearchParams();
+
+    useEffect(() => {
+        const authorParam = searchParams.get('author');
+        if (authorParam) setSelectedAuthor(authorParam);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
     const [sortBy, setSortBy] = useState('latest');
     const [showFilters, setShowFilters] = useState(false);
 
