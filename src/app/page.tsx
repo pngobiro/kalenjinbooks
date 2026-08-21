@@ -120,28 +120,28 @@ export default function HomePage() {
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {authors.slice(0, 6).map((author, index) => (
+              <div className="flex flex-wrap justify-center gap-8">
+                {authors.slice(0, 6).map((author) => (
                   <Link
                     key={author.id}
                     href={`/authors/${author.id}`}
-                    className="group"
+                    className="group w-full max-w-xs"
                   >
-                    <div 
-                      className="rounded-xl p-6 transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
+                    <div
+                      className="rounded-xl p-8 text-center transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
                       style={{ backgroundColor: '#FFFCF5' }}
                     >
-                      <div className="relative w-full aspect-square rounded-xl overflow-hidden mb-4">
-                        <div className={`absolute inset-0 bg-gradient-to-br ${colorSchemes[index % colorSchemes.length]}`}>
+                      <div className="relative w-40 h-40 mx-auto mb-5">
+                        <div className={`absolute inset-0 rounded-full bg-gradient-to-br ${colorSchemes[0]} overflow-hidden ring-4 transition-transform duration-300 group-hover:scale-105`} style={{ '--tw-ring-color': '#D97846' } as React.CSSProperties}>
                           {author.profileImage ? (
                             <img
                               src={author.profileImage}
                               alt={author.name || 'Author'}
-                              className="w-full h-full object-cover"
+                              className="w-full h-full object-cover rounded-full"
                             />
                           ) : (
                             <div className="w-full h-full flex items-center justify-center">
-                              <span className="text-5xl font-bold text-white">
+                              <span className="text-6xl font-bold text-white">
                                 {author.name?.charAt(0) || 'A'}
                               </span>
                             </div>
@@ -152,11 +152,11 @@ export default function HomePage() {
                         {author.name || 'Unknown Author'}
                       </h3>
                       {author.bio && (
-                        <p className="text-sm mb-3 line-clamp-2" style={{ color: '#5B4F42' }}>
+                        <p className="text-sm mb-4 line-clamp-2" style={{ color: '#5B4F42' }}>
                           {author.bio}
                         </p>
                       )}
-                      <div className="flex items-center gap-2 text-sm font-medium" style={{ color: '#7A9B76' }}>
+                      <div className="inline-flex items-center gap-2 text-sm font-medium px-4 py-1.5 rounded-full" style={{ color: '#7A9B76', backgroundColor: '#F5F1E8' }}>
                         <BookOpen size={16} />
                         <span>{author.booksCount} {author.booksCount === 1 ? 'book' : 'books'}</span>
                       </div>
