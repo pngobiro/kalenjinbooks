@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Menu, X, BookOpen, Feather, Users, Info, Mail } from 'lucide-react';
+import { Menu, X, BookOpen, Feather, Users, Info, Mail, PenSquare } from 'lucide-react';
 import KaleeReadsLogo from '@/components/KaleeReadsLogo';
 
 const navLinks = [
@@ -28,25 +28,35 @@ export default function Navbar() {
             <span className="text-sm font-bold text-neutral-brown-900 font-heading">KaleeReads</span>
           </Link>
 
-          {/* Desktop Links */}
-          <div className="hidden md:flex items-center gap-0.5">
-            {navLinks.map((link) => {
-              const Icon = link.icon;
-              return (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-medium transition-colors ${
-                    pathname === link.href
-                      ? 'bg-primary/10 text-primary'
-                      : 'text-neutral-brown-700 hover:bg-neutral-brown-100'
-                  }`}
-                >
-                  <Icon size={12} />
-                  {link.label}
-                </Link>
-              );
-            })}
+          {/* Desktop Links + CTA */}
+          <div className="hidden md:flex items-center gap-1">
+            <div className="flex items-center gap-0.5">
+              {navLinks.map((link) => {
+                const Icon = link.icon;
+                return (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-medium transition-colors ${
+                      pathname === link.href
+                        ? 'bg-primary/10 text-primary'
+                        : 'text-neutral-brown-700 hover:bg-neutral-brown-100'
+                    }`}
+                  >
+                    <Icon size={12} />
+                    {link.label}
+                  </Link>
+                );
+              })}
+            </div>
+            <Link
+              href="/dashboard/author/register"
+              className="ml-2 inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold text-white hover:shadow-md transition-all"
+              style={{ backgroundColor: '#D97846' }}
+            >
+              <PenSquare size={13} />
+              Become an Author
+            </Link>
           </div>
 
           {/* Mobile Hamburger */}
@@ -82,6 +92,15 @@ export default function Navbar() {
                 </Link>
               );
             })}
+            <Link
+              href="/dashboard/author/register"
+              onClick={() => setMobileOpen(false)}
+              className="flex items-center justify-center gap-2 mt-2 px-4 py-2.5 rounded-full text-sm font-bold text-white"
+              style={{ backgroundColor: '#D97846' }}
+            >
+              <PenSquare size={15} />
+              Become an Author
+            </Link>
           </div>
         </div>
       )}
