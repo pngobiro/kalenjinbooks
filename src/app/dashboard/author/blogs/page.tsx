@@ -347,15 +347,41 @@ export default function AuthorBlogsPage() {
                                                 </button>
                                             </td>
                                             <td className="px-5 py-4">
-                                                <Link
-                                                    href={`/blogs/${post.slug || post.id}`}
-                                                    className="font-semibold text-neutral-brown-900 hover:text-primary transition-colors line-clamp-1"
-                                                >
-                                                    {post.coverType === 'video' && '▶ '}{post.title}
-                                                </Link>
-                                                <p className="text-xs text-neutral-brown-500 mt-1 line-clamp-1">
-                                                    {post.excerpt}
-                                                </p>
+                                                <div className="flex items-center gap-3">
+                                                    {/* Media thumbnail if available */}
+                                                    {(post.coverImage || (post.coverType === 'video' && post.coverVideoUrl)) ? (
+                                                        <div className="w-14 h-10 shrink-0 rounded-lg overflow-hidden bg-neutral-brown-100 relative">
+                                                            {post.coverImage ? (
+                                                                <img src={post.coverImage} alt="" className="w-full h-full object-cover" />
+                                                            ) : (
+                                                                <img
+                                                                    src={(() => {
+                                                                        const m = post.coverVideoUrl?.match(/(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/\s]{11})/);
+                                                                        return m ? `https://img.youtube.com/vi/${m[1]}/mqdefault.jpg` : '';
+                                                                    })()}
+                                                                    alt=""
+                                                                    className="w-full h-full object-cover"
+                                                                />
+                                                            )}
+                                                            {post.coverType === 'video' && (
+                                                                <div className="absolute inset-0 bg-black/25 flex items-center justify-center">
+                                                                    <PlayCircle size={16} className="text-white drop-shadow" fill="white" />
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    ) : null}
+                                                    <div className="min-w-0">
+                                                        <Link
+                                                            href={`/blogs/${post.slug || post.id}`}
+                                                            className="font-semibold text-neutral-brown-900 hover:text-primary transition-colors line-clamp-1"
+                                                        >
+                                                            {post.title}
+                                                        </Link>
+                                                        <p className="text-xs text-neutral-brown-500 mt-1 line-clamp-1">
+                                                            {post.excerpt}
+                                                        </p>
+                                                    </div>
+                                                </div>
                                             </td>
                                             <td className="px-5 py-4">
                                                 {post.category ? (
