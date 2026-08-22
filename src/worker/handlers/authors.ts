@@ -158,24 +158,30 @@ async function applyAsAuthor(request: WorkerRequest, env: Env): Promise<Response
                 additionalInfo: formData.additionalInfo,
                 agreeToMarketing: formData.agreeToMarketing || false,
                 
-                // Status - pending admin review (admin approves via /api/admin/authors/approve)
-                status: 'PENDING',
+                // Status - auto-approve (no admin admission required)
+                status: 'APPROVED',
                 appliedAt: new Date(),
+                approvedAt: new Date(),
             },
         });
 
-        // Note: user role stays READER until an admin approves the application.
+        // Update user role to AUTHOR
+        await prisma.user.update({
+            where: { id: user.id },
+            data: { role: 'AUTHOR' },
+        });
 
         // Clear any cached author lists
         const { invalidateCacheByPrefix, CachePrefix } = await import('../utils/cache');
         await invalidateCacheByPrefix(env.CACHE, CachePrefix.AUTHORS);
 
         return successResponse({
-            message: 'Application submitted successfully. You will be notified once an admin reviews it.',
+            message: 'Author account created successfully',
             author: {
                 id: author.id,
                 status: author.status,
                 appliedAt: author.appliedAt,
+                approvedAt: author.approvedAt,
             },
             user: {
                 id: user.id,
