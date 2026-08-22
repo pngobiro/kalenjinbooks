@@ -52,9 +52,25 @@ export async function handleBlogRequest(
         });
     }
 
-    // Protected: create post
+    // Protected: create post (DB-truth: allows stale JWT where DB role has been promoted to AUTHOR/ADMIN)
     if (path === '/api/blog/posts' && method === 'POST') {
         return await authMiddleware(request, env, async () => {
+            const jwtRole = request.ctx?.user?.role;
+            if (jwtRole === 'AUTHOR' || jwtRole === 'ADMIN') {
+                return await createBlogPost(request, env);
+            }
+            // JWT still says READER but DB may have been promoted (author approved without re-login) — verify via DB
+            const prisma = createD1PrismaClient(env.DB);
+            const dbUser = await prisma.user.findUnique({
+                where: { id: request.ctx!.user!.id },
+                select: { role: true, isAdmin: true },
+            });
+            const freshRole = dbUser?.role;
+            if (freshRole === 'AUTHOR' || freshRole === 'ADMIN' || dbUser?.isAdmin) {
+                // Patch ctx for downstream handler's admin checks
+                (request.ctx as any).user.role = freshRole === 'ADMIN' || dbUser?.isAdmin ? 'ADMIN' : freshRole;
+                return await createBlogPost(request, env);
+            }
             return requireRole('AUTHOR', 'ADMIN')(request, env, async () => {
                 return await createBlogPost(request, env);
             });
@@ -72,18 +88,46 @@ export async function handleBlogRequest(
             return await getBlogPost(request, env, postId, isById);
         }
 
-        // Protected: update post
+        // Protected: update post (same stale-JWT fallback as create)
         if (method === 'PUT') {
             return await authMiddleware(request, env, async () => {
+                const jwtRole = request.ctx?.user?.role;
+                if (jwtRole === 'AUTHOR' || jwtRole === 'ADMIN') {
+                    return await updateBlogPost(request, env, postId, isById);
+                }
+                const prisma2 = createD1PrismaClient(env.DB);
+                const dbUser2 = await prisma2.user.findUnique({
+                    where: { id: request.ctx!.user!.id },
+                    select: { role: true, isAdmin: true },
+                });
+                const freshRole2 = dbUser2?.role;
+                if (freshRole2 === 'AUTHOR' || freshRole2 === 'ADMIN' || dbUser2?.isAdmin) {
+                    (request.ctx as any).user.role = freshRole2 === 'ADMIN' || dbUser2?.isAdmin ? 'ADMIN' : freshRole2;
+                    return await updateBlogPost(request, env, postId, isById);
+                }
                 return requireRole('AUTHOR', 'ADMIN')(request, env, async () => {
                     return await updateBlogPost(request, env, postId, isById);
                 });
             });
         }
 
-        // Protected: delete post
+        // Protected: delete post (same stale-JWT fallback)
         if (method === 'DELETE') {
             return await authMiddleware(request, env, async () => {
+                const jwtRole = request.ctx?.user?.role;
+                if (jwtRole === 'AUTHOR' || jwtRole === 'ADMIN') {
+                    return await deleteBlogPost(request, env, postId, isById);
+                }
+                const prisma3 = createD1PrismaClient(env.DB);
+                const dbUser3 = await prisma3.user.findUnique({
+                    where: { id: request.ctx!.user!.id },
+                    select: { role: true, isAdmin: true },
+                });
+                const freshRole3 = dbUser3?.role;
+                if (freshRole3 === 'AUTHOR' || freshRole3 === 'ADMIN' || dbUser3?.isAdmin) {
+                    (request.ctx as any).user.role = freshRole3 === 'ADMIN' || dbUser3?.isAdmin ? 'ADMIN' : freshRole3;
+                    return await deleteBlogPost(request, env, postId, isById);
+                }
                 return requireRole('AUTHOR', 'ADMIN')(request, env, async () => {
                     return await deleteBlogPost(request, env, postId, isById);
                 });

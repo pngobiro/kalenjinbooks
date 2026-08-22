@@ -128,6 +128,9 @@ export async function fetchBlogPosts(params?: {
         cache: 'no-store',
         headers: {
             'Accept': 'application/json',
+            ...(typeof window !== 'undefined' && localStorage.getItem('kaleereads_token')
+                ? { 'Authorization': `Bearer ${localStorage.getItem('kaleereads_token')}` }
+                : {}),
         },
     });
 
