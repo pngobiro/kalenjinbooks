@@ -28,6 +28,9 @@ export default function BlogDetailPage() {
                 const result = await fetchBlogPost(params.id);
                 setPost(result.data || null);
                 setError(null);
+                if (result.data?.id) {
+                    import('@/lib/analytics').then((m) => m.trackBlogView(result.data!.id, result.data!.authorId));
+                }
                 if (result.data) {
                     const authorPostsRes = await fetchBlogPosts({
                         authorId: result.data.authorId,

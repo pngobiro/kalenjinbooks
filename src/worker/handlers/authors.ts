@@ -849,10 +849,20 @@ async function getAuthorAnalytics(request: WorkerRequest, env: Env): Promise<Res
         const startDate = new Date();
         startDate.setDate(startDate.getDate() - days);
 
-        // Get analytics events for the period
+        // Get analytics events for the period (books + blogs)
+        const blogIdsForAuthor = bookIds.length === 0
+            ? (await prisma.blogPost.findMany({ where: { authorId: author.id }, select: { id: true } })).map((b: any) => b.id)
+            : [
+                // also include blog ids
+                ...(await prisma.blogPost.findMany({ where: { authorId: author.id }, select: { id: true } })).map((b: any) => b.id),
+            ];
+        const allIds = [...bookIds, ...blogIdsForAuthor];
         const events = await prisma.analyticsEvent.findMany({
             where: {
-                bookId: { in: bookIds },
+                OR: [
+                    { bookId: { in: allIds.length ? allIds : ['__none__'] } },
+                    { authorId: author.id },
+                ],
                 createdAt: {
                     gte: startDate,
                     lte: endDate
@@ -871,11 +881,25 @@ async function getAuthorAnalytics(request: WorkerRequest, env: Env): Promise<Res
             }
             const stats = dailyStatsMap.get(date)!;
             
-            if (event.eventType === 'BOOK_VIEW') stats.views++;
-            if (event.eventType === 'BOOK_CLICK') stats.clicks++;
+            if (event.eventType === 'BOOK_VIEW' || event.eventType === 'BLOG_VIEW') stats.views++;
+            if (event.eventType === 'BOOK_CLICK' || event.eventType === 'BLOG_CLICK') stats.clicks++;
             if (event.eventType === 'BOOK_PURCHASE') stats.purchases++;
         });
 
+        // Country breakdown for views in the period (books + blogs)
+        const countryMap = new Map<string, number>();
+        events.forEach((event: any) => {
+            if (event.eventType === 'BOOK_VIEW' || event.eventType === 'BLOG_VIEW') {
+                const c = event.country || 'Unknown';
+                countryMap.set(c, (countryMap.get(c) || 0) + 1);
+            }
+        });
+        const viewsByCountry = Array.from(countryMap.entries())
+            .map(([country, views]) => ({ country, views }))
+            .sort((a, b) => b.views - a.views)
+            .slice(0, 20);
+
+        // Include viewsByCountry in response below
         // Convert to array and fill missing dates
         const dailyStats = [];
         for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
@@ -887,11 +911,34 @@ async function getAuthorAnalytics(request: WorkerRequest, env: Env): Promise<Res
             });
         }
 
+        // Per-book top country
+        const bookCountryMap = new Map<string, Map<string, number>>();
+        events.forEach((ev: any) => {
+            if ((ev.eventType === 'BOOK_VIEW' || ev.eventType === 'BLOG_VIEW') && ev.bookId) {
+                if (!bookCountryMap.has(ev.bookId)) bookCountryMap.set(ev.bookId, new Map());
+                const m = bookCountryMap.get(ev.bookId)!;
+                const c = ev.country || 'Unknown';
+                m.set(c, (m.get(c) || 0) + 1);
+            }
+        });
+        const bookTopCountry = new Map<string, string>();
+        bookCountryMap.forEach((m, bookId) => {
+            let top = 'Unknown', max = -1;
+            m.forEach((cnt, c) => { if (cnt > max) { max = cnt; top = c; } });
+            bookTopCountry.set(bookId, top);
+        });
+
+        // Map of any content id (book or blog) -> top country, for blogs table
+        const topCountryById: Record<string, string> = {};
+        bookTopCountry.forEach((c, id) => { topCountryById[id] = c; });
+
         return successResponse({
             totalViews,
             totalClicks,
             totalPurchases,
             totalRevenue,
+            viewsByCountry,
+            topCountryById,
             bookAnalytics: bookAnalyticsWithTitles.map(b => ({
                 bookId: b.bookId,
                 bookTitle: b.bookTitle,
@@ -901,7 +948,8 @@ async function getAuthorAnalytics(request: WorkerRequest, env: Env): Promise<Res
                 purchases: b.purchases,
                 downloads: b.downloads,
                 revenue: b.revenue,
-                lastViewedAt: b.lastViewedAt?.toISOString() || null
+                lastViewedAt: b.lastViewedAt?.toISOString() || null,
+                topCountry: bookTopCountry.get(b.bookId) || null,
             })),
             dailyStats
         });

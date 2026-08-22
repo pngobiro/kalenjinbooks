@@ -11,6 +11,8 @@ export type EventType =
   | 'BOOK_DOWNLOAD'
   | 'AUTHOR_VIEW'
   | 'AUTHOR_FOLLOW'
+  | 'BLOG_VIEW'
+  | 'BLOG_CLICK'
   | 'PAGE_VIEW'
   | 'SIGNUP'
   | 'LOGIN';
@@ -100,6 +102,20 @@ export function trackBookPurchase(bookId: string, metadata?: Record<string, any>
  */
 export function trackAuthorView(authorId: string, metadata?: Record<string, any>): void {
   trackEvent({ eventType: 'AUTHOR_VIEW', authorId, metadata });
+}
+
+/**
+ * Track blog view
+ */
+export function trackBlogView(blogId: string, authorId?: string, metadata?: Record<string, any>): void {
+  trackEvent({ eventType: 'BLOG_VIEW', bookId: blogId, authorId, metadata });
+}
+
+/**
+ * Track blog click
+ */
+export function trackBlogClick(blogId: string, metadata?: Record<string, any>): void {
+  trackEvent({ eventType: 'BLOG_CLICK', bookId: blogId, metadata });
 }
 
 /**

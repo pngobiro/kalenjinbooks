@@ -41,6 +41,7 @@ export default function AuthorBlogsPage() {
     const [deletingId, setDeletingId] = useState<string | null>(null);
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedPosts, setSelectedPosts] = useState<Set<string>>(new Set());
+    const [topCountryById, setTopCountryById] = useState<Record<string, string>>({});
     const postsPerPage = 10;
 
     useEffect(() => {
@@ -81,6 +82,18 @@ export default function AuthorBlogsPage() {
             const all = (result as any).data?.posts || [];
             setPosts(all);
             setIsLoading(false);
+            // Fetch top country per blog
+            try {
+                const token = localStorage.getItem('kaleereads_token');
+                const res = await fetch('https://kalenjin-books-worker.pngobiro.workers.dev/api/authors/analytics?days=30', {
+                    headers: token ? { Authorization: `Bearer ${token}` } : {},
+                });
+                if (res.ok) {
+                    const json: any = await res.json();
+                    const map = json?.data?.topCountryById || json?.topCountryById || {};
+                    setTopCountryById(map);
+                }
+            } catch { /* optional */ }
         } catch (err) {
             console.error('Error fetching posts:', err);
             setError('Failed to load blog posts.');
@@ -330,6 +343,7 @@ export default function AuthorBlogsPage() {
                                         <th className="px-5 py-4 font-medium">Category</th>
                                         <th className="px-5 py-4 font-medium">Status</th>
                                         <th className="px-5 py-4 font-medium">Views</th>
+                                        <th className="px-5 py-4 font-medium">Top Country</th>
                                         <th className="px-5 py-4 font-medium">Published</th>
                                         <th className="px-5 py-4 font-medium text-right">Actions</th>
                                     </tr>
@@ -402,6 +416,9 @@ export default function AuthorBlogsPage() {
                                             </td>
                                             <td className="px-5 py-4 text-neutral-brown-700">
                                                 {post.viewCount}
+                                            </td>
+                                            <td className="px-5 py-4 text-neutral-brown-700 text-sm">
+                                                {topCountryById[post.id] || '—'}
                                             </td>
                                             <td className="px-5 py-4 text-neutral-brown-700 text-sm">
                                                 {post.publishedAt

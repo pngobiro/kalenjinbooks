@@ -23,6 +23,7 @@ interface BookData {
     sales?: number;
     views?: number;
     earnings?: number;
+    topCountry?: string | null;
 }
 
 interface BookStats {
@@ -140,8 +141,8 @@ export default function MyBooksPage() {
                 const booksData: any = await booksResponse.json();
                 const authorBooks = booksData.data || [];
 
-                // Fetch sales/analytics per book
-                let salesByBook: Record<string, { sales: number; views: number; earnings: number }> = {};
+                // Fetch sales/analytics per book (including country)
+                let salesByBook: Record<string, { sales: number; views: number; earnings: number; topCountry?: string | null }> = {};
                 try {
                     const analyticsRes = await fetch('https://kalenjin-books-worker.pngobiro.workers.dev/api/authors/analytics', {
                         headers: { 'Authorization': `Bearer ${token}` },
@@ -152,7 +153,7 @@ export default function MyBooksPage() {
                         const list = analyticsData.bookAnalytics || analyticsData.books || [];
                         for (const a of list) {
                             const bid = a.bookId || a.id;
-                            if (bid) salesByBook[bid] = { sales: a.purchases ?? a.sales ?? 0, views: a.views ?? a.viewCount ?? 0, earnings: a.revenue ?? a.earnings ?? 0 };
+                            if (bid) salesByBook[bid] = { sales: a.purchases ?? a.sales ?? 0, views: a.views ?? a.viewCount ?? 0, earnings: a.revenue ?? a.earnings ?? 0, topCountry: a.topCountry || null };
                         }
                     }
                 } catch { /* analytics optional */ }
@@ -162,6 +163,7 @@ export default function MyBooksPage() {
                     sales: salesByBook[b.id]?.sales ?? 0,
                     views: salesByBook[b.id]?.views ?? 0,
                     earnings: salesByBook[b.id]?.earnings ?? 0,
+                    topCountry: salesByBook[b.id]?.topCountry || null,
                 }));
                 setBooks(enriched);
 
@@ -359,6 +361,9 @@ export default function MyBooksPage() {
                                     Sales
                                 </th>
                                 <th className="px-6 py-4 text-left text-sm font-semibold text-neutral-brown-900">
+                                    Top Country
+                                </th>
+                                <th className="px-6 py-4 text-left text-sm font-semibold text-neutral-brown-900">
                                     Status
                                 </th>
                                 <th className="px-6 py-4 text-right text-sm font-semibold text-neutral-brown-900">
@@ -426,6 +431,11 @@ export default function MyBooksPage() {
                                             <p className="font-semibold text-neutral-brown-900">{book.sales ?? 0} sales</p>
                                             <p className="text-xs text-neutral-brown-500">{book.views ?? 0} views</p>
                                         </div>
+                                    </td>
+
+                                    {/* Country */}
+                                    <td className="px-6 py-4">
+                                        <span className="text-sm text-neutral-brown-900">{book.topCountry || '—'}</span>
                                     </td>
 
                                     {/* Status */}

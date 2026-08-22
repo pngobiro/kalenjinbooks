@@ -237,6 +237,7 @@ model AnalyticsEvent {
   sessionId     String?   // Anonymous session tracking
   metadata      String?   // JSON string with additional data
   ipAddress     String?
+  country       String?   // ISO 3166-1 alpha-2 from Cloudflare CF-IPCountry
   userAgent     String?
   referrer      String?
   createdAt     DateTime  @default(now())
@@ -244,6 +245,7 @@ model AnalyticsEvent {
   @@index([eventType])
   @@index([bookId])
   @@index([authorId])
+  @@index([country])
   @@index([createdAt])
 }
 
@@ -256,6 +258,8 @@ enum EventType {
   BOOK_DOWNLOAD     // Book downloaded
   AUTHOR_VIEW       // Author profile viewed
   AUTHOR_FOLLOW     // Author followed
+  BLOG_VIEW         // Blog post viewed
+  BLOG_CLICK        // Blog post clicked
   PAGE_VIEW         // General page view
   SIGNUP            // User signed up
   LOGIN             // User logged in

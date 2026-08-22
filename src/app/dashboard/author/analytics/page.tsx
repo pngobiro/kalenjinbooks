@@ -37,7 +37,9 @@ interface AnalyticsData {
   totalClicks: number;
   totalPurchases: number;
   totalRevenue: number;
-  bookAnalytics: BookAnalytics[];
+  bookAnalytics: (BookAnalytics & { topCountry?: string | null })[];
+  viewsByCountry?: { country: string; views: number }[];
+  topCountryById?: Record<string, string>;
   dailyStats: DailyStats[];
 }
 
@@ -232,6 +234,26 @@ export default function AuthorAnalyticsPage() {
           </div>
         )}
 
+        {/* Views by Country */}
+        {data.viewsByCountry && data.viewsByCountry.length > 0 && (
+          <div className="bg-white rounded-xl shadow-sm mb-8">
+            <div className="p-6 border-b border-neutral-brown-100">
+              <h3 className="text-lg font-bold text-neutral-brown-900">Audience by Country</h3>
+              <p className="text-sm text-neutral-brown-500 mt-1">Where your readers are viewing from</p>
+            </div>
+            <div className="p-6">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                {data.viewsByCountry.map((entry) => (
+                  <div key={entry.country} className="flex items-center justify-between p-3 bg-neutral-cream rounded-lg">
+                    <span className="font-semibold text-neutral-brown-900">{entry.country}</span>
+                    <span className="text-sm text-neutral-brown-600">{entry.views} views</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Book Performance */}
         <div className="bg-white rounded-xl shadow-sm">
           <div className="p-6 border-b border-neutral-brown-100">
@@ -249,6 +271,7 @@ export default function AuthorAnalyticsPage() {
                       <th className="px-4 py-3 text-left text-sm font-semibold text-neutral-brown-900">Previews</th>
                       <th className="px-4 py-3 text-left text-sm font-semibold text-neutral-brown-900">Purchases</th>
                       <th className="px-4 py-3 text-left text-sm font-semibold text-neutral-brown-900">Revenue</th>
+                      <th className="px-4 py-3 text-left text-sm font-semibold text-neutral-brown-900">Top Country</th>
                       <th className="px-4 py-3 text-left text-sm font-semibold text-neutral-brown-900">Last Viewed</th>
                     </tr>
                   </thead>
@@ -281,6 +304,9 @@ export default function AuthorAnalyticsPage() {
                         </td>
                         <td className="px-4 py-4">
                           <span className="font-bold text-green-600">KES {book.revenue.toLocaleString()}</span>
+                        </td>
+                        <td className="px-4 py-4">
+                          <span className="text-sm text-neutral-brown-900">{(book as any).topCountry || '—'}</span>
                         </td>
                         <td className="px-4 py-4">
                           <span className="text-sm text-neutral-brown-600">

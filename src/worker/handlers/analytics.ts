@@ -66,8 +66,9 @@ async function trackEvent(request: WorkerRequest, env: Env): Promise<Response> {
 
         const prisma = createD1PrismaClient(env.DB);
 
-        // Get IP and user agent from request
+        // Get IP, country and user agent from request (Cloudflare provides CF-IPCountry)
         const ipAddress = request.headers.get('CF-Connecting-IP') || request.headers.get('X-Forwarded-For');
+        const country = request.headers.get('CF-IPCountry') || (request as any).cf?.country || null;
         const userAgent = request.headers.get('User-Agent');
         const referrer = request.headers.get('Referer');
 
@@ -81,6 +82,7 @@ async function trackEvent(request: WorkerRequest, env: Env): Promise<Response> {
                 sessionId,
                 metadata: metadata ? JSON.stringify(metadata) : null,
                 ipAddress,
+                country: country && country !== 'XX' ? country : null,
                 userAgent,
                 referrer,
             },
