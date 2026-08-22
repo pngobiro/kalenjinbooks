@@ -138,6 +138,17 @@ export default function AuthorRegisterPage() {
   }
 
   const handleNext = () => {
+    if (step === 'personal') {
+      const missing: string[] = [];
+      if (!formData.fullName.trim()) missing.push('Full Name');
+      if (!formData.email.trim()) missing.push('Email Address');
+      if (!formData.phoneNumber.trim()) missing.push('Phone Number');
+      if (!formData.bio.trim()) missing.push('Author Bio');
+      if (missing.length > 0) {
+        alert(`Please fill in the following required fields before continuing:\n• ${missing.join('\n• ')}`);
+        return;
+      }
+    }
     const steps: RegistrationStep[] = ['personal', 'professional', 'writing', 'payment', 'pending'];
     const currentIndex = steps.indexOf(step);
     if (currentIndex < steps.length - 1) {
@@ -180,8 +191,14 @@ export default function AuthorRegisterPage() {
     }
 
     // Validate required fields
-    if (!formData.fullName || !formData.email || !formData.phoneNumber || !formData.bio) {
-      alert('Please fill in all required fields.');
+    const missing: string[] = [];
+    if (!formData.fullName.trim()) missing.push('Full Name');
+    if (!formData.email.trim()) missing.push('Email Address');
+    if (!formData.phoneNumber.trim()) missing.push('Phone Number');
+    if (!formData.bio.trim()) missing.push('Author Bio');
+    if (missing.length > 0) {
+      alert(`Please fill in the following required fields:\n• ${missing.join('\n• ')}\n\nGo back to the Personal step if needed.`);
+      setStep('personal');
       return;
     }
 
