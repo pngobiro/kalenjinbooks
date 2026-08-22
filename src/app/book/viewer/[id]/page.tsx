@@ -318,7 +318,7 @@ export default function SecureBookViewer() {
             <span>Secure Viewer</span>
           </div>
           <div className="text-xs text-neutral-brown-400">
-            Admin Preview
+            Free Reading
           </div>
         </div>
       </div>

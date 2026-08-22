@@ -266,17 +266,9 @@ async function getSecureBookView(request: WorkerRequest, env: Env, bookId: strin
             return errorResponse('User not found', HttpStatus.NOT_FOUND);
         }
 
-        // Allow access for admins or the book's author
-        const isAdmin = user.role === 'ADMIN' || user.isAdmin;
-        const isAuthor = book.author.userId === userId;
-        
-        console.log('[SecureView] Is admin:', isAdmin);
-        console.log('[SecureView] Is author:', isAuthor);
-        console.log('[SecureView] Book author userId:', book.author.userId);
-        
-        if (!isAdmin && !isAuthor) {
-            return errorResponse('Insufficient permissions to view this book', HttpStatus.FORBIDDEN);
-        }
+        // Free reading: any authenticated user may read online.
+        // Content is served via a time-limited token through /api/secure-pdf —
+        // the R2 file key is never exposed and the URL expires in 1 hour.
 
         // Generate time-limited secure URL (valid for 1 hour)
         const expirationTime = Date.now() + (60 * 60 * 1000); // 1 hour

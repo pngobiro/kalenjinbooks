@@ -3,7 +3,7 @@
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import KaleeReadsLogo from '@/components/KaleeReadsLogo';
-import { ArrowLeft, CreditCard, Building2, Check, Clock, BookOpen, Book } from 'lucide-react';
+import { ArrowLeft, CreditCard, Building2, Check, Clock, BookOpen, Book, Heart } from 'lucide-react';
 import { useState, Suspense } from 'react';
 import Image from 'next/image';
 
@@ -27,7 +27,7 @@ function PaymentContent() {
   
   const bookId = searchParams.get('bookId');
   const author = searchParams.get('author') || 'Unknown Author';
-  const type = searchParams.get('type') as 'permanent' | 'temporary';
+  const type = searchParams.get('type') as 'permanent' | 'temporary' | 'donation';
   const price = searchParams.get('price');
   const title = searchParams.get('title') || 'Book';
 
@@ -82,7 +82,14 @@ function PaymentContent() {
           </div>
           
           <div className="flex items-center gap-3">
-            {type === 'permanent' ? (
+            {type === 'donation' ? (
+              <>
+                <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#FEF3E7' }}>
+                  <Heart size={20} style={{ color: '#D97846' }} />
+                </div>
+                <span className="font-medium" style={{ color: '#2C2416' }}>Donation to support the author</span>
+              </>
+            ) : type === 'permanent' ? (
               <>
                 <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#FEF3E7' }}>
                   <BookOpen size={20} style={{ color: '#D97846' }} />

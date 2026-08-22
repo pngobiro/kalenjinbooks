@@ -22,6 +22,7 @@ export interface Book {
         id: string;
         user: {
             name: string | null;
+            image?: string | null;
         };
     };
 }
