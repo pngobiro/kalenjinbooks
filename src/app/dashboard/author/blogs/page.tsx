@@ -53,9 +53,20 @@ export default function AuthorBlogsPage() {
                 }
                 const result = await getMyAuthorProfile() as any;
                 setAuthorId(result.data.id);
-            } catch (err) {
+            } catch (err: any) {
                 console.error('Error fetching author profile:', err);
-                router.push('/login');
+                const msg = err?.message || '';
+                // Only redirect on auth errors; otherwise the user is logged in but has no author profile (e.g. admin account)
+                if (msg.includes('401') || msg.toLowerCase().includes('unauthorized')) {
+                    router.push('/login');
+                } else if (msg.includes('404') || msg.toLowerCase().includes('not found')) {
+                    // Logged in but no author record (e.g. admin visiting author area)
+                    setError('No author profile found for this account. Switch to the Admin dashboard or apply as an author.');
+                    setIsLoading(false);
+                } else {
+                    setError('Unable to load your author profile. Please try again.');
+                    setIsLoading(false);
+                }
             }
         };
         fetchAuthor();
