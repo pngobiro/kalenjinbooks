@@ -563,12 +563,32 @@ async function updateBook(request: WorkerRequest, env: Env, bookId: string): Pro
         } else {
             // Handle JSON data (no file upload)
             const body = await request.json() as Record<string, unknown>;
-            updateData = body;
-            
-            // If publishing for the first time, set publishedAt
-            if (updateData.isPublished && !book.isPublished) {
-                updateData.publishedAt = new Date();
+
+            // Whitelist updatable fields and coerce types to match the schema.
+            // `tags` is stored as a JSON string — normalize arrays/strings accordingly.
+            const allowed: Record<string, unknown> = {};
+            const fields = ['title', 'description', 'category', 'language', 'rentalPrice', 'previewPages', 'isPublished', 'isFeatured', 'isbn'];
+            for (const f of fields) {
+                if (f in body) allowed[f] = body[f];
             }
+            if ('price' in body) {
+                const p = Number(body.price);
+                if (!isNaN(p)) allowed.price = p;
+            }
+            if ('tags' in body) {
+                if (Array.isArray(body.tags)) {
+                    allowed.tags = body.tags.length > 0 ? JSON.stringify(body.tags) : null;
+                } else if (typeof body.tags === 'string') {
+                    allowed.tags = body.tags.trim() ? body.tags.trim() : null;
+                } else {
+                    allowed.tags = null;
+                }
+            }
+            if ('isPublished' in body && !book.isPublished && body.isPublished === true) {
+                allowed.publishedAt = new Date();
+            }
+
+            updateData = allowed;
         }
 
         // Update book
