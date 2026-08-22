@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import {
   FileText, Eye, Clock, ExternalLink, Search,
-  CheckCircle2, CircleDashed, Trash2, Edit,
+  CheckCircle2, CircleDashed, Trash2, Edit, EyeOff,
 } from 'lucide-react';
 
 interface BlogPostRow {
@@ -80,6 +80,23 @@ export default function BlogsTab() {
       setPosts((prev) => prev.filter((p) => p.id !== postId));
     } catch {
       alert('Failed to delete post');
+    }
+  }
+
+  async function handleTogglePublish(post: BlogPostRow) {
+    const action = post.isPublished ? 'unpublish' : 'publish';
+    if (!confirm(`${action === 'unpublish' ? 'Unpublish' : 'Publish'} "${post.title}"?`)) return;
+    try {
+      const token = localStorage.getItem('kaleereads_token');
+      const res = await fetch(`${WORKER_URL}/api/blog/posts/${post.id}`, {
+        method: 'PUT',
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ isPublished: !post.isPublished }),
+      });
+      if (!res.ok) throw new Error('Update failed');
+      setPosts((prev) => prev.map((p) => (p.id === post.id ? { ...p, isPublished: !p.isPublished } : p)));
+    } catch {
+      alert(`Failed to ${action} post`);
     }
   }
 
@@ -200,6 +217,13 @@ export default function BlogsTab() {
                       </td>
                       <td className="px-5 py-3.5">
                         <div className="flex items-center justify-end gap-2">
+                          <button
+                            onClick={() => handleTogglePublish(post)}
+                            className={`p-1.5 rounded-lg transition-colors ${post.isPublished ? 'text-yellow-600 hover:bg-yellow-50' : 'text-green-600 hover:bg-green-50'}`}
+                            title={post.isPublished ? 'Unpublish (hide from public)' : 'Publish'}
+                          >
+                            {post.isPublished ? <EyeOff size={15} /> : <Eye size={15} />}
+                          </button>
                           <Link
                             href={`/dashboard/author/blogs/${post.id}/edit`}
                             className="p-1.5 rounded-lg text-primary hover:bg-primary/10 transition-colors"
