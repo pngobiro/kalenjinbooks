@@ -125,4 +125,5 @@ export const CachePrefix = {
     BLOG_POST: 'blog_post',
     USER: 'user',
     FEATURED: 'featured',
+    SETTINGS: 'settings',
 } as const;

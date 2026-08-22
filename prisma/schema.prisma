@@ -341,3 +341,9 @@ enum HardCopyRequestStatus {
   COMPLETED     // Order fulfilled
   CANCELLED     // Cancelled by requester
 }
+
+model Setting {
+  key       String   @id // e.g. "platform"
+  value     String   // JSON blob of settings
+  updatedAt DateTime @updatedAt
+}
