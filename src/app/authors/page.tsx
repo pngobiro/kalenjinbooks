@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Search, MapPin, BookOpen, Star, Feather, ArrowRight, X } from 'lucide-react';
+import { Search, MapPin, BookOpen, Star, Feather, ArrowRight, X, FileText } from 'lucide-react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import { fetchAuthors, Author } from '@/lib/api/authors';
@@ -191,10 +191,29 @@ export default function AuthorsPage() {
                           <span className="font-semibold" style={{ color: '#2C2416' }}>{author.booksCount || 0}</span>
                           <span style={{ color: '#5B4F42' }}>books</span>
                         </div>
-                        <div className="flex items-center gap-1.5 text-sm">
-                          <Star size={16} className="fill-yellow-400 text-yellow-400" />
-                          <span className="font-semibold" style={{ color: '#2C2416' }}>{author.rating?.toFixed(1) || '0.0'}</span>
-                        </div>
+                        {(author.blogsCount ?? 0) > 0 ? (
+                          <Link
+                            href={`/blogs?author=${author.id}`}
+                            onClick={(e) => e.stopPropagation()}
+                            className="flex items-center gap-1.5 text-sm px-3 py-1 rounded-full font-medium transition-all hover:shadow-md"
+                            style={{ color: '#D97846', backgroundColor: '#FEF3E7' }}
+                          >
+                            <FileText size={15} />
+                            <span className="font-semibold">{author.blogsCount}</span>
+                            <span>{author.blogsCount === 1 ? 'blog' : 'blogs'}</span>
+                          </Link>
+                        ) : (
+                          <div className="flex items-center gap-1.5 text-sm">
+                            <Star size={16} className="fill-yellow-400 text-yellow-400" />
+                            <span className="font-semibold" style={{ color: '#2C2416' }}>{author.rating?.toFixed(1) || '0.0'}</span>
+                          </div>
+                        )}
+                        {(author.blogsCount ?? 0) > 0 && (
+                          <div className="flex items-center gap-1.5 text-sm">
+                            <Star size={16} className="fill-yellow-400 text-yellow-400" />
+                            <span className="font-semibold" style={{ color: '#2C2416' }}>{author.rating?.toFixed(1) || '0.0'}</span>
+                          </div>
+                        )}
                       </div>
 
                       {/* CTA */}
