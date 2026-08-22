@@ -433,6 +433,7 @@ function AdminDashboardContent() {
           allAuthors={allAuthors}
           onToggleAuthorStatus={handleToggleAuthorStatus}
           onMakeAdmin={handleMakeAdmin}
+          onUpdated={refetch}
         />
       )}
 

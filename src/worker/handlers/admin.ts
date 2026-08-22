@@ -1,7 +1,7 @@
 /// <reference types="@cloudflare/workers-types" />
 
 import { Env, WorkerRequest } from '../types/env';
-import { errorResponse, successResponse, HttpStatus } from '../utils/response';
+import { errorResponse, successResponse, HttpStatus, ErrorCode } from '../utils/response';
 import { createD1PrismaClient } from '../../lib/db/d1-client';
 import { verifyToken } from '../middleware/auth';
 
@@ -72,6 +72,11 @@ export async function handleAdminRequest(
     // POST /api/admin/authors/reject - Reject author
     if (path === '/api/admin/authors/reject' && method === 'POST') {
         return await rejectAuthor(request, env);
+    }
+
+    // POST /api/admin/authors/update - Edit author profile fields
+    if (path === '/api/admin/authors/update' && method === 'POST') {
+        return await updateAuthor(request, env);
     }
 
     // POST /api/admin/authors/toggle-status - Enable/Disable author
@@ -1008,5 +1013,69 @@ async function getAdminStats(request: WorkerRequest, env: Env): Promise<Response
     } catch (error) {
         console.error('Get admin stats error:', error);
         return errorResponse('Failed to fetch admin stats', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+}
+
+/**
+ * Update an author's profile fields (admin edit)
+ */
+async function updateAuthor(request: WorkerRequest, env: Env): Promise<Response> {
+    try {
+        const body = await request.json() as Record<string, unknown>;
+        const { authorId } = body as { authorId?: string };
+
+        if (!authorId) {
+            return errorResponse('authorId is required', HttpStatus.BAD_REQUEST);
+        }
+
+        const prisma = createD1PrismaClient(env.DB);
+
+        const author = await prisma.author.findUnique({ where: { id: authorId } });
+        if (!author) {
+            return errorResponse('Author not found', HttpStatus.NOT_FOUND, ErrorCode.RESOURCE_NOT_FOUND);
+        }
+
+        // Build whitelisted Author update
+        const authorData: Record<string, unknown> = {};
+        const authorFields = ['bio', 'location', 'nationality', 'phoneNumber', 'website', 'genres', 'languages', 'writingStyle', 'education', 'occupation'];
+        for (const f of authorFields) {
+            if (f in body) (authorData as any)[f] = body[f];
+        }
+        if ('isActive' in body) {
+            authorData.isActive = !!body.isActive;
+        }
+        if ('status' in body && ['PENDING', 'APPROVED', 'REJECTED'].includes(body.status as string)) {
+            authorData.status = body.status;
+            if (body.status === 'APPROVED' && !author.approvedAt) {
+                authorData.approvedAt = new Date();
+            }
+            if (body.status === 'REJECTED') {
+                authorData.rejectionReason = (body.rejectionReason as string) || null;
+            }
+        }
+
+        // Optionally update the user's display name
+        if ('name' in body && typeof body.name === 'string' && body.name.trim()) {
+            await prisma.user.update({
+                where: { id: author.userId },
+                data: { name: body.name.trim() },
+            });
+        }
+
+        const updated = Object.keys(authorData).length > 0
+            ? await prisma.author.update({ where: { id: authorId }, data: authorData })
+            : author;
+
+        // Invalidate cached author lists
+        const { invalidateCacheByPrefix, CachePrefix } = await import('../utils/cache');
+        await invalidateCacheByPrefix(env.CACHE, CachePrefix.AUTHORS);
+
+        return successResponse({
+            message: 'Author updated successfully',
+            author: updated,
+        });
+    } catch (error) {
+        console.error('Update author error:', error);
+        return errorResponse('Failed to update author', HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

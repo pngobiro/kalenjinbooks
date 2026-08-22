@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { Search, Filter, Eye, Edit, Ban, Power, MoreVertical, Users, Shield } from 'lucide-react';
+import Link from 'next/link';
+import { Search, Eye, Edit, Ban, Power, Users, Shield, X, Save } from 'lucide-react';
 
 interface Author {
   id: string;
@@ -11,6 +12,9 @@ interface Author {
   status: 'PENDING' | 'APPROVED' | 'REJECTED';
   totalEarnings: number | null;
   isActive?: boolean;
+  location?: string | null;
+  nationality?: string | null;
+  genres?: string | null;
   createdAt: string;
   user: {
     id: string;
@@ -25,10 +29,15 @@ interface AuthorsTabProps {
   allAuthors: Author[];
   onToggleAuthorStatus: (authorId: string, currentStatus: boolean) => void;
   onMakeAdmin: (authorId: string, userEmail: string) => void;
+  onUpdated?: () => void;
 }
 
-export default function AuthorsTab({ allAuthors, onToggleAuthorStatus, onMakeAdmin }: AuthorsTabProps) {
+const WORKER_URL = 'https://kalenjin-books-worker.pngobiro.workers.dev';
+
+export default function AuthorsTab({ allAuthors, onToggleAuthorStatus, onMakeAdmin, onUpdated }: AuthorsTabProps) {
   const [searchQuery, setSearchQuery] = useState('');
+  const [editing, setEditing] = useState<Author | null>(null);
+  const [saving, setSaving] = useState(false);
 
   return (
     <div className="space-y-6">
@@ -45,10 +54,6 @@ export default function AuthorsTab({ allAuthors, onToggleAuthorStatus, onMakeAdm
               className="pl-10 pr-4 py-2 border border-neutral-brown-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20"
             />
           </div>
-          <button className="flex items-center gap-2 px-4 py-2 border border-neutral-brown-200 rounded-lg hover:bg-neutral-brown-50">
-            <Filter size={18} />
-            Filter
-          </button>
         </div>
       </div>
 
@@ -66,8 +71,8 @@ export default function AuthorsTab({ allAuthors, onToggleAuthorStatus, onMakeAdm
               </thead>
               <tbody className="divide-y divide-neutral-brown-100">
                 {allAuthors
-                  .filter((author) => 
-                    !searchQuery || 
+                  .filter((author) =>
+                    !searchQuery ||
                     author.user.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
                     author.user.email?.toLowerCase().includes(searchQuery.toLowerCase())
                   )
@@ -75,10 +80,14 @@ export default function AuthorsTab({ allAuthors, onToggleAuthorStatus, onMakeAdm
                   <tr key={author.id} className="hover:bg-neutral-cream/50">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
-                          <span className="text-primary font-bold text-sm">
-                            {author.user.name?.split(' ').map(n => n[0]).join('') || 'U'}
-                          </span>
+                        <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center overflow-hidden">
+                          {author.profileImage ? (
+                            <img src={author.profileImage} alt="" className="w-full h-full object-cover" />
+                          ) : (
+                            <span className="text-primary font-bold text-sm">
+                              {author.user.name?.split(' ').map(n => n[0]).join('') || 'U'}
+                            </span>
+                          )}
                         </div>
                         <div>
                           <p className="font-medium text-neutral-brown-900">
@@ -89,9 +98,9 @@ export default function AuthorsTab({ allAuthors, onToggleAuthorStatus, onMakeAdm
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 flex-wrap">
                         <span className={`inline-block px-3 py-1 text-sm font-medium rounded-full ${
-                          author.status === 'APPROVED' 
+                          author.status === 'APPROVED'
                             ? 'bg-accent-green/20 text-accent-green'
                             : author.status === 'REJECTED'
                             ? 'bg-red-100 text-red-600'
@@ -101,7 +110,7 @@ export default function AuthorsTab({ allAuthors, onToggleAuthorStatus, onMakeAdm
                         </span>
                         {author.isActive !== undefined && (
                           <span className={`inline-block px-2 py-1 text-xs font-medium rounded-full ${
-                            author.isActive 
+                            author.isActive
                               ? 'bg-green-100 text-green-600'
                               : 'bg-gray-100 text-gray-600'
                           }`}>
@@ -124,10 +133,21 @@ export default function AuthorsTab({ allAuthors, onToggleAuthorStatus, onMakeAdm
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center justify-end gap-2">
-                        <button className="p-2 text-neutral-brown-600 hover:bg-neutral-brown-100 rounded">
+                        {/* View public profile */}
+                        <Link
+                          href={`/authors/${author.id}`}
+                          target="_blank"
+                          className="p-2 text-neutral-brown-600 hover:bg-neutral-brown-100 rounded"
+                          title="View public profile"
+                        >
                           <Eye size={16} />
-                        </button>
-                        <button className="p-2 text-primary hover:bg-primary/10 rounded">
+                        </Link>
+                        {/* Edit author */}
+                        <button
+                          onClick={() => setEditing(author)}
+                          className="p-2 text-primary hover:bg-primary/10 rounded"
+                          title="Edit author"
+                        >
                           <Edit size={16} />
                         </button>
                         {author.status === 'APPROVED' && (
@@ -152,9 +172,6 @@ export default function AuthorsTab({ allAuthors, onToggleAuthorStatus, onMakeAdm
                             <Shield size={16} />
                           </button>
                         )}
-                        <button className="p-2 text-neutral-brown-600 hover:bg-neutral-brown-100 rounded">
-                          <MoreVertical size={16} />
-                        </button>
                       </div>
                     </td>
                   </tr>
@@ -169,6 +186,191 @@ export default function AuthorsTab({ allAuthors, onToggleAuthorStatus, onMakeAdm
             <p className="text-sm">Authors will appear here once they register.</p>
           </div>
         )}
+      </div>
+
+      {/* Edit Modal */}
+      {editing && (
+        <EditAuthorModal
+          author={editing}
+          saving={saving}
+          onClose={() => setEditing(null)}
+          onSave={async (data) => {
+            setSaving(true);
+            try {
+              const token = localStorage.getItem('kaleereads_token');
+              const res = await fetch(`${WORKER_URL}/api/admin/authors/update`, {
+                method: 'POST',
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ authorId: editing.id, ...data }),
+              });
+              if (!res.ok) throw new Error('Failed to update author');
+              onUpdated?.();
+              setEditing(null);
+            } catch (e) {
+              alert(e instanceof Error ? e.message : 'Failed to update author');
+            } finally {
+              setSaving(false);
+            }
+          }}
+        />
+      )}
+    </div>
+  );
+}
+
+function EditAuthorModal({
+  author,
+  saving,
+  onClose,
+  onSave,
+}: {
+  author: Author;
+  saving: boolean;
+  onClose: () => void;
+  onSave: (data: Record<string, unknown>) => void | Promise<void>;
+}) {
+  const [name, setName] = useState(author.user.name || '');
+  const [bio, setBio] = useState(author.bio || '');
+  const [location, setLocation] = useState(author.location || '');
+  const [nationality, setNationality] = useState(author.nationality || '');
+  const [genres, setGenres] = useState(
+    Array.isArray(author.genres) ? author.genres.join(', ') : (author.genres || '')
+  );
+  const [status, setStatus] = useState<string>(author.status);
+
+  function parseGenres(input: string): string[] {
+    return input.split(',').map((g) => g.trim()).filter(Boolean);
+  }
+
+  return (
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={onClose}>
+      <div
+        className="bg-white rounded-xl p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex items-center justify-between mb-5">
+          <h3 className="text-xl font-bold text-neutral-brown-900">Edit Author</h3>
+          <button onClick={onClose} className="p-1.5 hover:bg-neutral-brown-100 rounded">
+            <X size={20} />
+          </button>
+        </div>
+
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-neutral-brown-900 mb-1.5">Display Name</label>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="w-full px-3.5 py-2.5 border border-neutral-brown-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-neutral-brown-900 mb-1.5">Email</label>
+            <input
+              type="email"
+              value={author.user.email}
+              disabled
+              className="w-full px-3.5 py-2.5 border border-neutral-brown-200 rounded-lg text-sm bg-neutral-brown-50 text-neutral-brown-400"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-neutral-brown-900 mb-1.5">Bio</label>
+            <textarea
+              value={bio}
+              onChange={(e) => setBio(e.target.value)}
+              rows={4}
+              className="w-full px-3.5 py-2.5 border border-neutral-brown-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 resize-none"
+            />
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-neutral-brown-900 mb-1.5">Location</label>
+              <input
+                type="text"
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+                placeholder="e.g. Eldoret, Kenya"
+                className="w-full px-3.5 py-2.5 border border-neutral-brown-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-neutral-brown-900 mb-1.5">Nationality</label>
+              <input
+                type="text"
+                value={nationality}
+                onChange={(e) => setNationality(e.target.value)}
+                placeholder="e.g. Kenyan"
+                className="w-full px-3.5 py-2.5 border border-neutral-brown-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-neutral-brown-900 mb-1.5">Genres (comma separated)</label>
+            <input
+              type="text"
+              value={genres}
+              onChange={(e) => setGenres(e.target.value)}
+              placeholder="Fiction, History, Folklore"
+              className="w-full px-3.5 py-2.5 border border-neutral-brown-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-neutral-brown-900 mb-1.5">Account Status</label>
+            <select
+              value={status}
+              onChange={(e) => setStatus(e.target.value)}
+              className="w-full px-3.5 py-2.5 border border-neutral-brown-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 bg-white"
+            >
+              <option value="PENDING">Pending</option>
+              <option value="APPROVED">Approved</option>
+              <option value="REJECTED">Rejected</option>
+            </select>
+          </div>
+        </div>
+
+        <div className="flex gap-3 mt-6">
+          <button
+            onClick={onClose}
+            className="flex-1 px-4 py-2.5 border border-neutral-brown-200 rounded-lg font-semibold text-sm text-neutral-brown-700 hover:bg-neutral-brown-50"
+          >
+            Cancel
+          </button>
+          <button
+            disabled={saving}
+            onClick={() =>
+              onSave({
+                name,
+                bio,
+                location,
+                nationality,
+                genres: JSON.stringify(parseGenres(genres)),
+                status,
+              })
+            }
+            className="flex-1 px-4 py-2.5 rounded-lg font-semibold text-sm text-white bg-primary hover:bg-primary-dark transition-colors disabled:opacity-50 inline-flex items-center justify-center gap-2"
+          >
+            {saving ? (
+              <>
+                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                Saving...
+              </>
+            ) : (
+              <>
+                <Save size={16} />
+                Save Changes
+              </>
+            )}
+          </button>
+        </div>
       </div>
     </div>
   );
