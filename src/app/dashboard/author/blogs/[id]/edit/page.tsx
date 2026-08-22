@@ -40,7 +40,17 @@ export default function EditBlogPostPage() {
                     router.push('/login');
                     return;
                 }
-                await getMyAuthorProfile() as any;
+                try {
+                    await getMyAuthorProfile() as any;
+                } catch (e: any) {
+                    const msg = e?.message || '';
+                    if (msg.includes('401') || msg.toLowerCase().includes('unauthorized')) {
+                        router.push('/login');
+                        return;
+                    }
+                    // Non-auth errors (e.g. no author profile for pure admin) - allow blog load to proceed
+                    console.warn('Author profile check failed, continuing as admin:', msg);
+                }
                 const result = await fetchBlogPost(params.id) as any;
                 const post = result.data;
                 if (!post) throw new Error('Post not found');
