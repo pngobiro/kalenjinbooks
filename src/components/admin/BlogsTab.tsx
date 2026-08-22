@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import {
   FileText, Eye, Clock, ExternalLink, Search,
-  CheckCircle2, CircleDashed, Trash2,
+  CheckCircle2, CircleDashed, Trash2, Edit,
 } from 'lucide-react';
 
 interface BlogPostRow {
@@ -200,6 +200,13 @@ export default function BlogsTab() {
                       </td>
                       <td className="px-5 py-3.5">
                         <div className="flex items-center justify-end gap-2">
+                          <Link
+                            href={`/dashboard/author/blogs/${post.id}/edit`}
+                            className="p-1.5 rounded-lg text-primary hover:bg-primary/10 transition-colors"
+                            title="Edit post"
+                          >
+                            <Edit size={15} />
+                          </Link>
                           {post.isPublished && (
                             <Link
                               href={`/blogs/${post.slug || post.id}`}
