@@ -120,6 +120,31 @@ export default function AuthorRegisterPage() {
     }
   }, [authLoading, isAuthenticated, router]);
 
+  // If already an author (pending/approved) or admin, send to the right dashboard instead of showing the form
+  useEffect(() => {
+    if (authLoading || !user) return;
+    if (user.role === 'ADMIN' || (user as any).isAdmin) {
+      router.replace('/dashboard/admin');
+      return;
+    }
+    const token = localStorage.getItem('kaleereads_token');
+    if (!token) return;
+    fetch('https://kalenjin-books-worker.pngobiro.workers.dev/api/authors/me', {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => {
+        if (res.ok) return res.json();
+        return null;
+      })
+      .then((json: any) => {
+        const status = json?.data?.status;
+        if (status === 'PENDING' || status === 'APPROVED') {
+          router.replace('/dashboard/author');
+        }
+      })
+      .catch(() => {});
+  }, [authLoading, user, router]);
+
   // Show loading while checking authentication
   if (authLoading) {
     return (
