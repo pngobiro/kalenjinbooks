@@ -250,9 +250,11 @@ export default {
                     return handleImageProxy(request, env, path);
                 }
 
-                // Secure PDF serving endpoint
+                // Secure PDF serving endpoint (CORS-applied: fetched cross-origin by the reader)
                 if (path.startsWith('/api/secure-pdf/')) {
-                    return handleSecurePDF(request, env, path);
+                    const pdfResponse = await handleSecurePDF(request, env, path);
+                    const { addCorsHeaders, getCorsConfig } = await import('./middleware/cors');
+                    return addCorsHeaders(pdfResponse, request.headers.get('Origin'), getCorsConfig(env));
                 }
 
                 // Health check endpoint
