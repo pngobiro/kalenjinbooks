@@ -1021,14 +1021,30 @@ async function getAdminStats(request: WorkerRequest, env: Env): Promise<Response
  */
 async function updateAuthor(request: WorkerRequest, env: Env): Promise<Response> {
     try {
-        const body = await request.json() as Record<string, unknown>;
-        const { authorId } = body as { authorId?: string };
+        const prisma = createD1PrismaClient(env.DB);
 
+        // Support both JSON and multipart (for profile image upload)
+        const contentType = request.headers.get('content-type') || '';
+        let body: Record<string, unknown> = {};
+        let profileImageFile: File | null = null;
+
+        if (contentType.includes('multipart/form-data')) {
+            const formData = await request.formData();
+            for (const [key, value] of formData.entries()) {
+                if (key === 'profileImage' && value instanceof File && value.size > 0) {
+                    profileImageFile = value;
+                } else {
+                    body[key] = value as unknown;
+                }
+            }
+        } else {
+            body = await request.json() as Record<string, unknown>;
+        }
+
+        const { authorId } = body as { authorId?: string };
         if (!authorId) {
             return errorResponse('authorId is required', HttpStatus.BAD_REQUEST);
         }
-
-        const prisma = createD1PrismaClient(env.DB);
 
         const author = await prisma.author.findUnique({ where: { id: authorId } });
         if (!author) {
@@ -1037,7 +1053,12 @@ async function updateAuthor(request: WorkerRequest, env: Env): Promise<Response>
 
         // Build whitelisted Author update
         const authorData: Record<string, unknown> = {};
-        const authorFields = ['bio', 'location', 'nationality', 'phoneNumber', 'website', 'genres', 'languages', 'writingStyle', 'education', 'occupation'];
+        const authorFields = [
+            'bio', 'location', 'nationality', 'phoneNumber',
+            'website', 'twitter', 'facebook', 'instagram', 'linkedin',
+            'genres', 'languages', 'writingStyle',
+            'education', 'occupation', 'writingExperience', 'previousPublications', 'awards',
+        ];
         for (const f of authorFields) {
             if (f in body) (authorData as any)[f] = body[f];
         }
@@ -1054,11 +1075,32 @@ async function updateAuthor(request: WorkerRequest, env: Env): Promise<Response>
             }
         }
 
+        // Handle profile image upload to R2
+        if (profileImageFile) {
+            const allowedImageTypes = ['image/jpeg', 'image/png', 'image/webp'];
+            if (!allowedImageTypes.includes(profileImageFile.type)) {
+                return errorResponse('Profile image must be JPEG, PNG, or WebP format', HttpStatus.BAD_REQUEST);
+            }
+            if (profileImageFile.size > 5 * 1024 * 1024) {
+                return errorResponse('Profile image must be smaller than 5MB', HttpStatus.BAD_REQUEST);
+            }
+
+            const filename = `author-${authorId}-${Date.now()}.${profileImageFile.type.split('/')[1]}`;
+            const fileKey = `profiles/${filename}`;
+
+            await env.BOOKS_BUCKET.put(fileKey, profileImageFile.stream(), {
+                httpMetadata: { contentType: profileImageFile.type },
+                customMetadata: { uploadedBy: request.ctx?.user?.id || 'admin' },
+            });
+
+            authorData.profileImage = `https://kalenjin-books-worker.pngobiro.workers.dev/api/images/${fileKey}`;
+        }
+
         // Optionally update the user's display name
-        if ('name' in body && typeof body.name === 'string' && body.name.trim()) {
+        if ('name' in body && typeof body.name === 'string' && (body.name as string).trim()) {
             await prisma.user.update({
                 where: { id: author.userId },
-                data: { name: body.name.trim() },
+                data: { name: (body.name as string).trim() },
             });
         }
 

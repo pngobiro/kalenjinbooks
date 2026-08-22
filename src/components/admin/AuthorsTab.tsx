@@ -15,6 +15,16 @@ interface Author {
   location?: string | null;
   nationality?: string | null;
   genres?: string | null;
+  languages?: string | null;
+  website?: string | null;
+  twitter?: string | null;
+  facebook?: string | null;
+  instagram?: string | null;
+  linkedin?: string | null;
+  phoneNumber?: string | null;
+  education?: string | null;
+  occupation?: string | null;
+  writingStyle?: string | null;
   createdAt: string;
   user: {
     id: string;
@@ -198,14 +208,31 @@ export default function AuthorsTab({ allAuthors, onToggleAuthorStatus, onMakeAdm
             setSaving(true);
             try {
               const token = localStorage.getItem('kaleereads_token');
-              const res = await fetch(`${WORKER_URL}/api/admin/authors/update`, {
-                method: 'POST',
-                headers: {
-                  Authorization: `Bearer ${token}`,
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ authorId: editing.id, ...data }),
-              });
+              let res: Response;
+
+              if (data.profileImage instanceof File) {
+                const fd = new FormData();
+                fd.append('authorId', editing.id);
+                for (const [k, v] of Object.entries(data)) {
+                  if (k === 'profileImage') continue;
+                  if (v !== undefined && v !== null) fd.append(k, String(v));
+                }
+                fd.append('profileImage', data.profileImage as File);
+                res = await fetch(`${WORKER_URL}/api/admin/authors/update`, {
+                  method: 'POST',
+                  headers: { Authorization: `Bearer ${token}` },
+                  body: fd,
+                });
+              } else {
+                res = await fetch(`${WORKER_URL}/api/admin/authors/update`, {
+                  method: 'POST',
+                  headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({ authorId: editing.id, ...data }),
+                });
+              }
               if (!res.ok) throw new Error('Failed to update author');
               onUpdated?.();
               setEditing(null);
@@ -237,107 +264,193 @@ function EditAuthorModal({
   const [location, setLocation] = useState(author.location || '');
   const [nationality, setNationality] = useState(author.nationality || '');
   const [genres, setGenres] = useState(
-    Array.isArray(author.genres) ? author.genres.join(', ') : (author.genres || '')
+    Array.isArray(author.genres) ? (author.genres as string[]).join(', ') : (author.genres || '')
   );
+  const [languages, setLanguages] = useState(
+    Array.isArray(author.languages) ? (author.languages as string[]).join(', ') : (author.languages || '')
+  );
+  const [phoneNumber, setPhoneNumber] = useState(author.phoneNumber || '');
+  const [website, setWebsite] = useState(author.website || '');
+  const [twitter, setTwitter] = useState(author.twitter || '');
+  const [facebook, setFacebook] = useState(author.facebook || '');
+  const [instagram, setInstagram] = useState(author.instagram || '');
+  const [linkedin, setLinkedin] = useState(author.linkedin || '');
+  const [education, setEducation] = useState(author.education || '');
+  const [occupation, setOccupation] = useState(author.occupation || '');
+  const [writingStyle, setWritingStyle] = useState(author.writingStyle || '');
   const [status, setStatus] = useState<string>(author.status);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(author.profileImage);
 
-  function parseGenres(input: string): string[] {
-    return input.split(',').map((g) => g.trim()).filter(Boolean);
+  function handleImageSelect(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+      alert('Image must be smaller than 5MB');
+      return;
+    }
+    if (!file.type.startsWith('image/')) {
+      alert('Please select a valid image file');
+      return;
+    }
+    setImageFile(file);
+    const reader = new FileReader();
+    reader.onload = () => setImagePreview(reader.result as string);
+    reader.readAsDataURL(file);
   }
+
+  function csvToArray(input: string): string {
+    return input.split(',').map((g) => g.trim()).filter(Boolean).join(',');
+  }
+
+  const labelCls = 'block text-sm font-medium text-neutral-brown-900 mb-1.5';
+  const inputCls =
+    'w-full px-3.5 py-2.5 border border-neutral-brown-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/30';
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={onClose}>
       <div
-        className="bg-white rounded-xl p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto"
+        className="bg-white rounded-xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between mb-5">
+        <div className="flex items-center justify-between mb-6">
           <h3 className="text-xl font-bold text-neutral-brown-900">Edit Author</h3>
           <button onClick={onClose} className="p-1.5 hover:bg-neutral-brown-100 rounded">
             <X size={20} />
           </button>
         </div>
 
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-neutral-brown-900 mb-1.5">Display Name</label>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="w-full px-3.5 py-2.5 border border-neutral-brown-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
-            />
+        <div className="space-y-6">
+          {/* Profile Image + Name + Status */}
+          <div className="flex flex-col sm:flex-row gap-6">
+            <div className="text-center">
+              <label className={labelCls}>Profile Image</label>
+              <label htmlFor="author-image-upload" className="cursor-pointer group block">
+                <div className="w-28 h-28 mx-auto rounded-full overflow-hidden border-4 border-neutral-brown-100 group-hover:border-primary/50 transition-colors relative" style={{ backgroundColor: '#F5F1E8' }}>
+                  {imagePreview ? (
+                    <img src={imagePreview} alt="" className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-neutral-brown-400 font-bold text-2xl">
+                      {(author.user.name || 'U').split(' ').map((n) => n[0]).slice(0, 2).join('')}
+                    </div>
+                  )}
+                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <Edit size={22} className="text-white" />
+                  </div>
+                </div>
+                <p className="text-xs text-neutral-brown-500 mt-1.5">Click to upload (JPG/PNG/WebP, max 5MB)</p>
+              </label>
+              <input
+                id="author-image-upload"
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                onChange={handleImageSelect}
+                className="hidden"
+              />
+            </div>
+
+            <div className="flex-1 space-y-4">
+              <div>
+                <label className={labelCls}>Display Name</label>
+                <input type="text" value={name} onChange={(e) => setName(e.target.value)} className={inputCls} />
+              </div>
+              <div>
+                <label className={labelCls}>Email</label>
+                <input
+                  type="email"
+                  value={author.user.email}
+                  disabled
+                  className={`${inputCls} bg-neutral-brown-50 text-neutral-brown-400`}
+                />
+              </div>
+              <div>
+                <label className={labelCls}>Account Status</label>
+                <select value={status} onChange={(e) => setStatus(e.target.value)} className={`${inputCls} bg-white`}>
+                  <option value="PENDING">Pending</option>
+                  <option value="APPROVED">Approved</option>
+                  <option value="REJECTED">Rejected</option>
+                </select>
+              </div>
+            </div>
           </div>
 
+          {/* Bio */}
           <div>
-            <label className="block text-sm font-medium text-neutral-brown-900 mb-1.5">Email</label>
-            <input
-              type="email"
-              value={author.user.email}
-              disabled
-              className="w-full px-3.5 py-2.5 border border-neutral-brown-200 rounded-lg text-sm bg-neutral-brown-50 text-neutral-brown-400"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-neutral-brown-900 mb-1.5">Bio</label>
+            <label className={labelCls}>Bio</label>
             <textarea
               value={bio}
               onChange={(e) => setBio(e.target.value)}
-              rows={4}
-              className="w-full px-3.5 py-2.5 border border-neutral-brown-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 resize-none"
+              rows={3}
+              className={`${inputCls} resize-none`}
+              placeholder="Short author biography..."
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          {/* Location */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium text-neutral-brown-900 mb-1.5">Location</label>
-              <input
-                type="text"
-                value={location}
-                onChange={(e) => setLocation(e.target.value)}
-                placeholder="e.g. Eldoret, Kenya"
-                className="w-full px-3.5 py-2.5 border border-neutral-brown-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
-              />
+              <label className={labelCls}>Location</label>
+              <input type="text" value={location} onChange={(e) => setLocation(e.target.value)} placeholder="Eldoret, Kenya" className={inputCls} />
             </div>
             <div>
-              <label className="block text-sm font-medium text-neutral-brown-900 mb-1.5">Nationality</label>
-              <input
-                type="text"
-                value={nationality}
-                onChange={(e) => setNationality(e.target.value)}
-                placeholder="e.g. Kenyan"
-                className="w-full px-3.5 py-2.5 border border-neutral-brown-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
-              />
+              <label className={labelCls}>Nationality</label>
+              <input type="text" value={nationality} onChange={(e) => setNationality(e.target.value)} placeholder="Kenyan" className={inputCls} />
+            </div>
+            <div>
+              <label className={labelCls}>Phone Number</label>
+              <input type="tel" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} placeholder="+254..." className={inputCls} />
+            </div>
+          </div>
+
+          {/* Writing info */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className={labelCls}>Genres (comma separated)</label>
+              <input type="text" value={genres} onChange={(e) => setGenres(e.target.value)} placeholder="Fiction, History" className={inputCls} />
+            </div>
+            <div>
+              <label className={labelCls}>Languages (comma separated)</label>
+              <input type="text" value={languages} onChange={(e) => setLanguages(e.target.value)} placeholder="Kalenjin, English, Swahili" className={inputCls} />
+            </div>
+          </div>
+
+          {/* Professional */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className={labelCls}>Education</label>
+              <input type="text" value={education} onChange={(e) => setEducation(e.target.value)} placeholder="PhD in African History" className={inputCls} />
+            </div>
+            <div>
+              <label className={labelCls}>Occupation</label>
+              <input type="text" value={occupation} onChange={(e) => setOccupation(e.target.value)} placeholder="Author, Historian" className={inputCls} />
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-neutral-brown-900 mb-1.5">Genres (comma separated)</label>
+            <label className={labelCls}>Writing Style</label>
             <input
               type="text"
-              value={genres}
-              onChange={(e) => setGenres(e.target.value)}
-              placeholder="Fiction, History, Folklore"
-              className="w-full px-3.5 py-2.5 border border-neutral-brown-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
+              value={writingStyle}
+              onChange={(e) => setWritingStyle(e.target.value)}
+              placeholder="e.g. Narrative non-fiction rooted in oral tradition"
+              className={inputCls}
             />
           </div>
 
+          {/* Social links */}
           <div>
-            <label className="block text-sm font-medium text-neutral-brown-900 mb-1.5">Account Status</label>
-            <select
-              value={status}
-              onChange={(e) => setStatus(e.target.value)}
-              className="w-full px-3.5 py-2.5 border border-neutral-brown-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 bg-white"
-            >
-              <option value="PENDING">Pending</option>
-              <option value="APPROVED">Approved</option>
-              <option value="REJECTED">Rejected</option>
-            </select>
+            <label className={labelCls}>Social Links</label>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <input type="url" value={website} onChange={(e) => setWebsite(e.target.value)} placeholder="Website URL" className={inputCls} />
+              <input type="text" value={twitter} onChange={(e) => setTwitter(e.target.value)} placeholder="Twitter username" className={inputCls} />
+              <input type="text" value={facebook} onChange={(e) => setFacebook(e.target.value)} placeholder="Facebook page or username" className={inputCls} />
+              <input type="text" value={instagram} onChange={(e) => setInstagram(e.target.value)} placeholder="Instagram username" className={inputCls} />
+              <input type="text" value={linkedin} onChange={(e) => setLinkedin(e.target.value)} placeholder="LinkedIn username" className={inputCls} />
+            </div>
           </div>
         </div>
 
-        <div className="flex gap-3 mt-6">
+        <div className="flex gap-3 mt-8 sticky bottom-0 bg-white pt-4 border-t border-neutral-brown-100">
           <button
             onClick={onClose}
             className="flex-1 px-4 py-2.5 border border-neutral-brown-200 rounded-lg font-semibold text-sm text-neutral-brown-700 hover:bg-neutral-brown-50"
@@ -352,8 +465,19 @@ function EditAuthorModal({
                 bio,
                 location,
                 nationality,
-                genres: JSON.stringify(parseGenres(genres)),
+                phoneNumber,
+                genres: csvToArray(genres),
+                languages: csvToArray(languages),
+                website,
+                twitter,
+                facebook,
+                instagram,
+                linkedin,
+                education,
+                occupation,
+                writingStyle,
                 status,
+                profileImage: imageFile ?? undefined,
               })
             }
             className="flex-1 px-4 py-2.5 rounded-lg font-semibold text-sm text-white bg-primary hover:bg-primary-dark transition-colors disabled:opacity-50 inline-flex items-center justify-center gap-2"
