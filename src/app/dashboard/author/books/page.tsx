@@ -20,8 +20,8 @@ interface BookData {
     publishedAt: string | null;
     createdAt: string;
     updatedAt: string;
-    // Sales data would come from separate API
     sales?: number;
+    views?: number;
     earnings?: number;
 }
 
@@ -140,18 +140,43 @@ export default function MyBooksPage() {
                 const booksData: any = await booksResponse.json();
                 const authorBooks = booksData.data || [];
 
-                setBooks(authorBooks);
+                // Fetch sales/analytics per book
+                let salesByBook: Record<string, { sales: number; views: number; earnings: number }> = {};
+                try {
+                    const analyticsRes = await fetch('https://kalenjin-books-worker.pngobiro.workers.dev/api/authors/analytics', {
+                        headers: { 'Authorization': `Bearer ${token}` },
+                    });
+                    if (analyticsRes.ok) {
+                        const analyticsJson: any = await analyticsRes.json();
+                        const analyticsData = analyticsJson.data || analyticsJson;
+                        const list = analyticsData.bookAnalytics || analyticsData.books || [];
+                        for (const a of list) {
+                            const bid = a.bookId || a.id;
+                            if (bid) salesByBook[bid] = { sales: a.purchases ?? a.sales ?? 0, views: a.views ?? a.viewCount ?? 0, earnings: a.revenue ?? a.earnings ?? 0 };
+                        }
+                    }
+                } catch { /* analytics optional */ }
+
+                const enriched = authorBooks.map((b: BookData) => ({
+                    ...b,
+                    sales: salesByBook[b.id]?.sales ?? 0,
+                    views: salesByBook[b.id]?.views ?? 0,
+                    earnings: salesByBook[b.id]?.earnings ?? 0,
+                }));
+                setBooks(enriched);
 
                 // Calculate stats
-                const publishedBooks = authorBooks.filter((book: BookData) => book.isPublished).length;
-                const draftBooks = authorBooks.filter((book: BookData) => !book.isPublished).length;
-                
+                const publishedBooks = enriched.filter((book: BookData) => book.isPublished).length;
+                const draftBooks = enriched.filter((book: BookData) => !book.isPublished).length;
+                const totalSales = enriched.reduce((sum: number, b: BookData) => sum + (b.sales || 0), 0);
+                const totalViews = enriched.reduce((sum: number, b: BookData) => sum + (b.views || 0), 0);
+
                 setStats({
-                    totalBooks: authorBooks.length,
+                    totalBooks: enriched.length,
                     publishedBooks,
                     draftBooks,
-                    totalSales: 0, // Will be calculated from sales data when available
-                    totalEarnings: authorEarnings, // Get from author profile
+                    totalSales,
+                    totalEarnings: authorEarnings,
                 });
 
             } catch (err) {
@@ -331,6 +356,9 @@ export default function MyBooksPage() {
                                     Price
                                 </th>
                                 <th className="px-6 py-4 text-left text-sm font-semibold text-neutral-brown-900">
+                                    Sales
+                                </th>
+                                <th className="px-6 py-4 text-left text-sm font-semibold text-neutral-brown-900">
                                     Status
                                 </th>
                                 <th className="px-6 py-4 text-right text-sm font-semibold text-neutral-brown-900">
@@ -389,6 +417,14 @@ export default function MyBooksPage() {
                                                     Rental: KES {book.rentalPrice}/day
                                                 </p>
                                             )}
+                                        </div>
+                                    </td>
+
+                                    {/* Sales */}
+                                    <td className="px-6 py-4">
+                                        <div>
+                                            <p className="font-semibold text-neutral-brown-900">{book.sales ?? 0} sales</p>
+                                            <p className="text-xs text-neutral-brown-500">{book.views ?? 0} views</p>
                                         </div>
                                     </td>
 
