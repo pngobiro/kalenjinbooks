@@ -126,12 +126,18 @@ export default function BookDetailPage({ params }: { params: Promise<{ id: strin
                   href={`/authors/${book.author.id}`}
                   className="inline-flex items-center gap-3 mb-6 group"
                 >
-                  <div className="w-11 h-11 rounded-full flex items-center justify-center overflow-hidden" style={{ backgroundColor: 'rgba(217,120,70,0.25)', border: '2px solid #D97846' }}>
-                    {book.author.user.image ? (
-                      <img src={book.author.user.image} alt={book.author.user.name} className="w-full h-full object-cover rounded-full" />
-                    ) : (
-                      <User size={22} style={{ color: '#E89B77' }} />
-                    )}
+                  <img
+                    src={book.author.profileImage || book.author.user.image || ''}
+                    alt={book.author.user.name}
+                    className="w-9 h-9 rounded-full object-cover ring-2 group-hover:ring-offset-1 transition-all"
+                    style={{ boxShadow: '0 0 0 2px #D97846', display: book.author.profileImage || book.author.user.image ? undefined : 'none' }}
+                    onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                  />
+                  <div
+                    className="w-9 h-9 rounded-full hidden items-center justify-center"
+                    style={{ backgroundColor: 'rgba(217,120,70,0.25)', border: '2px solid #D97846', display: book.author.profileImage || book.author.user.image ? 'none' : undefined } as any}
+                  >
+                    <User size={18} style={{ color: '#E89B77' }} />
                   </div>
                   <div className="text-left">
                     <p className="text-xs uppercase tracking-wider" style={{ color: '#A89888' }}>Written by</p>

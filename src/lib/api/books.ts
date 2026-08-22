@@ -20,6 +20,7 @@ export interface Book {
     publishedAt: Date | null;
     author: {
         id: string;
+        profileImage?: string | null;
         user: {
             name: string | null;
             image?: string | null;
