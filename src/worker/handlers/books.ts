@@ -23,7 +23,9 @@ export async function handleBooksRequest(
     // GET /api/books - List books
     if (path === '/api/books' && method === 'GET') {
         console.log('[BooksHandler] Listing books');
-        return await listBooks(request, env);
+        return await optionalAuthMiddleware(request, env, async () => {
+            return await listBooks(request, env);
+        });
     }
 
     // GET /api/books/debug/auth - Debug authentication (temporary)
@@ -122,28 +124,39 @@ async function listBooks(request: WorkerRequest, env: Env): Promise<Response> {
         `featured:${featured}`
     );
 
-    // Try cache first
+    const prisma = createD1PrismaClient(env.DB);
     const { getCached, setCached } = await import('../utils/cache');
-    const cached = await getCached<{ books: any[]; total: number }>(env.CACHE, cacheKey);
-    
-    if (cached) {
-        return paginatedResponse(cached.books, cached.total, page, limit);
+
+    // Draft visibility: only the owning author (or an admin) may list unpublished books.
+    let canSeeDrafts = false;
+    const userId = request.ctx?.user?.id;
+    const userRole = request.ctx?.user?.role;
+    if (authorId && userId) {
+        if (userRole === 'ADMIN') {
+            canSeeDrafts = true;
+        } else {
+            const ownProfile = await prisma.author.findFirst({ where: { id: authorId, userId }, select: { id: true } });
+            canSeeDrafts = !!ownProfile;
+        }
     }
 
-    const prisma = createD1PrismaClient(env.DB);
+    // Authorized draft views are user-specific — never serve them from (or write them to) the shared cache.
+    if (!canSeeDrafts) {
+        const cached = await getCached<{ books: any[]; total: number }>(env.CACHE, cacheKey);
+        if (cached) {
+            return paginatedResponse(cached.books, cached.total, page, limit);
+        }
+    }
 
     // Build where clause
     const where: any = {
         isActive: true, // Only show active (not disabled) books
     };
 
-    // For public listings, only show published books
-    // For author's own books, show all their books (published and unpublished)
-    if (!authorId) {
+    // For public listings (or other people's profiles), only show published books.
+    // For the author's own dashboard (or admin), show all their books including drafts.
+    if (!canSeeDrafts) {
         where.isPublished = true;
-    } else {
-        // If filtering by authorId, show all books (including drafts) for that author
-        // This allows authors to see their own unpublished books
     }
 
     if (search) {
@@ -189,8 +202,10 @@ async function listBooks(request: WorkerRequest, env: Env): Promise<Response> {
         orderBy,
     });
 
-    // Cache the data (not the Response)
-    await setCached(env.CACHE, cacheKey, { books, total }, CacheTTL.FIVE_MINUTES);
+    // Cache the data (not the Response) — only for public views
+    if (!canSeeDrafts) {
+        await setCached(env.CACHE, cacheKey, { books, total }, CacheTTL.FIVE_MINUTES);
+    }
 
     return paginatedResponse(books, total, page, limit);
 }
@@ -358,13 +373,17 @@ async function getBook(request: WorkerRequest, env: Env, bookId: string): Promis
         return errorResponse('Book not found', HttpStatus.NOT_FOUND, ErrorCode.RESOURCE_NOT_FOUND);
     }
 
-    // Check if book is disabled
-    if (!book.isActive) {
+    // Check if book is disabled or unpublished
+    if (!book.isActive || !book.isPublished) {
         // Only allow access if user is admin or the book's author
         const userId = request.ctx?.user?.id;
         const userRole = request.ctx?.user?.role;
-        
-        if (!userId || (userRole !== 'ADMIN' && book.authorId !== userId)) {
+        let isOwner = false;
+        if (userId && userRole !== 'ADMIN') {
+            const author = await prisma.author.findFirst({ where: { id: book.authorId, userId }, select: { id: true } });
+            isOwner = !!author;
+        }
+        if (!userId || (userRole !== 'ADMIN' && !isOwner)) {
             return errorResponse('Book not found', HttpStatus.NOT_FOUND, ErrorCode.RESOURCE_NOT_FOUND);
         }
     }

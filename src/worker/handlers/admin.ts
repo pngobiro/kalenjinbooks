@@ -44,6 +44,11 @@ export async function handleAdminRequest(
 
     console.log(`[AdminHandler] Path: ${path}, Method: ${method}`);
 
+    // GET /api/admin/stats - Dashboard overview counts
+    if (path === '/api/admin/stats' && method === 'GET') {
+        return await getAdminStats(request, env);
+    }
+
     // GET /api/admin/authors - List all authors with applications
     if (path === '/api/admin/authors' && method === 'GET') {
         return await listAllAuthors(request, env);
@@ -174,7 +179,8 @@ async function listAuthorApplications(request: WorkerRequest, env: Env): Promise
         const prisma = createD1PrismaClient(env.DB);
 
         const applications = await prisma.author.findMany({
-            include: { 
+            include: {
+                books: { select: { id: true } },
                 user: {
                     select: {
                         id: true,
@@ -234,6 +240,9 @@ async function listAuthorApplications(request: WorkerRequest, env: Env): Promise
                 
                 // Status and Dates
                 status: author.status,
+                isActive: author.isActive,
+                totalEarnings: author.totalEarnings,
+                booksCount: author.books ? author.books.length : undefined,
                 rejectionReason: author.rejectionReason,
                 appliedAt: author.appliedAt,
                 approvedAt: author.approvedAt,
@@ -941,5 +950,63 @@ async function getRevenueData(request: WorkerRequest, env: Env): Promise<Respons
     } catch (error) {
         console.error('Get revenue data error:', error);
         return errorResponse('Failed to fetch revenue data', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+}
+
+/**
+ * Get admin dashboard stats: platform-wide counts and recent activity
+ */
+async function getAdminStats(request: WorkerRequest, env: Env): Promise<Response> {
+    try {
+        const prisma = createD1PrismaClient(env.DB);
+
+        const [totalUsers, totalAuthors, pendingAuthors, disabledAuthors, totalBooks, publishedBooks, pendingBooks, totalBlogs, totalPurchases, revenueAgg] = await Promise.all([
+            prisma.user.count(),
+            prisma.author.count({ where: { status: 'APPROVED' } }),
+            prisma.author.count({ where: { status: 'PENDING' } }),
+            prisma.author.count({ where: { isActive: false } }),
+            prisma.book.count({ where: { isActive: true } }),
+            prisma.book.count({ where: { isActive: true, isPublished: true } }),
+            prisma.book.count({ where: { isActive: true, isPublished: false } }),
+            prisma.blogPost.count({ where: { isPublished: true } }),
+            prisma.purchase.count({ where: { status: 'COMPLETED' } }),
+            prisma.purchase.aggregate({
+                where: { status: 'COMPLETED' },
+                _sum: { amount: true, authorEarning: true, platformFee: true },
+            }),
+        ]);
+
+        const recentUsers = await prisma.user.findMany({
+            orderBy: { createdAt: 'desc' },
+            take: 5,
+            select: { id: true, name: true, email: true, role: true, image: true, createdAt: true },
+        });
+
+        const recentApplications = await prisma.author.findMany({
+            where: { status: 'PENDING' },
+            orderBy: { appliedAt: 'desc' },
+            take: 5,
+            include: {
+                user: { select: { name: true, email: true, image: true } },
+            },
+        });
+
+        return successResponse({
+            users: { total: totalUsers, authors: totalAuthors },
+            authors: { approved: totalAuthors, pending: pendingAuthors, disabled: disabledAuthors },
+            books: { total: totalBooks, published: publishedBooks, pending: pendingBooks },
+            blogs: { published: totalBlogs },
+            sales: {
+                transactions: totalPurchases,
+                totalRevenue: revenueAgg._sum.amount || 0,
+                authorEarnings: revenueAgg._sum.authorEarning || 0,
+                platformRevenue: revenueAgg._sum.platformFee || 0,
+            },
+            recentUsers,
+            recentApplications,
+        });
+    } catch (error) {
+        console.error('Get admin stats error:', error);
+        return errorResponse('Failed to fetch admin stats', HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

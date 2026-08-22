@@ -177,7 +177,7 @@ export default function AuthorDashboardPage() {
         const response = await fetch(`${getApiBaseUrl()}/api/blog/posts?authorId=${authorId}&limit=5`);
         if (response.ok) {
           const data: any = await response.json();
-          setRecentBlogs(data.posts || []);
+          setRecentBlogs(data?.data?.posts || data.posts || []);
         }
       } catch (e) {
         console.error('Failed to load blogs', e);

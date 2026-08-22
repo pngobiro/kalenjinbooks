@@ -1,6 +1,7 @@
 /// <reference types="@cloudflare/workers-types" />
 
 import { Env, WorkerRequest } from './types/env';
+import { authMiddleware, requireRole } from './middleware/auth';
 import { createD1PrismaClient } from '../lib/db/d1-client';
 import { corsMiddleware } from './middleware/cors';
 import { errorResponse, successResponse, HttpStatus } from './utils/response';
@@ -257,22 +258,26 @@ export default {
                     });
                 }
 
-                // Test email endpoint
+                // Test email endpoint (admin only)
                 if (path === '/api/test-email' && method === 'POST') {
                     console.log('[Worker] Test email endpoint');
-                    try {
-                        const { sendEmail, createApprovalEmail } = await import('./utils/email');
-                        const testEmail = createApprovalEmail('Test User', 'pngobiro@gmail.com');
-                        const sent = await sendEmail(testEmail, env);
-                        return successResponse({
-                            message: sent ? 'Test email sent successfully' : 'Email sending failed',
-                            sent,
-                            to: 'pngobiro@gmail.com'
+                    return await authMiddleware(request as WorkerRequest, env, async () => {
+                        return await requireRole('ADMIN')(request as WorkerRequest, env, async () => {
+                            try {
+                                const { sendEmail, createApprovalEmail } = await import('./utils/email');
+                                const testEmail = createApprovalEmail('Test User', 'pngobiro@gmail.com');
+                                const sent = await sendEmail(testEmail, env);
+                                return successResponse({
+                                    message: sent ? 'Test email sent successfully' : 'Email sending failed',
+                                    sent,
+                                    to: 'pngobiro@gmail.com'
+                                });
+                            } catch (error) {
+                                console.error('[Worker] Test email error:', error);
+                                return errorResponse('Failed to send test email: ' + error, HttpStatus.INTERNAL_SERVER_ERROR);
+                            }
                         });
-                    } catch (error) {
-                        console.error('[Worker] Test email error:', error);
-                        return errorResponse('Failed to send test email: ' + error, HttpStatus.INTERNAL_SERVER_ERROR);
-                    }
+                    });
                 }
 
                 // 404 for unknown routes

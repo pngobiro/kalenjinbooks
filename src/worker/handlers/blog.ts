@@ -3,7 +3,7 @@
 import { Env, WorkerRequest } from '../types/env';
 import { errorResponse, successResponse, HttpStatus, ErrorCode, parseJsonBody } from '../utils/response';
 import { createD1PrismaClient } from '../../lib/db/d1-client';
-import { authMiddleware, requireRole } from '../middleware/auth';
+import { authMiddleware, optionalAuthMiddleware, requireRole } from '../middleware/auth';
 import { CachePrefix, generateCacheKey, getCached, setCached, deleteCached, CacheTTL } from '../utils/cache';
 
 const PAGE_SIZE = 12;
@@ -45,9 +45,11 @@ export async function handleBlogRequest(
     const path = url.pathname;
     const method = request.method;
 
-    // Public: list posts
+    // Public: list posts (auth optional — owners/admins may see drafts)
     if (path === '/api/blog/posts' && method === 'GET') {
-        return await listBlogPosts(request, env);
+        return await optionalAuthMiddleware(request, env, async () => {
+            return await listBlogPosts(request, env);
+        });
     }
 
     // Protected: create post
@@ -152,10 +154,18 @@ async function listBlogPosts(request: WorkerRequest, env: Env): Promise<Response
             where.category = category;
         }
 
-        // If not authenticated as admin, and requesting without published=true for a specific author,
-        // only show published posts unless the author matches the requester.
-        if (!published && !userId && !authorId) {
-            where.isPublished = true;
+        // If not authenticated as admin, only show published posts
+        // unless the requester is the owning author viewing their own list.
+        if (!published) {
+            let isOwner = false;
+            if (userId && authorId && userRole !== 'ADMIN') {
+                const ownProfile = await prisma.author.findFirst({ where: { id: authorId, userId }, select: { id: true } });
+                isOwner = !!ownProfile;
+            }
+            const canSeeDrafts = userRole === 'ADMIN' || isOwner;
+            if (!canSeeDrafts) {
+                where.isPublished = true;
+            }
         }
 
         const orderBy = sort === 'most-viewed'
@@ -214,7 +224,7 @@ async function getBlogPost(request: WorkerRequest, env: Env, postId: string, isB
 
         const prisma = createD1PrismaClient(env.DB);
 
-        const post = await prisma.blogPost.findUnique({
+        let post = await prisma.blogPost.findUnique({
             where: isById ? { id: postId } : { slug: postId },
             include: {
                 author: {
@@ -231,6 +241,26 @@ async function getBlogPost(request: WorkerRequest, env: Env, postId: string, isB
             },
         });
 
+        // Fallback: if slug lookup failed, try by id (custom non-UUID ids)
+        if (!post && !isById) {
+            post = await prisma.blogPost.findUnique({
+                where: { id: postId },
+                include: {
+                    author: {
+                        include: {
+                            user: {
+                                select: {
+                                    name: true,
+                                    image: true,
+                                },
+                            },
+                        },
+                    },
+                    images: true,
+                },
+            });
+        }
+
         if (!post) {
             return errorResponse('Blog post not found', HttpStatus.NOT_FOUND, ErrorCode.RESOURCE_NOT_FOUND);
         }
@@ -238,15 +268,22 @@ async function getBlogPost(request: WorkerRequest, env: Env, postId: string, isB
         const userId = request.ctx?.user?.id;
         const userRole = request.ctx?.user?.role;
 
+        // Resolve whether the requester owns this post (post.authorId is an Author.id, not a User.id)
+        let isOwner = false;
+        if (userId && userRole !== 'ADMIN') {
+            const author = await prisma.author.findFirst({ where: { id: post.authorId, userId }, select: { id: true } });
+            isOwner = !!author;
+        }
+
         // If unpublished, only author/admin can view
         if (!post.isPublished) {
-            if (!userId || (userRole !== 'ADMIN' && post.authorId !== userId)) {
+            if (!userId || (userRole !== 'ADMIN' && !isOwner)) {
                 return errorResponse('Blog post not found', HttpStatus.NOT_FOUND, ErrorCode.RESOURCE_NOT_FOUND);
             }
         }
 
         // Increment view count (only for published posts viewed by non-author)
-        if (post.isPublished && userId !== post.authorId) {
+        if (post.isPublished && !isOwner) {
             await prisma.blogPost.update({
                 where: { id: post.id },
                 data: { viewCount: { increment: 1 } },
