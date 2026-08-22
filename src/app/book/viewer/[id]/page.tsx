@@ -4,7 +4,7 @@ export const runtime = 'edge';
 
 import { useState, useEffect, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { ArrowLeft, Shield, AlertTriangle, Download } from 'lucide-react';
+import { ArrowLeft, Shield, AlertTriangle, Download, Heart } from 'lucide-react';
 import { useAuth } from '@/lib/auth-context';
 
 interface BookData {
@@ -313,11 +313,19 @@ export default function SecureBookViewer() {
         </div>
         
         <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2 text-sm">
+          <a
+            href={`/payment?type=donation&bookId=${book?.id}&author=${encodeURIComponent(book?.author?.user?.name || '')}&title=${encodeURIComponent(book?.title || 'Book')}&price=200`}
+            className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm font-bold transition-all hover:-translate-y-0.5 shadow"
+            style={{ backgroundColor: '#D97846', color: '#FFFFFF' }}
+          >
+            <Heart size={14} fill="currentColor" />
+            Support Author
+          </a>
+          <div className="hidden sm:flex items-center gap-2 text-sm">
             <Shield size={16} className="text-green-400" />
             <span>Secure Viewer</span>
           </div>
-          <div className="text-xs text-neutral-brown-400">
+          <div className="text-xs text-neutral-brown-400 hidden sm:block">
             Free Reading
           </div>
         </div>
