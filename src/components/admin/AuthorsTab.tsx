@@ -17,6 +17,8 @@ interface Author {
   genres?: string | null;
   languages?: string | null;
   paymentMethods?: string[] | null;
+  mpesaPaybill?: string | null;
+  mpesaPaybillName?: string | null;
   website?: string | null;
   twitter?: string | null;
   facebook?: string | null;
@@ -283,6 +285,8 @@ function EditAuthorModal({
   const [payMethods, setPayMethods] = useState<string[]>(
     author.paymentMethods && author.paymentMethods.length > 0 ? author.paymentMethods : ['mpesa', 'stripe', 'paypal']
   );
+  const [mpesaPaybill, setMpesaPaybill] = useState(author.mpesaPaybill || '');
+  const [mpesaPaybillName, setMpesaPaybillName] = useState(author.mpesaPaybillName || '');
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(author.profileImage);
 
@@ -495,6 +499,31 @@ function EditAuthorModal({
               <p className="text-xs text-red-500 mt-1.5">At least one payment method is recommended — otherwise checkout falls back to defaults.</p>
             )}
           </div>
+
+          {/* M-Pesa Receiving Details */}
+          <div>
+            <label className={labelCls}>M-Pesa Receiving Details (where funds are funneled)</label>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <input
+                  type="text"
+                  value={mpesaPaybill}
+                  onChange={(e) => setMpesaPaybill(e.target.value.replace(/[^\d]/g, ''))}
+                  placeholder="Paybill number, e.g. 4123890"
+                  maxLength={12}
+                  className={inputCls}
+                />
+                <p className="text-xs text-neutral-brown-500 mt-1">Shown to buyers at checkout when M-Pesa is selected.</p>
+              </div>
+              <input
+                type="text"
+                value={mpesaPaybillName}
+                onChange={(e) => setMpesaPaybillName(e.target.value)}
+                placeholder="Account name, e.g. KIBET KITUR PUBLICATIONS"
+                className={inputCls}
+              />
+            </div>
+          </div>
         </div>
 
         <div className="flex gap-3 mt-8 sticky bottom-0 bg-white pt-4 border-t border-neutral-brown-100">
@@ -525,6 +554,8 @@ function EditAuthorModal({
                 writingStyle,
                 status,
                 paymentMethods: payMethods,
+                mpesaPaybill,
+                mpesaPaybillName,
                 profileImage: imageFile ?? undefined,
               })
             }

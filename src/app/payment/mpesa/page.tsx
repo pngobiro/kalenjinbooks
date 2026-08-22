@@ -4,13 +4,13 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import KaleeReadsLogo from '@/components/KaleeReadsLogo';
 import { ArrowLeft, Smartphone, Check, Clock, BookOpen, Book, AlertCircle } from 'lucide-react';
-import { useState, Suspense } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import Image from 'next/image';
 
 function MpesaPaymentContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  
+
   const bookId = searchParams.get('bookId');
   const type = searchParams.get('type') as 'permanent' | 'temporary';
   const price = searchParams.get('price');
@@ -19,6 +19,29 @@ function MpesaPaymentContent() {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState('');
+  const [paybill, setPaybill] = useState<{ mpesaPaybill: string; mpesaPaybillName?: string } | null>(null);
+
+  // Load the author's M-Pesa receiving details
+  useEffect(() => {
+    async function loadPaybill() {
+      try {
+        if (!bookId) return;
+        const bookRes = await fetch(`https://kalenjin-books-worker.pngobiro.workers.dev/api/books/${bookId}`);
+        if (!bookRes.ok) return;
+        const bookJson: any = await bookRes.json();
+        const authorId = bookJson?.data?.author?.id;
+        if (!authorId) return;
+        const authorRes = await fetch(`https://kalenjin-books-worker.pngobiro.workers.dev/api/authors/${authorId}`);
+        if (!authorRes.ok) return;
+        const authorJson: any = await authorRes.json();
+        const info = authorJson?.data?.paymentInfo;
+        if (info?.mpesaPaybill) setPaybill(info);
+      } catch (e) {
+        console.error('Failed to load paybill details', e);
+      }
+    }
+    loadPaybill();
+  }, [bookId]);
 
   const formatPhoneNumber = (value: string) => {
     // Remove all non-digits
@@ -106,6 +129,19 @@ function MpesaPaymentContent() {
           <h1 className="text-3xl font-bold text-neutral-brown-900 font-heading mb-2">M-Pesa Payment</h1>
           <p className="text-neutral-brown-600">Enter your M-Pesa number to receive payment prompt</p>
         </div>
+
+        {/* Author receiving details */}
+        {paybill && (
+          <div className="mb-6 rounded-xl p-4 border" style={{ backgroundColor: '#E8F5E9', borderColor: '#7A9B76' }}>
+            <p className="text-xs font-semibold uppercase tracking-wide mb-1" style={{ color: '#5a7a56' }}>Funds go directly to the author</p>
+            <div className="text-sm text-neutral-brown-800 space-y-0.5">
+              {paybill.mpesaPaybillName && (
+                <p><span className="font-medium text-neutral-brown-500">Account:</span> <span className="font-bold">{paybill.mpesaPaybillName}</span></p>
+              )}
+              <p><span className="font-medium text-neutral-brown-500">Paybill:</span> <span className="font-bold tracking-wider">{paybill.mpesaPaybill}</span></p>
+            </div>
+          </div>
+        )}
 
         {/* Order Summary */}
         <div className="bg-white rounded-2xl p-6 shadow-lg mb-6">

@@ -322,6 +322,16 @@ async function getAuthor(request: WorkerRequest, env: Env, authorId: string): Pr
         return errorResponse('Author not found', HttpStatus.NOT_FOUND, ErrorCode.RESOURCE_NOT_FOUND);
     }
 
+    // Sanitized receiving info for checkout (paybill only — no personal numbers)
+    let paymentInfo: Record<string, string> = {};
+    try {
+        const pd = (author as any).paymentDetails ? JSON.parse((author as any).paymentDetails) : {};
+        if (pd.mpesaPaybill) {
+            paymentInfo.mpesaPaybill = String(pd.mpesaPaybill);
+            if (pd.mpesaPaybillName) paymentInfo.mpesaPaybillName = String(pd.mpesaPaybillName);
+        }
+    } catch { /* ignore */ }
+
     const transformedAuthor = {
         id: author.id,
         name: author.user.name,
@@ -329,6 +339,7 @@ async function getAuthor(request: WorkerRequest, env: Env, authorId: string): Pr
         profileImage: author.profileImage,
         booksCount: author.books.length,
         paymentMethods: parsePaymentMethods((author as any).paymentMethods),
+        paymentInfo,
         rating: author.books.length > 0
             ? author.books.reduce((sum, book) => sum + (book.rating || 0), 0) / author.books.length
             : 0,
@@ -486,6 +497,11 @@ async function updateMyAuthorProfile(request: WorkerRequest, env: Env): Promise<
         let updateData: any = {};
         let profileImageUrl: string | undefined;
 
+        const author = await prisma.author.findUnique({ where: { userId } });
+        if (!author) {
+            return errorResponse('Author profile not found', HttpStatus.NOT_FOUND);
+        }
+
         // Check if this is a multipart form (file upload)
         const contentType = request.headers.get('content-type') || '';
         
@@ -572,6 +588,20 @@ async function updateMyAuthorProfile(request: WorkerRequest, env: Env): Promise<
                 additionalInfo: additionalInfo || null,
                 agreeToMarketing,
             };
+
+            // M-Pesa receiving details
+            const mpesaPaybill = formData.get('mpesaPaybill') as string | null;
+            const mpesaPaybillName = formData.get('mpesaPaybillName') as string | null;
+            if (mpesaPaybill !== null || mpesaPaybillName !== null) {
+                let details: Record<string, unknown> = {};
+                try {
+                    details = author.paymentDetails ? JSON.parse(author.paymentDetails) : {};
+                    if (!details || typeof details !== 'object') details = {};
+                } catch { details = {}; }
+                if (mpesaPaybill !== null && mpesaPaybill.trim()) details.mpesaPaybill = mpesaPaybill.trim();
+                if (mpesaPaybillName !== null && mpesaPaybillName.trim()) details.mpesaPaybillName = mpesaPaybillName.trim();
+                updateData.paymentDetails = JSON.stringify(details);
+            }
 
             if (profileImageUrl) {
                 updateData.profileImage = profileImageUrl;

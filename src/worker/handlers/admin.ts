@@ -1089,6 +1089,24 @@ async function updateAuthor(request: WorkerRequest, env: Env): Promise<Response>
             }
         }
 
+        // Merge M-Pesa receiving details into paymentDetails JSON
+        const MPESA_KEYS = ['mpesaPaybill', 'mpesaPaybillName', 'mpesaTillNumber', 'mpesaNumber', 'bankDetails'];
+        if (MPESA_KEYS.some((k) => k in body)) {
+            let details: Record<string, unknown> = {};
+            try {
+                details = author.paymentDetails ? JSON.parse(author.paymentDetails) : {};
+                if (!details || typeof details !== 'object') details = {};
+            } catch { details = {}; }
+            for (const k of MPESA_KEYS) {
+                if (k in body) {
+                    const v = body[k];
+                    (details as any)[k] = v === null || v === undefined || v === '' ? undefined : String(v).trim();
+                    if ((details as any)[k] === undefined) delete (details as any)[k];
+                }
+            }
+            authorData.paymentDetails = JSON.stringify(details);
+        }
+
         // Handle profile image upload to R2
         if (profileImageFile) {
             const allowedImageTypes = ['image/jpeg', 'image/png', 'image/webp'];
