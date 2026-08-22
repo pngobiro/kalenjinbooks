@@ -2,8 +2,8 @@
 
 import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { 
-  Users, Book, TrendingUp, 
+import {
+  Users, Book, TrendingUp, FileText,
   Star, Eye, Edit, CheckCircle, XCircle, Clock,
   Search, Filter, MoreVertical, Ban, Power
 } from 'lucide-react';
@@ -11,10 +11,11 @@ import AdminOverview from '@/components/admin/AdminOverview';
 import PendingBooksTab from '@/components/admin/PendingBooksTab';
 import AuthorsTab from '@/components/admin/AuthorsTab';
 import BooksTab from '@/components/admin/BooksTab';
+import BlogsTab from '@/components/admin/BlogsTab';
 import { useAdminData } from '@/components/admin/useAdminData';
 import { Author, BookData, PendingBook, Stats } from '@/types/admin';
 
-type TabType = 'overview' | 'authors' | 'books' | 'pending-books';
+type TabType = 'overview' | 'authors' | 'books' | 'blogs' | 'pending-books';
 
 function AdminDashboardContent() {
   const searchParams = useSearchParams();
@@ -342,6 +343,7 @@ function AdminDashboardContent() {
     { id: 'overview', label: 'Overview', icon: TrendingUp },
     { id: 'authors', label: 'Authors', icon: Users },
     { id: 'books', label: 'Books', icon: Book },
+    { id: 'blogs', label: 'Blogs', icon: FileText },
     { id: 'pending-books', label: 'Pending Books', icon: Clock, badge: stats.pendingBooks },
   ];
 
@@ -441,6 +443,8 @@ function AdminDashboardContent() {
           onToggleFeatured={handleToggleFeatured}
         />
       )}
+
+      {activeTab === 'blogs' && <BlogsTab />}
       
       {/* Rejection Modal */}
       {showRejectModal && (
