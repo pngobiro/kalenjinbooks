@@ -9,9 +9,9 @@ import Image from 'next/image';
 
 const authorPaymentMethods: Record<string, string[]> = {
   'Sarah Chebet': ['mpesa', 'stripe', 'paypal'],
-  'John Kamau': ['mpesa', 'stripe'],
+  'John Kamau': ['mpesa', 'stripe', 'paypal'],
   'Jane Kiplagat': ['mpesa', 'stripe', 'paypal', 'bank'],
-  default: ['mpesa', 'stripe'],
+  default: ['mpesa', 'stripe', 'paypal'],
 };
 
 const paymentMethodsInfo: Record<string, { name: string; icon: typeof CreditCard | null; logo?: string; description: string; color: string }> = {
