@@ -225,7 +225,10 @@ export default function HomePage() {
                       </div>
                       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
                         <div className="flex items-center justify-between text-white text-sm">
-                          <span className="font-bold">KES {book.price}</span>
+                          <span className="inline-flex items-center gap-1.5 font-bold" style={{ color: '#A3C8A0' }}>
+                            <BookOpen size={14} />
+                            Free to Read
+                          </span>
                           {book.rating > 0 && (
                             <div className="flex items-center gap-1">
                               <Star size={12} className="fill-yellow-400 text-yellow-400" />

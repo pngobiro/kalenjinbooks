@@ -308,8 +308,9 @@ export default function AuthorDetailPage() {
                         <p className="text-sm line-clamp-2 mb-4 flex-1" style={{ color: '#5B4F42' }}>{book.description}</p>
                       )}
                       <div className="flex items-center justify-between pt-3 border-t" style={{ borderColor: '#E4D9C4' }}>
-                        <span className="text-lg font-bold" style={{ color: '#D97846' }}>
-                          KES {book.price.toLocaleString()}
+                        <span className="inline-flex items-center gap-1.5 text-sm font-bold" style={{ color: '#7A9B76' }}>
+                          <BookOpen size={15} />
+                          Free to Read
                         </span>
                         <div className="flex items-center gap-1 text-sm">
                           <Star size={14} className="fill-yellow-400 text-yellow-400" />
