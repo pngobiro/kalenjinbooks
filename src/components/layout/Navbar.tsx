@@ -2,9 +2,10 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { Menu, X, BookOpen, Feather, Users, Info, Mail, PenSquare } from 'lucide-react';
 import KaleeReadsLogo from '@/components/KaleeReadsLogo';
+import { useAuth } from '@/lib/auth-context';
 
 const navLinks = [
   { href: '/books', label: 'Books', icon: BookOpen },
@@ -13,6 +14,82 @@ const navLinks = [
   { href: '/about', label: 'About', icon: Info },
   { href: '/contact', label: 'Contact', icon: Mail },
 ];
+
+function BecomeAuthorButton({ mobile, onClose }: { mobile?: boolean; onClose?: () => void }) {
+  const { user, isAuthenticated } = useAuth();
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+
+  const handleClick = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    onClose?.();
+
+    if (!isAuthenticated || !user) {
+      router.push('/dashboard/author/register');
+      return;
+    }
+
+    // Admin → admin dashboard
+    if (user.role === 'ADMIN' || (user as any).isAdmin) {
+      router.push('/dashboard/admin');
+      return;
+    }
+
+    // Check author application status
+    if (loading) return;
+    setLoading(true);
+    try {
+      const token = localStorage.getItem('kaleereads_token');
+      const res = await fetch('https://kalenjin-books-worker.pngobiro.workers.dev/api/authors/me', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.ok) {
+        const json: any = await res.json();
+        const status = json?.data?.status;
+        if (status === 'PENDING' || status === 'APPROVED') {
+          router.push('/dashboard/author');
+          return;
+        }
+      }
+      if (res.status === 401) {
+        router.push('/login');
+        return;
+      }
+      // No author record → go to register
+      router.push('/dashboard/author/register');
+    } catch {
+      router.push('/dashboard/author/register');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (mobile) {
+    return (
+      <button
+        onClick={handleClick}
+        disabled={loading}
+        className="flex items-center justify-center gap-2 mt-2 w-full px-4 py-2.5 rounded-full text-sm font-bold text-white disabled:opacity-60"
+        style={{ backgroundColor: '#D97846' }}
+      >
+        <PenSquare size={15} />
+        {isAuthenticated && user ? 'Go to Dashboard' : 'Become an Author'}
+      </button>
+    );
+  }
+
+  return (
+    <button
+      onClick={handleClick}
+      disabled={loading}
+      className="ml-2 inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold text-white hover:shadow-md transition-all disabled:opacity-60"
+      style={{ backgroundColor: '#D97846' }}
+    >
+      <PenSquare size={13} />
+      {isAuthenticated && user ? 'Go to Dashboard' : 'Become an Author'}
+    </button>
+  );
+}
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -49,14 +126,7 @@ export default function Navbar() {
                 );
               })}
             </div>
-            <Link
-              href="/dashboard/author/register"
-              className="ml-2 inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold text-white hover:shadow-md transition-all"
-              style={{ backgroundColor: '#D97846' }}
-            >
-              <PenSquare size={13} />
-              Become an Author
-            </Link>
+            <BecomeAuthorButton />
           </div>
 
           {/* Mobile Hamburger */}
@@ -92,15 +162,7 @@ export default function Navbar() {
                 </Link>
               );
             })}
-            <Link
-              href="/dashboard/author/register"
-              onClick={() => setMobileOpen(false)}
-              className="flex items-center justify-center gap-2 mt-2 px-4 py-2.5 rounded-full text-sm font-bold text-white"
-              style={{ backgroundColor: '#D97846' }}
-            >
-              <PenSquare size={15} />
-              Become an Author
-            </Link>
+            <BecomeAuthorButton mobile onClose={() => setMobileOpen(false)} />
           </div>
         </div>
       )}
