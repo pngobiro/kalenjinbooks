@@ -16,6 +16,7 @@ interface Author {
   nationality?: string | null;
   genres?: string | null;
   languages?: string | null;
+  paymentMethods?: string[] | null;
   website?: string | null;
   twitter?: string | null;
   facebook?: string | null;
@@ -279,8 +280,18 @@ function EditAuthorModal({
   const [occupation, setOccupation] = useState(author.occupation || '');
   const [writingStyle, setWritingStyle] = useState(author.writingStyle || '');
   const [status, setStatus] = useState<string>(author.status);
+  const [payMethods, setPayMethods] = useState<string[]>(
+    author.paymentMethods && author.paymentMethods.length > 0 ? author.paymentMethods : ['mpesa', 'stripe', 'paypal']
+  );
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(author.profileImage);
+
+  const paymentMethodOptions: { key: string; label: string; hint: string }[] = [
+    { key: 'mpesa', label: 'M-Pesa', hint: 'Mobile money' },
+    { key: 'stripe', label: 'Card (Stripe)', hint: 'Visa, Mastercard' },
+    { key: 'paypal', label: 'PayPal', hint: 'International' },
+    { key: 'bank', label: 'Bank Transfer', hint: 'Direct deposit' },
+  ];
 
   function handleImageSelect(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -448,6 +459,42 @@ function EditAuthorModal({
               <input type="text" value={linkedin} onChange={(e) => setLinkedin(e.target.value)} placeholder="LinkedIn username" className={inputCls} />
             </div>
           </div>
+
+          {/* Payment methods */}
+          <div>
+            <label className={labelCls}>Payment Methods (checkout options for this author's books)</label>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              {paymentMethodOptions.map((pm) => {
+                const checked = payMethods.includes(pm.key);
+                return (
+                  <label
+                    key={pm.key}
+                    className={`flex items-start gap-2.5 p-3 rounded-lg border cursor-pointer transition-colors ${
+                      checked ? 'border-primary bg-orange-50/60' : 'border-neutral-brown-200 hover:bg-neutral-brown-50'
+                    }`}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={checked}
+                      onChange={(e) =>
+                        setPayMethods((prev) =>
+                          e.target.checked ? [...prev, pm.key] : prev.filter((m) => m !== pm.key)
+                        )
+                      }
+                      className="mt-0.5 accent-[#D97846]"
+                    />
+                    <span>
+                      <span className="block text-sm font-medium text-neutral-brown-900">{pm.label}</span>
+                      <span className="block text-xs text-neutral-brown-500">{pm.hint}</span>
+                    </span>
+                  </label>
+                );
+              })}
+            </div>
+            {payMethods.length === 0 && (
+              <p className="text-xs text-red-500 mt-1.5">At least one payment method is recommended — otherwise checkout falls back to defaults.</p>
+            )}
+          </div>
         </div>
 
         <div className="flex gap-3 mt-8 sticky bottom-0 bg-white pt-4 border-t border-neutral-brown-100">
@@ -477,6 +524,7 @@ function EditAuthorModal({
                 occupation,
                 writingStyle,
                 status,
+                paymentMethods: payMethods,
                 profileImage: imageFile ?? undefined,
               })
             }

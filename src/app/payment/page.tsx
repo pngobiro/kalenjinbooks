@@ -4,15 +4,14 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import KaleeReadsLogo from '@/components/KaleeReadsLogo';
 import { ArrowLeft, CreditCard, Building2, Check, Clock, BookOpen, Book, Heart } from 'lucide-react';
-import { useState, Suspense } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import Image from 'next/image';
 
 const authorPaymentMethods: Record<string, string[]> = {
-  'Sarah Chebet': ['mpesa', 'stripe', 'paypal'],
-  'John Kamau': ['mpesa', 'stripe', 'paypal'],
-  'Jane Kiplagat': ['mpesa', 'stripe', 'paypal', 'bank'],
   default: ['mpesa', 'stripe', 'paypal'],
 };
+
+const ALL_METHODS = ['mpesa', 'stripe', 'paypal', 'bank'];
 
 const paymentMethodsInfo: Record<string, { name: string; icon: typeof CreditCard | null; logo?: string; description: string; color: string }> = {
   mpesa: { name: 'M-Pesa', icon: null, logo: '/images/mpesa-logo.png', description: 'Pay with mobile money', color: 'green' },
@@ -32,7 +31,32 @@ function PaymentContent() {
   const title = searchParams.get('title') || 'Book';
 
   const [selectedMethod, setSelectedMethod] = useState<string | null>(null);
-  const availableMethods = authorPaymentMethods[author] || authorPaymentMethods.default;
+  const [availableMethods, setAvailableMethods] = useState<string[]>(authorPaymentMethods.default);
+
+  // Load the author's configured payment methods via the book's author
+  useEffect(() => {
+    async function loadAuthorMethods() {
+      try {
+        if (!bookId) return;
+        const bookRes = await fetch(`https://kalenjin-books-worker.pngobiro.workers.dev/api/books/${bookId}`);
+        if (!bookRes.ok) return;
+        const bookJson: any = await bookRes.json();
+        const authorId = bookJson?.data?.author?.id;
+        if (!authorId) return;
+        const authorRes = await fetch(`https://kalenjin-books-worker.pngobiro.workers.dev/api/authors/${authorId}`);
+        if (!authorRes.ok) return;
+        const authorJson: any = await authorRes.json();
+        const methods: string[] | undefined = authorJson?.data?.paymentMethods;
+        if (Array.isArray(methods) && methods.length > 0) {
+          // keep a stable, supported order
+          setAvailableMethods(ALL_METHODS.filter((m) => methods.includes(m)));
+        }
+      } catch (e) {
+        console.error('Failed to load author payment methods', e);
+      }
+    }
+    loadAuthorMethods();
+  }, [bookId]);
 
   const handleProceed = () => {
     if (!selectedMethod) return;

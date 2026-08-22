@@ -199,6 +199,24 @@ async function applyAsAuthor(request: WorkerRequest, env: Env): Promise<Response
 }
 
 /**
+ * Parse the author's enabled checkout methods from its JSON column.
+ * Falls back to all default methods when unset/invalid.
+ */
+function parsePaymentMethods(raw: unknown): string[] {
+    const DEFAULTS = ['mpesa', 'stripe', 'paypal'];
+    if (typeof raw !== 'string' || !raw.trim()) return DEFAULTS;
+    try {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+            return parsed.filter((m) => typeof m === 'string');
+        }
+    } catch {
+        // fall through
+    }
+    return DEFAULTS;
+}
+
+/**
  * List authors with pagination
  */
 async function listAuthors(request: WorkerRequest, env: Env): Promise<Response> {
@@ -247,6 +265,7 @@ async function listAuthors(request: WorkerRequest, env: Env): Promise<Response> 
         profileImage: author.profileImage,
         booksCount: author.books.length,
         blogsCount: author.blogPosts.length,
+        paymentMethods: parsePaymentMethods((author as any).paymentMethods),
         rating: author.books.length > 0
             ? author.books.reduce((sum, book) => sum + (book.rating || 0), 0) / author.books.length
             : 0,
@@ -309,6 +328,7 @@ async function getAuthor(request: WorkerRequest, env: Env, authorId: string): Pr
         bio: author.bio,
         profileImage: author.profileImage,
         booksCount: author.books.length,
+        paymentMethods: parsePaymentMethods((author as any).paymentMethods),
         rating: author.books.length > 0
             ? author.books.reduce((sum, book) => sum + (book.rating || 0), 0) / author.books.length
             : 0,

@@ -1065,6 +1065,20 @@ async function updateAuthor(request: WorkerRequest, env: Env): Promise<Response>
         if ('isActive' in body) {
             authorData.isActive = !!body.isActive;
         }
+        if ('paymentMethods' in body) {
+            let methods: string[] = [];
+            if (Array.isArray(body.paymentMethods)) {
+                methods = body.paymentMethods.filter((m) => typeof m === 'string');
+            } else if (typeof body.paymentMethods === 'string' && body.paymentMethods.trim()) {
+                try { methods = JSON.parse(body.paymentMethods); } catch { methods = []; }
+                if (!Array.isArray(methods)) {
+                    methods = (body.paymentMethods as string).split(',').map((m) => m.trim()).filter(Boolean);
+                }
+            }
+            const VALID = ['mpesa', 'stripe', 'paypal', 'bank'];
+            methods = methods.filter((m) => VALID.includes(m));
+            authorData.paymentMethods = methods.length > 0 ? JSON.stringify(methods) : null;
+        }
         if ('status' in body && ['PENDING', 'APPROVED', 'REJECTED'].includes(body.status as string)) {
             authorData.status = body.status;
             if (body.status === 'APPROVED' && !author.approvedAt) {

@@ -43,6 +43,7 @@ model Author {
   phoneNumber   String?
   paymentMethod String?   // e.g., "mpesa", "bank", "stripe"
   paymentDetails String?  // JSON string with payment info
+  paymentMethods String?  // JSON array of enabled checkout methods, e.g. ["mpesa","stripe","paypal"]
   totalEarnings Float     @default(0)
   status        AuthorStatus @default(PENDING)
   rejectionReason String? // Reason if rejected
