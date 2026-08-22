@@ -219,9 +219,9 @@ async function listAuthorApplications(request: WorkerRequest, env: Env): Promise
                 previousPublications: author.previousPublications,
                 awards: author.awards,
                 
-                // Writing Information
-                genres: author.genres ? JSON.parse(author.genres) : [],
-                languages: author.languages ? JSON.parse(author.languages) : [],
+                // Writing Information (defensive: handles legacy plain-string or empty values)
+                genres: (() => { try { return author.genres ? JSON.parse(author.genres) : []; } catch { return author.genres ? author.genres.split(',').map((s: string) => s.trim()).filter(Boolean) : []; } })(),
+                languages: (() => { try { return author.languages ? JSON.parse(author.languages) : []; } catch { return author.languages ? author.languages.split(',').map((s: string) => s.trim()).filter(Boolean) : []; } })(),
                 writingStyle: author.writingStyle,
                 inspirations: author.inspirations,
                 targetAudience: author.targetAudience,
