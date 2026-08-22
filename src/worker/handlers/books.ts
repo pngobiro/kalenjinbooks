@@ -493,6 +493,7 @@ async function updateBook(request: WorkerRequest, env: Env, bookId: string): Pro
             const tagsJson = formData.get('tags') as string;
             const isbn = formData.get('isbn') as string || null;
             const coverImage = formData.get('coverImage') as File;
+            const bookFile = formData.get('bookFile') as File | null;
 
             // Parse tags
             let tags: string[] = [];
@@ -545,6 +546,44 @@ async function updateBook(request: WorkerRequest, env: Env, bookId: string): Pro
                 }
             }
 
+            // Handle book PDF file upload if provided
+            let newFileKey: string | null = null;
+            let newFileSize: number | null = null;
+            let newFileType: string | null = null;
+            if (bookFile && bookFile.size > 0) {
+                const allowedBookTypes = ['application/pdf', 'application/epub+zip', 'application/x-mobipocket-ebook'];
+                if (!allowedBookTypes.includes(bookFile.type) && !bookFile.name.toLowerCase().endsWith('.pdf')) {
+                    return errorResponse('Book file must be a PDF', HttpStatus.BAD_REQUEST);
+                }
+                if (bookFile.size > 50 * 1024 * 1024) {
+                    return errorResponse('Book file must be smaller than 50MB', HttpStatus.BAD_REQUEST);
+                }
+
+                const sanitizedName = bookFile.name.replace(/\s+/g, '-').replace(/[^a-zA-Z0-9._-]/g, '');
+                newFileKey = `books/${bookId}/${Date.now()}-${sanitizedName}`;
+
+                try {
+                    await env.BOOKS_BUCKET.put(newFileKey, bookFile.stream(), {
+                        httpMetadata: { contentType: bookFile.type || 'application/pdf' },
+                    });
+
+                    newFileSize = bookFile.size;
+                    newFileType = bookFile.type || 'application/pdf';
+
+                    // Delete old file if it exists and differs
+                    if (book.fileKey && book.fileKey !== newFileKey) {
+                        try {
+                            await env.BOOKS_BUCKET.delete(book.fileKey);
+                        } catch (e) {
+                            console.error('Error deleting old book file:', e);
+                        }
+                    }
+                } catch (uploadError) {
+                    console.error('Book file upload error:', uploadError);
+                    return errorResponse('Failed to upload book file', HttpStatus.INTERNAL_SERVER_ERROR);
+                }
+            }
+
             updateData = {
                 title,
                 description,
@@ -560,6 +599,11 @@ async function updateBook(request: WorkerRequest, env: Env, bookId: string): Pro
                 coverImage: coverImageUrl,
                 publishedAt: isPublished && !book.isPublished ? new Date() : book.publishedAt,
             };
+            if (newFileKey) {
+                (updateData as any).fileKey = newFileKey;
+                (updateData as any).fileSize = newFileSize;
+                (updateData as any).fileType = newFileType;
+            }
         } else {
             // Handle JSON data (no file upload)
             const body = await request.json() as Record<string, unknown>;

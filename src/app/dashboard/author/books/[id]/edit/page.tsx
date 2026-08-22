@@ -64,6 +64,8 @@ export default function EditBookPage({ params }: { params: Promise<{ id: string 
   // File upload
   const [coverFile, setCoverFile] = useState<File | null>(null);
   const [coverPreview, setCoverPreview] = useState<string | null>(null);
+  const [bookFile, setBookFile] = useState<File | null>(null);
+  const [existingFileKey, setExistingFileKey] = useState<string | null>(null);
 
   useEffect(() => {
     async function getParams() {
@@ -123,6 +125,7 @@ export default function EditBookPage({ params }: { params: Promise<{ id: string 
         tags,
         isbn: book.isbn,
       });
+      setExistingFileKey((book as any).fileKey || null);
 
     } catch (err) {
       console.error('Error fetching book:', err);
@@ -139,23 +142,33 @@ export default function EditBookPage({ params }: { params: Promise<{ id: string 
   const handleCoverUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      // Validate file size (5MB max)
       if (file.size > 5 * 1024 * 1024) {
         alert('Cover image must be smaller than 5MB');
         return;
       }
-
-      // Validate file type
       if (!file.type.startsWith('image/')) {
         alert('Please select a valid image file');
         return;
       }
-
       setCoverFile(file);
       const reader = new FileReader();
       reader.onload = () => setCoverPreview(reader.result as string);
       reader.readAsDataURL(file);
     }
+  };
+
+  const handleBookFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
+      alert('Please select a PDF file');
+      return;
+    }
+    if (file.size > 50 * 1024 * 1024) {
+      alert('Book file must be smaller than 50MB');
+      return;
+    }
+    setBookFile(file);
   };
 
   const handleSave = async () => {
@@ -169,13 +182,13 @@ export default function EditBookPage({ params }: { params: Promise<{ id: string 
         return;
       }
 
-      // Prepare form data for multipart upload if there's a new cover
+      // Prepare form data for multipart upload if there's a new cover or PDF
       let requestBody;
       let headers: any = {
         'Authorization': `Bearer ${token}`,
       };
 
-      if (coverFile) {
+      if (coverFile || bookFile) {
         // Use FormData for file upload
         const formDataToSend = new FormData();
         formDataToSend.append('title', formData.title);
@@ -193,7 +206,8 @@ export default function EditBookPage({ params }: { params: Promise<{ id: string 
         if (formData.isbn) {
           formDataToSend.append('isbn', formData.isbn);
         }
-        formDataToSend.append('coverImage', coverFile);
+        if (coverFile) formDataToSend.append('coverImage', coverFile);
+        if (bookFile) formDataToSend.append('bookFile', bookFile);
 
         requestBody = formDataToSend;
       } else {
@@ -592,6 +606,56 @@ export default function EditBookPage({ params }: { params: Promise<{ id: string 
                   </div>
                 )}
               </div>
+            </div>
+
+            {/* Book File (PDF) */}
+            <div className="bg-white rounded-xl p-6 shadow-sm">
+              <h2 className="text-lg font-bold text-neutral-brown-900 mb-4 flex items-center gap-2">
+                <FileText size={18} /> Book File (PDF)
+              </h2>
+
+              {existingFileKey && !bookFile && (
+                <div className="mb-4 p-3 rounded-lg flex items-center gap-2.5" style={{ backgroundColor: '#E8F5E9', border: '1px solid #7A9B76' }}>
+                  <FileText size={18} style={{ color: '#5a7a56' }} />
+                  <span className="text-sm font-medium flex-1 truncate" style={{ color: '#5a7a56' }}>
+                    {existingFileKey.split('/').pop()}
+                  </span>
+                  <span className="text-xs px-2 py-1 rounded-full" style={{ backgroundColor: '#c8e6c9', color: '#2e5530' }}>Uploaded</span>
+                </div>
+              )}
+
+              {bookFile ? (
+                <div className="flex items-center justify-between p-3 rounded-lg" style={{ backgroundColor: '#FEF3E7', border: '1px solid #D97846' }}>
+                  <span className="text-sm font-medium truncate" style={{ color: '#D97846' }}>
+                    {bookFile.name} ({(bookFile.size / 1024 / 1024).toFixed(2)} MB)
+                  </span>
+                  <button
+                    onClick={() => setBookFile(null)}
+                    className="text-neutral-brown-400 hover:text-red-500 flex-shrink-0 ml-2"
+                  >
+                    <X size={16} />
+                  </button>
+                </div>
+              ) : (
+                <div>
+                  <input
+                    type="file"
+                    id="bookfile-upload"
+                    accept="application/pdf,.pdf"
+                    onChange={handleBookFileUpload}
+                    className="hidden"
+                  />
+                  <label
+                    htmlFor="bookfile-upload"
+                    className="w-full flex items-center justify-center gap-2 px-4 py-3 border-2 border-dashed rounded-lg cursor-pointer transition-colors hover:border-primary hover:bg-orange-50"
+                    style={{ borderColor: existingFileKey ? '#E4D9C4' : '#D97846', color: '#D97846' }}
+                  >
+                    <Upload size={18} />
+                    {existingFileKey ? 'Replace PDF' : 'Upload PDF'}
+                  </label>
+                  <p className="text-xs text-neutral-brown-500 mt-2">PDF, max 50MB. Stored securely in R2 — never exposed directly, read only via the protected viewer.</p>
+                </div>
+              )}
             </div>
 
             {/* Danger Zone */}
