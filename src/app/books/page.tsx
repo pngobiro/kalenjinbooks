@@ -6,6 +6,7 @@ import { Search, BookOpen, Star, ArrowRight, Compass, Package, SlidersHorizontal
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import { fetchBooks, type Book as BookType } from '@/lib/api/books';
+import { fetchAuthors, type Author } from '@/lib/api/authors';
 import { trackBookClick } from '@/lib/analytics';
 
 const categories = ['All', 'Fiction', 'Non-Fiction', 'Folklore', 'History', 'Poetry', 'Children', 'Education'];
@@ -44,8 +45,15 @@ export default function BooksPage() {
   const [priceRange, setPriceRange] = useState('all');
   const [minRating, setMinRating] = useState(0);
   const [books, setBooks] = useState<BookType[]>([]);
+  const [authors, setAuthors] = useState<Author[]>([]);
+  const [selectedAuthor, setSelectedAuthor] = useState('All');
+  const [accessFilter, setAccessFilter] = useState<'all' | 'free' | 'paid'>('all');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetchAuthors({ limit: 50 }).then((res) => setAuthors(res?.data || [])).catch(() => {});
+  }, []);
 
   useEffect(() => {
     async function loadBooks() {
@@ -101,6 +109,14 @@ export default function BooksPage() {
       result = result.filter((b) => (b.rating || 0) >= minRating);
     }
 
+    if (selectedAuthor !== 'All') {
+      result = result.filter((b) => b.author?.id === selectedAuthor);
+    }
+
+    if (accessFilter !== 'all') {
+      result = result.filter((b) => (accessFilter === 'free' ? !!b.isFreeReading : !b.isFreeReading));
+    }
+
     const sorted = [...result];
     switch (sortBy) {
       case 'price-asc':
@@ -120,15 +136,17 @@ export default function BooksPage() {
         });
     }
     return sorted;
-  }, [books, selectedLanguage, priceRange, minRating, sortBy]);
+  }, [books, selectedLanguage, priceRange, minRating, sortBy, selectedAuthor, accessFilter]);
 
-  const hasClientFilters = selectedLanguage !== 'All' || priceRange !== 'all' || minRating > 0;
+  const hasClientFilters = selectedLanguage !== 'All' || priceRange !== 'all' || minRating > 0 || selectedAuthor !== 'All' || accessFilter !== 'all';
 
   function resetClientFilters() {
     setSelectedLanguage('All');
     setPriceRange('all');
     setMinRating(0);
     setSortBy('newest');
+    setSelectedAuthor('All');
+    setAccessFilter('all');
   }
 
   return (
@@ -244,6 +262,43 @@ export default function BooksPage() {
                 {languages.map((lang) => (
                   <option key={lang} value={lang}>{lang}</option>
                 ))}
+              </select>
+              <ChevronDown size={16} className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2" style={{ color: '#A89888' }} />
+            </div>
+
+            <div className="relative">
+              <select
+                value={selectedAuthor}
+                onChange={(e) => setSelectedAuthor(e.target.value)}
+                className="appearance-none pl-4 pr-10 py-2.5 rounded-lg border text-sm font-medium focus:outline-none focus:ring-2 cursor-pointer"
+                style={{
+                  backgroundColor: '#F5F1E8',
+                  color: '#2C2416',
+                  borderColor: '#E4D9C4',
+                }}
+              >
+                <option value="All">All Authors</option>
+                {authors.map((a) => (
+                  <option key={a.id} value={a.id}>{a.name || 'Unknown Author'}</option>
+                ))}
+              </select>
+              <ChevronDown size={16} className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2" style={{ color: '#A89888' }} />
+            </div>
+
+            <div className="relative">
+              <select
+                value={accessFilter}
+                onChange={(e) => setAccessFilter(e.target.value as 'all' | 'free' | 'paid')}
+                className="appearance-none pl-4 pr-10 py-2.5 rounded-lg border text-sm font-medium focus:outline-none focus:ring-2 cursor-pointer"
+                style={{
+                  backgroundColor: '#F5F1E8',
+                  color: '#2C2416',
+                  borderColor: '#E4D9C4',
+                }}
+              >
+                <option value="all">Free & Paid</option>
+                <option value="free">Free to Read</option>
+                <option value="paid">Paid</option>
               </select>
               <ChevronDown size={16} className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2" style={{ color: '#A89888' }} />
             </div>
