@@ -109,8 +109,17 @@ function RequestHardCopyContent() {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-violet-500 to-purple-600 overflow-hidden">
-        <div className="absolute inset-0 bg-black/10"></div>
+      <section className="relative overflow-hidden" style={{ backgroundColor: '#2C2416' }}>
+        <img
+          src="/images/delivery-illustration.jpg"
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        <div
+          className="absolute inset-0"
+          style={{ background: 'linear-gradient(135deg, rgba(44,36,22,0.88) 0%, rgba(44,36,22,0.62) 55%, rgba(44,36,22,0.45) 100%)' }}
+        />
         
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 py-16 text-center">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6" style={{ backgroundColor: 'rgba(255,255,255,0.2)' }}>
