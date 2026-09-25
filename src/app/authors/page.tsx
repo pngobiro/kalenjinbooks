@@ -58,7 +58,7 @@ export default function AuthorsPage() {
             Meet Our Authors
           </h1>
           <p className="text-lg max-w-2xl mx-auto mb-8" style={{ color: '#E4D9C4' }}>
-            Discover the voices preserving Kalenjin heritage through their words
+            Discover the voices preserving African heritage through their words — the storytellers of Mama Africa Library
           </p>
 
           {/* Search Bar */}
