@@ -66,13 +66,13 @@ export default function HomePage() {
               className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold mb-6"
               style={{ color: '#FFFCF5', lineHeight: '1.15' }}
             >
-              Discover Authentic Kalenjin Literature
+              Mama Africa Library
             </h1>
             <p 
               className="text-base md:text-lg mb-10 max-w-2xl mx-auto"
               style={{ color: 'rgba(255, 252, 245, 0.9)', lineHeight: '1.6' }}
             >
-              Explore books, stories, and cultural narratives from talented local authors. 
+              Discover authentic African literature — books, stories, and cultural narratives from talented local authors. 
               Preserving our heritage one page at a time.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
