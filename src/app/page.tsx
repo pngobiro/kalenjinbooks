@@ -53,13 +53,25 @@ export default function HomePage() {
       <Navbar />
 
       {/* Hero Section */}
-      <section 
+      <section
         className="relative overflow-hidden"
         style={{
-          background: 'linear-gradient(135deg, #2C2416 0%, #3A2E57 100%)',
+          background: '#2C2416',
           minHeight: '500px',
         }}
       >
+        {/* Nano Banana generated illustration */}
+        <img
+          src="/images/hero-illustration.jpg"
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        {/* Readability overlay */}
+        <div
+          className="absolute inset-0"
+          style={{ background: 'linear-gradient(135deg, rgba(44,36,22,0.88) 0%, rgba(58,46,87,0.72) 55%, rgba(44,36,22,0.55) 100%)' }}
+        />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-20 md:py-24 relative z-10">
           <div className="max-w-3xl mx-auto text-center">
             <h1 
