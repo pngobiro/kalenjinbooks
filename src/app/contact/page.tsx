@@ -62,8 +62,8 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="font-bold mb-1" style={{ color: '#2C2416' }}>Email</h3>
-                    <a href="mailto:hello@kaleereads.com" className="text-orange-600 hover:underline font-medium">
-                      hello@kaleereads.com
+                    <a href="mailto:hello@mamaafricalibrary.com" className="text-orange-600 hover:underline font-medium">
+                      hello@mamaafricalibrary.com
                     </a>
                     <p className="text-sm text-gray-600 mt-1">We&apos;ll respond within 24 hours</p>
                   </div>

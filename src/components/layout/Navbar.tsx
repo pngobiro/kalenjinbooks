@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { Menu, X, BookOpen, Feather, Users, Info, Mail, PenSquare } from 'lucide-react';
-import KaleeReadsLogo from '@/components/KaleeReadsLogo';
+import SiteLogo from '@/components/SiteLogo';
 import { useAuth } from '@/lib/auth-context';
 
 const navLinks = [
@@ -101,8 +101,8 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-10">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-1.5">
-            <KaleeReadsLogo size={17} />
-            <span className="text-sm font-bold text-neutral-brown-900 font-heading">KaleeReads</span>
+            <SiteLogo size={17} />
+            <span className="text-sm font-bold text-neutral-brown-900 font-heading">Mama Africa Library</span>
           </Link>
 
           {/* Desktop Links + CTA */}

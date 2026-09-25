@@ -304,7 +304,7 @@ export default function BookDetailPage({ params }: { params: Promise<{ id: strin
                 <Share2 size={17} />
                 Share This Book
               </h4>
-              <ShareButtons title={`${book.title} - KaleeReads`} />
+              <ShareButtons title={`${book.title} - Mama Africa Library`} />
             </div>
 
             {/* Author CTA */}

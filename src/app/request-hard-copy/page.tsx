@@ -97,7 +97,7 @@ function RequestHardCopyContent() {
               <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: '#D97846' }}>
                 <Book size={22} className="text-white" />
               </div>
-              <span className="text-xl font-bold hidden sm:inline" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>KaleeReads</span>
+              <span className="text-xl font-bold hidden sm:inline" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>Mama Africa Library</span>
             </Link>
 
             <Link href={bookId ? `/books/${bookId}` : '/books'} className="flex items-center gap-2 text-gray-700 hover:text-orange-600 transition-colors font-medium">

@@ -25,11 +25,11 @@ export async function sendEmail(template: EmailTemplate, env: Env): Promise<bool
         }
 
         // Create email message using Cloudflare Email Workers API
-        const emailContent = `From: KaleeReads Team <${env.EMAIL_FROM || 'noreply@kalenjinbooks.com'}>
+        const emailContent = `From: Mama Africa Library Team <${env.EMAIL_FROM || 'noreply@kalenjinbooks.com'}>
 To: ${template.to}
 Subject: ${template.subject}
 Content-Type: text/html; charset=utf-8
-X-Mailer: KaleeReads Platform
+X-Mailer: Mama Africa Library Platform
 List-Unsubscribe: <mailto:unsubscribe@kalenjinbooks.com>
 
 ${template.html}`;
@@ -59,7 +59,7 @@ ${template.html}`;
  * Generate approval email template
  */
 export function createApprovalEmail(authorName: string, authorEmail: string): EmailTemplate {
-    const subject = 'Welcome to KaleeReads - Your Author Application Approved';
+    const subject = 'Welcome to Mama Africa Library - Your Author Application Approved';
     
     const html = `
     <!DOCTYPE html>
@@ -67,7 +67,7 @@ export function createApprovalEmail(authorName: string, authorEmail: string): Em
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Author Application Approved - KaleeReads</title>
+        <title>Author Application Approved - Mama Africa Library</title>
         <style>
             body { 
                 font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
@@ -143,15 +143,15 @@ export function createApprovalEmail(authorName: string, authorEmail: string): Em
     <body>
         <div class="container">
             <div class="header">
-                <h1>🎉 Welcome to KaleeReads!</h1>
+                <h1>🎉 Welcome to Mama Africa Library!</h1>
                 <p style="margin: 10px 0 0 0; opacity: 0.9;">Your author application has been approved</p>
             </div>
             <div class="content">
                 <h2>Dear ${authorName},</h2>
                 
-                <p>Congratulations! We're excited to inform you that your application to become a KaleeReads author has been <strong>approved</strong>.</p>
+                <p>Congratulations! We're excited to inform you that your application to become a Mama Africa Library author has been <strong>approved</strong>.</p>
                 
-                <p>KaleeReads is dedicated to preserving and promoting Kalenjin literature and culture. As an approved author, you're now part of our mission to share authentic stories with readers worldwide.</p>
+                <p>Mama Africa Library is dedicated to preserving and promoting Kalenjin literature and culture. As an approved author, you're now part of our mission to share authentic stories with readers worldwide.</p>
                 
                 <div class="features">
                     <h3 style="margin-top: 0; color: #E07856;">What you can do now:</h3>
@@ -171,14 +171,14 @@ export function createApprovalEmail(authorName: string, authorEmail: string): Em
                 
                 <p>If you have any questions or need assistance, our support team is here to help. Simply reply to this email or contact us through your dashboard.</p>
                 
-                <p>Welcome to the KaleeReads family!</p>
+                <p>Welcome to the Mama Africa Library family!</p>
                 
                 <p>Best regards,<br>
-                <strong>The KaleeReads Team</strong><br>
+                <strong>The Mama Africa Library Team</strong><br>
                 Preserving Kalenjin Literature & Culture</p>
             </div>
             <div class="footer">
-                <p><strong>KaleeReads</strong> - Digital Platform for Kalenjin Literature</p>
+                <p><strong>Mama Africa Library</strong> - Digital Platform for Kalenjin Literature</p>
                 <p>This email was sent to ${authorEmail}</p>
                 <p><a href="mailto:support@kalenjinbooks.com">Contact Support</a> | <a href="https://kalenjinbooks.com/privacy">Privacy Policy</a></p>
             </div>
@@ -188,13 +188,13 @@ export function createApprovalEmail(authorName: string, authorEmail: string): Em
     `;
     
     const text = `
-Welcome to KaleeReads!
+Welcome to Mama Africa Library!
 
 Dear ${authorName},
 
-Congratulations! Your application to become a KaleeReads author has been approved.
+Congratulations! Your application to become a Mama Africa Library author has been approved.
 
-KaleeReads is dedicated to preserving and promoting Kalenjin literature and culture. As an approved author, you're now part of our mission to share authentic stories with readers worldwide.
+Mama Africa Library is dedicated to preserving and promoting Kalenjin literature and culture. As an approved author, you're now part of our mission to share authentic stories with readers worldwide.
 
 What you can do now:
 - Publish your books - Upload and share your stories
@@ -208,10 +208,10 @@ Access your dashboard: https://kalenjinbooks.com/dashboard/author
 
 If you have any questions or need assistance, our support team is here to help. Simply reply to this email or contact us through your dashboard.
 
-Welcome to the KaleeReads family!
+Welcome to the Mama Africa Library family!
 
 Best regards,
-The KaleeReads Team
+The Mama Africa Library Team
 Preserving Kalenjin Literature & Culture
 
 ---
@@ -232,7 +232,7 @@ Privacy Policy: https://kalenjinbooks.com/privacy
  * Generate rejection email template
  */
 export function createRejectionEmail(authorName: string, authorEmail: string, reason: string): EmailTemplate {
-    const subject = 'Update on Your KaleeReads Author Application';
+    const subject = 'Update on Your Mama Africa Library Author Application';
     
     const html = `
     <!DOCTYPE html>
@@ -240,7 +240,7 @@ export function createRejectionEmail(authorName: string, authorEmail: string, re
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Author Application Update - KaleeReads</title>
+        <title>Author Application Update - Mama Africa Library</title>
         <style>
             body { 
                 font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
@@ -317,12 +317,12 @@ export function createRejectionEmail(authorName: string, authorEmail: string, re
         <div class="container">
             <div class="header">
                 <h1>Author Application Update</h1>
-                <p style="margin: 10px 0 0 0; opacity: 0.8;">Thank you for your interest in KaleeReads</p>
+                <p style="margin: 10px 0 0 0; opacity: 0.8;">Thank you for your interest in Mama Africa Library</p>
             </div>
             <div class="content">
                 <h2>Dear ${authorName},</h2>
                 
-                <p>Thank you for your interest in becoming a KaleeReads author and for taking the time to submit your application.</p>
+                <p>Thank you for your interest in becoming a Mama Africa Library author and for taking the time to submit your application.</p>
                 
                 <p>After careful review by our editorial team, we are unable to approve your application at this time. This decision was not made lightly, and we appreciate the effort you put into your submission.</p>
                 
@@ -331,7 +331,7 @@ export function createRejectionEmail(authorName: string, authorEmail: string, re
                     <p>${reason}</p>
                 </div>
                 
-                <p>We encourage you to address the feedback above and consider reapplying in the future. KaleeReads is committed to supporting quality content that celebrates and preserves Kalenjin culture and literature.</p>
+                <p>We encourage you to address the feedback above and consider reapplying in the future. Mama Africa Library is committed to supporting quality content that celebrates and preserves Kalenjin culture and literature.</p>
                 
                 <p>You can submit a new application at any time:</p>
                 <div style="text-align: center;">
@@ -340,14 +340,14 @@ export function createRejectionEmail(authorName: string, authorEmail: string, re
                 
                 <p>If you have questions about this decision or would like clarification on any aspect of the feedback, please don't hesitate to contact our support team. We're here to help you succeed.</p>
                 
-                <p>Thank you for your understanding and continued interest in KaleeReads.</p>
+                <p>Thank you for your understanding and continued interest in Mama Africa Library.</p>
                 
                 <p>Best regards,<br>
-                <strong>The KaleeReads Editorial Team</strong><br>
+                <strong>The Mama Africa Library Editorial Team</strong><br>
                 Preserving Kalenjin Literature & Culture</p>
             </div>
             <div class="footer">
-                <p><strong>KaleeReads</strong> - Digital Platform for Kalenjin Literature</p>
+                <p><strong>Mama Africa Library</strong> - Digital Platform for Kalenjin Literature</p>
                 <p>This email was sent to ${authorEmail}</p>
                 <p><a href="mailto:support@kalenjinbooks.com">Contact Support</a> | <a href="https://kalenjinbooks.com/privacy">Privacy Policy</a></p>
             </div>
@@ -357,28 +357,28 @@ export function createRejectionEmail(authorName: string, authorEmail: string, re
     `;
     
     const text = `
-Author Application Update - KaleeReads
+Author Application Update - Mama Africa Library
 
 Dear ${authorName},
 
-Thank you for your interest in becoming a KaleeReads author and for taking the time to submit your application.
+Thank you for your interest in becoming a Mama Africa Library author and for taking the time to submit your application.
 
 After careful review by our editorial team, we are unable to approve your application at this time. This decision was not made lightly, and we appreciate the effort you put into your submission.
 
 Feedback from our review:
 ${reason}
 
-We encourage you to address the feedback above and consider reapplying in the future. KaleeReads is committed to supporting quality content that celebrates and preserves Kalenjin culture and literature.
+We encourage you to address the feedback above and consider reapplying in the future. Mama Africa Library is committed to supporting quality content that celebrates and preserves Kalenjin culture and literature.
 
 You can submit a new application at any time:
 https://kalenjinbooks.com/dashboard/author/register
 
 If you have questions about this decision or would like clarification on any aspect of the feedback, please don't hesitate to contact our support team. We're here to help you succeed.
 
-Thank you for your understanding and continued interest in KaleeReads.
+Thank you for your understanding and continued interest in Mama Africa Library.
 
 Best regards,
-The KaleeReads Editorial Team
+The Mama Africa Library Editorial Team
 Preserving Kalenjin Literature & Culture
 
 ---
@@ -417,7 +417,7 @@ export function createHardCopyRequestEmail(
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>New Hard Copy Request - KaleeReads</title>
+        <title>New Hard Copy Request - Mama Africa Library</title>
         <style>
             body { 
                 font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
@@ -562,10 +562,10 @@ export function createHardCopyRequestEmail(
                 <p>Please respond to this request within 2-3 business days to maintain a good relationship with your readers.</p>
                 
                 <p>Best regards,<br>
-                <strong>The KaleeReads Team</strong></p>
+                <strong>The Mama Africa Library Team</strong></p>
             </div>
             <div class="footer">
-                <p><strong>KaleeReads</strong> - Digital Platform for Kalenjin Literature</p>
+                <p><strong>Mama Africa Library</strong> - Digital Platform for Kalenjin Literature</p>
                 <p>This email was sent to ${authorEmail}</p>
                 <p><a href="mailto:support@kalenjinbooks.com">Contact Support</a> | <a href="https://kalenjinbooks.com/privacy">Privacy Policy</a></p>
             </div>
@@ -575,7 +575,7 @@ export function createHardCopyRequestEmail(
     `;
     
     const text = `
-New Hard Copy Request - KaleeReads
+New Hard Copy Request - Mama Africa Library
 
 Dear ${authorName},
 
@@ -601,7 +601,7 @@ View Request in Dashboard: https://kalenjinbooks.com/dashboard/author/requests
 Please respond to this request within 2-3 business days to maintain a good relationship with your readers.
 
 Best regards,
-The KaleeReads Team
+The Mama Africa Library Team
 
 ---
 This email was sent to ${authorEmail}
@@ -634,7 +634,7 @@ export function createHardCopyConfirmationEmail(
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Request Received - KaleeReads</title>
+        <title>Request Received - Mama Africa Library</title>
         <style>
             body { 
                 font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
@@ -720,10 +720,10 @@ export function createHardCopyConfirmationEmail(
                 <p>Thank you for supporting Kalenjin literature!</p>
                 
                 <p>Best regards,<br>
-                <strong>The KaleeReads Team</strong></p>
+                <strong>The Mama Africa Library Team</strong></p>
             </div>
             <div class="footer">
-                <p><strong>KaleeReads</strong> - Digital Platform for Kalenjin Literature</p>
+                <p><strong>Mama Africa Library</strong> - Digital Platform for Kalenjin Literature</p>
                 <p>This email was sent to ${requesterEmail}</p>
                 <p><a href="mailto:support@kalenjinbooks.com">Contact Support</a> | <a href="https://kalenjinbooks.com">Visit Website</a></p>
             </div>
@@ -733,7 +733,7 @@ export function createHardCopyConfirmationEmail(
     `;
     
     const text = `
-Request Received! - KaleeReads
+Request Received! - Mama Africa Library
 
 Dear ${requesterName},
 
@@ -753,7 +753,7 @@ If you have any questions in the meantime, feel free to reach out to our support
 Thank you for supporting Kalenjin literature!
 
 Best regards,
-The KaleeReads Team
+The Mama Africa Library Team
 
 ---
 This email was sent to ${requesterEmail}

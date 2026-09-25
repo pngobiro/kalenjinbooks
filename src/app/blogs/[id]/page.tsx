@@ -91,7 +91,7 @@ export default function BlogDetailPage() {
 
     const isVideo = post.coverType === 'video' && post.coverVideoUrl;
     const readTime = calculateReadTime(post.content);
-    const authorName = post.author?.user?.name || 'KaleeReads Author';
+    const authorName = post.author?.user?.name || 'Mama Africa Library Author';
     const authorImage = post.author?.user?.image || post.author?.profileImage;
 
     return (

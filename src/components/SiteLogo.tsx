@@ -1,4 +1,4 @@
-export default function KaleeReadsLogo({ 
+export default function SiteLogo({ 
   size = 40, 
   className = '',
   showText = false,
@@ -42,7 +42,7 @@ export default function KaleeReadsLogo({
   return (
     <div className="flex items-end">
       <span className={`font-bold text-neutral-brown-900 font-heading ${textSize}`}>
-        Kalee
+        Mama Africa
       </span>
       <div className="relative">
         <div className="absolute -top-3 left-1/2 -translate-x-1/2">
@@ -64,7 +64,7 @@ export default function KaleeReadsLogo({
           </svg>
         </div>
         <span className={`font-bold text-primary font-heading ${textSize}`}>
-          Reads
+          Library
         </span>
       </div>
     </div>
@@ -72,11 +72,11 @@ export default function KaleeReadsLogo({
 }
 
 // Full logo with text for headers
-export function KaleeReadsFullLogo({ className = '' }: { className?: string }) {
+export function SiteFullLogo({ className = '' }: { className?: string }) {
   return (
     <div className={`flex items-end ${className}`}>
       <span className="font-bold text-neutral-brown-900 font-heading text-2xl">
-        Kalee
+        Mama Africa
       </span>
       <div className="relative">
         <div className="absolute -top-3 left-1/2 -translate-x-1/2">
@@ -98,7 +98,7 @@ export function KaleeReadsFullLogo({ className = '' }: { className?: string }) {
           </svg>
         </div>
         <span className="font-bold text-primary font-heading text-2xl">
-          Reads
+          Library
         </span>
       </div>
     </div>

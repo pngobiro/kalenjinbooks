@@ -16,7 +16,7 @@ export default function AboutPage() {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28">
           <div className="max-w-3xl mx-auto text-center">
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight" style={{ fontFamily: 'Playfair Display, serif' }}>
-              About KaleeReads
+              About Mama Africa Library
             </h1>
             <p className="text-xl sm:text-2xl text-white/95 leading-relaxed">
               Preserving and celebrating Kalenjin stories, one book at a time
@@ -33,7 +33,7 @@ export default function AboutPage() {
               Our Mission
             </h2>
             <p className="text-lg text-gray-700 leading-relaxed mb-6">
-              KaleeReads was born from a simple yet powerful idea: that African stories, particularly those from the Kalenjin community, deserve a global stage. We believe in the power of storytelling to educate, inspire, and unite across generations and borders.
+              Mama Africa Library was born from a simple yet powerful idea: that African stories, particularly those from the Kalenjin community, deserve a global stage. We believe in the power of storytelling to educate, inspire, and unite across generations and borders.
             </p>
             <p className="text-lg text-gray-700 leading-relaxed mb-6">
               Our platform enables authors to share their stories, connect with readers worldwide, and earn from their work while preserving the rich oral and written traditions of the Kalenjin community.

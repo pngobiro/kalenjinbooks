@@ -2,7 +2,7 @@
 
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import KaleeReadsLogo from '@/components/KaleeReadsLogo';
+import SiteLogo from '@/components/SiteLogo';
 import { ArrowLeft, CreditCard, Building2, Check, Clock, BookOpen, Book, Heart } from 'lucide-react';
 import { useState, useEffect, Suspense } from 'react';
 import Image from 'next/image';
@@ -73,7 +73,7 @@ function PaymentContent() {
               <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: '#D97846' }}>
                 <Book className="text-white" size={22} />
               </div>
-              <span className="text-xl font-bold hidden sm:inline" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>KaleeReads</span>
+              <span className="text-xl font-bold hidden sm:inline" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>Mama Africa Library</span>
             </Link>
 
             <button onClick={() => router.back()} className="flex items-center gap-2 text-gray-700 hover:text-orange-600 transition-colors font-medium">

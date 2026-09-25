@@ -13,7 +13,7 @@ import { CachePrefix, generateCacheKey } from '../utils/cache';
 const SETTINGS_KEY = 'platform';
 
 export const DEFAULT_SETTINGS = {
-  siteName: 'KaleeReads',
+  siteName: 'Mama Africa Library',
   tagline: 'Preserving Kalenjin heritage through stories',
   contactEmail: 'pngobiro@gmail.com',
   currency: 'KES',

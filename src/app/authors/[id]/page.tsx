@@ -185,7 +185,7 @@ export default function AuthorDetailPage() {
                   ) : (
                     <div className="w-full h-full flex flex-col items-center justify-center gap-3" style={{ background: 'linear-gradient(135deg, #D97846 0%, #B45A30 100%)' }}>
                       <span className="text-7xl font-bold text-white/90" style={{ fontFamily: 'Playfair Display, serif' }}>{initials}</span>
-                      <span className="text-xs uppercase tracking-[0.25em] text-white/60">KaleeReads Author</span>
+                      <span className="text-xs uppercase tracking-[0.25em] text-white/60">Mama Africa Library Author</span>
                     </div>
                   )}
                   {/* subtle bottom gradient for depth */}
@@ -204,7 +204,7 @@ export default function AuthorDetailPage() {
             <div className="text-center lg:text-left lg:col-span-8">
               {/* eyebrow */}
               <p className="hidden lg:block text-xs font-semibold uppercase tracking-[0.25em] mb-3" style={{ color: '#D97846' }}>
-                KaleeReads Author
+                Mama Africa Library Author
               </p>
 
               <h1 className="hidden lg:block text-4xl md:text-5xl xl:text-6xl font-bold mb-4 leading-tight" style={{ fontFamily: 'Playfair Display, serif', color: '#FFFCF5' }}>

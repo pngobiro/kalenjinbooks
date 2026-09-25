@@ -170,7 +170,7 @@ export default function AuthorsPage() {
 
                       {/* Bio */}
                       <p className="text-sm leading-relaxed line-clamp-3 mb-5" style={{ color: '#5B4F42' }}>
-                        {author.bio || 'A talented storyteller on KaleeReads, sharing their unique voice and perspective.'}
+                        {author.bio || 'A talented storyteller on Mama Africa Library, sharing their unique voice and perspective.'}
                       </p>
 
                       {/* Genres */}

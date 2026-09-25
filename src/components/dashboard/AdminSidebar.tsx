@@ -57,7 +57,7 @@ function AdminSidebarContent() {
                         <Shield className="text-white" size={24} />
                     </div>
                     <div>
-                        <h1 className="font-bold text-lg text-neutral-brown-900">KaleeReads</h1>
+                        <h1 className="font-bold text-lg text-neutral-brown-900">Mama Africa Library</h1>
                         <p className="text-xs text-neutral-brown-700">Admin Panel</p>
                     </div>
                 </Link>

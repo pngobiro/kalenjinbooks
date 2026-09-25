@@ -313,7 +313,7 @@ export default function HomePage() {
                           </p>
                         )}
                         <div className="flex items-center justify-between text-xs" style={{ color: '#A89888' }}>
-                          <span>{post.author?.user?.name || 'KaleeReads'}</span>
+                          <span>{post.author?.user?.name || 'Mama Africa Library'}</span>
                           <div className="flex items-center gap-3">
                             <span className="flex items-center gap-1">
                               <Clock size={11} />

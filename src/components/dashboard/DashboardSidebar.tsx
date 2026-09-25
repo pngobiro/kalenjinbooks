@@ -33,7 +33,7 @@ export function DashboardSidebar() {
                         <Book className="text-white" size={22} />
                     </div>
                     <div>
-                        <h1 className="font-bold text-base" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>KaleeReads</h1>
+                        <h1 className="font-bold text-base" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>Mama Africa Library</h1>
                         <p className="text-xs text-gray-600">Author Portal</p>
                     </div>
                 </Link>

@@ -145,7 +145,7 @@ export default function LoginPage() {
 
                                 <div className="mt-8 pt-6 border-t border-neutral-brown-100">
                                     <p className="text-neutral-brown-600 text-center mb-4">
-                                        Want to write for KaleeReads?
+                                        Want to write for Mama Africa Library?
                                     </p>
                                     <Link 
                                         href="/dashboard/author/register" 

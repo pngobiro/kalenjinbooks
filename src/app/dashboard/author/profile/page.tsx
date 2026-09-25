@@ -92,7 +92,7 @@ export default function ProfilePage() {
                             <p className="text-neutral-brown-700 mt-1">{authUser?.email}</p>
                             <div className="flex items-center gap-2 text-sm text-neutral-brown-700 mt-2">
                                 <Calendar size={14} />
-                                <span>Member of KaleeReads Author Community</span>
+                                <span>Member of Mama Africa Library Author Community</span>
                             </div>
                         </div>
 

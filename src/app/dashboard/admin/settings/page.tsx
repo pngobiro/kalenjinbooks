@@ -24,7 +24,7 @@ interface PlatformSettings {
 }
 
 const DEFAULTS: PlatformSettings = {
-  siteName: 'KaleeReads',
+  siteName: 'Mama Africa Library',
   tagline: 'Preserving Kalenjin heritage through stories',
   contactEmail: '',
   currency: 'KES',
@@ -129,7 +129,7 @@ export default function AdminSettingsPage() {
       <div className="mb-8 flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-neutral-brown-900 font-heading">Global Settings</h1>
-          <p className="text-neutral-brown-600 mt-1">Platform-wide configuration applied across KaleeReads</p>
+          <p className="text-neutral-brown-600 mt-1">Platform-wide configuration applied across Mama Africa Library</p>
         </div>
       </div>
 

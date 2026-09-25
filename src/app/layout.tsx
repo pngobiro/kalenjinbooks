@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "KaleeReads - Kalenjin Books & Literature",
+  title: "Mama Africa Library - Kalenjin Books & Literature",
   description: "Discover and explore authentic Kalenjin literature, folklore, and cultural stories. Supporting local authors and preserving our heritage.",
 };
 

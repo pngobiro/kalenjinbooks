@@ -687,7 +687,7 @@ export default function EditProfilePage() {
                 />
                 <div>
                   <p className="font-medium text-neutral-brown-900">Marketing Communications</p>
-                  <p className="text-sm text-neutral-brown-600">I agree to receive marketing communications and updates about KaleeReads</p>
+                  <p className="text-sm text-neutral-brown-600">I agree to receive marketing communications and updates about Mama Africa Library</p>
                 </div>
               </label>
             </div>

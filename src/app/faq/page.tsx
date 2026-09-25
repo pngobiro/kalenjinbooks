@@ -11,7 +11,7 @@ const faqs = [
     questions: [
       { q: "Do you ship internationally?", a: "Yes! We ship to over 50 countries worldwide. Shipping costs vary by location." },
       { q: "How long will delivery take?", a: "Kenya: 2-3 business days. International: 7-14 business days." },
-      { q: "Can I change my shipping address?", a: "Yes, if not shipped yet. Contact us at hello@kaleereads.com." },
+      { q: "Can I change my shipping address?", a: "Yes, if not shipped yet. Contact us at hello@mamaafricalibrary.com." },
     ]
   },
   {
@@ -25,7 +25,7 @@ const faqs = [
   {
     category: "For Authors",
     questions: [
-      { q: "How can I publish on KaleeReads?", a: "Create an author account and submit your manuscript. We review within 2 weeks." },
+      { q: "How can I publish on Mama Africa Library?", a: "Create an author account and submit your manuscript. We review within 2 weeks." },
       { q: "What royalties do authors receive?", a: "Authors keep up to 70% of sales revenue." },
     ]
   }
@@ -77,7 +77,7 @@ export default function FAQPage() {
         <div className="max-w-7xl mx-auto px-6 text-center">
           <h1 className="text-4xl font-bold text-neutral-brown-900 font-heading mb-4">FAQ</h1>
           <p className="text-lg text-neutral-brown-600 max-w-xl mx-auto">
-            Everything you need to know about KaleeReads
+            Everything you need to know about Mama Africa Library
           </p>
         </div>
       </section>

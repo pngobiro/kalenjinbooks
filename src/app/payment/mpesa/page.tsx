@@ -2,7 +2,7 @@
 
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import KaleeReadsLogo from '@/components/KaleeReadsLogo';
+import SiteLogo from '@/components/SiteLogo';
 import { ArrowLeft, Smartphone, Check, Clock, BookOpen, Book, AlertCircle } from 'lucide-react';
 import { useState, useEffect, Suspense } from 'react';
 import Image from 'next/image';
@@ -101,7 +101,7 @@ function MpesaPaymentContent() {
               <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-primary/10">
                 <Book className="text-primary" size={24} />
               </div>
-              <span className="text-2xl font-bold text-neutral-brown-900 font-heading">KaleeReads</span>
+              <span className="text-2xl font-bold text-neutral-brown-900 font-heading">Mama Africa Library</span>
             </Link>
 
             <button onClick={() => router.back()} className="flex items-center gap-2 text-neutral-brown-700 hover:text-primary transition-colors">

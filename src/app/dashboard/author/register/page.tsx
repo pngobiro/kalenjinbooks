@@ -279,7 +279,7 @@ export default function AuthorRegisterPage() {
               <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-primary/10">
                 <Book className="text-primary" size={24} />
               </div>
-              <span className="text-2xl font-bold text-neutral-brown-900 font-heading">KaleeReads</span>
+              <span className="text-2xl font-bold text-neutral-brown-900 font-heading">Mama Africa Library</span>
             </Link>
             
             {step !== 'pending' && (
@@ -687,7 +687,7 @@ export default function AuthorRegisterPage() {
                 <textarea
                   value={formData.publishingGoals}
                   onChange={(e) => setFormData({ ...formData, publishingGoals: e.target.value })}
-                  placeholder="What do you hope to achieve through publishing on KaleeReads?"
+                  placeholder="What do you hope to achieve through publishing on Mama Africa Library?"
                   rows={3}
                   className="w-full px-4 py-3 border border-neutral-brown-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent resize-none"
                 />
@@ -869,7 +869,7 @@ export default function AuthorRegisterPage() {
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-neutral-brown-700 mb-2">
-                      How did you hear about KaleeReads?
+                      How did you hear about Mama Africa Library?
                     </label>
                     <select
                       value={formData.howDidYouHear}
@@ -924,7 +924,7 @@ export default function AuthorRegisterPage() {
                     className="mt-1 w-5 h-5 text-primary border-neutral-brown-300 rounded focus:ring-primary"
                   />
                   <span className="text-sm text-neutral-brown-600">
-                    I agree to receive marketing emails and updates about KaleeReads (optional)
+                    I agree to receive marketing emails and updates about Mama Africa Library (optional)
                   </span>
                 </label>
               </div>

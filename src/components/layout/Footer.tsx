@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import KaleeReadsLogo from '@/components/KaleeReadsLogo';
+import SiteLogo from '@/components/SiteLogo';
 
 export default function Footer() {
   return (
@@ -9,8 +9,8 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
           <Link href="/" className="flex items-center gap-2">
-            <KaleeReadsLogo size={20} />
-            <span className="text-sm font-bold font-heading">KaleeReads</span>
+            <SiteLogo size={20} />
+            <span className="text-sm font-bold font-heading">Mama Africa Library</span>
           </Link>
           
           <div className="flex items-center gap-4 text-xs text-neutral-brown-400">
@@ -22,7 +22,7 @@ export default function Footer() {
           </div>
           
           <p className="text-xs text-neutral-brown-500">
-            &copy; {new Date().getFullYear()} KaleeReads
+            &copy; {new Date().getFullYear()} Mama Africa Library
           </p>
         </div>
       </div>

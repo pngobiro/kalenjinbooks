@@ -305,7 +305,7 @@ function BlogsContent() {
                                                         <span className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold" style={{ backgroundColor: '#FEF3E7', color: '#D97846' }}>
                                                             {featured.author?.user?.name?.charAt(0) || 'K'}
                                                         </span>
-                                                        {featured.author?.user?.name || 'KaleeReads'}
+                                                        {featured.author?.user?.name || 'Mama Africa Library'}
                                                     </span>
                                                     <span>{formatBlogDate(featured.publishedAt || featured.createdAt)}</span>
                                                     <span className="flex items-center gap-1.5">
@@ -361,7 +361,7 @@ function BlogsContent() {
                                                             <span className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold" style={{ backgroundColor: '#FEF3E7', color: '#D97846' }}>
                                                                 {post.author?.user?.name?.charAt(0) || 'K'}
                                                             </span>
-                                                            {post.author?.user?.name || 'KaleeReads'}
+                                                            {post.author?.user?.name || 'Mama Africa Library'}
                                                         </span>
                                                         <span>{formatBlogDate(post.publishedAt || post.createdAt)}</span>
                                                     </div>

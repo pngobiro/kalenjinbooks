@@ -282,7 +282,7 @@ export default function AuthorDashboardPage() {
               <User size={48} className="text-primary" />
             </div>
             <h1 className="text-4xl font-bold text-neutral-brown-900 font-heading mb-4">
-              Become a KaleeReads Author
+              Become a Mama Africa Library Author
             </h1>
             <p className="text-lg text-neutral-brown-600 mb-8 max-w-2xl mx-auto">
               Share your stories with thousands of readers. Join our community of authors and start earning from your writing today.
@@ -404,7 +404,7 @@ export default function AuthorDashboardPage() {
     const totalBlogViews = recentBlogs.reduce((sum, p) => sum + (p.viewCount || 0), 0);
     const publishedBooks = books.filter((b) => b.isPublished).length;
     const authorName = authorStatus?.user?.name || authorStatus?.name || user?.name || 'Author';
-    const authorBio = authorStatus?.bio || 'Storyteller on KaleeReads.';
+    const authorBio = authorStatus?.bio || 'Storyteller on Mama Africa Library.';
 
     return (
       <div className="p-4 md:p-6 lg:p-8 max-w-7xl mx-auto">
@@ -537,7 +537,7 @@ export default function AuthorDashboardPage() {
             <div className="flex-1">
               <h3 className="text-xl font-heading font-bold text-neutral-brown-900">Your readers are waiting</h3>
               <p className="text-neutral-brown-600 mt-1 text-sm max-w-xl">
-                Publish your first book or write a blog post to start building your audience on KaleeReads.
+                Publish your first book or write a blog post to start building your audience on Mama Africa Library.
                 Authors keep 70% of every sale.
               </p>
             </div>
@@ -762,7 +762,7 @@ export default function AuthorDashboardPage() {
             <User size={48} className="text-primary" />
           </div>
           <h1 className="text-4xl font-bold text-neutral-brown-900 font-heading mb-4">
-            Become a KaleeReads Author
+            Become a Mama Africa Library Author
           </h1>
           <p className="text-lg text-neutral-brown-600 mb-8 max-w-2xl mx-auto">
             Share your stories with thousands of readers. Join our community of authors and start earning from your writing today.
