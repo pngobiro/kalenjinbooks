@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { BookOpen, Star, Clock, Eye, Users, TrendingUp, FileText } from 'lucide-react';
 import Navbar from '@/components/layout/Navbar';
@@ -24,6 +24,36 @@ const colorSchemes = [
 
 export default function HomePage() {
   const [books, setBooks] = useState<BookType[]>([]);
+
+  // Fair rotation: round-robin across authors so no single author dominates
+  // the shelf. Each author gets an equal share of the 8 slots; leftover slots
+  // (when an author has fewer books) go to the newest remaining books.
+  const shelfBooks = useMemo(() => {
+    const MAX = 8;
+    if (books.length <= MAX) return books;
+    const byAuthor = new Map<string, BookType[]>();
+    for (const b of books) {
+      const key = b.author?.id || '__unknown__';
+      if (!byAuthor.has(key)) byAuthor.set(key, []);
+      byAuthor.get(key)!.push(b);
+    }
+    if (byAuthor.size <= 1) return books.slice(0, MAX);
+    const queues = [...byAuthor.values()];
+    const picked: BookType[] = [];
+    let progress = true;
+    while (picked.length < MAX && progress) {
+      progress = false;
+      for (const q of queues) {
+        if (picked.length >= MAX) break;
+        const next = q.shift();
+        if (next) {
+          picked.push(next);
+          progress = true;
+        }
+      }
+    }
+    return picked;
+  }, [books]);
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
   const [authors, setAuthors] = useState<Author[]>([]);
   const [loading, setLoading] = useState(true);
@@ -215,7 +245,7 @@ export default function HomePage() {
               </div>
 
               <div className="flex flex-wrap justify-center gap-6">
-                {books.slice(0, 8).map((book) => (
+                {shelfBooks.map((book) => (
                   <Link
                     key={book.id}
                     href={`/books/${book.id}`}
