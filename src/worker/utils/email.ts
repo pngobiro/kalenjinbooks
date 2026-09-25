@@ -25,7 +25,7 @@ export async function sendEmail(template: EmailTemplate, env: Env): Promise<bool
         }
 
         // Create email message using Cloudflare Email Workers API
-        const emailContent = `From: Mama Africa Library Team <${env.EMAIL_FROM || 'noreply@kalenjinbooks.com'}>
+        const emailContent = `From: Mama Africa Library Team <${env.EMAIL_FROM || 'noreply@mamaafricalibrary.com'}>
 To: ${template.to}
 Subject: ${template.subject}
 Content-Type: text/html; charset=utf-8
@@ -36,7 +36,7 @@ ${template.html}`;
 
         // Send the email using the EMAIL binding
         await env.EMAIL.send({
-            from: env.EMAIL_FROM || 'noreply@kalenjinbooks.com',
+            from: env.EMAIL_FROM || 'noreply@mamaafricalibrary.com',
             to: template.to,
             subject: template.subject,
             html: template.html,
