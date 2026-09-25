@@ -415,7 +415,7 @@ export default function HomePage() {
                 Start Your Reading Journey
               </h2>
               <p className="text-base md:text-lg mb-8 max-w-2xl mx-auto" style={{ color: 'rgba(255, 252, 245, 0.85)' }}>
-                Join our community of readers and authors preserving Kalenjin heritage through literature
+                Join our community of readers and authors preserving African heritage through literature — welcome to Mama Africa Library
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <Link
