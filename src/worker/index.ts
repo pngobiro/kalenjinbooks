@@ -73,6 +73,8 @@ async function handleImageProxy(request: Request, env: Env, path: string): Promi
             'https://kalenjinbooks.com',
             'https://kalenjinbooks.pages.dev',
             'https://ab336e39.kalenjinbooks.pages.dev',
+            'https://mamaafricalibrary.com',
+            'https://www.mamaafricalibrary.com',
         ];
 
         if (origin && allowedOrigins.includes(origin)) {
@@ -313,6 +315,8 @@ export default {
                     'https://kalenjinbooks.com',
                     'https://kalenjinbooks.pages.dev',
                     'https://ab336e39.kalenjinbooks.pages.dev',
+                    'https://mamaafricalibrary.com',
+                    'https://www.mamaafricalibrary.com',
                 ],
                 allowedMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
                 allowedHeaders: ['Content-Type', 'Authorization'],
