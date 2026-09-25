@@ -25,7 +25,7 @@ interface PlatformSettings {
 
 const DEFAULTS: PlatformSettings = {
   siteName: 'Mama Africa Library',
-  tagline: 'Preserving Kalenjin heritage through stories',
+  tagline: 'Preserving African heritage through stories',
   contactEmail: '',
   currency: 'KES',
   defaultPaymentMethods: ['mpesa', 'stripe', 'paypal'],
@@ -162,7 +162,7 @@ export default function AdminSettingsPage() {
             </div>
             <div>
               <label className={labelCls}><Mail size={13} className="inline mr-1" />Contact Email</label>
-              <input type="email" value={settings.contactEmail} onChange={(e) => update('contactEmail', e.target.value)} placeholder="hello@kalenjinbooks.com" className={inputCls} />
+              <input type="email" value={settings.contactEmail} onChange={(e) => update('contactEmail', e.target.value)} placeholder="hello@mamaafricalibrary.com" className={inputCls} />
             </div>
           </div>
         </section>

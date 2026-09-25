@@ -36,7 +36,7 @@ export function PlatformStats() {
                         Growing Community
                     </h2>
                     <p className="text-lg text-neutral-brown-700">
-                        Join thousands preserving Kalenjin culture
+                        Join thousands preserving African culture
                     </p>
                 </div>
 

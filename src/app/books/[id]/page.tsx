@@ -176,7 +176,7 @@ export default function BookDetailPage({ params }: { params: Promise<{ id: strin
               </div>
 
               <p className="text-base md:text-lg leading-relaxed mb-8 max-w-2xl" style={{ color: '#E4D9C4' }}>
-                {book.description?.slice(0, 260) || 'Discover the rich cultural heritage and stories through this captivating piece of Kalenjin literature.'}
+                {book.description?.slice(0, 260) || 'Discover the rich cultural heritage and stories through this captivating piece of African literature.'}
                 {book.description && book.description.length > 260 && '…'}
               </p>
 
@@ -253,7 +253,7 @@ export default function BookDetailPage({ params }: { params: Promise<{ id: strin
                 About This Book
               </h3>
               <p className="leading-relaxed text-lg whitespace-pre-line" style={{ color: '#5B4F42' }}>
-                {book.description || 'No description available for this book. Discover the rich cultural heritage and stories through this captivating piece of Kalenjin literature.'}
+                {book.description || 'No description available for this book. Discover the rich cultural heritage and stories through this captivating piece of African literature.'}
               </p>
 
               {('tags' in book && typeof book.tags === 'string') && (

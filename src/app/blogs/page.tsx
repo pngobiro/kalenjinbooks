@@ -144,7 +144,7 @@ function BlogsContent() {
                             Stories & Insights
                         </h1>
                         <p className="text-lg sm:text-xl text-white/95 leading-relaxed mb-8">
-                            Explore thoughts, stories, and perspectives from our community of Kalenjin writers
+                            Explore thoughts, stories, and perspectives from our community of African writers
                         </p>
                         
                         {/* Search Bar */}

@@ -19,7 +19,7 @@ export default function AboutPage() {
               About Mama Africa Library
             </h1>
             <p className="text-xl sm:text-2xl text-white/95 leading-relaxed">
-              Preserving and celebrating Kalenjin stories, one book at a time
+              Preserving and celebrating African stories, one book at a time
             </p>
           </div>
         </div>
@@ -85,7 +85,7 @@ export default function AboutPage() {
                 Global Reach
               </h3>
               <p className="text-gray-700 leading-relaxed">
-                Making Kalenjin literature accessible to readers around the world
+                Making African literature accessible to readers around the world
               </p>
             </div>
 

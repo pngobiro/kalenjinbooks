@@ -449,7 +449,7 @@ export default function AuthorRegisterPage() {
                 <ul className="space-y-3 text-sm text-neutral-brown-600">
                   <li className="flex items-start gap-2">
                     <CheckCircle size={18} className="text-accent-green mt-0.5" />
-                    <span>Reach thousands of readers interested in Kalenjin literature</span>
+                    <span>Reach thousands of readers interested in African literature</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle size={18} className="text-accent-green mt-0.5" />

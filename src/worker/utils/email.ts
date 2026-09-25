@@ -30,7 +30,7 @@ To: ${template.to}
 Subject: ${template.subject}
 Content-Type: text/html; charset=utf-8
 X-Mailer: Mama Africa Library Platform
-List-Unsubscribe: <mailto:unsubscribe@kalenjinbooks.com>
+List-Unsubscribe: <mailto:unsubscribe@mamaafricalibrary.com>
 
 ${template.html}`;
 
@@ -151,7 +151,7 @@ export function createApprovalEmail(authorName: string, authorEmail: string): Em
                 
                 <p>Congratulations! We're excited to inform you that your application to become a Mama Africa Library author has been <strong>approved</strong>.</p>
                 
-                <p>Mama Africa Library is dedicated to preserving and promoting Kalenjin literature and culture. As an approved author, you're now part of our mission to share authentic stories with readers worldwide.</p>
+                <p>Mama Africa Library is dedicated to preserving and promoting African literature and culture. As an approved author, you're now part of our mission to share authentic stories with readers worldwide.</p>
                 
                 <div class="features">
                     <h3 style="margin-top: 0; color: #E07856;">What you can do now:</h3>
@@ -166,7 +166,7 @@ export function createApprovalEmail(authorName: string, authorEmail: string): Em
                 
                 <p>Ready to start your publishing journey?</p>
                 <div style="text-align: center;">
-                    <a href="https://kalenjinbooks.com/dashboard/author" class="button">Access Your Dashboard</a>
+                    <a href="https://mamaafricalibrary.com/dashboard/author" class="button">Access Your Dashboard</a>
                 </div>
                 
                 <p>If you have any questions or need assistance, our support team is here to help. Simply reply to this email or contact us through your dashboard.</p>
@@ -175,12 +175,12 @@ export function createApprovalEmail(authorName: string, authorEmail: string): Em
                 
                 <p>Best regards,<br>
                 <strong>The Mama Africa Library Team</strong><br>
-                Preserving Kalenjin Literature & Culture</p>
+                Preserving African Literature & Culture</p>
             </div>
             <div class="footer">
-                <p><strong>Mama Africa Library</strong> - Digital Platform for Kalenjin Literature</p>
+                <p><strong>Mama Africa Library</strong> - Digital Platform for African Literature</p>
                 <p>This email was sent to ${authorEmail}</p>
-                <p><a href="mailto:support@kalenjinbooks.com">Contact Support</a> | <a href="https://kalenjinbooks.com/privacy">Privacy Policy</a></p>
+                <p><a href="mailto:support@mamaafricalibrary.com">Contact Support</a> | <a href="https://mamaafricalibrary.com/privacy">Privacy Policy</a></p>
             </div>
         </div>
     </body>
@@ -194,7 +194,7 @@ Dear ${authorName},
 
 Congratulations! Your application to become a Mama Africa Library author has been approved.
 
-Mama Africa Library is dedicated to preserving and promoting Kalenjin literature and culture. As an approved author, you're now part of our mission to share authentic stories with readers worldwide.
+Mama Africa Library is dedicated to preserving and promoting African literature and culture. As an approved author, you're now part of our mission to share authentic stories with readers worldwide.
 
 What you can do now:
 - Publish your books - Upload and share your stories
@@ -204,7 +204,7 @@ What you can do now:
 - Keep 70% revenue - Earn more from your creative work
 
 Ready to start your publishing journey?
-Access your dashboard: https://kalenjinbooks.com/dashboard/author
+Access your dashboard: https://mamaafricalibrary.com/dashboard/author
 
 If you have any questions or need assistance, our support team is here to help. Simply reply to this email or contact us through your dashboard.
 
@@ -212,12 +212,12 @@ Welcome to the Mama Africa Library family!
 
 Best regards,
 The Mama Africa Library Team
-Preserving Kalenjin Literature & Culture
+Preserving African Literature & Culture
 
 ---
 This email was sent to ${authorEmail}
-Contact Support: support@kalenjinbooks.com
-Privacy Policy: https://kalenjinbooks.com/privacy
+Contact Support: support@mamaafricalibrary.com
+Privacy Policy: https://mamaafricalibrary.com/privacy
     `;
     
     return {
@@ -331,11 +331,11 @@ export function createRejectionEmail(authorName: string, authorEmail: string, re
                     <p>${reason}</p>
                 </div>
                 
-                <p>We encourage you to address the feedback above and consider reapplying in the future. Mama Africa Library is committed to supporting quality content that celebrates and preserves Kalenjin culture and literature.</p>
+                <p>We encourage you to address the feedback above and consider reapplying in the future. Mama Africa Library is committed to supporting quality content that celebrates and preserves African culture and literature.</p>
                 
                 <p>You can submit a new application at any time:</p>
                 <div style="text-align: center;">
-                    <a href="https://kalenjinbooks.com/dashboard/author/register" class="button">Apply Again</a>
+                    <a href="https://mamaafricalibrary.com/dashboard/author/register" class="button">Apply Again</a>
                 </div>
                 
                 <p>If you have questions about this decision or would like clarification on any aspect of the feedback, please don't hesitate to contact our support team. We're here to help you succeed.</p>
@@ -344,12 +344,12 @@ export function createRejectionEmail(authorName: string, authorEmail: string, re
                 
                 <p>Best regards,<br>
                 <strong>The Mama Africa Library Editorial Team</strong><br>
-                Preserving Kalenjin Literature & Culture</p>
+                Preserving African Literature & Culture</p>
             </div>
             <div class="footer">
-                <p><strong>Mama Africa Library</strong> - Digital Platform for Kalenjin Literature</p>
+                <p><strong>Mama Africa Library</strong> - Digital Platform for African Literature</p>
                 <p>This email was sent to ${authorEmail}</p>
-                <p><a href="mailto:support@kalenjinbooks.com">Contact Support</a> | <a href="https://kalenjinbooks.com/privacy">Privacy Policy</a></p>
+                <p><a href="mailto:support@mamaafricalibrary.com">Contact Support</a> | <a href="https://mamaafricalibrary.com/privacy">Privacy Policy</a></p>
             </div>
         </div>
     </body>
@@ -368,10 +368,10 @@ After careful review by our editorial team, we are unable to approve your applic
 Feedback from our review:
 ${reason}
 
-We encourage you to address the feedback above and consider reapplying in the future. Mama Africa Library is committed to supporting quality content that celebrates and preserves Kalenjin culture and literature.
+We encourage you to address the feedback above and consider reapplying in the future. Mama Africa Library is committed to supporting quality content that celebrates and preserves African culture and literature.
 
 You can submit a new application at any time:
-https://kalenjinbooks.com/dashboard/author/register
+https://mamaafricalibrary.com/dashboard/author/register
 
 If you have questions about this decision or would like clarification on any aspect of the feedback, please don't hesitate to contact our support team. We're here to help you succeed.
 
@@ -379,12 +379,12 @@ Thank you for your understanding and continued interest in Mama Africa Library.
 
 Best regards,
 The Mama Africa Library Editorial Team
-Preserving Kalenjin Literature & Culture
+Preserving African Literature & Culture
 
 ---
 This email was sent to ${authorEmail}
-Contact Support: support@kalenjinbooks.com
-Privacy Policy: https://kalenjinbooks.com/privacy
+Contact Support: support@mamaafricalibrary.com
+Privacy Policy: https://mamaafricalibrary.com/privacy
     `;
     
     return {
@@ -556,7 +556,7 @@ export function createHardCopyRequestEmail(
                 </ol>
                 
                 <div style="text-align: center;">
-                    <a href="https://kalenjinbooks.com/dashboard/author/requests" class="button">View Request in Dashboard</a>
+                    <a href="https://mamaafricalibrary.com/dashboard/author/requests" class="button">View Request in Dashboard</a>
                 </div>
                 
                 <p>Please respond to this request within 2-3 business days to maintain a good relationship with your readers.</p>
@@ -565,9 +565,9 @@ export function createHardCopyRequestEmail(
                 <strong>The Mama Africa Library Team</strong></p>
             </div>
             <div class="footer">
-                <p><strong>Mama Africa Library</strong> - Digital Platform for Kalenjin Literature</p>
+                <p><strong>Mama Africa Library</strong> - Digital Platform for African Literature</p>
                 <p>This email was sent to ${authorEmail}</p>
-                <p><a href="mailto:support@kalenjinbooks.com">Contact Support</a> | <a href="https://kalenjinbooks.com/privacy">Privacy Policy</a></p>
+                <p><a href="mailto:support@mamaafricalibrary.com">Contact Support</a> | <a href="https://mamaafricalibrary.com/privacy">Privacy Policy</a></p>
             </div>
         </div>
     </body>
@@ -596,7 +596,7 @@ Next Steps:
 2. Respond with your pricing and delivery estimate
 3. Coordinate directly with the requester for payment and delivery
 
-View Request in Dashboard: https://kalenjinbooks.com/dashboard/author/requests
+View Request in Dashboard: https://mamaafricalibrary.com/dashboard/author/requests
 
 Please respond to this request within 2-3 business days to maintain a good relationship with your readers.
 
@@ -605,8 +605,8 @@ The Mama Africa Library Team
 
 ---
 This email was sent to ${authorEmail}
-Contact Support: support@kalenjinbooks.com
-Privacy Policy: https://kalenjinbooks.com/privacy
+Contact Support: support@mamaafricalibrary.com
+Privacy Policy: https://mamaafricalibrary.com/privacy
     `;
     
     return {
@@ -717,15 +717,15 @@ export function createHardCopyConfirmationEmail(
                 
                 <p>If you have any questions in the meantime, feel free to reach out to our support team.</p>
                 
-                <p>Thank you for supporting Kalenjin literature!</p>
+                <p>Thank you for supporting African literature!</p>
                 
                 <p>Best regards,<br>
                 <strong>The Mama Africa Library Team</strong></p>
             </div>
             <div class="footer">
-                <p><strong>Mama Africa Library</strong> - Digital Platform for Kalenjin Literature</p>
+                <p><strong>Mama Africa Library</strong> - Digital Platform for African Literature</p>
                 <p>This email was sent to ${requesterEmail}</p>
-                <p><a href="mailto:support@kalenjinbooks.com">Contact Support</a> | <a href="https://kalenjinbooks.com">Visit Website</a></p>
+                <p><a href="mailto:support@mamaafricalibrary.com">Contact Support</a> | <a href="https://mamaafricalibrary.com">Visit Website</a></p>
             </div>
         </div>
     </body>
@@ -750,15 +750,15 @@ The author will contact you directly at ${requesterEmail} to finalize the detail
 
 If you have any questions in the meantime, feel free to reach out to our support team.
 
-Thank you for supporting Kalenjin literature!
+Thank you for supporting African literature!
 
 Best regards,
 The Mama Africa Library Team
 
 ---
 This email was sent to ${requesterEmail}
-Contact Support: support@kalenjinbooks.com
-Visit Website: https://kalenjinbooks.com
+Contact Support: support@mamaafricalibrary.com
+Visit Website: https://mamaafricalibrary.com
     `;
     
     return {

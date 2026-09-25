@@ -58,7 +58,7 @@ export default function LoginPage() {
                                     Share Your Story With The World
                                 </h2>
                                 <p className="text-neutral-brown-200 text-lg mb-8">
-                                    Join our community of talented Kalenjin authors. Publish your books, connect with readers, and grow your writing career.
+                                    Join our community of talented African authors. Publish your books, connect with readers, and grow your writing career.
                                 </p>
 
                                 <div className="space-y-4">
@@ -78,7 +78,7 @@ export default function LoginPage() {
                                         </div>
                                         <div>
                                             <p className="text-white font-semibold mb-1">Build Your Audience</p>
-                                            <p className="text-neutral-brown-300 text-sm">Connect with readers who appreciate Kalenjin literature</p>
+                                            <p className="text-neutral-brown-300 text-sm">Connect with readers who appreciate African literature</p>
                                         </div>
                                     </div>
                                     

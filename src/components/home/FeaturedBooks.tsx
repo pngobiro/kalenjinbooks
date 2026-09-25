@@ -54,7 +54,7 @@ export function FeaturedBooks({ books }: FeaturedBooksProps) {
                 {/* Centered Header */}
                 <div className="text-center mb-12">
                     <h2 className="text-4xl md:text-5xl font-bold text-neutral-brown-900 font-heading mb-3">Featured Books</h2>
-                    <p className="text-lg text-neutral-brown-700 font-body">Discover our curated collection of Kalenjin literature</p>
+                    <p className="text-lg text-neutral-brown-700 font-body">Discover our curated collection of African literature</p>
                 </div>
 
                 {/* Centered Navigation buttons */}

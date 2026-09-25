@@ -287,7 +287,7 @@ export default function HomePage() {
                     Stories & Insights
                   </h2>
                   <p className="text-base md:text-lg max-w-2xl mx-auto" style={{ color: '#5B4F42' }}>
-                    Dive into engaging posts about Kalenjin culture, literature, and life
+                    Dive into engaging posts about African culture, literature, and life
                   </p>
                 </div>
 

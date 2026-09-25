@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Share2, Twitter, Facebook, Link2, Check, MessageCircle } from 'lucide-react';
 
-const SITE_URL = 'https://kalenjinbooks.pages.dev';
+const SITE_URL = 'https://mamaafricalibrary.com';
 
 interface ShareButtonsProps {
   title: string;

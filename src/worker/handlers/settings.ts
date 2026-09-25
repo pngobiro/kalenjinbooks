@@ -14,7 +14,7 @@ const SETTINGS_KEY = 'platform';
 
 export const DEFAULT_SETTINGS = {
   siteName: 'Mama Africa Library',
-  tagline: 'Preserving Kalenjin heritage through stories',
+  tagline: 'Preserving African heritage through stories',
   contactEmail: 'pngobiro@gmail.com',
   currency: 'KES',
   defaultPaymentMethods: ['mpesa', 'stripe', 'paypal'],

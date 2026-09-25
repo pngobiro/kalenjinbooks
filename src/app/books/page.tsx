@@ -173,7 +173,7 @@ export default function BooksPage() {
               className="text-sm md:text-base mb-8 max-w-2xl mx-auto"
               style={{ color: 'rgba(255, 252, 245, 0.9)', lineHeight: '1.6' }}
             >
-              Discover authentic Kalenjin literature from folklore to modern fiction. Browse our growing library of books by local authors.
+              Discover authentic African literature from folklore to modern fiction. Browse our growing library of books by local authors.
             </p>
 
             {/* Search Bar */}

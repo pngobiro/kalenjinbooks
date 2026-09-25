@@ -6,7 +6,7 @@ const featuredAuthors = [
         id: '1',
         name: 'John Kamau',
         booksCount: 8,
-        bio: 'Passionate storyteller preserving Kalenjin culture',
+        bio: 'Passionate storyteller preserving African culture',
     },
     {
         id: '2',
