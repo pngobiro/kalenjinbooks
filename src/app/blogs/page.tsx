@@ -136,8 +136,17 @@ function BlogsContent() {
             <Navbar />
 
             {/* Hero Section */}
-            <section className="relative bg-gradient-to-br from-amber-400 via-orange-400 to-red-500 overflow-hidden">
-                <div className="absolute inset-0 bg-black/10"></div>
+            <section className="relative overflow-hidden" style={{ backgroundColor: '#2C2416' }}>
+                <img
+                  src="/images/blogs-illustration.jpg"
+                  alt=""
+                  aria-hidden="true"
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+                <div
+                  className="absolute inset-0"
+                  style={{ background: 'linear-gradient(100deg, rgba(44,36,22,0.92) 0%, rgba(44,36,22,0.65) 55%, rgba(44,36,22,0.35) 100%)' }}
+                />
                 <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
                     <div className="max-w-3xl">
                         <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight" style={{ fontFamily: 'Playfair Display, serif' }}>

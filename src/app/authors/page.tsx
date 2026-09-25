@@ -47,9 +47,16 @@ export default function AuthorsPage() {
 
       {/* Hero Section */}
       <section className="relative overflow-hidden" style={{ backgroundColor: '#2C2416' }}>
-        <div className="absolute inset-0 opacity-10" style={{
-          backgroundImage: 'radial-gradient(circle at 20% 30%, #D97846 0%, transparent 40%), radial-gradient(circle at 80% 70%, #7A9B76 0%, transparent 40%)',
-        }}></div>
+        <img
+          src="/images/authors-illustration.jpg"
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        <div
+          className="absolute inset-0"
+          style={{ background: 'linear-gradient(180deg, rgba(44,36,22,0.82) 0%, rgba(44,36,22,0.6) 60%, rgba(44,36,22,0.78) 100%)' }}
+        />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 text-center">
           <p className="text-sm font-semibold uppercase tracking-[0.2em] mb-4" style={{ color: '#D97846' }}>
             The Storytellers
