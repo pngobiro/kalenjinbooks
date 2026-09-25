@@ -125,7 +125,7 @@ export default function HomePage() {
             <section>
               <div className="text-center mb-12">
                 <h2 className="font-heading text-3xl md:text-4xl font-bold mb-4" style={{ color: '#2C2416' }}>
-                  Meet Our Storytellers
+                  Meet Our Visionary Writers
                 </h2>
                 <p className="text-base md:text-lg max-w-2xl mx-auto" style={{ color: '#5B4F42' }}>
                   Talented authors preserving African heritage through their words — the voices of Mama Africa Library
