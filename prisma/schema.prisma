@@ -117,6 +117,7 @@ model Book {
   publishedAt   DateTime?
   isPublished   Boolean   @default(false)
   isFeatured    Boolean   @default(false)
+  isFreeReading Boolean   @default(false) // Author/admin can enable free online reading per book
   featuredOrder Int?      // Order in featured list (lower = first)
   rating        Float     @default(0)
   reviewCount   Int       @default(0)

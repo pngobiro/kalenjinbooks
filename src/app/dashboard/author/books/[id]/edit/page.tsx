@@ -24,6 +24,7 @@ interface BookData {
   previewPages: number;
   isPublished: boolean;
   isFeatured: boolean;
+  isFreeReading: boolean;
   tags: string[];
   isbn: string | null;
 }
@@ -57,6 +58,7 @@ export default function EditBookPage({ params }: { params: Promise<{ id: string 
     previewPages: 5,
     isPublished: false,
     isFeatured: false,
+    isFreeReading: false,
     tags: [],
     isbn: null,
   });
@@ -122,6 +124,7 @@ export default function EditBookPage({ params }: { params: Promise<{ id: string 
         previewPages: book.previewPages || 5,
         isPublished: book.isPublished,
         isFeatured: book.isFeatured,
+        isFreeReading: (book as any).isFreeReading ?? false,
         tags,
         isbn: book.isbn,
       });
@@ -202,6 +205,7 @@ export default function EditBookPage({ params }: { params: Promise<{ id: string 
         formDataToSend.append('previewPages', formData.previewPages.toString());
         formDataToSend.append('isPublished', formData.isPublished.toString());
         formDataToSend.append('isFeatured', formData.isFeatured.toString());
+        formDataToSend.append('isFreeReading', formData.isFreeReading.toString());
         formDataToSend.append('tags', JSON.stringify(formData.tags));
         if (formData.isbn) {
           formDataToSend.append('isbn', formData.isbn);
@@ -223,6 +227,7 @@ export default function EditBookPage({ params }: { params: Promise<{ id: string 
           previewPages: formData.previewPages,
           isPublished: formData.isPublished,
           isFeatured: formData.isFeatured,
+          isFreeReading: formData.isFreeReading,
           tags: formData.tags,
           isbn: formData.isbn,
         });
@@ -540,6 +545,19 @@ export default function EditBookPage({ params }: { params: Promise<{ id: string 
                   <div>
                     <p className="font-medium text-neutral-brown-900">Featured</p>
                     <p className="text-sm text-neutral-brown-600">Show this book in the featured section</p>
+                  </div>
+                </label>
+
+                <label className="flex items-start gap-4 p-4 bg-neutral-cream rounded-lg cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={formData.isFreeReading}
+                    onChange={(e) => handleInputChange('isFreeReading', e.target.checked)}
+                    className="mt-1 w-5 h-5 rounded border-neutral-brown-300 text-primary focus:ring-primary"
+                  />
+                  <div>
+                    <p className="font-medium text-neutral-brown-900">Free Reading</p>
+                    <p className="text-sm text-neutral-brown-600">Let any signed-in reader read this book free in the protected viewer</p>
                   </div>
                 </label>
               </div>

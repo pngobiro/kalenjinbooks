@@ -266,9 +266,25 @@ async function getSecureBookView(request: WorkerRequest, env: Env, bookId: strin
             return errorResponse('User not found', HttpStatus.NOT_FOUND);
         }
 
-        // Free reading: any authenticated user may read online.
+        // Free reading: any authenticated user may read books flagged free.
+        // Paid books: admin, the book's author, or a user with a COMPLETED purchase.
         // Content is served via a time-limited token through /api/secure-pdf —
         // the R2 file key is never exposed and the URL expires in 1 hour.
+        if (!book.isFreeReading) {
+            const isAdmin = user.role === 'ADMIN' || user.isAdmin;
+            const isOwner = book.author.userId === userId;
+            let hasPurchase = false;
+            if (!isAdmin && !isOwner) {
+                const purchase = await prisma.purchase.findFirst({
+                    where: { bookId, userId, status: 'COMPLETED' },
+                    select: { id: true },
+                });
+                hasPurchase = !!purchase;
+            }
+            if (!isAdmin && !isOwner && !hasPurchase) {
+                return errorResponse('This book is not available for free reading', HttpStatus.FORBIDDEN, ErrorCode.INSUFFICIENT_PERMISSIONS);
+            }
+        }
 
         // Generate time-limited secure URL (valid for 1 hour)
         const expirationTime = Date.now() + (60 * 60 * 1000); // 1 hour
@@ -490,6 +506,7 @@ async function updateBook(request: WorkerRequest, env: Env, bookId: string): Pro
             const previewPages = parseInt(formData.get('previewPages') as string);
             const isPublished = formData.get('isPublished') === 'true';
             const isFeatured = formData.get('isFeatured') === 'true';
+            const isFreeReading = formData.get('isFreeReading') === 'true';
             const tagsJson = formData.get('tags') as string;
             const isbn = formData.get('isbn') as string || null;
             const coverImage = formData.get('coverImage') as File;
@@ -594,6 +611,7 @@ async function updateBook(request: WorkerRequest, env: Env, bookId: string): Pro
                 previewPages,
                 isPublished,
                 isFeatured,
+                isFreeReading,
                 tags: tags.length > 0 ? JSON.stringify(tags) : null,
                 isbn,
                 coverImage: coverImageUrl,
@@ -614,6 +632,9 @@ async function updateBook(request: WorkerRequest, env: Env, bookId: string): Pro
             const fields = ['title', 'description', 'category', 'language', 'rentalPrice', 'previewPages', 'isPublished', 'isFeatured', 'isbn'];
             for (const f of fields) {
                 if (f in body) allowed[f] = body[f];
+            }
+            if ('isFreeReading' in body) {
+                allowed.isFreeReading = body.isFreeReading === true || body.isFreeReading === 'true';
             }
             if ('price' in body) {
                 const p = Number(body.price);

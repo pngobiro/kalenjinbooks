@@ -30,6 +30,7 @@ interface AuthorWithBooks extends Author {
     language: string;
     publishedAt: string;
     rating: number;
+    isFreeReading?: boolean;
     tags?: string;
     amazonUrl?: string | null;
     readOnlineUrl?: string | null;
@@ -314,9 +315,15 @@ export default function AuthorDetailPage() {
                         </div>
                       )}
                       {/* Free reading badge */}
-                      <div className="absolute top-3 right-3 px-3 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-wide shadow" style={{ backgroundColor: '#7A9B76', color: '#FFFCF5' }}>
-                        Read Free
-                      </div>
+                      {book.isFreeReading ? (
+                        <div className="absolute top-3 right-3 px-3 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-wide shadow" style={{ backgroundColor: '#7A9B76', color: '#FFFCF5' }}>
+                          Read Free
+                        </div>
+                      ) : (
+                        <div className="absolute top-3 right-3 px-3 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-wide shadow" style={{ backgroundColor: '#2C2416', color: '#FFFCF5' }}>
+                          KES {book.price.toLocaleString()}
+                        </div>
+                      )}
                       {book.category && (
                         <div className="absolute top-3 left-3">
                           <span className="px-3 py-1 rounded text-xs font-semibold uppercase" style={{ backgroundColor: 'rgba(217,120,70,0.95)', color: '#FFFCF5' }}>

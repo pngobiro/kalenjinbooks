@@ -370,10 +370,16 @@ export default function BooksPage() {
                         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
                           <div className="p-4 w-full">
                             <div className="rounded-lg p-3 flex items-center justify-between" style={{ backgroundColor: 'rgba(255, 252, 245, 0.95)' }}>
-                              <span className="inline-flex items-center gap-1.5 font-bold" style={{ color: '#7A9B76' }}>
-                                <BookOpen size={14} />
-                                Free to Read
-                              </span>
+                              {book.isFreeReading ? (
+                                <span className="inline-flex items-center gap-1.5 font-bold" style={{ color: '#7A9B76' }}>
+                                  <BookOpen size={14} />
+                                  Free to Read
+                                </span>
+                              ) : (
+                                <span className="font-bold" style={{ color: '#D97846' }}>
+                                  KES {book.price.toLocaleString()}
+                                </span>
+                              )}
                               <span className="flex items-center gap-1 text-xs" style={{ color: '#5B4F42' }}>
                                 <Star size={13} className="fill-yellow-400 text-yellow-400" />
                                 {book.rating?.toFixed(1) || '0.0'}
@@ -393,10 +399,16 @@ export default function BooksPage() {
                         </p>
 
                         <div className="flex items-center justify-between mb-3">
-                          <span className="inline-flex items-center gap-1.5 text-sm font-bold" style={{ color: '#7A9B76' }}>
-                            <BookOpen size={15} />
-                            Free to Read
-                          </span>
+                          {book.isFreeReading ? (
+                            <span className="inline-flex items-center gap-1.5 text-sm font-bold" style={{ color: '#7A9B76' }}>
+                              <BookOpen size={15} />
+                              Free to Read
+                            </span>
+                          ) : (
+                            <span className="text-sm font-bold" style={{ color: '#D97846' }}>
+                              KES {book.price.toLocaleString()}
+                            </span>
+                          )}
                           <span className="flex items-center gap-1 text-sm" style={{ color: '#5B4F42' }}>
                             <Star size={14} className="fill-yellow-400 text-yellow-400" />
                             {book.rating?.toFixed(1) || '0.0'}
@@ -412,15 +424,24 @@ export default function BooksPage() {
                         )}
 
                         <div className="mt-auto flex gap-2">
-                          <Link
-                            href={`/book/viewer/${book.id}`}
-                            className="flex-1 inline-flex items-center justify-center gap-1.5 py-2.5 rounded-lg font-bold text-xs transition-colors shadow-sm"
-                            style={{ backgroundColor: '#7A9B76', color: '#FFFCF5' }}
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            <BookOpen size={13} />
-                            Read Free
-                          </Link>
+                          {book.isFreeReading ? (
+                            <Link
+                              href={`/book/viewer/${book.id}`}
+                              className="flex-1 inline-flex items-center justify-center gap-1.5 py-2.5 rounded-lg font-bold text-xs transition-colors shadow-sm"
+                              style={{ backgroundColor: '#7A9B76', color: '#FFFCF5' }}
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <BookOpen size={13} />
+                              Read Free
+                            </Link>
+                          ) : (
+                            <span
+                              className="flex-1 inline-flex items-center justify-center gap-1.5 py-2.5 rounded-lg font-bold text-xs transition-colors shadow-sm"
+                              style={{ backgroundColor: '#F5F1E8', color: '#5B4F42' }}
+                            >
+                              KES {book.price.toLocaleString()}
+                            </span>
+                          )}
                           <Link
                             href={`/request-hard-copy?book=${encodeURIComponent(book.title)}&id=${book.id}`}
                             className="flex-1 inline-flex items-center justify-center gap-1.5 py-2.5 rounded-lg font-bold text-xs transition-colors shadow-sm"

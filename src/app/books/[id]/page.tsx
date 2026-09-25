@@ -103,9 +103,15 @@ export default function BookDetailPage({ params }: { params: Promise<{ id: strin
                   )}
                 </div>
                 {/* Free reading badge */}
-                <div className="absolute -top-3 -right-3 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wide shadow-lg rotate-3" style={{ backgroundColor: '#7A9B76', color: '#FFFCF5' }}>
-                  Read Free
-                </div>
+                {book.isFreeReading ? (
+                  <div className="absolute -top-3 -right-3 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wide shadow-lg rotate-3" style={{ backgroundColor: '#7A9B76', color: '#FFFCF5' }}>
+                    Read Free
+                  </div>
+                ) : (
+                  <div className="absolute -top-3 -right-3 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wide shadow-lg rotate-3" style={{ backgroundColor: '#D97846', color: '#FFFFFF' }}>
+                    KES {book.price.toLocaleString()}
+                  </div>
+                )}
               </div>
             </div>
 
@@ -174,16 +180,25 @@ export default function BookDetailPage({ params }: { params: Promise<{ id: strin
                 {book.description && book.description.length > 260 && '…'}
               </p>
 
-              {/* CTAs — Read free / Donate */}
+              {/* CTAs — Read free / Donate (free books) or Price / Support (paid books) */}
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 max-w-lg">
-                <Link
-                  href={`/book/viewer/${book.id}`}
-                  className="flex-1 inline-flex items-center justify-center gap-2 font-bold py-4 px-8 rounded-full transition-all hover:-translate-y-0.5 shadow-lg"
-                  style={{ backgroundColor: '#D97846', color: '#FFFFFF' }}
-                >
-                  <BookOpen size={20} />
-                  Read Free
-                </Link>
+                {book.isFreeReading ? (
+                  <Link
+                    href={`/book/viewer/${book.id}`}
+                    className="flex-1 inline-flex items-center justify-center gap-2 font-bold py-4 px-8 rounded-full transition-all hover:-translate-y-0.5 shadow-lg"
+                    style={{ backgroundColor: '#D97846', color: '#FFFFFF' }}
+                  >
+                    <BookOpen size={20} />
+                    Read Free
+                  </Link>
+                ) : (
+                  <div
+                    className="flex-1 inline-flex items-center justify-center gap-2 font-bold py-4 px-8 rounded-full"
+                    style={{ backgroundColor: 'rgba(255,252,245,0.08)', color: '#FFFCF5', border: '2px solid rgba(255,252,245,0.2)' }}
+                  >
+                    KES {book.price.toLocaleString()}
+                  </div>
+                )}
                 <Link
                   href={`/payment?type=donation&bookId=${book.id}&author=${encodeURIComponent(book.author?.user?.name || '')}&title=${encodeURIComponent(book.title)}&price=200`}
                   className="flex-1 inline-flex items-center justify-center gap-2 font-bold py-4 px-8 rounded-full transition-all hover:-translate-y-0.5"
@@ -196,7 +211,9 @@ export default function BookDetailPage({ params }: { params: Promise<{ id: strin
 
               <p className="mt-4 inline-flex items-center gap-2 text-xs" style={{ color: '#A89888' }}>
                 <ShieldCheck size={14} style={{ color: '#7A9B76' }} />
-                Protected in-browser reader — content cannot be downloaded or printed
+                {book.isFreeReading
+                  ? 'Protected in-browser reader — content cannot be downloaded or printed'
+                  : 'Available in hard copy below — support the author to keep writing'}
               </p>
             </div>
           </div>

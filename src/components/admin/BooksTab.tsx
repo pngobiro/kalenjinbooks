@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Search, Filter, Eye, Edit, Ban, Power, Star, Book } from 'lucide-react';
+import { Search, Filter, Eye, Edit, Ban, Power, Star, Book, BookOpen, Lock } from 'lucide-react';
 
 interface BookData {
   id: string;
@@ -22,6 +22,7 @@ interface BookData {
   reviewCount: number;
   publishedAt: string | null;
   isActive?: boolean;
+  isFreeReading?: boolean;
   author: {
     id: string;
     user: {
@@ -34,12 +35,14 @@ interface BooksTabProps {
   allBooks: BookData[];
   onToggleBookStatus: (bookId: string, currentStatus: boolean) => void;
   onToggleFeatured: (bookId: string, currentFeaturedStatus: boolean) => void;
+  onToggleFreeReading: (bookId: string, currentFree: boolean) => void;
 }
 
 export default function BooksTab({ 
   allBooks, 
   onToggleBookStatus, 
-  onToggleFeatured 
+  onToggleFeatured,
+  onToggleFreeReading
 }: BooksTabProps) {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
@@ -181,6 +184,17 @@ export default function BooksTab({
                           title={book.isFeatured ? 'Remove from Featured' : 'Add to Featured'}
                         >
                           <Star size={16} fill={book.isFeatured ? 'currentColor' : 'none'} />
+                        </button>
+                        <button
+                          onClick={() => onToggleFreeReading(book.id, book.isFreeReading === true)}
+                          className={`p-2 rounded transition-colors ${
+                            book.isFreeReading
+                              ? 'text-accent-green bg-accent-green/10'
+                              : 'text-neutral-brown-400 hover:bg-neutral-brown-100'
+                          }`}
+                          title={book.isFreeReading ? 'Free reading ON — click to make paid' : 'Paid — click to enable free reading'}
+                        >
+                          {book.isFreeReading ? <BookOpen size={16} /> : <Lock size={16} />}
                         </button>
                         <button
                           onClick={() => onToggleBookStatus(book.id, book.isActive !== false)}

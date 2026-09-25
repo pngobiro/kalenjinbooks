@@ -304,6 +304,38 @@ function AdminDashboardContent() {
     }
   };
 
+  const handleToggleFreeReading = async (bookId: string, currentFree: boolean) => {
+    const action = currentFree ? 'make paid (disable free reading for)' : 'enable free reading for';
+    if (!confirm(`Are you sure you want to ${action} this book?`)) return;
+
+    try {
+      const token = localStorage.getItem('kaleereads_token');
+      if (!token) {
+        alert('Authentication required');
+        return;
+      }
+
+      const response = await fetch('https://kalenjin-books-worker.pngobiro.workers.dev/api/books/' + bookId, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ isFreeReading: !currentFree }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update book');
+      }
+
+      await refetch();
+      alert(currentFree ? 'Free reading disabled — book is now paid.' : 'Free reading enabled.');
+    } catch (err) {
+      console.error('Error toggling free reading:', err);
+      alert('Failed to update book');
+    }
+  };
+
   const handleToggleFeatured = async (bookId: string, currentFeaturedStatus: boolean) => {
     const action = currentFeaturedStatus ? 'unfeature' : 'feature';
     if (!confirm(`Are you sure you want to ${action} this book?`)) return;
@@ -442,6 +474,7 @@ function AdminDashboardContent() {
           allBooks={allBooks}
           onToggleBookStatus={handleToggleBookStatus}
           onToggleFeatured={handleToggleFeatured}
+          onToggleFreeReading={handleToggleFreeReading}
         />
       )}
 

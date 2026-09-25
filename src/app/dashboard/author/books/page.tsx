@@ -24,6 +24,7 @@ interface BookData {
     views?: number;
     earnings?: number;
     topCountry?: string | null;
+    isFreeReading?: boolean;
 }
 
 interface BookStats {
@@ -440,15 +441,26 @@ export default function MyBooksPage() {
 
                                     {/* Status */}
                                     <td className="px-6 py-4">
-                                        {book.isPublished ? (
-                                            <span className="inline-block px-3 py-1 bg-accent-green/20 text-accent-green text-sm font-medium rounded-full">
-                                                Published
-                                            </span>
-                                        ) : (
-                                            <span className="inline-block px-3 py-1 bg-neutral-brown-500/20 text-neutral-brown-700 text-sm font-medium rounded-full">
-                                                Draft
-                                            </span>
-                                        )}
+                                        <div className="flex flex-col items-start gap-1.5">
+                                            {book.isPublished ? (
+                                                <span className="inline-block px-3 py-1 bg-accent-green/20 text-accent-green text-sm font-medium rounded-full">
+                                                    Published
+                                                </span>
+                                            ) : (
+                                                <span className="inline-block px-3 py-1 bg-neutral-brown-500/20 text-neutral-brown-700 text-sm font-medium rounded-full">
+                                                    Draft
+                                                </span>
+                                            )}
+                                            {book.isFreeReading ? (
+                                                <span className="inline-block px-3 py-1 bg-accent-green/10 text-accent-green text-xs font-medium rounded-full">
+                                                    Free reading
+                                                </span>
+                                            ) : (
+                                                <span className="inline-block px-3 py-1 bg-neutral-brown-500/10 text-neutral-brown-600 text-xs font-medium rounded-full">
+                                                    Paid
+                                                </span>
+                                            )}
+                                        </div>
                                     </td>
 
                                     {/* Actions */}

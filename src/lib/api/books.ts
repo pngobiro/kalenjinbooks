@@ -18,6 +18,7 @@ export interface Book {
     rating: number;
     reviewCount: number;
     publishedAt: Date | null;
+    isFreeReading?: boolean;
     author: {
         id: string;
         profileImage?: string | null;
