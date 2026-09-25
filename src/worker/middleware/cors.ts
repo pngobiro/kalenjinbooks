@@ -27,6 +27,8 @@ export function getCorsConfig(env: Env): CorsConfig {
         'https://www.kalenjinbooks.com',
         'https://kalenjinbooks.pages.dev',
         'https://ab336e39.kalenjinbooks.pages.dev',
+        'https://mamaafricalibrary.com',
+        'https://www.mamaafricalibrary.com',
     ];
 
     // Add NEXTAUTH_URL if set
