@@ -116,7 +116,7 @@ export default function HomePage() {
                   Meet Our Storytellers
                 </h2>
                 <p className="text-base md:text-lg max-w-2xl mx-auto" style={{ color: '#5B4F42' }}>
-                  Talented local authors preserving Kalenjin heritage through their words
+                  Talented authors preserving African heritage through their words — the voices of Mama Africa Library
                 </p>
               </div>
 
