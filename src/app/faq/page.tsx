@@ -73,10 +73,20 @@ export default function FAQPage() {
       <Navbar />
 
       {/* Header */}
-      <section className="bg-white py-12">
-        <div className="max-w-7xl mx-auto px-6 text-center">
-          <h1 className="text-4xl font-bold text-neutral-brown-900 font-heading mb-4">FAQ</h1>
-          <p className="text-lg text-neutral-brown-600 max-w-xl mx-auto">
+      <section className="relative overflow-hidden" style={{ backgroundColor: '#2C2416' }}>
+        <img
+          src="/images/faq-illustration.jpg"
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        <div
+          className="absolute inset-0"
+          style={{ background: 'linear-gradient(135deg, rgba(44,36,22,0.88) 0%, rgba(44,36,22,0.62) 55%, rgba(44,36,22,0.45) 100%)' }}
+        />
+        <div className="relative max-w-7xl mx-auto px-6 py-16 text-center">
+          <h1 className="text-4xl font-bold font-heading mb-4" style={{ color: '#FFFCF5' }}>FAQ</h1>
+          <p className="text-lg max-w-xl mx-auto" style={{ color: '#E4D9C4' }}>
             Everything you need to know about Mama Africa Library
           </p>
         </div>

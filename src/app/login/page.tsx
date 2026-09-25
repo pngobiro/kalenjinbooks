@@ -42,7 +42,14 @@ export default function LoginPage() {
                 <div className="grid lg:grid-cols-2 gap-12 max-w-5xl w-full items-center">
                     {/* Left Side - For Authors */}
                     <div className="hidden lg:block relative">
-                        <div className="relative bg-gradient-to-br from-neutral-brown-900 via-neutral-brown-800 to-neutral-brown-900 rounded-3xl p-10 overflow-hidden">
+                        <div className="relative rounded-3xl p-10 overflow-hidden" style={{ backgroundColor: '#2C2416' }}>
+                            <img
+                              src="/images/login-illustration.jpg"
+                              alt=""
+                              aria-hidden="true"
+                              className="absolute inset-0 w-full h-full object-cover opacity-40"
+                            />
+                            <div className="absolute inset-0" style={{ background: 'linear-gradient(160deg, rgba(44,36,22,0.55) 0%, rgba(44,36,22,0.85) 100%)' }}></div>
                             <div className="absolute inset-0 opacity-30">
                                 <div className="absolute top-0 left-0 w-64 h-64 bg-primary rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
                                 <div className="absolute bottom-0 right-0 w-56 h-56 bg-accent-green rounded-full blur-3xl translate-x-1/2 translate-y-1/2"></div>
