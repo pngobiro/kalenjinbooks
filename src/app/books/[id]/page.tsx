@@ -2,7 +2,7 @@
 
 export const runtime = 'edge';
 
-import { Star, Book, ArrowLeft, User, Package, FileText, Calendar, Globe, Share2, BookOpen, Heart, ShieldCheck } from 'lucide-react';
+import { Star, Book, ArrowLeft, User, Package, FileText, Calendar, Globe, Share2, BookOpen, ShieldCheck } from 'lucide-react';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import Navbar from '@/components/layout/Navbar';
@@ -199,14 +199,6 @@ export default function BookDetailPage({ params }: { params: Promise<{ id: strin
                     KES {book.price.toLocaleString()}
                   </div>
                 )}
-                <Link
-                  href={`/payment?type=donation&bookId=${book.id}&author=${encodeURIComponent(book.author?.user?.name || '')}&title=${encodeURIComponent(book.title)}&price=200`}
-                  className="flex-1 inline-flex items-center justify-center gap-2 font-bold py-4 px-8 rounded-full transition-all hover:-translate-y-0.5"
-                  style={{ backgroundColor: 'rgba(255,252,245,0.08)', color: '#FFFCF5', border: '2px solid rgba(217,120,70,0.6)' }}
-                >
-                  <Heart size={20} style={{ color: '#E89B77' }} />
-                  Support Author
-                </Link>
               </div>
 
               <p className="mt-4 inline-flex items-center gap-2 text-xs" style={{ color: '#A89888' }}>
