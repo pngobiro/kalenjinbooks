@@ -128,7 +128,7 @@ export default function HomePage() {
                   Meet Our Visionary Writers
                 </h2>
                 <p className="text-base md:text-lg max-w-2xl mx-auto" style={{ color: '#5B4F42' }}>
-                  Talented authors preserving African heritage through their words — the voices of Mama Africa Library
+                  Visionary authors preserving African heritage through their words — the voices of Mama Africa Library
                 </p>
               </div>
 
