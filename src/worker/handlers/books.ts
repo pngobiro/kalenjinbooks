@@ -52,10 +52,11 @@ export async function handleBooksRequest(
         });
     }
 
-    // GET /api/books/:id/secure-view - Get secure PDF viewing URL (admin/author only)
+    // GET /api/books/:id/secure-view - Get secure PDF viewing URL.
+    // Free books: open to everyone (no login). Paid books: admin/author/purchaser only.
     if (path.match(/^\/api\/books\/[^/]+\/secure-view$/) && method === 'GET') {
         const bookId = path.split('/')[3];
-        return await authMiddleware(request, env, async () => {
+        return await optionalAuthMiddleware(request, env, async () => {
             return await getSecureBookView(request, env, bookId);
         });
     }
@@ -243,15 +244,35 @@ async function getSecureBookView(request: WorkerRequest, env: Env, bookId: strin
             return errorResponse('Book not available', HttpStatus.NOT_FOUND, ErrorCode.RESOURCE_NOT_FOUND);
         }
 
-        // Check if user has permission (admin or book author)
-        const userId = request.ctx?.user?.id;
-        const userRole = request.ctx?.user?.role;
-        
-        console.log('[SecureView] User ID:', userId);
-        console.log('[SecureView] User role:', userRole);
-        
+        // Free books are open to everyone — no login required.
+        // Paid books: admin, the book's author, or a user with a COMPLETED purchase.
+        // Content is served via a time-limited token through /api/secure-pdf —
+        // the R2 file key is never exposed and the URL expires in 1 hour.
+        const userId = request.ctx?.user?.id || null;
+
+        console.log('[SecureView] User ID:', userId || 'guest');
+
+        if (book.isFreeReading) {
+            const expirationTime = Date.now() + (60 * 60 * 1000); // 1 hour
+            const guestId = userId || 'guest';
+            const secureToken = await generateSecureToken(bookId, guestId, expirationTime, env);
+            const secureUrl = `https://kalenjin-books-worker.pngobiro.workers.dev/api/secure-pdf/${secureToken}`;
+            return successResponse({
+                secureUrl,
+                expiresAt: new Date(expirationTime).toISOString(),
+                guest: !userId,
+                book: {
+                    id: book.id,
+                    title: book.title,
+                    fileType: book.fileType,
+                    author: { user: { name: book.author.user.name } },
+                },
+            });
+        }
+
+        // Paid book from here on — authentication required
         if (!userId) {
-            return errorResponse('Authentication required', HttpStatus.UNAUTHORIZED);
+            return errorResponse('Please sign in to read this book', HttpStatus.UNAUTHORIZED);
         }
 
         // Check if user is admin (either role=ADMIN or isAdmin=true)
@@ -266,11 +287,7 @@ async function getSecureBookView(request: WorkerRequest, env: Env, bookId: strin
             return errorResponse('User not found', HttpStatus.NOT_FOUND);
         }
 
-        // Free reading: any authenticated user may read books flagged free.
-        // Paid books: admin, the book's author, or a user with a COMPLETED purchase.
-        // Content is served via a time-limited token through /api/secure-pdf —
-        // the R2 file key is never exposed and the URL expires in 1 hour.
-        if (!book.isFreeReading) {
+        {
             const isAdmin = user.role === 'ADMIN' || user.isAdmin;
             const isOwner = book.author.userId === userId;
             let hasPurchase = false;

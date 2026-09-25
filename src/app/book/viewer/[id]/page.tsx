@@ -4,6 +4,7 @@ export const runtime = 'edge';
 
 import { useState, useEffect, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { ArrowLeft, Shield, AlertTriangle, Download, Heart } from 'lucide-react';
 import { useAuth } from '@/lib/auth-context';
 
@@ -31,40 +32,26 @@ export default function SecureBookViewer() {
   const viewerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    console.log('Auth state:', { isAuthenticated, user, authLoading });
-    
-    // Wait for auth to finish loading
+    // Wait for auth to finish loading — guests can read free books, no redirect
     if (authLoading) {
-      console.log('Auth still loading...');
-      return;
-    }
-    
-    if (!isAuthenticated) {
-      console.log('Not authenticated, redirecting to login');
-      router.push('/login');
       return;
     }
 
     fetchBookData();
-  }, [params.id, isAuthenticated, authLoading]);
+  }, [params.id, authLoading]);
 
   const fetchBookData = async () => {
     try {
-      const token = localStorage.getItem('kaleereads_token');
-      console.log('Token from localStorage:', token ? 'exists' : 'missing');
-      
-      if (!token) {
-        setError('Authentication required');
-        return;
-      }
+      // Token is optional: free books load without login; paid books need it
+      const token = typeof window !== 'undefined' ? localStorage.getItem('kaleereads_token') : null;
 
       console.log('Fetching book data for ID:', params.id);
 
       // Get secure PDF URL first (this includes book info)
+      const headers: Record<string, string> = {};
+      if (token) headers['Authorization'] = `Bearer ${token}`;
       const pdfResponse = await fetch(`https://kalenjin-books-worker.pngobiro.workers.dev/api/books/${params.id}/secure-view`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
+        headers,
       });
 
       console.log('PDF fetch response status:', pdfResponse.status);
@@ -72,7 +59,15 @@ export default function SecureBookViewer() {
       if (!pdfResponse.ok) {
         const errorText = await pdfResponse.text();
         console.log('PDF fetch error:', errorText);
-        throw new Error('Failed to get secure PDF access');
+        let message = 'Failed to get secure PDF access';
+        try {
+          const parsed = JSON.parse(errorText);
+          if (parsed?.error) message = parsed.error;
+        } catch { /* keep default */ }
+        if (pdfResponse.status === 401 && !token) {
+          message = 'Please sign in to read this book';
+        }
+        throw new Error(message);
       }
 
       const pdfData: any = await pdfResponse.json();
@@ -268,12 +263,23 @@ export default function SecureBookViewer() {
           <AlertTriangle className="w-16 h-16 text-red-500 mx-auto mb-4" />
           <h1 className="text-2xl font-bold text-neutral-brown-900 mb-2">Access Denied</h1>
           <p className="text-neutral-brown-600 mb-6">{error}</p>
-          <button
-            onClick={() => router.back()}
-            className="bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary-dark transition-colors"
-          >
-            Go Back
-          </button>
+          <div className="flex items-center justify-center gap-3">
+            {error === 'Please sign in to read this book' ? (
+              <Link
+                href={`/login?next=/book/viewer/${params.id}`}
+                className="bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary-dark transition-colors"
+              >
+                Sign In
+              </Link>
+            ) : (
+              <button
+                onClick={() => router.back()}
+                className="bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary-dark transition-colors"
+              >
+                Go Back
+              </button>
+            )}
+          </div>
         </div>
       </div>
     );
