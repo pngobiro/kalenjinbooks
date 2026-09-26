@@ -5,7 +5,7 @@ export const runtime = 'edge';
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import {
-  ArrowLeft, BookOpen, Star, User, MapPin, Globe,
+  ArrowLeft, BookOpen, Star, User, MapPin, Globe, Phone,
   Twitter, Facebook, Instagram, Linkedin,
   Clock, Eye, ArrowRight, FileText, Play,
   Newspaper,
@@ -397,6 +397,53 @@ export default function AuthorDetailPage() {
             </div>
           )}
         </section>
+
+        {/* ── Contact Author ──────────────────────────────── */}
+        {(() => {
+          const contacts: Array<{ icon: any; label: string; value: string; href: string }> = [];
+          if (author.phoneNumber) {
+            contacts.push({ icon: Phone, label: 'Phone', value: author.phoneNumber, href: `tel:${author.phoneNumber.replace(/\s+/g, '')}` });
+          }
+          if (author.website) {
+            const url = /^https?:\/\//i.test(author.website) ? author.website : `https://${author.website}`;
+            contacts.push({ icon: Globe, label: 'Website', value: author.website.replace(/^https?:\/\//i, ''), href: url });
+          }
+          if (author.twitter) contacts.push({ icon: Twitter, label: 'Twitter', value: `@${author.twitter.replace(/^@/, '')}`, href: `https://twitter.com/${author.twitter.replace(/^@/, '')}` });
+          if (author.facebook) contacts.push({ icon: Facebook, label: 'Facebook', value: author.facebook, href: author.facebook.startsWith('http') ? author.facebook : `https://facebook.com/${author.facebook}` });
+          if (author.instagram) contacts.push({ icon: Instagram, label: 'Instagram', value: `@${author.instagram.replace(/^@/, '')}`, href: `https://instagram.com/${author.instagram.replace(/^@/, '')}` });
+          if (author.linkedin) contacts.push({ icon: Linkedin, label: 'LinkedIn', value: author.linkedin, href: author.linkedin.startsWith('http') ? author.linkedin : `https://linkedin.com/in/${author.linkedin}` });
+          if (contacts.length === 0) return null;
+          return (
+            <section>
+              <div className="mb-8">
+                <p className="text-xs font-semibold uppercase tracking-[0.25em] mb-2" style={{ color: '#D97846' }}>Get In Touch</p>
+                <h2 className="text-3xl md:text-4xl font-bold" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>
+                  Contact {author.name?.split(' ')[0]}
+                </h2>
+              </div>
+              <div className="flex flex-wrap justify-center lg:justify-start gap-4">
+                {contacts.map((c, i) => (
+                  <a
+                    key={i}
+                    href={c.href}
+                    target={c.href.startsWith('tel:') ? undefined : '_blank'}
+                    rel="noopener noreferrer"
+                    className="group inline-flex items-center gap-3 px-5 py-3.5 rounded-2xl transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5"
+                    style={{ backgroundColor: '#FFFCF5', border: '1px solid #E4D9C4' }}
+                  >
+                    <span className="w-10 h-10 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: '#FEF3E7' }}>
+                      <c.icon size={18} style={{ color: '#D97846' }} />
+                    </span>
+                    <span>
+                      <span className="block text-[11px] font-semibold uppercase tracking-wider" style={{ color: '#A89888' }}>{c.label}</span>
+                      <span className="block text-sm font-bold group-hover:underline" style={{ color: '#2C2416' }}>{c.value}</span>
+                    </span>
+                  </a>
+                ))}
+              </div>
+            </section>
+          );
+        })()}
 
         {/* Bottom CTA */}
         <div className="text-center pt-4 pb-8">
