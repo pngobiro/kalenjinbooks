@@ -233,6 +233,68 @@ export default function HomePage() {
               )}
             </section>
 
+            {/* Featured Book Spotlight */}
+            {(() => {
+              const featured = books.find((b) => b.isFeatured) || books.find((b) => b.id === 'book-1');
+              if (!featured) return null;
+              return (
+                <section className="relative overflow-hidden rounded-3xl" style={{ backgroundColor: '#2C2416' }}>
+                  <div className="absolute inset-0 opacity-10" style={{
+                    backgroundImage: 'radial-gradient(circle at 20% 30%, #D97846 0%, transparent 40%), radial-gradient(circle at 80% 70%, #C9A354 0%, transparent 40%)',
+                  }}></div>
+                  <div className="relative grid grid-cols-1 md:grid-cols-[240px_1fr] gap-8 md:gap-12 items-center p-8 md:p-12">
+                    <Link href={`/books/${featured.id}`} className="group mx-auto w-48 md:w-full shrink-0">
+                      <div className="relative aspect-[2/3] rounded-xl overflow-hidden shadow-2xl transition-transform duration-300 group-hover:scale-[1.03]" style={{ boxShadow: '0 20px 50px rgba(0,0,0,0.45)' }}>
+                        {featured.coverImage ? (
+                          <img src={featured.coverImage} alt={featured.title} className="w-full h-full object-cover" />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center" style={{ backgroundColor: '#3A2E22' }}>
+                            <BookOpen size={48} style={{ color: 'rgba(228,217,196,0.4)' }} />
+                          </div>
+                        )}
+                      </div>
+                    </Link>
+                    <div className="text-center md:text-left">
+                      <p className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] px-4 py-1.5 rounded-full mb-5" style={{ backgroundColor: 'rgba(217,120,70,0.18)', color: '#E89B77', border: '1px solid rgba(217,120,70,0.4)' }}>
+                        <Star size={13} className="fill-yellow-400 text-yellow-400" />
+                        Featured Book
+                      </p>
+                      <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold mb-3 leading-tight" style={{ color: '#FFFCF5' }}>
+                        {featured.title}
+                      </h2>
+                      <p className="text-sm mb-4" style={{ color: '#E89B77' }}>
+                        by {featured.author?.user?.name || 'Unknown Author'}
+                      </p>
+                      {featured.description && (
+                        <p className="text-base leading-relaxed mb-6 max-w-xl mx-auto md:mx-0 line-clamp-3" style={{ color: '#E4D9C4' }}>
+                          {featured.description}
+                        </p>
+                      )}
+                      <div className="flex flex-col sm:flex-row items-center justify-center md:justify-start gap-3">
+                        {featured.isFreeReading && (
+                          <Link
+                            href={`/book/viewer/${featured.id}`}
+                            className="inline-flex items-center gap-2 px-7 py-3 rounded-full font-bold transition-all hover:-translate-y-0.5 shadow-lg"
+                            style={{ backgroundColor: '#D97846', color: '#FFFFFF' }}
+                          >
+                            <BookOpen size={17} />
+                            Read Free
+                          </Link>
+                        )}
+                        <Link
+                          href={`/books/${featured.id}`}
+                          className="inline-flex items-center gap-2 px-7 py-3 rounded-full font-bold transition-all hover:-translate-y-0.5"
+                          style={{ backgroundColor: 'rgba(255,252,245,0.08)', color: '#FFFCF5', border: '2px solid rgba(217,120,70,0.6)' }}
+                        >
+                          View Details
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+              );
+            })()}
+
             {/* Latest Books Section */}
             <section style={{ backgroundColor: '#F5F1E8', margin: '0 -1.5rem', padding: '4rem 1.5rem', borderRadius: '1.5rem' }}>
               <div className="text-center mb-12">
