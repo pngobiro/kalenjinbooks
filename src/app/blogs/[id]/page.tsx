@@ -98,13 +98,27 @@ export default function BlogDetailPage() {
         <div className="min-h-screen bg-neutral-cream">
             <Navbar />
 
-            {/* Breadcrumb */}
-            <div className="bg-white border-b border-neutral-brown-200">
-                <div className="max-w-3xl mx-auto px-6 py-4">
-                    <Link href="/blogs" className="inline-flex items-center gap-1.5 text-sm text-neutral-brown-600 hover:text-primary transition-colors">
-                        <ArrowLeft size={16} />
+            {/* Breadcrumb band */}
+            <div className="relative overflow-hidden" style={{ backgroundColor: '#2C2416' }}>
+                <div className="absolute inset-0 opacity-10" style={{
+                    backgroundImage: 'radial-gradient(circle at 15% 50%, #D97846 0%, transparent 45%), radial-gradient(circle at 85% 50%, #C9A354 0%, transparent 40%)',
+                }}></div>
+                <div className="relative max-w-7xl mx-auto px-6 py-5 flex items-center justify-between gap-4">
+                    <Link
+                        href="/blogs"
+                        className="group inline-flex items-center gap-2 pl-2 pr-4 py-2 rounded-full text-sm font-semibold transition-all hover:-translate-x-0.5"
+                        style={{ backgroundColor: 'rgba(255,252,245,0.08)', border: '1px solid rgba(228,217,196,0.2)', color: '#E4D9C4' }}
+                    >
+                        <span className="w-7 h-7 rounded-full flex items-center justify-center transition-colors group-hover:bg-primary" style={{ backgroundColor: '#D97846' }}>
+                            <ArrowLeft size={14} className="text-white" />
+                        </span>
                         All Blog Posts
                     </Link>
+                    {post.category && (
+                        <span className="hidden sm:inline-block px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider" style={{ backgroundColor: 'rgba(217,120,70,0.18)', color: '#E89B77', border: '1px solid rgba(217,120,70,0.4)' }}>
+                            {post.category}
+                        </span>
+                    )}
                 </div>
             </div>
 
