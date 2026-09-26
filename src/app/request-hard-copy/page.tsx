@@ -1,7 +1,8 @@
 'use client';
 
-import { ArrowLeft, Package, MapPin, User, BookOpen, CheckCircle, Book, Truck, Sparkles } from 'lucide-react';
+import { ArrowLeft, Package, MapPin, User, BookOpen, CheckCircle, Truck, Sparkles } from 'lucide-react';
 import Link from 'next/link';
+import SiteLogo from '@/components/SiteLogo';
 import { useSearchParams } from 'next/navigation';
 import { useState, Suspense } from 'react';
 
@@ -90,19 +91,39 @@ function RequestHardCopyContent() {
   return (
     <main className="min-h-screen" style={{ backgroundColor: '#FFFCF5' }}>
       {/* Navigation */}
-      <nav className="bg-white/95 backdrop-blur-sm sticky top-0 z-50 border-b shadow-sm" style={{ borderColor: '#E5D5C3' }}>
+      <nav
+        className="sticky top-0 z-50 backdrop-blur-md"
+        style={{
+          backgroundColor: 'rgba(255,252,245,0.92)',
+          borderBottom: '1px solid #E4D9C4',
+          boxShadow: '0 2px 20px rgba(44,36,22,0.06)',
+        }}
+      >
+        <div className="h-1" style={{ background: 'linear-gradient(90deg, #D97846 0%, #C9A354 50%, #7A9B76 100%)' }} />
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="flex items-center justify-between h-16">
-            <Link href="/" className="flex items-center gap-2">
-              <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: '#D97846' }}>
-                <Book size={22} className="text-white" />
-              </div>
-              <span className="text-xl font-bold hidden sm:inline" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>Mama Africa Library</span>
+          <div className="flex items-center justify-between h-16 md:h-[72px]">
+            <Link href="/" className="flex items-center gap-2.5 group">
+              <span className="transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3 inline-block">
+                <SiteLogo size={30} />
+              </span>
+              <span className="leading-tight">
+                <span className="block text-[17px] md:text-lg font-bold font-heading" style={{ color: '#2C2416' }}>
+                  Mama Africa Library
+                </span>
+                <span className="hidden sm:block text-[10px] font-semibold uppercase tracking-[0.18em]" style={{ color: '#A89888' }}>
+                  African Books & Stories
+                </span>
+              </span>
             </Link>
 
-            <Link href={bookId ? `/books/${bookId}` : '/books'} className="flex items-center gap-2 text-gray-700 hover:text-orange-600 transition-colors font-medium">
-              <ArrowLeft size={20} />
-              <span className="hidden sm:inline">Back</span>
+            <Link
+              href={bookId ? `/books/${bookId}` : '/books'}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold transition-all hover:-translate-y-0.5"
+              style={{ backgroundColor: '#F5F1E8', border: '1px solid #E4D9C4', color: '#5B4F42' }}
+            >
+              <ArrowLeft size={16} />
+              <span className="hidden sm:inline">Back to Book</span>
+              <span className="sm:hidden">Back</span>
             </Link>
           </div>
         </div>
