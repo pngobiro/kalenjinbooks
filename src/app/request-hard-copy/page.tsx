@@ -1,10 +1,10 @@
 'use client';
 
-import { ArrowLeft, Package, MapPin, User, BookOpen, CheckCircle, Truck, Sparkles } from 'lucide-react';
+import { ArrowLeft, Package, MapPin, User, BookOpen, CheckCircle, Truck, Sparkles, Phone, Globe } from 'lucide-react';
 import Link from 'next/link';
 import SiteLogo from '@/components/SiteLogo';
 import { useSearchParams } from 'next/navigation';
-import { useState, Suspense } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 
 function RequestHardCopyContent() {
   const searchParams = useSearchParams();
@@ -17,6 +17,17 @@ function RequestHardCopyContent() {
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [author, setAuthor] = useState<any>(null);
+
+  useEffect(() => {
+    if (!bookId) return;
+    fetch(`https://kalenjin-books-worker.pngobiro.workers.dev/api/books/${bookId}`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((j: any) => {
+        if (j?.data?.author) setAuthor(j.data.author);
+      })
+      .catch(() => {});
+  }, [bookId]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -172,6 +183,37 @@ function RequestHardCopyContent() {
       {/* Form */}
       <section className="py-12">
         <div className="max-w-2xl mx-auto px-4 sm:px-6">
+          {author && (
+            <div className="mb-6 rounded-2xl p-5 flex flex-col sm:flex-row sm:items-center gap-4 shadow-md" style={{ backgroundColor: '#FFFCF5', border: '1px solid #E4D9C4' }}>
+              {author.profileImage ? (
+                <img src={author.profileImage} alt="" className="w-14 h-14 rounded-full object-cover shrink-0" style={{ boxShadow: '0 0 0 2px #D97846' }} />
+              ) : (
+                <div className="w-14 h-14 rounded-full flex items-center justify-center shrink-0 font-bold text-lg" style={{ backgroundColor: '#FEF3E7', color: '#D97846' }}>
+                  {(author?.user?.name || 'A').charAt(0)}
+                </div>
+              )}
+              <div className="flex-1 min-w-0">
+                <p className="text-[11px] font-semibold uppercase tracking-wider" style={{ color: '#A89888' }}>Order directly from the author</p>
+                <Link href={`/authors/${author.id}`} className="font-bold hover:underline" style={{ color: '#2C2416' }}>
+                  {author?.user?.name || 'Author'}
+                </Link>
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-1">
+                  {author.phoneNumber ? (
+                    <a href={`tel:${String(author.phoneNumber).replace(/\s+/g, '')}`} className="inline-flex items-center gap-1.5 text-sm font-semibold" style={{ color: '#D97846' }}>
+                      <Phone size={14} /> {author.phoneNumber}
+                    </a>
+                  ) : (
+                    <span className="text-sm" style={{ color: '#A89888' }}>Contact via the form below</span>
+                  )}
+                  {author.website && (
+                    <a href={/^https?:\/\//i.test(author.website) ? author.website : `https://${author.website}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-sm font-semibold" style={{ color: '#D97846' }}>
+                      <Globe size={14} /> Website
+                    </a>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
           <form onSubmit={handleSubmit} className="rounded-xl shadow-xl overflow-hidden" style={{ backgroundColor: '#FFFCF5', border: '1px solid #E5D5C3' }}>
             {/* Personal Info */}
             <div className="p-8 border-b" style={{ borderColor: '#E5D5C3' }}>
