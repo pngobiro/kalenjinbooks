@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { 
   ArrowLeft, Book, Save, Eye, Upload, X, AlertTriangle,
-  DollarSign, Tag, Globe, FileText, Image as ImageIcon
+  DollarSign, Tag, Globe, FileText, Image as ImageIcon, ShoppingCart, ExternalLink, Plus, Trash2
 } from 'lucide-react';
 import { useAuth } from '@/lib/auth-context';
 import { AuthorProfileHeader } from '@/components/author/AuthorProfileHeader';
@@ -27,6 +27,7 @@ interface BookData {
   isFreeReading: boolean;
   tags: string[];
   isbn: string | null;
+  purchaseLinks: Array<{ label: string; url: string }>;
 }
 
 const categories = [
@@ -61,6 +62,7 @@ export default function EditBookPage({ params }: { params: Promise<{ id: string 
     isFreeReading: false,
     tags: [],
     isbn: null,
+    purchaseLinks: [],
   });
 
   // File upload
@@ -112,6 +114,19 @@ export default function EditBookPage({ params }: { params: Promise<{ id: string 
         tags = [];
       }
 
+      // Parse purchase links if they exist
+      let purchaseLinks: Array<{ label: string; url: string }> = [];
+      try {
+        const parsed = book.purchaseLinks ? JSON.parse(book.purchaseLinks) : [];
+        if (Array.isArray(parsed)) {
+          purchaseLinks = parsed
+            .filter((l: any) => l && typeof l.url === 'string')
+            .map((l: any) => ({ label: String(l.label || 'Buy'), url: String(l.url) }));
+        }
+      } catch (e) {
+        purchaseLinks = [];
+      }
+
       setFormData({
         id: book.id,
         title: book.title,
@@ -127,6 +142,7 @@ export default function EditBookPage({ params }: { params: Promise<{ id: string 
         isFreeReading: (book as any).isFreeReading ?? false,
         tags,
         isbn: book.isbn,
+        purchaseLinks,
       });
       setExistingFileKey((book as any).fileKey || null);
 
@@ -207,6 +223,7 @@ export default function EditBookPage({ params }: { params: Promise<{ id: string 
         formDataToSend.append('isFeatured', formData.isFeatured.toString());
         formDataToSend.append('isFreeReading', formData.isFreeReading.toString());
         formDataToSend.append('tags', JSON.stringify(formData.tags));
+        formDataToSend.append('purchaseLinks', JSON.stringify(formData.purchaseLinks));
         if (formData.isbn) {
           formDataToSend.append('isbn', formData.isbn);
         }
@@ -229,6 +246,7 @@ export default function EditBookPage({ params }: { params: Promise<{ id: string 
           isFeatured: formData.isFeatured,
           isFreeReading: formData.isFreeReading,
           tags: formData.tags,
+          purchaseLinks: formData.purchaseLinks,
           isbn: formData.isbn,
         });
       }
@@ -512,6 +530,58 @@ export default function EditBookPage({ params }: { params: Promise<{ id: string 
                   max="20"
                 />
                 <p className="text-sm text-neutral-brown-500 mt-1">Number of pages readers can preview for free</p>
+              </div>
+            </div>
+
+            {/* Where to Buy (external links) */}
+            <div className="bg-white rounded-xl p-6 shadow-sm">
+              <h2 className="text-xl font-bold text-neutral-brown-900 mb-2 flex items-center gap-2">
+                <ShoppingCart size={20} /> Where to Buy
+              </h2>
+              <p className="text-sm text-neutral-brown-500 mb-4">External stores where readers can purchase this book (e.g. Amazon, Jumia, Nuria). Shown on the book page.</p>
+              <div className="space-y-3">
+                {formData.purchaseLinks.map((link, idx) => (
+                  <div key={idx} className="flex flex-col sm:flex-row gap-2">
+                    <input
+                      type="text"
+                      value={link.label}
+                      onChange={(e) => {
+                        const next = [...formData.purchaseLinks];
+                        next[idx] = { ...next[idx], label: e.target.value };
+                        handleInputChange('purchaseLinks', next);
+                      }}
+                      placeholder="Store name (e.g. Amazon)"
+                      maxLength={40}
+                      className="sm:w-40 px-4 py-2.5 border border-neutral-brown-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                    />
+                    <input
+                      type="url"
+                      value={link.url}
+                      onChange={(e) => {
+                        const next = [...formData.purchaseLinks];
+                        next[idx] = { ...next[idx], url: e.target.value };
+                        handleInputChange('purchaseLinks', next);
+                      }}
+                      placeholder="https://..."
+                      className="flex-1 px-4 py-2.5 border border-neutral-brown-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => handleInputChange('purchaseLinks', formData.purchaseLinks.filter((_, i) => i !== idx))}
+                      className="p-2.5 text-red-500 hover:bg-red-50 rounded-lg transition-colors self-start"
+                      title="Remove link"
+                    >
+                      <Trash2 size={18} />
+                    </button>
+                  </div>
+                ))}
+                <button
+                  type="button"
+                  onClick={() => handleInputChange('purchaseLinks', [...formData.purchaseLinks, { label: '', url: '' }])}
+                  className="inline-flex items-center gap-2 px-4 py-2.5 border-2 border-dashed border-neutral-brown-200 rounded-lg text-sm font-semibold text-neutral-brown-600 hover:border-primary hover:text-primary transition-colors"
+                >
+                  <Plus size={16} /> Add store link
+                </button>
               </div>
             </div>
 

@@ -482,6 +482,33 @@ async function createBook(request: WorkerRequest, env: Env): Promise<Response> {
 /**
  * Update a book
  */
+/**
+ * Normalize purchase links to a JSON string (or null).
+ * Accepts an array of {label, url} or an already-stringified JSON array.
+ */
+function normalizePurchaseLinks(input: unknown): string | null {
+    let links: Array<{ label?: string; url?: string }> = [];
+    if (typeof input === 'string' && input.trim()) {
+        try {
+            const parsed = JSON.parse(input);
+            if (Array.isArray(parsed)) links = parsed;
+        } catch {
+            return null;
+        }
+    } else if (Array.isArray(input)) {
+        links = input;
+    } else {
+        return null;
+    }
+    const clean = links
+        .filter((l): l is { label?: string; url: string } => !!l && typeof l.url === 'string' && l.url.trim() !== '')
+        .map((l) => ({
+            label: typeof l.label === 'string' && l.label.trim() ? l.label.trim().slice(0, 40) : 'Buy',
+            url: l.url.trim().slice(0, 500),
+        }));
+    return clean.length > 0 ? JSON.stringify(clean) : null;
+}
+
 async function updateBook(request: WorkerRequest, env: Env, bookId: string): Promise<Response> {
     const prisma = createD1PrismaClient(env.DB);
 
@@ -526,6 +553,7 @@ async function updateBook(request: WorkerRequest, env: Env, bookId: string): Pro
             const isFreeReading = formData.get('isFreeReading') === 'true';
             const tagsJson = formData.get('tags') as string;
             const isbn = formData.get('isbn') as string || null;
+            const purchaseLinksJson = formData.get('purchaseLinks') as string;
             const coverImage = formData.get('coverImage') as File;
             const bookFile = formData.get('bookFile') as File | null;
 
@@ -631,6 +659,7 @@ async function updateBook(request: WorkerRequest, env: Env, bookId: string): Pro
                 isFreeReading,
                 tags: tags.length > 0 ? JSON.stringify(tags) : null,
                 isbn,
+                purchaseLinks: normalizePurchaseLinks(purchaseLinksJson),
                 coverImage: coverImageUrl,
                 publishedAt: isPublished && !book.isPublished ? new Date() : book.publishedAt,
             };
@@ -652,6 +681,9 @@ async function updateBook(request: WorkerRequest, env: Env, bookId: string): Pro
             }
             if ('isFreeReading' in body) {
                 allowed.isFreeReading = body.isFreeReading === true || body.isFreeReading === 'true';
+            }
+            if ('purchaseLinks' in body) {
+                allowed.purchaseLinks = normalizePurchaseLinks(body.purchaseLinks);
             }
             if ('price' in body) {
                 const p = Number(body.price);

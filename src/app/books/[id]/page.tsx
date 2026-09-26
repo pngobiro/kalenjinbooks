@@ -2,7 +2,7 @@
 
 export const runtime = 'edge';
 
-import { Star, Book, ArrowLeft, User, Package, FileText, Calendar, Globe, Share2, BookOpen, ShieldCheck } from 'lucide-react';
+import { Star, Book, ArrowLeft, User, Package, FileText, Calendar, Globe, Share2, BookOpen, ShieldCheck, ExternalLink } from 'lucide-react';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import Navbar from '@/components/layout/Navbar';
@@ -207,6 +207,37 @@ export default function BookDetailPage({ params }: { params: Promise<{ id: strin
                   ? 'Protected in-browser reader — content cannot be downloaded or printed'
                   : 'Available in hard copy below — support the author to keep writing'}
               </p>
+
+              {(() => {
+                let links: Array<{ label: string; url: string }> = [];
+                try {
+                  const parsed = book.purchaseLinks ? JSON.parse(book.purchaseLinks) : [];
+                  if (Array.isArray(parsed)) links = parsed.filter((l: any) => l && l.url);
+                } catch { /* ignore */ }
+                if (links.length === 0) return null;
+                return (
+                  <div className="mt-6">
+                    <p className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: '#A89888' }}>
+                      Also available at
+                    </p>
+                    <div className="flex flex-wrap gap-2.5 max-w-lg">
+                      {links.map((l, i) => (
+                        <a
+                          key={i}
+                          href={l.url}
+                          target="_blank"
+                          rel="noopener noreferrer sponsored"
+                          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold transition-all hover:-translate-y-0.5 shadow"
+                          style={{ backgroundColor: '#FFFCF5', color: '#2C2416' }}
+                        >
+                          <ExternalLink size={15} style={{ color: '#D97846' }} />
+                          {l.label || 'Buy'}
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })()}
             </div>
           </div>
         </div>

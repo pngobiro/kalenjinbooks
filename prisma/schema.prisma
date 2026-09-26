@@ -114,6 +114,7 @@ model Book {
   language      String    @default("Kalenjin")
   isbn          String?   // ISBN number
   tags          String?   // JSON array of tags
+  purchaseLinks String?   // JSON array of {label, url} external buy links (Amazon etc.)
   publishedAt   DateTime?
   isPublished   Boolean   @default(false)
   isFeatured    Boolean   @default(false)
