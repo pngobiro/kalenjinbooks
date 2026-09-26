@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
-import { Search, BookOpen, Star, ArrowRight, Compass, Package, SlidersHorizontal, ChevronDown, Mountain, MapPin } from 'lucide-react';
+import { Search, BookOpen, Star, ArrowRight, Compass, Package, SlidersHorizontal, ChevronDown, Mountain, MapPin, ExternalLink } from 'lucide-react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import { fetchBooks, type Book as BookType } from '@/lib/api/books';
@@ -481,12 +481,46 @@ export default function BooksPage() {
                         </div>
 
                         {book.language && (
-                          <div className="flex gap-2 mb-4">
+                          <div className="flex gap-2 mb-3">
                             <span className="text-xs px-3 py-1 rounded-full font-medium" style={{ backgroundColor: '#F5F1E8', color: '#5B4F42' }}>
                               {book.language}
                             </span>
                           </div>
                         )}
+
+                        {(() => {
+                          let links: Array<{ label: string; url: string }> = [];
+                          try {
+                            const parsed = book.purchaseLinks ? JSON.parse(book.purchaseLinks) : [];
+                            if (Array.isArray(parsed)) links = parsed.filter((l: any) => l && l.url);
+                          } catch { /* ignore */ }
+                          if (links.length === 0) return null;
+                          return (
+                            <div className="flex flex-wrap items-center gap-x-1.5 gap-y-1 mb-4">
+                              <span className="text-[11px] font-semibold uppercase tracking-wide" style={{ color: '#A89888' }}>
+                                Buy from:
+                              </span>
+                              {links.map((l, i) => (
+                                <span key={i} className="inline-flex items-center">
+                                  <a
+                                    href={l.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer sponsored"
+                                    onClick={(e) => e.stopPropagation()}
+                                    className="inline-flex items-center gap-1 text-xs font-bold hover:underline"
+                                    style={{ color: '#D97846' }}
+                                  >
+                                    <ExternalLink size={11} />
+                                    {l.label || 'Buy'}
+                                  </a>
+                                  {i < links.length - 1 && (
+                                    <span className="ml-1.5 text-[11px]" style={{ color: '#E4D9C4' }}>•</span>
+                                  )}
+                                </span>
+                              ))}
+                            </div>
+                          );
+                        })()}
 
                         <div className="mt-auto flex gap-2">
                           {book.isFreeReading ? (
