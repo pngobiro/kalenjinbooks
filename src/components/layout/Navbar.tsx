@@ -69,10 +69,10 @@ function BecomeAuthorButton({ mobile, onClose }: { mobile?: boolean; onClose?: (
       <button
         onClick={handleClick}
         disabled={loading}
-        className="flex items-center justify-center gap-2 mt-2 w-full px-4 py-2.5 rounded-full text-sm font-bold text-white disabled:opacity-60"
+        className="flex items-center justify-center gap-2 mt-3 w-full px-4 py-3 rounded-full text-sm font-bold text-white shadow-md disabled:opacity-60"
         style={{ backgroundColor: '#D97846' }}
       >
-        <PenSquare size={15} />
+        <PenSquare size={16} />
         {isAuthenticated && user ? 'Go to Dashboard' : 'Become an Author'}
       </button>
     );
@@ -82,10 +82,10 @@ function BecomeAuthorButton({ mobile, onClose }: { mobile?: boolean; onClose?: (
     <button
       onClick={handleClick}
       disabled={loading}
-      className="ml-2 inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold text-white hover:shadow-md transition-all disabled:opacity-60"
-      style={{ backgroundColor: '#D97846' }}
+      className="ml-3 inline-flex items-center gap-2 pl-4 pr-5 py-2.5 rounded-full text-sm font-bold text-white transition-all hover:-translate-y-0.5 hover:shadow-lg disabled:opacity-60"
+      style={{ backgroundColor: '#D97846', boxShadow: '0 4px 14px rgba(217,120,70,0.35)' }}
     >
-      <PenSquare size={13} />
+      <PenSquare size={15} />
       {isAuthenticated && user ? 'Go to Dashboard' : 'Become an Author'}
     </button>
   );
@@ -96,31 +96,67 @@ export default function Navbar() {
   const pathname = usePathname();
 
   return (
-    <nav className="bg-white/98 backdrop-blur-sm sticky top-0 z-50 border-b border-neutral-brown-200/50">
+    <nav
+      className="sticky top-0 z-50 backdrop-blur-md"
+      style={{
+        backgroundColor: 'rgba(255,252,245,0.92)',
+        borderBottom: '1px solid #E4D9C4',
+        boxShadow: '0 2px 20px rgba(44,36,22,0.06)',
+      }}
+    >
+      {/* Terracotta accent line */}
+      <div className="h-1" style={{ background: 'linear-gradient(90deg, #D97846 0%, #C9A354 50%, #7A9B76 100%)' }} />
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        <div className="flex items-center justify-between h-10">
+        <div className="flex items-center justify-between h-16 md:h-[72px]">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-1.5">
-            <SiteLogo size={17} />
-            <span className="text-sm font-bold text-neutral-brown-900 font-heading">Mama Africa Library</span>
+          <Link href="/" className="flex items-center gap-2.5 group">
+            <span className="transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3 inline-block">
+              <SiteLogo size={30} />
+            </span>
+            <span className="leading-tight">
+              <span className="block text-[17px] md:text-lg font-bold font-heading" style={{ color: '#2C2416' }}>
+                Mama Africa Library
+              </span>
+              <span className="hidden sm:block text-[10px] font-semibold uppercase tracking-[0.18em]" style={{ color: '#A89888' }}>
+                African Books & Stories
+              </span>
+            </span>
           </Link>
 
           {/* Desktop Links + CTA */}
           <div className="hidden md:flex items-center gap-1">
-            <div className="flex items-center gap-0.5">
+            <div
+              className="flex items-center gap-1 p-1.5 rounded-full mr-2"
+              style={{ backgroundColor: '#F5F1E8', border: '1px solid #E4D9C4' }}
+            >
               {navLinks.map((link) => {
                 const Icon = link.icon;
+                const active = pathname === link.href;
                 return (
                   <Link
                     key={link.href}
                     href={link.href}
-                    className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-medium transition-colors ${
-                      pathname === link.href
-                        ? 'bg-primary/10 text-primary'
-                        : 'text-neutral-brown-700 hover:bg-neutral-brown-100'
-                    }`}
+                    className="flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold transition-all"
+                    style={
+                      active
+                        ? { backgroundColor: '#2C2416', color: '#FFFCF5', boxShadow: '0 2px 8px rgba(44,36,22,0.3)' }
+                        : { color: '#5B4F42' }
+                    }
+                    onMouseEnter={(e) => {
+                      if (!active) {
+                        (e.currentTarget as HTMLAnchorElement).style.backgroundColor = '#FFFCF5';
+                        (e.currentTarget as HTMLAnchorElement).style.color = '#D97846';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!active) {
+                        (e.currentTarget as HTMLAnchorElement).style.backgroundColor = 'transparent';
+                        (e.currentTarget as HTMLAnchorElement).style.color = '#5B4F42';
+                      }
+                    }}
                   >
-                    <Icon size={12} />
+                    <Icon size={15} />
                     {link.label}
                   </Link>
                 );
@@ -132,37 +168,50 @@ export default function Navbar() {
           {/* Mobile Hamburger */}
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="md:hidden w-7 h-7 flex items-center justify-center rounded-md hover:bg-neutral-brown-100 transition-colors"
+            className="md:hidden w-10 h-10 flex items-center justify-center rounded-full transition-colors"
+            style={{ backgroundColor: '#F5F1E8', border: '1px solid #E4D9C4', color: '#2C2416' }}
             aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
           >
-            {mobileOpen ? <X size={16} /> : <Menu size={16} />}
+            {mobileOpen ? <X size={19} /> : <Menu size={19} />}
           </button>
         </div>
       </div>
 
       {/* Mobile Menu */}
       {mobileOpen && (
-        <div className="md:hidden border-t border-neutral-brown-100 bg-white">
-          <div className="px-4 py-1.5 space-y-0.5">
+        <div
+          className="md:hidden border-t bg-white"
+          style={{ borderColor: '#E4D9C4', boxShadow: '0 12px 32px rgba(44,36,22,0.12)' }}
+        >
+          <div className="px-4 py-3 space-y-1">
             {navLinks.map((link) => {
               const Icon = link.icon;
+              const active = pathname === link.href;
               return (
                 <Link
                   key={link.href}
                   href={link.href}
                   onClick={() => setMobileOpen(false)}
-                  className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-                    pathname === link.href
-                      ? 'bg-primary/10 text-primary'
-                      : 'text-neutral-brown-700 hover:bg-neutral-brown-50'
-                  }`}
+                  className="flex items-center gap-3 px-4 py-3 rounded-xl text-[15px] font-semibold transition-colors"
+                  style={
+                    active
+                      ? { backgroundColor: '#2C2416', color: '#FFFCF5' }
+                      : { color: '#5B4F42' }
+                  }
                 >
-                  <Icon size={16} />
+                  <span
+                    className="w-8 h-8 rounded-lg flex items-center justify-center"
+                    style={{ backgroundColor: active ? 'rgba(255,252,245,0.12)' : '#F5F1E8' }}
+                  >
+                    <Icon size={16} style={{ color: active ? '#E89B77' : '#D97846' }} />
+                  </span>
                   {link.label}
                 </Link>
               );
             })}
-            <BecomeAuthorButton mobile onClose={() => setMobileOpen(false)} />
+            <div className="pt-1 pb-2">
+              <BecomeAuthorButton mobile onClose={() => setMobileOpen(false)} />
+            </div>
           </div>
         </div>
       )}
