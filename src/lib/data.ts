@@ -19,7 +19,7 @@ export const booksData: Record<string, BookData> = {
   '1': {
     id: '1',
     title: 'Immortal Knowledge',
-    author: 'Dr. Kibet Kitur',
+    author: 'Dr. Kibet arap Soi',
     price: 1200,
     rentalPrice: 150,
     rating: 4.9,
