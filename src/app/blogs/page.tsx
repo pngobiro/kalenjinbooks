@@ -53,7 +53,7 @@ export default function BlogsPage() {
                 <div className="flex justify-center py-32">
                     <div className="relative w-12 h-12">
                         <div className="absolute inset-0 border-4 rounded-full" style={{ borderColor: '#E4D9C4' }}></div>
-                        <div className="absolute inset-0 border-4 rounded-full animate-spin" style={{ borderColor: '#D97846', borderTopColor: 'transparent' }}></div>
+                        <div className="absolute inset-0 border-4 rounded-full animate-spin" style={{ borderColor: '#B4502A', borderTopColor: 'transparent' }}></div>
                     </div>
                 </div>
                 <Footer />
@@ -147,7 +147,7 @@ function BlogsContent() {
                   className="absolute inset-0"
                   style={{ background: 'linear-gradient(100deg, rgba(44,36,22,0.92) 0%, rgba(44,36,22,0.65) 55%, rgba(44,36,22,0.35) 100%)' }}
                 />
-                <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
+                <div className="relative page-container py-16 sm:py-20">
                     <div className="max-w-3xl">
                         <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight" style={{ fontFamily: 'Playfair Display, serif' }}>
                             Stories & Insights
@@ -181,7 +181,7 @@ function BlogsContent() {
                 </div>
             </section>
 
-            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <main id="main-content" className="page-container py-12">
                 {/* Category Filter Pills */}
                 <div className="flex items-center gap-3 mb-8 overflow-x-auto pb-2" style={{ scrollbarWidth: 'thin' }}>
                     {BLOG_CATEGORIES.map((cat) => (
@@ -190,7 +190,7 @@ function BlogsContent() {
                             onClick={() => setSelectedCategory(cat.id)}
                             className="px-5 py-2.5 rounded-full font-medium whitespace-nowrap transition-all shadow-sm hover:shadow-md"
                             style={{
-                                backgroundColor: selectedCategory === cat.id ? '#D97846' : '#FFFCF5',
+                                backgroundColor: selectedCategory === cat.id ? '#B4502A' : '#FFFCF5',
                                 color: selectedCategory === cat.id ? '#FFFFFF' : '#2C2416',
                                 border: selectedCategory === cat.id ? 'none' : '1px solid #E5D5C3'
                             }}
@@ -231,7 +231,7 @@ function BlogsContent() {
                         <button
                             onClick={clearFilters}
                             className="flex items-center gap-2 px-4 py-2.5 rounded-lg font-medium transition-all hover:shadow-md"
-                            style={{ backgroundColor: '#D97846', color: '#FFFFFF' }}
+                            style={{ backgroundColor: '#B4502A', color: '#FFFFFF' }}
                         >
                             <X size={16} />
                             Clear Filters
@@ -258,7 +258,7 @@ function BlogsContent() {
                     <div className="flex flex-col items-center justify-center py-24">
                         <div className="relative">
                             <div className="w-16 h-16 border-4 rounded-full" style={{ borderColor: '#F5E6D3' }}></div>
-                            <div className="absolute top-0 left-0 w-16 h-16 border-4 border-t-transparent rounded-full animate-spin" style={{ borderColor: '#D97846' }}></div>
+                            <div className="absolute top-0 left-0 w-16 h-16 border-4 border-t-transparent rounded-full animate-spin" style={{ borderColor: '#B4502A' }}></div>
                         </div>
                         <p className="mt-6 text-gray-600 font-medium">Loading blog posts...</p>
                     </div>
@@ -299,11 +299,11 @@ function BlogsContent() {
                                             </div>
                                             <div className="md:col-span-3 p-8 flex flex-col justify-center">
                                                 {featured.category && (
-                                                    <span className="inline-block w-fit px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wide mb-4" style={{ backgroundColor: '#FEF3E7', color: '#D97846' }}>
+                                                    <span className="inline-block w-fit px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wide mb-4" style={{ backgroundColor: '#FEF3E7', color: '#B4502A' }}>
                                                         {featured.category}
                                                     </span>
                                                 )}
-                                                <h2 className="text-3xl font-bold mb-4 leading-tight group-hover:text-orange-600 transition-colors" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>
+                                                <h2 className="text-3xl font-bold mb-4 leading-tight group-hover:text-primary transition-colors" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>
                                                     {featured.title}
                                                 </h2>
                                                 <p className="text-gray-700 leading-relaxed mb-6 line-clamp-3">
@@ -311,7 +311,7 @@ function BlogsContent() {
                                                 </p>
                                                 <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-6">
                                                     <span className="font-semibold flex items-center gap-2" style={{ color: '#2C2416' }}>
-                                                        <span className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold" style={{ backgroundColor: '#FEF3E7', color: '#D97846' }}>
+                                                        <span className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold" style={{ backgroundColor: '#FEF3E7', color: '#B4502A' }}>
                                                             {featured.author?.user?.name?.charAt(0) || 'K'}
                                                         </span>
                                                         {featured.author?.user?.name || 'Mama Africa Library'}
@@ -367,7 +367,7 @@ function BlogsContent() {
                                                 <div className="p-6">
                                                     <div className="flex items-center gap-3 text-xs text-gray-600 mb-3">
                                                         <span className="font-semibold flex items-center gap-2" style={{ color: '#2C2416' }}>
-                                                            <span className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold" style={{ backgroundColor: '#FEF3E7', color: '#D97846' }}>
+                                                            <span className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold" style={{ backgroundColor: '#FEF3E7', color: '#B4502A' }}>
                                                                 {post.author?.user?.name?.charAt(0) || 'K'}
                                                             </span>
                                                             {post.author?.user?.name || 'Mama Africa Library'}
@@ -375,11 +375,11 @@ function BlogsContent() {
                                                         <span>{formatBlogDate(post.publishedAt || post.createdAt)}</span>
                                                     </div>
                                                     {post.category && (
-                                                        <span className="inline-block px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wide mb-3" style={{ backgroundColor: '#FEF3E7', color: '#D97846' }}>
+                                                        <span className="inline-block px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wide mb-3" style={{ backgroundColor: '#FEF3E7', color: '#B4502A' }}>
                                                             {post.category}
                                                         </span>
                                                     )}
-                                                    <h3 className="text-xl font-bold mb-3 leading-tight line-clamp-2 group-hover:text-orange-600 transition-colors" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>
+                                                    <h3 className="text-xl font-bold mb-3 leading-tight line-clamp-2 group-hover:text-primary transition-colors" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>
                                                         {post.title}
                                                     </h3>
                                                     <p className="text-sm text-gray-700 leading-relaxed line-clamp-2 mb-4">
@@ -423,7 +423,7 @@ function BlogsContent() {
                                         <button
                                             onClick={clearFilters}
                                             className="px-8 py-3 rounded-xl font-bold transition-all hover:shadow-lg"
-                                            style={{ backgroundColor: '#D97846', color: '#FFFFFF' }}
+                                            style={{ backgroundColor: '#B4502A', color: '#FFFFFF' }}
                                         >
                                             Clear Filters
                                         </button>
@@ -431,7 +431,7 @@ function BlogsContent() {
                                         <Link
                                             href="/books"
                                             className="inline-block px-8 py-3 rounded-xl font-bold transition-all hover:shadow-lg"
-                                            style={{ backgroundColor: '#D97846', color: '#FFFFFF' }}
+                                            style={{ backgroundColor: '#B4502A', color: '#FFFFFF' }}
                                         >
                                             Browse Books
                                         </Link>
@@ -474,10 +474,10 @@ function BlogsContent() {
                                             </div>
                                             <div className="min-w-0 flex-1">
                                                 <div className="flex items-start gap-2 mb-2">
-                                                    <span className="w-6 h-6 shrink-0 rounded-md flex items-center justify-center text-xs font-bold" style={{ backgroundColor: '#FEF3E7', color: '#D97846' }}>
+                                                    <span className="w-6 h-6 shrink-0 rounded-md flex items-center justify-center text-xs font-bold" style={{ backgroundColor: '#FEF3E7', color: '#B4502A' }}>
                                                         {i + 1}
                                                     </span>
-                                                    <h4 className="text-sm font-bold line-clamp-2 leading-tight group-hover:text-orange-600 transition-colors" style={{ color: '#2C2416' }}>
+                                                    <h4 className="text-sm font-bold line-clamp-2 leading-tight group-hover:text-primary transition-colors" style={{ color: '#2C2416' }}>
                                                         {post.title}
                                                     </h4>
                                                 </div>
@@ -497,7 +497,7 @@ function BlogsContent() {
 
                             {/* Our Authors */}
                             <div className="rounded-xl overflow-hidden shadow-lg" style={{ backgroundColor: '#FFFCF5' }}>
-                                <div className="px-6 py-4" style={{ backgroundColor: '#7A9B76' }}>
+                                <div className="px-6 py-4" style={{ backgroundColor: '#4F6D4C' }}>
                                     <h3 className="text-white font-bold text-lg flex items-center gap-2" style={{ fontFamily: 'Playfair Display, serif' }}>
                                         <Users size={18} />
                                         Our Authors
@@ -518,14 +518,14 @@ function BlogsContent() {
                                                 )}
                                             </div>
                                             <div className="min-w-0 flex-1">
-                                                <h4 className="text-sm font-bold truncate group-hover:text-orange-600 transition-colors" style={{ color: '#2C2416' }}>
+                                                <h4 className="text-sm font-bold truncate group-hover:text-primary transition-colors" style={{ color: '#2C2416' }}>
                                                     {author.name || 'Unknown Author'}
                                                 </h4>
                                                 <p className="text-xs text-gray-600 flex items-center gap-1">
                                                     <BookOpen size={11} /> {author.booksCount || 0} books
                                                 </p>
                                             </div>
-                                            <ArrowRight size={14} className="text-gray-400 group-hover:text-orange-600 group-hover:translate-x-0.5 transition-all" />
+                                            <ArrowRight size={14} className="text-gray-400 group-hover:text-primary group-hover:translate-x-0.5 transition-all" />
                                         </Link>
                                     )) : (
                                         <p className="text-sm text-gray-500 p-4">No authors yet.</p>
@@ -536,7 +536,7 @@ function BlogsContent() {
                                         <Link 
                                             href="/authors" 
                                             className="flex items-center justify-center gap-2 text-sm font-bold py-3 rounded-lg border-2 transition-all hover:shadow-md"
-                                            style={{ borderColor: '#D97846', color: '#D97846' }}
+                                            style={{ borderColor: '#B4502A', color: '#B4502A' }}
                                         >
                                             View All Authors <ArrowRight size={14} />
                                         </Link>

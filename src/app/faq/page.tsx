@@ -84,7 +84,7 @@ export default function FAQPage() {
           className="absolute inset-0"
           style={{ background: 'linear-gradient(135deg, rgba(44,36,22,0.88) 0%, rgba(44,36,22,0.62) 55%, rgba(44,36,22,0.45) 100%)' }}
         />
-        <div className="relative max-w-7xl mx-auto px-6 py-16 text-center">
+        <div className="relative page-container py-16 text-center">
           <h1 className="text-4xl font-bold font-heading mb-4" style={{ color: '#FFFCF5' }}>FAQ</h1>
           <p className="text-lg max-w-xl mx-auto" style={{ color: '#E4D9C4' }}>
             Everything you need to know about Mama Africa Library

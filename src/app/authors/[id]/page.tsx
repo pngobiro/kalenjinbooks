@@ -7,13 +7,14 @@ import { useParams } from 'next/navigation';
 import {
   ArrowLeft, BookOpen, Star, User, MapPin, Globe, Phone,
   Twitter, Facebook, Instagram, Linkedin,
-  Clock, Eye, ArrowRight, FileText, Play,
+  Clock, Eye, ArrowRight, FileText,
   Newspaper,
 } from 'lucide-react';
 import Link from 'next/link';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import ShareButtons from '@/components/ShareButtons';
+import VideoThumbnail from '@/components/blog/VideoThumbnail';
 import { getAuthorById, Author } from '@/lib/api/authors';
 import { fetchBlogPosts, type BlogPost } from '@/lib/api/blogs';
 import { calculateReadTime, formatBlogDate } from '@/lib/blog-utils';
@@ -35,34 +36,6 @@ interface AuthorWithBooks extends Author {
     amazonUrl?: string | null;
     readOnlineUrl?: string | null;
   }>;
-}
-
-function VideoThumbnail({ videoUrl, title }: { videoUrl: string; title: string }) {
-  const [playing, setPlaying] = useState(false);
-
-  if (playing) {
-    return (
-      <video src={videoUrl} controls autoPlay className="w-full h-full object-cover" />
-    );
-  }
-
-  return (
-    <button
-      type="button"
-      onClick={() => setPlaying(true)}
-      className="absolute inset-0 w-full h-full group/thumb"
-      aria-label={`Play video: ${title}`}
-    >
-      <span className="absolute inset-0 flex items-center justify-center">
-        <span className="w-14 h-14 rounded-full flex items-center justify-center shadow-xl transition-transform duration-300 group-hover/thumb:scale-110" style={{ backgroundColor: 'rgba(217,120,70,0.95)' }}>
-          <Play size={22} className="text-white ml-1" fill="currentColor" />
-        </span>
-      </span>
-      <span className="absolute bottom-3 right-3 px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider" style={{ backgroundColor: 'rgba(44,36,22,0.85)', color: '#FFFCF5' }}>
-        Video
-      </span>
-    </button>
-  );
 }
 
 export default function AuthorDetailPage() {
@@ -100,7 +73,7 @@ export default function AuthorDetailPage() {
       <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#F5F1E8' }}>
         <div className="relative">
           <div className="w-16 h-16 border-4 rounded-full" style={{ borderColor: '#E4D9C4' }}></div>
-          <div className="absolute top-0 left-0 w-16 h-16 border-4 border-t-transparent rounded-full animate-spin" style={{ borderColor: '#D97846' }}></div>
+          <div className="absolute top-0 left-0 w-16 h-16 border-4 border-t-transparent rounded-full animate-spin" style={{ borderColor: '#B4502A' }}></div>
         </div>
       </div>
     );
@@ -118,7 +91,7 @@ export default function AuthorDetailPage() {
           <Link
             href="/authors"
             className="inline-block px-8 py-3 rounded-full font-bold transition-all hover:shadow-lg"
-            style={{ backgroundColor: '#D97846', color: '#FFFFFF' }}
+            style={{ backgroundColor: '#B4502A', color: '#FFFFFF' }}
           >
             Back to Authors
           </Link>
@@ -159,7 +132,7 @@ export default function AuthorDetailPage() {
           backgroundImage: 'radial-gradient(circle at 15% 20%, #D97846 0%, transparent 40%), radial-gradient(circle at 85% 80%, #7A9B76 0%, transparent 40%)',
         }}></div>
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+        <div className="relative page-container py-12 sm:py-16">
           <Link
             href="/authors"
             className="inline-flex items-center gap-2 mb-10 transition-colors hover:gap-3"
@@ -204,7 +177,7 @@ export default function AuthorDetailPage() {
             {/* Info */}
             <div className="text-center lg:text-left lg:col-span-8">
               {/* eyebrow */}
-              <p className="hidden lg:block text-xs font-semibold uppercase tracking-[0.25em] mb-3" style={{ color: '#D97846' }}>
+              <p className="hidden lg:block text-xs font-semibold uppercase tracking-[0.25em] mb-3" style={{ color: '#B4502A' }}>
                 Mama Africa Library Author
               </p>
 
@@ -214,7 +187,7 @@ export default function AuthorDetailPage() {
 
               {(author.location || author.nationality) && (
                 <p className="inline-flex items-center gap-1.5 text-sm px-4 py-1.5 rounded-full mb-5" style={{ color: '#E4D9C4', backgroundColor: 'rgba(255,252,245,0.08)', border: '1px solid rgba(228,217,196,0.18)' }}>
-                  <MapPin size={14} style={{ color: '#D97846' }} />
+                  <MapPin size={14} style={{ color: '#B4502A' }} />
                   {author.location || author.nationality}
                 </p>
               )}
@@ -243,24 +216,24 @@ export default function AuthorDetailPage() {
                   className="px-6 first:pl-0 text-center hover:opacity-80 transition-opacity"
                 >
                   <div className="flex items-center justify-center lg:justify-start gap-2 font-bold text-2xl" style={{ color: '#FFFCF5' }}>
-                    <BookOpen size={17} style={{ color: '#D97846' }} />{allBooks.length}
+                    <BookOpen size={17} style={{ color: '#B4502A' }} />{allBooks.length}
                   </div>
-                  <div className="text-[11px] uppercase tracking-widest mt-1" style={{ color: '#A89888' }}>Books ↓</div>
+                  <div className="text-[11px] uppercase tracking-widest mt-1" style={{ color: '#6B5D52' }}>Books ↓</div>
                 </button>
                 <button
                   onClick={() => document.getElementById('author-blogs')?.scrollIntoView({ behavior: 'smooth' })}
                   className="px-6 text-center hover:opacity-80 transition-opacity"
                 >
                   <div className="flex items-center justify-center lg:justify-start gap-2 font-bold text-2xl" style={{ color: '#FFFCF5' }}>
-                    <Newspaper size={17} style={{ color: '#D97846' }} />{blogPosts.length}
+                    <Newspaper size={17} style={{ color: '#B4502A' }} />{blogPosts.length}
                   </div>
-                  <div className="text-[11px] uppercase tracking-widest mt-1" style={{ color: '#A89888' }}>Articles ↓</div>
+                  <div className="text-[11px] uppercase tracking-widest mt-1" style={{ color: '#6B5D52' }}>Articles ↓</div>
                 </button>
                 <div className="px-6 text-center">
                   <div className="flex items-center justify-center lg:justify-start gap-2 font-bold text-2xl" style={{ color: '#FFFCF5' }}>
-                    <Star size={17} className="fill-yellow-400 text-yellow-400" />{author.rating?.toFixed(1) || '0.0'}
+                    <Star size={17} className="fill-star text-star" />{author.rating?.toFixed(1) || '0.0'}
                   </div>
-                  <div className="text-[11px] uppercase tracking-widest mt-1" style={{ color: '#A89888' }}>Rating</div>
+                  <div className="text-[11px] uppercase tracking-widest mt-1" style={{ color: '#6B5D52' }}>Rating</div>
                 </div>
               </div>
 
@@ -285,18 +258,18 @@ export default function AuthorDetailPage() {
         </div>
       </section>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 space-y-16">
+      <main id="main-content" className="page-container py-14 space-y-16">
 
         {/* ── Books ─────────────────────────────────────────── */}
         <section id="author-books" className="scroll-mt-24">
           <div className="flex items-end justify-between mb-8">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.25em] mb-2" style={{ color: '#D97846' }}>The Library</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.25em] mb-2" style={{ color: '#B4502A' }}>The Library</p>
               <h2 className="text-3xl md:text-4xl font-bold" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>
                 Books by {author.name?.split(' ').slice(-1)[0]}
               </h2>
             </div>
-            <span className="px-4 py-1.5 rounded-full text-sm font-bold" style={{ backgroundColor: '#FEF3E7', color: '#D97846' }}>
+            <span className="px-4 py-1.5 rounded-full text-sm font-bold" style={{ backgroundColor: '#FEF3E7', color: '#B4502A' }}>
               {allBooks.length}
             </span>
           </div>
@@ -311,12 +284,12 @@ export default function AuthorDetailPage() {
                         <img src={book.coverImage} alt={book.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center">
-                          <BookOpen size={48} style={{ color: '#A89888' }} />
+                          <BookOpen size={48} style={{ color: '#6B5D52' }} />
                         </div>
                       )}
                       {/* Free reading badge */}
                       {book.isFreeReading ? (
-                        <div className="absolute top-3 right-3 px-3 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-wide shadow" style={{ backgroundColor: '#7A9B76', color: '#FFFCF5' }}>
+                        <div className="absolute top-3 right-3 px-3 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-wide shadow" style={{ backgroundColor: '#4F6D4C', color: '#FFFCF5' }}>
                           Read Free
                         </div>
                       ) : (
@@ -333,14 +306,14 @@ export default function AuthorDetailPage() {
                       )}
                     </div>
                     <div className="p-5 flex-1 flex flex-col">
-                      <h3 className="font-bold text-lg mb-2 line-clamp-2 group-hover:text-orange-600 transition-colors" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>
+                      <h3 className="font-bold text-lg mb-2 line-clamp-2 group-hover:text-primary transition-colors" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>
                         {book.title}
                       </h3>
                       {book.description && (
                         <p className="text-sm line-clamp-2 mb-4 flex-1" style={{ color: '#5B4F42' }}>{book.description}</p>
                       )}
                       <div className="mt-auto pt-3 border-t flex items-center justify-between" style={{ borderColor: '#E4D9C4' }}>
-                        <span className="text-xs font-semibold" style={{ color: '#A89888' }}>Hard copy available</span>
+                        <span className="text-xs font-semibold" style={{ color: '#6B5D52' }}>Hard copy available</span>
                         <span className="inline-flex items-center gap-1 text-sm font-bold transition-all group-hover:gap-2" style={{ color: '#D97846' }}>
                           Open <ArrowRight size={14} />
                         </span>
@@ -352,7 +325,7 @@ export default function AuthorDetailPage() {
             </div>
           ) : (
             <div className="rounded-2xl p-14 text-center max-w-md" style={{ backgroundColor: '#FFFCF5', border: '1px dashed #E4D9C4' }}>
-              <BookOpen size={38} className="mx-auto mb-4" style={{ color: '#D97846' }} />
+              <BookOpen size={38} className="mx-auto mb-4" style={{ color: '#B4502A' }} />
               <p className="font-bold text-lg mb-1" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>No books published yet</p>
               <p className="text-sm" style={{ color: '#5B4F42' }}>New releases will appear here.</p>
             </div>
@@ -363,12 +336,12 @@ export default function AuthorDetailPage() {
         <section id="author-blogs" className="scroll-mt-24">
           <div className="flex items-end justify-between mb-8">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.25em] mb-2" style={{ color: '#D97846' }}>Insights & Lectures</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.25em] mb-2" style={{ color: '#B4502A' }}>Insights & Lectures</p>
               <h2 className="text-3xl md:text-4xl font-bold" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>
                 Articles by {author.name?.split(' ')[0]}
               </h2>
             </div>
-            <span className="px-4 py-1.5 rounded-full text-sm font-bold" style={{ backgroundColor: '#FEF3E7', color: '#D97846' }}>
+            <span className="px-4 py-1.5 rounded-full text-sm font-bold" style={{ backgroundColor: '#FEF3E7', color: '#B4502A' }}>
               {blogPosts.length}
             </span>
           </div>
@@ -391,7 +364,7 @@ export default function AuthorDetailPage() {
             )
           ) : (
             <div className="rounded-2xl p-14 text-center max-w-md" style={{ backgroundColor: '#FFFCF5', border: '1px dashed #E4D9C4' }}>
-              <FileText size={38} className="mx-auto mb-4" style={{ color: '#D97846' }} />
+              <FileText size={38} className="mx-auto mb-4" style={{ color: '#B4502A' }} />
               <p className="font-bold text-lg mb-1" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>No articles yet</p>
               <p className="text-sm" style={{ color: '#5B4F42' }}>Essays and lectures will appear here.</p>
             </div>
@@ -416,7 +389,7 @@ export default function AuthorDetailPage() {
           return (
             <section>
               <div className="mb-8">
-                <p className="text-xs font-semibold uppercase tracking-[0.25em] mb-2" style={{ color: '#D97846' }}>Get In Touch</p>
+                <p className="text-xs font-semibold uppercase tracking-[0.25em] mb-2" style={{ color: '#B4502A' }}>Get In Touch</p>
                 <h2 className="text-3xl md:text-4xl font-bold" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>
                   Contact {author.name?.split(' ')[0]}
                 </h2>
@@ -432,10 +405,10 @@ export default function AuthorDetailPage() {
                     style={{ backgroundColor: '#FFFCF5', border: '1px solid #E4D9C4' }}
                   >
                     <span className="w-10 h-10 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: '#FEF3E7' }}>
-                      <c.icon size={18} style={{ color: '#D97846' }} />
+                      <c.icon size={18} style={{ color: '#B4502A' }} />
                     </span>
                     <span>
-                      <span className="block text-[11px] font-semibold uppercase tracking-wider" style={{ color: '#A89888' }}>{c.label}</span>
+                      <span className="block text-[11px] font-semibold uppercase tracking-wider" style={{ color: '#6B5D52' }}>{c.label}</span>
                       <span className="block text-sm font-bold group-hover:underline" style={{ color: '#2C2416' }}>{c.value}</span>
                     </span>
                   </a>
@@ -450,7 +423,7 @@ export default function AuthorDetailPage() {
           <Link
             href="/books"
             className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full font-semibold transition-all hover:-translate-y-0.5 shadow-lg"
-            style={{ backgroundColor: '#D97846', color: '#FFFCF5' }}
+            style={{ backgroundColor: '#B4502A', color: '#FFFCF5' }}
           >
             Explore All Books <ArrowRight size={18} />
           </Link>
@@ -474,29 +447,29 @@ function ArticleRow({ post }: { post: BlogPost }) {
             <VideoThumbnail videoUrl={post.coverVideoUrl} title={post.title} />
           ) : (
             <div className="absolute inset-0 flex items-center justify-center">
-              <FileText size={34} style={{ color: '#A89888' }} />
+              <FileText size={34} style={{ color: '#6B5D52' }} />
             </div>
           )}
         </div>
         <div className="p-5 sm:p-6 flex-1 min-w-0">
           <div className="flex items-center gap-3 mb-2">
             {post.category && (
-              <span className="px-2.5 py-0.5 rounded text-[11px] font-bold uppercase tracking-wide" style={{ backgroundColor: '#FEF3E7', color: '#D97846' }}>
+              <span className="px-2.5 py-0.5 rounded text-[11px] font-bold uppercase tracking-wide" style={{ backgroundColor: '#FEF3E7', color: '#B4502A' }}>
                 {post.category}
               </span>
             )}
-            <span className="text-xs" style={{ color: '#A89888' }}>{formatBlogDate(post.publishedAt || post.createdAt)}</span>
+            <span className="text-xs" style={{ color: '#6B5D52' }}>{formatBlogDate(post.publishedAt || post.createdAt)}</span>
           </div>
-          <h3 className="font-bold text-xl leading-snug mb-2 line-clamp-2 group-hover:text-orange-600 transition-colors" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>
+          <h3 className="font-bold text-xl leading-snug mb-2 line-clamp-2 group-hover:text-primary transition-colors" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>
             {post.title}
           </h3>
           {post.excerpt && (
             <p className="text-sm line-clamp-2 mb-3" style={{ color: '#5B4F42' }}>{post.excerpt}</p>
           )}
-          <div className="flex items-center gap-4 text-xs" style={{ color: '#A89888' }}>
+          <div className="flex items-center gap-4 text-xs" style={{ color: '#6B5D52' }}>
             <span className="inline-flex items-center gap-1"><Clock size={12} />{calculateReadTime(post.content).text}</span>
             <span className="inline-flex items-center gap-1"><Eye size={12} />{post.viewCount} views</span>
-            <span className="inline-flex items-center gap-1 font-semibold ml-auto transition-all group-hover:gap-2" style={{ color: '#D97846' }}>Read <ArrowRight size={13} /></span>
+            <span className="inline-flex items-center gap-1 font-semibold ml-auto transition-all group-hover:gap-2" style={{ color: '#B4502A' }}>Read <ArrowRight size={13} /></span>
           </div>
         </div>
       </div>
@@ -516,7 +489,7 @@ function BlogCard({ post }: { post: BlogPost }) {
             <VideoThumbnail videoUrl={post.coverVideoUrl} title={post.title} />
           ) : (
             <div className="w-full h-full flex items-center justify-center">
-              <FileText size={40} style={{ color: '#A89888' }} />
+              <FileText size={40} style={{ color: '#6B5D52' }} />
             </div>
           )}
           {post.category && (
@@ -528,7 +501,7 @@ function BlogCard({ post }: { post: BlogPost }) {
           )}
         </div>
         <div className="p-5 flex-1 flex flex-col">
-          <h3 className="font-bold text-lg leading-snug mb-2 line-clamp-2 group-hover:text-orange-600 transition-colors" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>
+          <h3 className="font-bold text-lg leading-snug mb-2 line-clamp-2 group-hover:text-primary transition-colors" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>
             {post.title}
           </h3>
           {post.excerpt && (
@@ -536,7 +509,7 @@ function BlogCard({ post }: { post: BlogPost }) {
               {post.excerpt}
             </p>
           )}
-          <div className="flex items-center justify-between text-xs pt-3 border-t" style={{ borderColor: '#E4D9C4', color: '#A89888' }}>
+          <div className="flex items-center justify-between text-xs pt-3 border-t" style={{ borderColor: '#E4D9C4', color: '#6B5D52' }}>
             <span>{formatBlogDate(post.publishedAt || post.createdAt)}</span>
             <div className="flex items-center gap-3">
               <span className="flex items-center gap-1">

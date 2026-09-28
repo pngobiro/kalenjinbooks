@@ -6,7 +6,7 @@ import SiteLogo from '@/components/SiteLogo';
 export default function Footer() {
   return (
     <footer className="bg-neutral-brown-900 text-white mt-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
+      <div className="page-container py-6">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
           <Link href="/" className="flex items-center gap-2">
             <SiteLogo size={20} />

@@ -30,7 +30,7 @@ const stats = [
 export function PlatformStats() {
     return (
         <div className="py-16 bg-gradient-to-r from-primary/10 to-primary/5">
-            <div className="max-w-7xl mx-auto px-6">
+            <div className="page-container">
                 <div className="text-center mb-12">
                     <h2 className="text-3xl font-bold text-neutral-brown-900 mb-3 font-heading">
                         Growing Community

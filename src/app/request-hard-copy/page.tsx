@@ -3,6 +3,8 @@
 import { ArrowLeft, Package, MapPin, User, BookOpen, CheckCircle, Truck, Sparkles, Phone, Globe } from 'lucide-react';
 import Link from 'next/link';
 import SiteLogo from '@/components/SiteLogo';
+import Navbar from '@/components/layout/Navbar';
+import Footer from '@/components/layout/Footer';
 import { useSearchParams } from 'next/navigation';
 import { useState, useEffect, Suspense } from 'react';
 
@@ -74,22 +76,22 @@ function RequestHardCopyContent() {
 
   if (submitted) {
     return (
-      <main className="min-h-screen flex items-center justify-center px-6 py-12" style={{ backgroundColor: '#FFFCF5' }}>
+      <main id="main-content" className="min-h-screen flex items-center justify-center px-6 py-12" style={{ backgroundColor: '#FFFCF5' }}>
         <div className="max-w-md w-full">
           <div className="rounded-xl shadow-2xl overflow-hidden" style={{ backgroundColor: '#FFFCF5', border: '1px solid #E5D5C3' }}>
             <div className="p-12 text-center" style={{ backgroundColor: '#E8F5E9' }}>
-              <div className="w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6" style={{ backgroundColor: '#7A9B76' }}>
+              <div className="w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6" style={{ backgroundColor: '#4F6D4C' }}>
                 <CheckCircle size={48} className="text-white" />
               </div>
               <h1 className="text-3xl font-bold mb-4" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>
                 Request Submitted!
               </h1>
               <p className="text-lg text-gray-700">
-                We'll contact you within 2-3 business days about <strong style={{ color: '#D97846' }}>{bookTitle}</strong>.
+                We'll contact you within 2-3 business days about <strong style={{ color: '#B4502A' }}>{bookTitle}</strong>.
               </p>
             </div>
             <div className="p-8 text-center">
-              <Link href={bookId ? `/books/${bookId}` : '/books'} className="inline-block px-8 py-4 rounded-xl font-bold text-white transition-all hover:shadow-lg" style={{ backgroundColor: '#D97846' }}>
+              <Link href={bookId ? `/books/${bookId}` : '/books'} className="inline-block px-8 py-4 rounded-xl font-bold text-white transition-all hover:shadow-lg" style={{ backgroundColor: '#B4502A' }}>
                 Back to Book
               </Link>
             </div>
@@ -100,45 +102,8 @@ function RequestHardCopyContent() {
   }
 
   return (
-    <main className="min-h-screen" style={{ backgroundColor: '#FFFCF5' }}>
-      {/* Navigation */}
-      <nav
-        className="sticky top-0 z-50 backdrop-blur-md"
-        style={{
-          backgroundColor: 'rgba(255,252,245,0.92)',
-          borderBottom: '1px solid #E4D9C4',
-          boxShadow: '0 2px 20px rgba(44,36,22,0.06)',
-        }}
-      >
-        <div className="h-1" style={{ background: 'linear-gradient(90deg, #D97846 0%, #C9A354 50%, #7A9B76 100%)' }} />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="flex items-center justify-between h-16 md:h-[72px]">
-            <Link href="/" className="flex items-center gap-2.5 group">
-              <span className="transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3 inline-block">
-                <SiteLogo size={30} />
-              </span>
-              <span className="leading-tight">
-                <span className="block text-[17px] md:text-lg font-bold font-heading" style={{ color: '#2C2416' }}>
-                  Mama Africa Library
-                </span>
-                <span className="hidden sm:block text-[10px] font-semibold uppercase tracking-[0.18em]" style={{ color: '#A89888' }}>
-                  African Books & Stories
-                </span>
-              </span>
-            </Link>
-
-            <Link
-              href={bookId ? `/books/${bookId}` : '/books'}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold transition-all hover:-translate-y-0.5"
-              style={{ backgroundColor: '#F5F1E8', border: '1px solid #E4D9C4', color: '#5B4F42' }}
-            >
-              <ArrowLeft size={16} />
-              <span className="hidden sm:inline">Back to Book</span>
-              <span className="sm:hidden">Back</span>
-            </Link>
-          </div>
-        </div>
-      </nav>
+    <main id="main-content" className="min-h-screen" style={{ backgroundColor: '#FFFCF5' }}>
+      <Navbar />
 
       {/* Hero Section */}
       <section className="relative overflow-hidden" style={{ backgroundColor: '#2C2416' }}>
@@ -153,7 +118,7 @@ function RequestHardCopyContent() {
           style={{ background: 'linear-gradient(135deg, rgba(44,36,22,0.88) 0%, rgba(44,36,22,0.62) 55%, rgba(44,36,22,0.45) 100%)' }}
         />
         
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 py-16 text-center">
+        <div className="page-container relative py-16 text-center">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6" style={{ backgroundColor: 'rgba(255,255,255,0.2)' }}>
             <Package size={18} style={{ color: '#C9A354' }} />
             <span className="text-white/95 text-sm font-bold">Hard Copy Request</span>
@@ -169,7 +134,7 @@ function RequestHardCopyContent() {
           {/* Delivery Info Cards */}
           <div className="flex flex-wrap items-center justify-center gap-4">
             <div className="flex items-center gap-3 rounded-xl px-5 py-3" style={{ backgroundColor: 'rgba(255,255,255,0.2)' }}>
-              <Truck size={24} style={{ color: '#7A9B76' }} />
+              <Truck size={24} style={{ color: '#4F6D4C' }} />
               <span className="text-white font-semibold">Kenya-wide Delivery</span>
             </div>
             <div className="flex items-center gap-3 rounded-xl px-5 py-3" style={{ backgroundColor: 'rgba(255,255,255,0.2)' }}>
@@ -186,27 +151,27 @@ function RequestHardCopyContent() {
           {author && (
             <div className="mb-6 rounded-2xl p-5 flex flex-col sm:flex-row sm:items-center gap-4 shadow-md" style={{ backgroundColor: '#FFFCF5', border: '1px solid #E4D9C4' }}>
               {author.profileImage ? (
-                <img src={author.profileImage} alt="" className="w-14 h-14 rounded-full object-cover shrink-0" style={{ boxShadow: '0 0 0 2px #D97846' }} />
+                <img src={author.profileImage} alt="" className="w-14 h-14 rounded-full object-cover shrink-0" style={{ boxShadow: '0 0 0 2px #B4502A' }} />
               ) : (
-                <div className="w-14 h-14 rounded-full flex items-center justify-center shrink-0 font-bold text-lg" style={{ backgroundColor: '#FEF3E7', color: '#D97846' }}>
+                <div className="w-14 h-14 rounded-full flex items-center justify-center shrink-0 font-bold text-lg" style={{ backgroundColor: '#FEF3E7', color: '#B4502A' }}>
                   {(author?.user?.name || 'A').charAt(0)}
                 </div>
               )}
               <div className="flex-1 min-w-0">
-                <p className="text-[11px] font-semibold uppercase tracking-wider" style={{ color: '#A89888' }}>Order directly from the author</p>
+                <p className="text-[11px] font-semibold uppercase tracking-wider" style={{ color: '#6B5D52' }}>Order directly from the author</p>
                 <Link href={`/authors/${author.id}`} className="font-bold hover:underline" style={{ color: '#2C2416' }}>
                   {author?.user?.name || 'Author'}
                 </Link>
                 <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-1">
                   {author.phoneNumber ? (
-                    <a href={`tel:${String(author.phoneNumber).replace(/\s+/g, '')}`} className="inline-flex items-center gap-1.5 text-sm font-semibold" style={{ color: '#D97846' }}>
+                    <a href={`tel:${String(author.phoneNumber).replace(/\s+/g, '')}`} className="inline-flex items-center gap-1.5 text-sm font-semibold" style={{ color: '#B4502A' }}>
                       <Phone size={14} /> {author.phoneNumber}
                     </a>
                   ) : (
-                    <span className="text-sm" style={{ color: '#A89888' }}>Contact via the form below</span>
+                    <span className="text-sm" style={{ color: '#6B5D52' }}>Contact via the form below</span>
                   )}
                   {author.website && (
-                    <a href={/^https?:\/\//i.test(author.website) ? author.website : `https://${author.website}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-sm font-semibold" style={{ color: '#D97846' }}>
+                    <a href={/^https?:\/\//i.test(author.website) ? author.website : `https://${author.website}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-sm font-semibold" style={{ color: '#B4502A' }}>
                       <Globe size={14} /> Website
                     </a>
                   )}
@@ -219,7 +184,7 @@ function RequestHardCopyContent() {
             <div className="p-8 border-b" style={{ borderColor: '#E5D5C3' }}>
               <h2 className="font-bold text-2xl mb-6 flex items-center gap-3" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>
                 <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: '#FEF3E7' }}>
-                  <User size={24} style={{ color: '#D97846' }} />
+                  <User size={24} style={{ color: '#B4502A' }} />
                 </div>
                 Personal Information
               </h2>
@@ -252,7 +217,7 @@ function RequestHardCopyContent() {
             <div className="p-8 border-b" style={{ borderColor: '#E5D5C3', backgroundColor: '#F5E6D3' }}>
               <h2 className="font-bold text-2xl mb-6 flex items-center gap-3" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>
                 <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: '#E8F5E9' }}>
-                  <MapPin size={24} style={{ color: '#7A9B76' }} />
+                  <MapPin size={24} style={{ color: '#4F6D4C' }} />
                 </div>
                 Shipping Address
               </h2>
@@ -326,7 +291,7 @@ function RequestHardCopyContent() {
                 type="submit" 
                 disabled={isSubmitting}
                 className="w-full text-white font-bold py-4 rounded-xl flex items-center justify-center gap-3 transition-all hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
-                style={{ backgroundColor: '#D97846' }}
+                style={{ backgroundColor: '#B4502A' }}
               >
                 {isSubmitting ? (
                   <>
@@ -347,6 +312,7 @@ function RequestHardCopyContent() {
           </form>
         </div>
       </section>
+      <Footer />
     </main>
   );
 }

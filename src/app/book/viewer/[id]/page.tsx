@@ -322,7 +322,7 @@ export default function SecureBookViewer() {
           <a
             href={`/payment?type=donation&bookId=${book?.id}&author=${encodeURIComponent(book?.author?.user?.name || '')}&title=${encodeURIComponent(book?.title || 'Book')}&price=200`}
             className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm font-bold transition-all hover:-translate-y-0.5 shadow"
-            style={{ backgroundColor: '#D97846', color: '#FFFFFF' }}
+            style={{ backgroundColor: '#B4502A', color: '#FFFFFF' }}
           >
             <Heart size={14} fill="currentColor" />
             Support Author

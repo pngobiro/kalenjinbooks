@@ -22,7 +22,7 @@ export default function AboutPage() {
           className="absolute inset-0"
           style={{ background: 'linear-gradient(180deg, rgba(44,36,22,0.82) 0%, rgba(44,36,22,0.6) 60%, rgba(44,36,22,0.78) 100%)' }}
         />
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28">
+        <div className="relative page-container py-20 sm:py-28">
           <div className="max-w-3xl mx-auto text-center">
             <p className="text-sm font-semibold uppercase tracking-[0.2em] mb-4" style={{ color: '#D97846' }}>
               Our Story
@@ -37,7 +37,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <main id="main-content" className="page-container py-16">
         {/* Mission Section */}
         <div className="max-w-4xl mx-auto mb-20">
           <div className="rounded-2xl p-10 shadow-lg" style={{ backgroundColor: '#FFFCF5', border: '1px solid #E4D9C4' }}>
@@ -65,7 +65,7 @@ export default function AboutPage() {
             {/* Value 1 */}
             <div className="rounded-2xl p-8 shadow-md hover:shadow-xl transition-all text-center" style={{ backgroundColor: '#FFFCF5', border: '1px solid #E4D9C4' }}>
               <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: '#FEF3E7' }}>
-                <BookOpen size={32} style={{ color: '#D97846' }} />
+                <BookOpen size={32} style={{ color: '#B4502A' }} />
               </div>
               <h3 className="text-xl font-bold mb-3" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>
                 Authentic Stories
@@ -78,7 +78,7 @@ export default function AboutPage() {
             {/* Value 2 */}
             <div className="rounded-2xl p-8 shadow-md hover:shadow-xl transition-all text-center" style={{ backgroundColor: '#FFFCF5', border: '1px solid #E4D9C4' }}>
               <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: '#E8F5E9' }}>
-                <Users size={32} style={{ color: '#7A9B76' }} />
+                <Users size={32} style={{ color: '#4F6D4C' }} />
               </div>
               <h3 className="text-xl font-bold mb-3" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>
                 Community First
@@ -128,7 +128,7 @@ export default function AboutPage() {
             <Link
               href="/books"
               className="inline-flex items-center gap-2 px-8 py-4 rounded-full font-bold transition-all hover:shadow-lg hover:-translate-y-0.5"
-              style={{ backgroundColor: '#D97846', color: '#FFFFFF' }}
+              style={{ backgroundColor: '#B4502A', color: '#FFFFFF' }}
             >
               Browse Books <ArrowRight size={20} />
             </Link>

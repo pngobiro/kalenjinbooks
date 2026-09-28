@@ -50,7 +50,7 @@ export function FeaturedBooks({ books }: FeaturedBooksProps) {
 
     return (
         <div className="bg-white py-20">
-            <div className="max-w-7xl mx-auto px-6">
+            <div className="page-container">
                 {/* Centered Header */}
                 <div className="text-center mb-12">
                     <h2 className="text-4xl md:text-5xl font-bold text-neutral-brown-900 font-heading mb-3">Featured Books</h2>

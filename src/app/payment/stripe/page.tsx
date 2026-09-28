@@ -3,6 +3,7 @@
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, CreditCard, Lock, Check, Book } from 'lucide-react';
+import Navbar from '@/components/layout/Navbar';
 import { useState, Suspense } from 'react';
 
 function StripePaymentContent() {
@@ -91,25 +92,7 @@ function StripePaymentContent() {
   return (
     <div className="min-h-screen bg-neutral-cream">
       {/* Navigation */}
-      <nav className="bg-white/90 backdrop-blur-sm sticky top-0 z-50 border-b border-neutral-brown-500/10">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="flex items-center justify-between h-20">
-            <Link href="/" className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-primary/10">
-                <Book className="text-primary" size={24} />
-              </div>
-              <span className="text-2xl font-bold text-neutral-brown-900 font-heading">Mama Africa Library</span>
-            </Link>
-
-            <button onClick={() => router.back()} className="flex items-center gap-2 text-neutral-brown-700 hover:text-primary transition-colors">
-              <div className="w-10 h-10 rounded-lg bg-white border border-neutral-brown-200 flex items-center justify-center shadow-sm">
-                <ArrowLeft size={20} />
-              </div>
-              <span className="hidden sm:inline">Back</span>
-            </button>
-          </div>
-        </div>
-      </nav>
+      <Navbar />
 
       <div className="max-w-lg mx-auto px-6 py-12">
         {/* Header */}

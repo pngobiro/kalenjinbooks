@@ -70,7 +70,7 @@ function BecomeAuthorButton({ mobile, onClose }: { mobile?: boolean; onClose?: (
         onClick={handleClick}
         disabled={loading}
         className="flex items-center justify-center gap-2 mt-3 w-full px-4 py-3 rounded-full text-sm font-bold text-white shadow-md disabled:opacity-60"
-        style={{ backgroundColor: '#D97846' }}
+        style={{ backgroundColor: '#B4502A' }}
       >
         <PenSquare size={16} />
         {isAuthenticated && user ? 'Go to Dashboard' : 'Become an Author'}
@@ -83,7 +83,7 @@ function BecomeAuthorButton({ mobile, onClose }: { mobile?: boolean; onClose?: (
       onClick={handleClick}
       disabled={loading}
       className="ml-3 inline-flex items-center gap-2 pl-4 pr-5 py-2.5 rounded-full text-sm font-bold text-white transition-all hover:-translate-y-0.5 hover:shadow-lg disabled:opacity-60"
-      style={{ backgroundColor: '#D97846', boxShadow: '0 4px 14px rgba(217,120,70,0.35)' }}
+      style={{ backgroundColor: '#B4502A', boxShadow: '0 4px 14px rgba(217,120,70,0.35)' }}
     >
       <PenSquare size={15} />
       {isAuthenticated && user ? 'Go to Dashboard' : 'Become an Author'}
@@ -105,9 +105,9 @@ export default function Navbar() {
       }}
     >
       {/* Terracotta accent line */}
-      <div className="h-1" style={{ background: 'linear-gradient(90deg, #D97846 0%, #C9A354 50%, #7A9B76 100%)' }} />
+      <div className="h-1" style={{ background: 'linear-gradient(90deg, #B4502A 0%, #C9A354 50%, #4F6D4C 100%)' }} />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+      <div className="page-container">
         <div className="flex items-center justify-between h-16 md:h-[72px]">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2.5 group">
@@ -118,7 +118,7 @@ export default function Navbar() {
               <span className="block text-[17px] md:text-lg font-bold font-heading" style={{ color: '#2C2416' }}>
                 Mama Africa Library
               </span>
-              <span className="hidden sm:block text-[10px] font-semibold uppercase tracking-[0.18em]" style={{ color: '#A89888' }}>
+              <span className="hidden sm:block text-[10px] font-semibold uppercase tracking-[0.18em]" style={{ color: '#6B5D52' }}>
                 African Books & Stories
               </span>
             </span>
@@ -137,24 +137,17 @@ export default function Navbar() {
                   <Link
                     key={link.href}
                     href={link.href}
-                    className="flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold transition-all"
+                    aria-current={active ? 'page' : undefined}
+                    className={
+                      active
+                        ? 'flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold transition-colors'
+                        : 'flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold text-body transition-colors hover:bg-warm-white hover:text-primary focus-visible:bg-warm-white focus-visible:text-primary'
+                    }
                     style={
                       active
                         ? { backgroundColor: '#2C2416', color: '#FFFCF5', boxShadow: '0 2px 8px rgba(44,36,22,0.3)' }
-                        : { color: '#5B4F42' }
+                        : undefined
                     }
-                    onMouseEnter={(e) => {
-                      if (!active) {
-                        (e.currentTarget as HTMLAnchorElement).style.backgroundColor = '#FFFCF5';
-                        (e.currentTarget as HTMLAnchorElement).style.color = '#D97846';
-                      }
-                    }}
-                    onMouseLeave={(e) => {
-                      if (!active) {
-                        (e.currentTarget as HTMLAnchorElement).style.backgroundColor = 'transparent';
-                        (e.currentTarget as HTMLAnchorElement).style.color = '#5B4F42';
-                      }
-                    }}
                   >
                     <Icon size={15} />
                     {link.label}

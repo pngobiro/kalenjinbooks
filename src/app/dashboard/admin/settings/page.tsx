@@ -141,7 +141,7 @@ export default function AdminSettingsPage() {
         {/* General */}
         <section className="bg-white rounded-xl border border-neutral-brown-200 p-6">
           <h2 className="flex items-center gap-2 font-bold text-lg mb-5" style={{ color: '#2C2416' }}>
-            <Globe size={18} style={{ color: '#D97846' }} /> General
+            <Globe size={18} style={{ color: '#B4502A' }} /> General
           </h2>
           <div className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -170,7 +170,7 @@ export default function AdminSettingsPage() {
         {/* Default Payment Methods */}
         <section className="bg-white rounded-xl border border-neutral-brown-200 p-6">
           <h2 className="flex items-center gap-2 font-bold text-lg mb-2" style={{ color: '#2C2416' }}>
-            <CreditCard size={18} style={{ color: '#D97846' }} /> Default Payment Methods
+            <CreditCard size={18} style={{ color: '#B4502A' }} /> Default Payment Methods
           </h2>
           <p className="text-sm text-neutral-brown-500 mb-4">
             Fallback for authors without their own selection. Individual authors can override this in Authors → Edit.
@@ -198,7 +198,7 @@ export default function AdminSettingsPage() {
         {/* Feature Toggles */}
         <section className="bg-white rounded-xl border border-neutral-brown-200 p-6">
           <h2 className="flex items-center gap-2 font-bold text-lg mb-5" style={{ color: '#2C2416' }}>
-            <ToggleLeft size={18} style={{ color: '#D97846' }} /> Features
+            <ToggleLeft size={18} style={{ color: '#B4502A' }} /> Features
           </h2>
           <div className="space-y-1">
             {([
@@ -231,7 +231,7 @@ export default function AdminSettingsPage() {
         {/* Footer Socials */}
         <section className="bg-white rounded-xl border border-neutral-brown-200 p-6">
           <h2 className="flex items-center gap-2 font-bold text-lg mb-5" style={{ color: '#2C2416' }}>
-            <Share2 size={18} style={{ color: '#D97846' }} /> Footer Social Links
+            <Share2 size={18} style={{ color: '#B4502A' }} /> Footer Social Links
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
@@ -255,7 +255,7 @@ export default function AdminSettingsPage() {
             onClick={handleSave}
             disabled={saving}
             className="inline-flex items-center gap-2 px-8 py-3 rounded-full font-bold text-white shadow-lg transition-all hover:-translate-y-0.5 disabled:opacity-50"
-            style={{ backgroundColor: saved ? '#7A9B76' : '#D97846' }}
+            style={{ backgroundColor: saved ? '#4F6D4C' : '#B4502A' }}
           >
             {saving ? (
               <>

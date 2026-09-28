@@ -149,7 +149,7 @@ export default function NewBookPage() {
       <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#FFFCF5' }}>
         <div className="relative">
           <div className="w-16 h-16 border-4 rounded-full" style={{ borderColor: '#F5E6D3' }}></div>
-          <div className="absolute top-0 left-0 w-16 h-16 border-4 border-t-transparent rounded-full animate-spin" style={{ borderColor: '#D97846' }}></div>
+          <div className="absolute top-0 left-0 w-16 h-16 border-4 border-t-transparent rounded-full animate-spin" style={{ borderColor: '#B4502A' }}></div>
         </div>
       </div>
     );
@@ -165,13 +165,13 @@ export default function NewBookPage() {
       <nav className="bg-white/95 backdrop-blur-sm sticky top-0 z-50 border-b" style={{ borderColor: '#E5D5C3' }}>
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="flex items-center justify-between h-16">
-            <Link href="/dashboard/author" className="flex items-center gap-2 text-gray-600 hover:text-orange-600 transition-colors">
+            <Link href="/dashboard/author" className="flex items-center gap-2 text-gray-600 hover:text-primary transition-colors">
               <ArrowLeft size={20} />
               <span className="font-medium">Back to Dashboard</span>
             </Link>
             
             <div className="flex items-center gap-2">
-              <Book style={{ color: '#D97846' }} size={24} />
+              <Book style={{ color: '#B4502A' }} size={24} />
               <span className="text-xl font-bold hidden sm:inline" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>Upload New Book</span>
             </div>
           </div>
@@ -182,7 +182,7 @@ export default function NewBookPage() {
         <div className="rounded-xl p-8 shadow-lg" style={{ backgroundColor: '#FFFCF5', border: '1px solid #E5D5C3' }}>
           <div className="text-center mb-10">
             <div className="w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6" style={{ backgroundColor: '#FEF3E7' }}>
-              <Upload size={48} style={{ color: '#D97846' }} />
+              <Upload size={48} style={{ color: '#B4502A' }} />
             </div>
             <h1 className="text-4xl font-bold mb-3" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>
               Upload Your Book
@@ -200,7 +200,7 @@ export default function NewBookPage() {
             {/* Basic Information */}
             <div className="space-y-6">
               <h2 className="text-2xl font-bold flex items-center gap-3" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>
-                <FileText size={24} style={{ color: '#D97846' }} />
+                <FileText size={24} style={{ color: '#B4502A' }} />
                 Book Information
               </h2>
 
@@ -309,7 +309,7 @@ export default function NewBookPage() {
             {/* Pricing */}
             <div className="space-y-6">
               <h2 className="text-2xl font-bold flex items-center gap-3" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>
-                <DollarSign size={24} style={{ color: '#D97846' }} />
+                <DollarSign size={24} style={{ color: '#B4502A' }} />
                 Pricing
               </h2>
 
@@ -354,7 +354,7 @@ export default function NewBookPage() {
             {/* File Uploads */}
             <div className="space-y-6">
               <h2 className="text-2xl font-bold flex items-center gap-3" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>
-                <Upload size={24} style={{ color: '#D97846' }} />
+                <Upload size={24} style={{ color: '#B4502A' }} />
                 Files
               </h2>
 
@@ -363,8 +363,8 @@ export default function NewBookPage() {
                   <label className="block text-sm font-bold mb-3" style={{ color: '#2C2416' }}>
                     Cover Image
                   </label>
-                  <div className="border-2 border-dashed rounded-xl p-8 text-center hover:border-orange-400 transition-colors cursor-pointer" style={{ borderColor: formData.coverImage ? '#7A9B76' : '#E5D5C3', backgroundColor: formData.coverImage ? '#E8F5E9' : '#FFFCF5' }}>
-                    <Image size={40} className="mx-auto mb-3" style={{ color: formData.coverImage ? '#7A9B76' : '#D97846' }} />
+                  <div className="border-2 border-dashed rounded-xl p-8 text-center hover:border-orange-400 transition-colors cursor-pointer" style={{ borderColor: formData.coverImage ? '#4F6D4C' : '#E5D5C3', backgroundColor: formData.coverImage ? '#E8F5E9' : '#FFFCF5' }}>
+                    <Image size={40} className="mx-auto mb-3" style={{ color: formData.coverImage ? '#4F6D4C' : '#B4502A' }} />
                     <input
                       type="file"
                       accept="image/*"
@@ -373,13 +373,13 @@ export default function NewBookPage() {
                       id="coverImage"
                     />
                     <label htmlFor="coverImage" className="cursor-pointer">
-                      <span className="font-bold block mb-1" style={{ color: '#D97846' }}>
+                      <span className="font-bold block mb-1" style={{ color: '#B4502A' }}>
                         {formData.coverImage ? 'Change cover image' : 'Choose cover image'}
                       </span>
                       <p className="text-sm text-gray-600">PNG, JPG up to 5MB</p>
                     </label>
                     {formData.coverImage && (
-                      <p className="text-sm font-semibold mt-3" style={{ color: '#7A9B76' }}>✓ {formData.coverImage.name}</p>
+                      <p className="text-sm font-semibold mt-3" style={{ color: '#4F6D4C' }}>✓ {formData.coverImage.name}</p>
                     )}
                   </div>
                 </div>
@@ -388,8 +388,8 @@ export default function NewBookPage() {
                   <label className="block text-sm font-bold mb-3" style={{ color: '#2C2416' }}>
                     Book File * {!formData.bookFile && <span className="text-red-500 text-xs">(Required)</span>}
                   </label>
-                  <div className="border-2 border-dashed rounded-xl p-8 text-center hover:border-orange-400 transition-colors cursor-pointer" style={{ borderColor: formData.bookFile ? '#7A9B76' : '#E5D5C3', backgroundColor: formData.bookFile ? '#E8F5E9' : '#FFFCF5' }}>
-                    <Book size={40} className="mx-auto mb-3" style={{ color: formData.bookFile ? '#7A9B76' : '#D97846' }} />
+                  <div className="border-2 border-dashed rounded-xl p-8 text-center hover:border-orange-400 transition-colors cursor-pointer" style={{ borderColor: formData.bookFile ? '#4F6D4C' : '#E5D5C3', backgroundColor: formData.bookFile ? '#E8F5E9' : '#FFFCF5' }}>
+                    <Book size={40} className="mx-auto mb-3" style={{ color: formData.bookFile ? '#4F6D4C' : '#B4502A' }} />
                     <input
                       type="file"
                       accept=".pdf,.epub,.mobi"
@@ -398,13 +398,13 @@ export default function NewBookPage() {
                       id="bookFile"
                     />
                     <label htmlFor="bookFile" className="cursor-pointer">
-                      <span className="font-bold block mb-1" style={{ color: '#D97846' }}>
+                      <span className="font-bold block mb-1" style={{ color: '#B4502A' }}>
                         {formData.bookFile ? 'Change book file' : 'Choose book file'}
                       </span>
                       <p className="text-sm text-gray-600">PDF, EPUB, MOBI up to 50MB</p>
                     </label>
                     {formData.bookFile && (
-                      <p className="text-sm font-semibold mt-3" style={{ color: '#7A9B76' }}>✓ {formData.bookFile.name}</p>
+                      <p className="text-sm font-semibold mt-3" style={{ color: '#4F6D4C' }}>✓ {formData.bookFile.name}</p>
                     )}
                   </div>
                 </div>
@@ -424,7 +424,7 @@ export default function NewBookPage() {
                 type="submit"
                 disabled={isLoading}
                 className="flex-1 px-6 py-4 rounded-xl font-bold transition-all hover:shadow-lg flex items-center justify-center gap-2 disabled:opacity-50"
-                style={{ backgroundColor: '#D97846', color: '#FFFFFF' }}
+                style={{ backgroundColor: '#B4502A', color: '#FFFFFF' }}
               >
                 {isLoading ? (
                   <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin" />

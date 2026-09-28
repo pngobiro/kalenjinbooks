@@ -1,7 +1,7 @@
 'use client';
 
-import { Suspense } from 'react';
-import { Shield, Users, Book, TrendingUp, UserCheck, Settings, LogOut, BarChart3, DollarSign, FileText } from 'lucide-react';
+import { Suspense, useEffect, useState } from 'react';
+import { Shield, Users, Book, TrendingUp, UserCheck, Settings, LogOut, BarChart3, DollarSign, X } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
@@ -17,7 +17,7 @@ const navigation = [
     { name: 'Settings', href: '/dashboard/admin/settings', icon: Settings },
 ];
 
-function AdminSidebarContent() {
+function AdminSidebarContent({ onNavigate }: { onNavigate?: () => void }) {
     const pathname = usePathname();
     const searchParams = useSearchParams();
     const router = useRouter();
@@ -26,6 +26,7 @@ function AdminSidebarContent() {
     const currentTab = searchParams.get('tab') || 'overview';
 
     const handleNavigation = (item: typeof navigation[0]) => {
+        onNavigate?.();
         if (item.href) {
             // For future pages that have their own routes
             router.push(item.href);
@@ -140,16 +141,77 @@ function AdminSidebarContent() {
 
 
 export function AdminSidebar() {
+    const [open, setOpen] = useState(false);
+
+    // Close the mobile drawer on navigation and on Escape.
+    useEffect(() => { setOpen(false); }, [usePathname()]);
+    useEffect(() => {
+        if (!open) return;
+        const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setOpen(false); };
+        window.addEventListener('keydown', onKey);
+        return () => window.removeEventListener('keydown', onKey);
+    }, [open]);
+
     return (
-        <Suspense fallback={
-            <div className="w-64 bg-white border-r border-neutral-brown-500/10 min-h-screen flex items-center justify-center">
-                <div className="text-center">
-                    <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
-                    <p className="text-neutral-brown-600 text-sm">Loading...</p>
-                </div>
+        <>
+            {/* Desktop: static sidebar, unchanged */}
+            <div className="hidden md:block shrink-0">
+                <Suspense fallback={
+                    <div className="w-64 bg-white border-r border-neutral-brown-500/10 min-h-screen flex items-center justify-center">
+                        <div className="text-center">
+                            <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
+                            <p className="text-neutral-brown-600 text-sm">Loading...</p>
+                        </div>
+                    </div>
+                }>
+                    <AdminSidebarContent />
+                </Suspense>
             </div>
-        }>
-            <AdminSidebarContent />
-        </Suspense>
+
+            {/* Mobile: hamburger + slide-in drawer */}
+            <button
+                type="button"
+                onClick={() => setOpen(true)}
+                className="md:hidden fixed top-4 left-4 z-40 w-11 h-11 flex items-center justify-center rounded-lg bg-white border border-neutral-brown-500/20 text-neutral-brown-900"
+                aria-label="Open navigation menu"
+                aria-expanded={open}
+                aria-controls="admin-drawer"
+            >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+                    <line x1="3" y1="6" x2="21" y2="6" />
+                    <line x1="3" y1="12" x2="21" y2="12" />
+                    <line x1="3" y1="18" x2="21" y2="18" />
+                </svg>
+            </button>
+
+            {open && (
+                <div className="md:hidden fixed inset-0 z-50 flex">
+                    <button
+                        type="button"
+                        className="absolute inset-0 bg-black/50"
+                        onClick={() => setOpen(false)}
+                        aria-label="Close navigation menu"
+                        tabIndex={-1}
+                    />
+                    <div id="admin-drawer" className="relative h-full shadow-2xl">
+                        <button
+                            type="button"
+                            onClick={() => setOpen(false)}
+                            className="absolute top-4 right-4 z-10 w-9 h-9 flex items-center justify-center rounded-lg bg-gray-100 text-gray-700"
+                            aria-label="Close navigation menu"
+                        >
+                            <X size={18} />
+                        </button>
+                        <Suspense fallback={
+                            <div className="w-64 h-full bg-white flex items-center justify-center">
+                                <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+                            </div>
+                        }>
+                            <AdminSidebarContent onNavigate={() => setOpen(false)} />
+                        </Suspense>
+                    </div>
+                </div>
+            )}
+        </>
     );
 }

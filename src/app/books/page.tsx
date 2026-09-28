@@ -171,7 +171,7 @@ export default function BooksPage() {
           className="absolute inset-0"
           style={{ background: 'linear-gradient(135deg, rgba(44,36,22,0.9) 0%, rgba(44,36,22,0.68) 55%, rgba(44,36,22,0.5) 100%)' }}
         />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 md:py-20 relative z-10">
+        <div className="page-container py-16 md:py-20 relative z-10">
           <div className="max-w-3xl mx-auto text-center">
             <h1 
               className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold mb-4"
@@ -188,7 +188,7 @@ export default function BooksPage() {
 
             {/* Search Bar */}
             <div className="relative max-w-2xl mx-auto">
-              <Search size={20} className="absolute left-5 top-1/2 -translate-y-1/2" style={{ color: '#A89888' }} />
+              <Search size={20} className="absolute left-5 top-1/2 -translate-y-1/2" style={{ color: '#6B5D52' }} />
               <input
                 type="search"
                 placeholder="Search by title, author, or genre..."
@@ -206,7 +206,7 @@ export default function BooksPage() {
         </div>
       </section>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
+      <main id="main-content" className="page-container py-12">
 
           {/* Categories */}
           <div className="flex items-center gap-3 mb-10 overflow-x-auto pb-2" style={{ scrollbarWidth: 'none' }}>
@@ -228,7 +228,7 @@ export default function BooksPage() {
           {/* Results count */}
           {!loading && (
             <div className="flex items-center justify-between mb-4">
-              <p className="kr-mono text-[10px] tracking-[0.25em] text-[#8A7B68]">
+              <p className="kr-mono text-[10px] tracking-[0.25em] text-[#6B5D52]">
                 {visibleBooks.length} VOLUME{visibleBooks.length === 1 ? '' : 'S'} ON THE SHELF
                 {selectedCategory !== 'All' && (
                   <span className="ml-1">· {selectedCategory.toUpperCase()}</span>
@@ -241,7 +241,7 @@ export default function BooksPage() {
               <button
                 onClick={() => { setSearchQuery(''); resetClientFilters(); }}
                 className="text-sm font-semibold transition-colors"
-                style={{ color: '#D97846' }}
+                style={{ color: '#B4502A' }}
               >
                 Clear All Filters
               </button>
@@ -273,7 +273,7 @@ export default function BooksPage() {
                   <option key={lang} value={lang}>{lang}</option>
                 ))}
               </select>
-              <ChevronDown size={16} className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2" style={{ color: '#A89888' }} />
+              <ChevronDown size={16} className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2" style={{ color: '#6B5D52' }} />
             </div>
 
             <div className="relative">
@@ -292,7 +292,7 @@ export default function BooksPage() {
                   <option key={a.id} value={a.id}>{a.name || 'Unknown Author'}</option>
                 ))}
               </select>
-              <ChevronDown size={16} className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2" style={{ color: '#A89888' }} />
+              <ChevronDown size={16} className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2" style={{ color: '#6B5D52' }} />
             </div>
 
             <div className="relative">
@@ -310,7 +310,7 @@ export default function BooksPage() {
                 <option value="free">Free to Read</option>
                 <option value="paid">Paid</option>
               </select>
-              <ChevronDown size={16} className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2" style={{ color: '#A89888' }} />
+              <ChevronDown size={16} className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2" style={{ color: '#6B5D52' }} />
             </div>
 
             <div className="relative">
@@ -328,7 +328,7 @@ export default function BooksPage() {
                   <option key={range.value} value={range.value}>{range.label}</option>
                 ))}
               </select>
-              <ChevronDown size={16} className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2" style={{ color: '#A89888' }} />
+              <ChevronDown size={16} className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2" style={{ color: '#6B5D52' }} />
             </div>
 
             <div className="relative">
@@ -346,7 +346,7 @@ export default function BooksPage() {
                   <option key={rating.value} value={rating.value}>{rating.label}</option>
                 ))}
               </select>
-              <ChevronDown size={16} className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2" style={{ color: '#A89888' }} />
+              <ChevronDown size={16} className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2" style={{ color: '#6B5D52' }} />
             </div>
 
             <div className="relative ml-auto">
@@ -364,7 +364,7 @@ export default function BooksPage() {
                   <option key={option.value} value={option.value}>{option.label}</option>
                 ))}
               </select>
-              <ChevronDown size={16} className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2" style={{ color: '#A89888' }} />
+              <ChevronDown size={16} className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2" style={{ color: '#6B5D52' }} />
             </div>
           </div>
         )}
@@ -374,7 +374,7 @@ export default function BooksPage() {
           <div className="flex flex-col items-center justify-center py-20 gap-4">
             <div className="relative w-12 h-12">
               <div className="absolute inset-0 border-4 rounded-full" style={{ borderColor: '#E4D9C4' }}></div>
-              <div className="absolute inset-0 border-4 rounded-full animate-spin" style={{ borderColor: '#D97846', borderTopColor: 'transparent' }}></div>
+              <div className="absolute inset-0 border-4 rounded-full animate-spin" style={{ borderColor: '#B4502A', borderTopColor: 'transparent' }}></div>
             </div>
             <p className="text-sm font-medium" style={{ color: '#5B4F42' }}>Loading books...</p>
           </div>
@@ -436,17 +436,17 @@ export default function BooksPage() {
                           <div className="p-4 w-full">
                             <div className="rounded-lg p-3 flex items-center justify-between" style={{ backgroundColor: 'rgba(255, 252, 245, 0.95)' }}>
                               {book.isFreeReading ? (
-                                <span className="inline-flex items-center gap-1.5 font-bold" style={{ color: '#7A9B76' }}>
+                                <span className="inline-flex items-center gap-1.5 font-bold" style={{ color: '#4F6D4C' }}>
                                   <BookOpen size={14} />
                                   Free to Read
                                 </span>
                               ) : (
-                                <span className="font-bold" style={{ color: '#D97846' }}>
+                                <span className="font-bold" style={{ color: '#B4502A' }}>
                                   KES {book.price.toLocaleString()}
                                 </span>
                               )}
                               <span className="flex items-center gap-1 text-xs" style={{ color: '#5B4F42' }}>
-                                <Star size={13} className="fill-yellow-400 text-yellow-400" />
+                                <Star size={13} className="fill-star text-star" />
                                 {book.rating?.toFixed(1) || '0.0'}
                               </span>
                             </div>
@@ -459,23 +459,23 @@ export default function BooksPage() {
                         <h3 className="font-heading text-lg font-bold leading-tight line-clamp-2 mb-1 group-hover:text-primary transition-colors" style={{ color: '#2C2416' }}>
                           {book.title}
                         </h3>
-                        <p className="text-xs mb-3" style={{ color: '#A89888' }}>
+                        <p className="text-xs mb-3" style={{ color: '#6B5D52' }}>
                           {book.author?.user?.name || 'Unknown Author'}
                         </p>
 
                         <div className="flex items-center justify-between mb-3">
                           {book.isFreeReading ? (
-                            <span className="inline-flex items-center gap-1.5 text-sm font-bold" style={{ color: '#7A9B76' }}>
+                            <span className="inline-flex items-center gap-1.5 text-sm font-bold" style={{ color: '#4F6D4C' }}>
                               <BookOpen size={15} />
                               Free to Read
                             </span>
                           ) : (
-                            <span className="text-sm font-bold" style={{ color: '#D97846' }}>
+                            <span className="text-sm font-bold" style={{ color: '#B4502A' }}>
                               KES {book.price.toLocaleString()}
                             </span>
                           )}
                           <span className="flex items-center gap-1 text-sm" style={{ color: '#5B4F42' }}>
-                            <Star size={14} className="fill-yellow-400 text-yellow-400" />
+                            <Star size={14} className="fill-star text-star" />
                             {book.rating?.toFixed(1) || '0.0'}
                           </span>
                         </div>
@@ -497,7 +497,7 @@ export default function BooksPage() {
                           if (links.length === 0) return null;
                           return (
                             <div className="flex flex-wrap items-center gap-x-1.5 gap-y-1 mb-4">
-                              <span className="text-[11px] font-semibold uppercase tracking-wide" style={{ color: '#A89888' }}>
+                              <span className="text-[11px] font-semibold uppercase tracking-wide" style={{ color: '#6B5D52' }}>
                                 Buy from:
                               </span>
                               {links.map((l, i) => (
@@ -508,7 +508,7 @@ export default function BooksPage() {
                                     rel="noopener noreferrer sponsored"
                                     onClick={(e) => e.stopPropagation()}
                                     className="inline-flex items-center gap-1 text-xs font-bold hover:underline"
-                                    style={{ color: '#D97846' }}
+                                    style={{ color: '#B4502A' }}
                                   >
                                     <ExternalLink size={11} />
                                     {l.label || 'Buy'}
@@ -527,7 +527,7 @@ export default function BooksPage() {
                             <Link
                               href={`/book/viewer/${book.id}`}
                               className="flex-1 inline-flex items-center justify-center gap-1.5 py-2.5 rounded-lg font-bold text-xs transition-colors shadow-sm"
-                              style={{ backgroundColor: '#7A9B76', color: '#FFFCF5' }}
+                              style={{ backgroundColor: '#4F6D4C', color: '#FFFCF5' }}
                               onClick={(e) => e.stopPropagation()}
                             >
                               <BookOpen size={13} />
@@ -544,7 +544,7 @@ export default function BooksPage() {
                           <Link
                             href={`/request-hard-copy?book=${encodeURIComponent(book.title)}&id=${book.id}`}
                             className="flex-1 inline-flex items-center justify-center gap-1.5 py-2.5 rounded-lg font-bold text-xs transition-colors shadow-sm"
-                            style={{ backgroundColor: '#D97846', color: '#FFFCF5' }}
+                            style={{ backgroundColor: '#B4502A', color: '#FFFCF5' }}
                             onClick={(e) => e.stopPropagation()}
                           >
                             <Package size={13} />
@@ -563,7 +563,7 @@ export default function BooksPage() {
         {!loading && !error && visibleBooks.length === 0 && (
           <div className="rounded-xl p-12 text-center" style={{ backgroundColor: '#FFFCF5', border: '1px solid #E4D9C4' }}>
             <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6" style={{ backgroundColor: '#F5F1E8' }}>
-              <BookOpen size={36} style={{ color: '#D97846' }} />
+              <BookOpen size={36} style={{ color: '#B4502A' }} />
             </div>
             <h3 className="font-heading text-2xl font-bold mb-2" style={{ color: '#2C2416' }}>
               No books found
@@ -575,14 +575,14 @@ export default function BooksPage() {
               <button
                 onClick={() => { setSelectedCategory('All'); setSearchQuery(''); resetClientFilters(); }}
                 className="px-8 py-3 rounded-lg font-semibold transition-all hover:shadow-lg"
-                style={{ backgroundColor: '#D97846', color: '#FFFCF5' }}
+                style={{ backgroundColor: '#B4502A', color: '#FFFCF5' }}
               >
                 Clear Filters
               </button>
               <Link
                 href="/authors"
                 className="flex items-center gap-2 font-semibold transition-colors"
-                style={{ color: '#D97846' }}
+                style={{ color: '#B4502A' }}
               >
                 Browse Authors <ArrowRight size={18} />
               </Link>

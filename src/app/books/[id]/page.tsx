@@ -37,7 +37,7 @@ export default function BookDetailPage({ params }: { params: Promise<{ id: strin
       <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#F5F1E8' }}>
         <div className="relative">
           <div className="w-16 h-16 border-4 rounded-full" style={{ borderColor: '#E4D9C4' }}></div>
-          <div className="absolute top-0 left-0 w-16 h-16 border-4 border-t-transparent rounded-full animate-spin" style={{ borderColor: '#D97846' }}></div>
+          <div className="absolute top-0 left-0 w-16 h-16 border-4 border-t-transparent rounded-full animate-spin" style={{ borderColor: '#B4502A' }}></div>
         </div>
       </div>
     );
@@ -48,7 +48,7 @@ export default function BookDetailPage({ params }: { params: Promise<{ id: strin
       <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#F5F1E8' }}>
         <div className="text-center">
           <div className="w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6" style={{ backgroundColor: '#FEF3E7' }}>
-            <Book size={48} style={{ color: '#D97846' }} />
+            <Book size={48} style={{ color: '#B4502A' }} />
           </div>
           <h1 className="text-3xl font-bold mb-3" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>
             Book Not Found
@@ -57,7 +57,7 @@ export default function BookDetailPage({ params }: { params: Promise<{ id: strin
           <Link
             href="/books"
             className="inline-block px-8 py-3 rounded-full font-bold transition-all hover:shadow-lg"
-            style={{ backgroundColor: '#D97846', color: '#FFFFFF' }}
+            style={{ backgroundColor: '#B4502A', color: '#FFFFFF' }}
           >
             Browse All Books
           </Link>
@@ -76,7 +76,7 @@ export default function BookDetailPage({ params }: { params: Promise<{ id: strin
           backgroundImage: 'radial-gradient(circle at 20% 30%, #D97846 0%, transparent 40%), radial-gradient(circle at 80% 70%, #7A9B76 0%, transparent 40%)',
         }}></div>
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+        <div className="relative page-container py-12 sm:py-16">
           <Link
             href="/books"
             className="inline-flex items-center gap-2 mb-10 transition-colors hover:gap-3"
@@ -104,11 +104,11 @@ export default function BookDetailPage({ params }: { params: Promise<{ id: strin
                 </div>
                 {/* Free reading badge */}
                 {book.isFreeReading ? (
-                  <div className="absolute -top-3 -right-3 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wide shadow-lg rotate-3" style={{ backgroundColor: '#7A9B76', color: '#FFFCF5' }}>
+                  <div className="absolute -top-3 -right-3 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wide shadow-lg rotate-3" style={{ backgroundColor: '#4F6D4C', color: '#FFFCF5' }}>
                     Read Free
                   </div>
                 ) : (
-                  <div className="absolute -top-3 -right-3 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wide shadow-lg rotate-3" style={{ backgroundColor: '#D97846', color: '#FFFFFF' }}>
+                  <div className="absolute -top-3 -right-3 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wide shadow-lg rotate-3" style={{ backgroundColor: '#B4502A', color: '#FFFFFF' }}>
                     KES {book.price.toLocaleString()}
                   </div>
                 )}
@@ -136,17 +136,17 @@ export default function BookDetailPage({ params }: { params: Promise<{ id: strin
                     src={book.author.profileImage || book.author.user.image || ''}
                     alt={book.author.user.name}
                     className="w-9 h-9 rounded-full object-cover ring-2 group-hover:ring-offset-1 transition-all"
-                    style={{ boxShadow: '0 0 0 2px #D97846', display: book.author.profileImage || book.author.user.image ? undefined : 'none' }}
+                    style={{ boxShadow: '0 0 0 2px #B4502A', display: book.author.profileImage || book.author.user.image ? undefined : 'none' }}
                     onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
                   />
                   <div
                     className="w-9 h-9 rounded-full hidden items-center justify-center"
-                    style={{ backgroundColor: 'rgba(217,120,70,0.25)', border: '2px solid #D97846', display: book.author.profileImage || book.author.user.image ? 'none' : undefined } as any}
+                    style={{ backgroundColor: 'rgba(217,120,70,0.25)', border: '2px solid #B4502A', display: book.author.profileImage || book.author.user.image ? 'none' : undefined } as any}
                   >
                     <User size={18} style={{ color: '#E89B77' }} />
                   </div>
                   <div className="text-left">
-                    <p className="text-xs uppercase tracking-wider" style={{ color: '#A89888' }}>Written by</p>
+                    <p className="text-xs uppercase tracking-wider" style={{ color: '#6B5D52' }}>Written by</p>
                     <p className="font-bold group-hover:underline" style={{ color: '#FFFCF5' }}>{book.author.user.name}</p>
                   </div>
                 </Link>
@@ -160,7 +160,7 @@ export default function BookDetailPage({ params }: { params: Promise<{ id: strin
                       <Star
                         key={i}
                         size={16}
-                        className={i < Math.floor(book.rating || 0) ? 'fill-yellow-400 text-yellow-400' : ''}
+                        className={i < Math.floor(book.rating || 0) ? 'fill-star text-star' : ''}
                         style={{ color: i < Math.floor(book.rating || 0) ? '#facc15' : '#5B4F42' }}
                       />
                     ))}
@@ -186,7 +186,7 @@ export default function BookDetailPage({ params }: { params: Promise<{ id: strin
                   <Link
                     href={`/book/viewer/${book.id}`}
                     className="flex-1 inline-flex items-center justify-center gap-2 font-bold py-4 px-8 rounded-full transition-all hover:-translate-y-0.5 shadow-lg"
-                    style={{ backgroundColor: '#D97846', color: '#FFFFFF' }}
+                    style={{ backgroundColor: '#B4502A', color: '#FFFFFF' }}
                   >
                     <BookOpen size={20} />
                     Read Free
@@ -201,8 +201,8 @@ export default function BookDetailPage({ params }: { params: Promise<{ id: strin
                 )}
               </div>
 
-              <p className="mt-4 inline-flex items-center gap-2 text-xs" style={{ color: '#A89888' }}>
-                <ShieldCheck size={14} style={{ color: '#7A9B76' }} />
+              <p className="mt-4 inline-flex items-center gap-2 text-xs" style={{ color: '#6B5D52' }}>
+                <ShieldCheck size={14} style={{ color: '#4F6D4C' }} />
                 {book.isFreeReading
                   ? 'Protected in-browser reader — content cannot be downloaded or printed'
                   : 'Available in hard copy below — support the author to keep writing'}
@@ -217,7 +217,7 @@ export default function BookDetailPage({ params }: { params: Promise<{ id: strin
                 if (links.length === 0) return null;
                 return (
                   <div className="mt-6">
-                    <p className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: '#A89888' }}>
+                    <p className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: '#6B5D52' }}>
                       Also available at
                     </p>
                     <div className="flex flex-wrap gap-2.5 max-w-lg">
@@ -230,7 +230,7 @@ export default function BookDetailPage({ params }: { params: Promise<{ id: strin
                           className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold transition-all hover:-translate-y-0.5 shadow"
                           style={{ backgroundColor: '#FFFCF5', color: '#2C2416' }}
                         >
-                          <ExternalLink size={15} style={{ color: '#D97846' }} />
+                          <ExternalLink size={15} style={{ color: '#B4502A' }} />
                           {l.label || 'Buy'}
                         </a>
                       ))}
@@ -244,10 +244,10 @@ export default function BookDetailPage({ params }: { params: Promise<{ id: strin
       </section>
 
       {/* Options strip: Hard Copy only */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <section className="page-container py-12">
         <div className="rounded-2xl p-8 md:p-10 flex flex-col md:flex-row items-center gap-8" style={{ backgroundColor: '#FFFCF5', border: '1px solid #E4D9C4' }}>
           <div className="w-16 h-16 rounded-2xl flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#FEF3E7' }}>
-            <Package size={30} style={{ color: '#D97846' }} />
+            <Package size={30} style={{ color: '#B4502A' }} />
           </div>
           <div className="flex-1 text-center md:text-left">
             <h3 className="text-2xl font-bold mb-1" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>
@@ -260,7 +260,7 @@ export default function BookDetailPage({ params }: { params: Promise<{ id: strin
           <Link
             href={`/request-hard-copy?book=${encodeURIComponent(book.title)}&id=${book.id}`}
             className="inline-flex items-center justify-center gap-2 font-bold py-3.5 px-8 rounded-full whitespace-nowrap transition-all hover:-translate-y-0.5 shadow-md"
-            style={{ backgroundColor: '#D97846', color: '#FFFFFF' }}
+            style={{ backgroundColor: '#B4502A', color: '#FFFFFF' }}
           >
             <Package size={18} />
             Request Hard Copy
@@ -287,7 +287,7 @@ export default function BookDetailPage({ params }: { params: Promise<{ id: strin
                       <span
                         key={tag.trim()}
                         className="px-3 py-1 rounded-full text-sm font-medium"
-                        style={{ backgroundColor: '#FEF3E7', color: '#D97846' }}
+                        style={{ backgroundColor: '#FEF3E7', color: '#B4502A' }}
                       >
                         {tag.trim()}
                       </span>
@@ -308,28 +308,28 @@ export default function BookDetailPage({ params }: { params: Promise<{ id: strin
               <div className="space-y-4">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#FEF3E7' }}>
-                    <FileText size={19} style={{ color: '#D97846' }} />
+                    <FileText size={19} style={{ color: '#B4502A' }} />
                   </div>
                   <div>
-                    <p className="text-xs" style={{ color: '#A89888' }}>Pages</p>
+                    <p className="text-xs" style={{ color: '#6B5D52' }}>Pages</p>
                     <p className="font-bold" style={{ color: '#2C2416' }}>{book.previewPages * 5 || '~150'}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#FEF3E7' }}>
-                    <Globe size={19} style={{ color: '#D97846' }} />
+                    <Globe size={19} style={{ color: '#B4502A' }} />
                   </div>
                   <div>
-                    <p className="text-xs" style={{ color: '#A89888' }}>Language</p>
+                    <p className="text-xs" style={{ color: '#6B5D52' }}>Language</p>
                     <p className="font-bold" style={{ color: '#2C2416' }}>{book.language || 'English'}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#FEF3E7' }}>
-                    <Calendar size={19} style={{ color: '#D97846' }} />
+                    <Calendar size={19} style={{ color: '#B4502A' }} />
                   </div>
                   <div>
-                    <p className="text-xs" style={{ color: '#A89888' }}>Published</p>
+                    <p className="text-xs" style={{ color: '#6B5D52' }}>Published</p>
                     <p className="font-bold" style={{ color: '#2C2416' }}>
                       {book.publishedAt ? new Date(book.publishedAt).getFullYear() : '2024'}
                     </p>
@@ -353,13 +353,13 @@ export default function BookDetailPage({ params }: { params: Promise<{ id: strin
                 <h4 className="font-bold mb-2" style={{ fontFamily: 'Playfair Display, serif', color: '#FFFCF5' }}>
                   More from {book.author.user.name.split(' ')[0]}
                 </h4>
-                <p className="text-sm mb-4" style={{ color: '#A89888' }}>
+                <p className="text-sm mb-4" style={{ color: '#6B5D52' }}>
                   Discover more books and stories from this author.
                 </p>
                 <Link
                   href={`/authors/${book.author.id}`}
                   className="inline-flex items-center justify-center w-full gap-2 px-6 py-3 rounded-full font-bold transition-all hover:shadow-lg hover:-translate-y-0.5"
-                  style={{ backgroundColor: '#D97846', color: '#FFFFFF' }}
+                  style={{ backgroundColor: '#B4502A', color: '#FFFFFF' }}
                 >
                   View Profile <ArrowLeft size={17} className="rotate-180" />
                 </Link>

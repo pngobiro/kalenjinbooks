@@ -2,9 +2,9 @@
 
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import SiteLogo from '@/components/SiteLogo';
 import { ArrowLeft, Smartphone, Check, Clock, BookOpen, Book, AlertCircle } from 'lucide-react';
 import { useState, useEffect, Suspense } from 'react';
+import Navbar from '@/components/layout/Navbar';
 import Image from 'next/image';
 
 function MpesaPaymentContent() {
@@ -94,25 +94,7 @@ function MpesaPaymentContent() {
   return (
     <div className="min-h-screen bg-neutral-cream">
       {/* Navigation */}
-      <nav className="bg-white/90 backdrop-blur-sm sticky top-0 z-50 border-b border-neutral-brown-500/10">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="flex items-center justify-between h-20">
-            <Link href="/" className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-primary/10">
-                <Book className="text-primary" size={24} />
-              </div>
-              <span className="text-2xl font-bold text-neutral-brown-900 font-heading">Mama Africa Library</span>
-            </Link>
-
-            <button onClick={() => router.back()} className="flex items-center gap-2 text-neutral-brown-700 hover:text-primary transition-colors">
-              <div className="w-10 h-10 rounded-lg bg-white border border-neutral-brown-200 flex items-center justify-center shadow-sm">
-                <ArrowLeft size={20} />
-              </div>
-              <span className="hidden sm:inline">Back</span>
-            </button>
-          </div>
-        </div>
-      </nav>
+      <Navbar />
 
       <div className="max-w-md mx-auto px-6 py-12">
         {/* Header */}
@@ -132,7 +114,7 @@ function MpesaPaymentContent() {
 
         {/* Author receiving details */}
         {paybill && (
-          <div className="mb-6 rounded-xl p-4 border" style={{ backgroundColor: '#E8F5E9', borderColor: '#7A9B76' }}>
+          <div className="mb-6 rounded-xl p-4 border" style={{ backgroundColor: '#E8F5E9', borderColor: '#4F6D4C' }}>
             <p className="text-xs font-semibold uppercase tracking-wide mb-1" style={{ color: '#5a7a56' }}>Funds go directly to the author</p>
             <div className="text-sm text-neutral-brown-800 space-y-0.5">
               {paybill.mpesaPaybillName && (

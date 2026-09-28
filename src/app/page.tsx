@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
-import { BookOpen, Star, Clock, Eye, Users, TrendingUp, FileText } from 'lucide-react';
+import { BookOpen, Star, Clock, Eye, FileText, ArrowRight } from 'lucide-react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import { fetchBooks, type Book as BookType } from '@/lib/api/books';
@@ -11,15 +11,19 @@ import { fetchAuthors, type Author } from '@/lib/api/authors';
 import { calculateReadTime, formatBlogDate } from '@/lib/blog-utils';
 import VideoThumbnail from '@/components/blog/VideoThumbnail';
 
-const colorSchemes = [
-  'from-emerald-500 to-teal-600',
-  'from-rose-500 to-pink-600',
-  'from-amber-500 to-orange-600',
-  'from-violet-500 to-purple-600',
-  'from-blue-500 to-indigo-600',
-  'from-red-500 to-rose-600',
-  'from-cyan-500 to-blue-600',
-  'from-fuchsia-500 to-purple-600',
+/* Editorial palette for author avatars and blog covers.
+   Previously eight stock Tailwind gradients (emerald/rose/violet/fuchsia) that
+   fought the warm earth brand. These are all drawn from the site palette so a
+   card never looks like it came from a different product. */
+const editorialTones = [
+  { from: '#8A4B2A', to: '#5C3218' }, // burnt sienna
+  { from: '#4F6D4C', to: '#2F452D' }, // deep sage
+  { from: '#A8762B', to: '#6E4C18' }, // ochre
+  { from: '#7A4B5C', to: '#4A2B36' }, // plum clay
+  { from: '#3F5A6B', to: '#24353F' }, // slate teal
+  { from: '#9C5A3C', to: '#5F3320' }, // terracotta
+  { from: '#5B5340', to: '#33301F' }, // olive ash
+  { from: '#6B4A2F', to: '#3B2917' }, // bark
 ];
 
 export default function HomePage() {
@@ -97,197 +101,326 @@ export default function HomePage() {
           aria-hidden="true"
           className="absolute inset-0 w-full h-full object-cover"
         />
-        {/* Readability overlay */}
+        {/* Readability overlay — heavier on the left where the text column sits,
+            so the display type stays legible over the illustration. */}
         <div
           className="absolute inset-0"
-          style={{ background: 'linear-gradient(135deg, rgba(44,36,22,0.88) 0%, rgba(58,46,87,0.72) 55%, rgba(44,36,22,0.55) 100%)' }}
+          style={{
+            background:
+              'linear-gradient(100deg, rgba(44,36,22,0.94) 0%, rgba(44,36,22,0.86) 38%, rgba(58,46,87,0.62) 68%, rgba(44,36,22,0.42) 100%)',
+          }}
         />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-20 md:py-24 relative z-10">
-          <div className="max-w-3xl mx-auto text-center">
-            <h1 
-              className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold mb-6"
-              style={{ color: '#FFFCF5', lineHeight: '1.15' }}
+        <div className="page-container relative z-10 flex min-h-[520px] items-center py-20 md:py-24">
+          <div className="max-w-2xl">
+            <p
+              className="font-mono text-[11px] sm:text-xs uppercase tracking-[0.28em] mb-7"
+              style={{ color: '#E8A87C' }}
             >
-              Mama Africa Library
-            </h1>
-            <p 
-              className="text-base md:text-lg mb-10 max-w-2xl mx-auto"
-              style={{ color: 'rgba(255, 252, 245, 0.9)', lineHeight: '1.6' }}
-            >
-              Discover authentic African literature — books, stories, and cultural narratives from talented local authors. 
-              Preserving our heritage one page at a time.
+              An independent African press
             </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+
+            <h1
+              className="font-heading font-bold mb-7 text-[2.6rem] leading-[1.06] sm:text-6xl lg:text-7xl"
+              style={{ color: '#FFFCF5' }}
+            >
+              Stories that
+              <br />
+              <span className="italic" style={{ color: '#F0BE94' }}>
+                outlast
+              </span>{' '}
+              the telling.
+            </h1>
+
+            <div
+              className="w-16 h-[3px] mb-7"
+              style={{ backgroundColor: '#B4502A' }}
+              aria-hidden="true"
+            />
+
+            <p
+              className="text-base md:text-lg mb-10 max-w-xl leading-relaxed"
+              style={{ color: 'rgba(255, 252, 245, 0.88)' }}
+            >
+              Books, oral histories and cultural writing from Kenyan authors —
+              preserved, published and read on your own terms.
+            </p>
+
+            <div className="flex flex-col sm:flex-row items-start gap-4">
               <Link
                 href="/books"
-                className="inline-flex items-center justify-center px-8 py-3.5 rounded-lg font-semibold text-base transition-all hover:-translate-y-0.5 shadow-lg"
-                style={{ backgroundColor: '#D97846', color: '#FFFCF5' }}
+                className="inline-flex items-center gap-2.5 px-8 py-3.5 rounded-full font-semibold text-base transition-transform hover:-translate-y-0.5"
+                style={{
+                  backgroundColor: '#B4502A',
+                  color: '#FFFCF5',
+                  boxShadow: '0 10px 30px rgba(44,36,22,0.35)',
+                }}
               >
-                Explore Books
+                Explore the Library
+                <ArrowRight size={18} />
               </Link>
               <Link
                 href="/authors"
-                className="inline-flex items-center justify-center px-8 py-3.5 rounded-lg font-semibold text-base transition-all hover:-translate-y-0.5 border-2"
-                style={{ 
+                className="inline-flex items-center gap-2.5 px-8 py-3.5 rounded-full font-semibold text-base transition-colors"
+                style={{
                   backgroundColor: 'transparent',
                   color: '#FFFCF5',
-                  borderColor: 'rgba(255, 252, 245, 0.3)',
+                  border: '1px solid rgba(255, 252, 245, 0.35)',
                 }}
               >
-                Meet Authors
+                Meet the Authors
               </Link>
             </div>
+
+            {/* Live counts read as a masthead line rather than filler stats. */}
+            <dl
+              className="mt-14 pt-8 grid grid-cols-3 gap-6 max-w-lg border-t"
+              style={{ borderColor: 'rgba(255, 252, 245, 0.18)' }}
+            >
+              {[
+                { label: 'Books', value: books.length },
+                { label: 'Authors', value: authors.length },
+                { label: 'Stories', value: blogPosts.length },
+              ].map((stat) => (
+                <div key={stat.label}>
+                  <dt
+                    className="font-mono text-[10px] uppercase tracking-[0.2em] mb-1.5"
+                    style={{ color: 'rgba(255, 252, 245, 0.6)' }}
+                  >
+                    {stat.label}
+                  </dt>
+                  <dd
+                    className="font-heading text-3xl font-bold"
+                    style={{ color: '#FFFCF5' }}
+                  >
+                    {loading ? '—' : stat.value}
+                  </dd>
+                </div>
+              ))}
+            </dl>
           </div>
         </div>
       </section>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6">
+      <main id="main-content" className="page-container">
         {loading ? (
           <div className="flex justify-center py-20">
             <div className="relative w-12 h-12">
               <div className="absolute inset-0 border-4 rounded-full" style={{ borderColor: '#E4D9C4' }}></div>
-              <div className="absolute inset-0 border-4 rounded-full animate-spin" style={{ borderColor: '#D97846', borderTopColor: 'transparent' }}></div>
+              <div className="absolute inset-0 border-4 rounded-full animate-spin" style={{ borderColor: '#B4502A', borderTopColor: 'transparent' }}></div>
             </div>
           </div>
         ) : (
           <div className="space-y-20 py-16">
-            {/* Featured Authors Section */}
-            <section>
-              <div className="text-center mb-12">
-                <h2 className="font-heading text-3xl md:text-4xl font-bold mb-4" style={{ color: '#2C2416' }}>
-                  Meet Our Visionary Writers
-                </h2>
-                <p className="text-base md:text-lg max-w-2xl mx-auto" style={{ color: '#5B4F42' }}>
-                  Visionary authors preserving African heritage through their words — the voices of Mama Africa Library
+            {/* 01 — Authors: editorial portrait cards, left-aligned header */}
+            <section className="editorial-section">
+              <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end mb-14">
+                <div>
+                  <p className="editorial-eyebrow editorial-eyebrow-rule mb-5">The Writers</p>
+                  <h2
+                    className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mb-5 max-w-2xl"
+                    style={{ color: '#2C2416' }}
+                  >
+                    Authors preserving what
+                    <br className="hidden sm:block" /> the world almost lost
+                  </h2>
+                  <p className="text-base md:text-lg max-w-xl leading-relaxed" style={{ color: '#5B4F42' }}>
+                    Historians, theologians and storytellers writing the record of
+                    Kenya&rsquo;s peoples in their own words.
+                  </p>
+                </div>
+                <p className="editorial-numeral hidden lg:block" aria-hidden="true">
+                  01
                 </p>
               </div>
 
-              <div className="flex flex-wrap justify-center gap-8">
-                {authors.slice(0, 6).map((author) => (
-                  <Link
-                    key={author.id}
-                    href={`/authors/${author.id}`}
-                    className="group w-full max-w-xs"
-                  >
-                    <div
-                      className="rounded-xl p-8 text-center transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
-                      style={{ backgroundColor: '#FFFCF5' }}
+              <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+                {authors.slice(0, 6).map((author, i) => {
+                  const tone = editorialTones[i % editorialTones.length];
+                  return (
+                    <Link
+                      key={author.id}
+                      href={`/authors/${author.id}`}
+                      className="editorial-card group block overflow-hidden"
                     >
-                      <div className="relative w-40 h-40 mx-auto mb-5">
-                        <div className={`absolute inset-0 rounded-full bg-gradient-to-br ${colorSchemes[0]} overflow-hidden ring-4 transition-transform duration-300 group-hover:scale-105`} style={{ '--tw-ring-color': '#D97846' } as React.CSSProperties}>
-                          {author.profileImage ? (
-                            <img
-                              src={author.profileImage}
-                              alt={author.name || 'Author'}
-                              className="w-full h-full object-cover rounded-full"
-                            />
-                          ) : (
-                            <div className="w-full h-full flex items-center justify-center">
-                              <span className="text-6xl font-bold text-white">
-                                {author.name?.charAt(0) || 'A'}
+                      {/* Portrait panel — brand tone, not a stock Tailwind gradient */}
+                      <div
+                        className="relative h-52 overflow-hidden"
+                        style={{
+                          background: `linear-gradient(140deg, ${tone.from} 0%, ${tone.to} 100%)`,
+                        }}
+                      >
+                        {author.profileImage ? (
+                          <img
+                            src={author.profileImage}
+                            alt={author.name || 'Author'}
+                            loading="lazy"
+                            className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.04]"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center">
+                            <span className="font-heading text-6xl font-bold text-white/90">
+                              {author.name?.charAt(0) || 'A'}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="p-6">
+                        <h3
+                          className="font-heading text-xl font-bold mb-2 group-hover:text-primary transition-colors"
+                          style={{ color: '#2C2416' }}
+                        >
+                          {author.name || 'Unknown Author'}
+                        </h3>
+                        {author.bio && (
+                          <p className="text-sm leading-relaxed mb-5 line-clamp-3" style={{ color: '#5B4F42' }}>
+                            {author.bio}
+                          </p>
+                        )}
+                        {/* Stats set as a data line, like a byline in print */}
+                        <div
+                          className="flex items-center gap-4 pt-4 border-t text-xs font-medium"
+                          style={{ borderColor: '#E4D9C4', color: '#5B4F42' }}
+                        >
+                          <span className="inline-flex items-center gap-1.5">
+                            <BookOpen size={14} style={{ color: '#4F6D4C' }} />
+                            {author.booksCount} {author.booksCount === 1 ? 'book' : 'books'}
+                          </span>
+                          {(author.blogsCount ?? 0) > 0 && (
+                            <>
+                              <span aria-hidden="true" style={{ color: '#E4D9C4' }}>
+                                /
                               </span>
-                            </div>
+                              <span className="inline-flex items-center gap-1.5">
+                                <FileText size={14} style={{ color: '#B4502A' }} />
+                                {author.blogsCount} {author.blogsCount === 1 ? 'story' : 'stories'}
+                              </span>
+                            </>
                           )}
                         </div>
                       </div>
-                      <h3 className="font-heading text-xl md:text-2xl font-bold mb-2 group-hover:text-primary transition-colors" style={{ color: '#2C2416' }}>
-                        {author.name || 'Unknown Author'}
-                      </h3>
-                      {author.bio && (
-                        <p className="text-sm mb-4 line-clamp-2" style={{ color: '#5B4F42' }}>
-                          {author.bio}
-                        </p>
-                      )}
-                      <div className="flex items-center justify-center gap-2 text-sm font-medium">
-                        <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full" style={{ color: '#7A9B76', backgroundColor: '#F5F1E8' }}>
-                          <BookOpen size={16} />
-                          <span>{author.booksCount} {author.booksCount === 1 ? 'book' : 'books'}</span>
-                        </span>
-                        {(author.blogsCount ?? 0) > 0 && (
-                          <Link
-                            href={`/blogs?author=${author.id}`}
-                            onClick={(e) => e.stopPropagation()}
-                            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full transition-all hover:shadow-md"
-                            style={{ color: '#D97846', backgroundColor: '#FEF3E7' }}
-                          >
-                            <FileText size={16} />
-                            <span>{author.blogsCount} {author.blogsCount === 1 ? 'blog' : 'blogs'}</span>
-                          </Link>
-                        )}
-                      </div>
-                    </div>
-                  </Link>
-                ))}
+                    </Link>
+                  );
+                })}
               </div>
 
-              {authors.length > 6 && (
-                <div className="text-center mt-8">
+              {authors.length > 0 && (
+                <div className="mt-12">
                   <Link
                     href="/authors"
-                    className="inline-flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all"
-                    style={{ color: '#D97846' }}
+                    className="inline-flex items-center gap-2 font-semibold transition-colors group"
+                    style={{ color: '#B4502A' }}
                   >
-                    View All Authors →
+                    <span className="border-b-2 pb-0.5 group-hover:border-current" style={{ borderColor: 'transparent' }}>
+                      Browse all authors
+                    </span>
+                    <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
                   </Link>
                 </div>
               )}
             </section>
 
-            {/* Featured Book Spotlight */}
+            <hr className="editorial-rule" />
+
+            {/* 02 — Featured book: full-bleed dark band, cover left / copy right */}
             {(() => {
-              const featured = books.find((b) => b.isFeatured) || books.find((b) => b.id === 'book-1');
+              const featured = books.find((b) => b.isFeatured) || books[0];
               if (!featured) return null;
               return (
-                <section className="relative overflow-hidden rounded-3xl" style={{ backgroundColor: '#2C2416' }}>
-                  <div className="absolute inset-0 opacity-10" style={{
-                    backgroundImage: 'radial-gradient(circle at 20% 30%, #D97846 0%, transparent 40%), radial-gradient(circle at 80% 70%, #C9A354 0%, transparent 40%)',
-                  }}></div>
-                  <div className="relative grid grid-cols-1 md:grid-cols-[240px_1fr] gap-8 md:gap-12 items-center p-8 md:p-12">
-                    <Link href={`/books/${featured.id}`} className="group mx-auto w-48 md:w-full shrink-0">
-                      <div className="relative aspect-[2/3] rounded-xl overflow-hidden shadow-2xl transition-transform duration-300 group-hover:scale-[1.03]" style={{ boxShadow: '0 20px 50px rgba(0,0,0,0.45)' }}>
-                        {featured.coverImage ? (
-                          <img src={featured.coverImage} alt={featured.title} className="w-full h-full object-cover" />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center" style={{ backgroundColor: '#3A2E22' }}>
-                            <BookOpen size={48} style={{ color: 'rgba(228,217,196,0.4)' }} />
-                          </div>
-                        )}
-                      </div>
-                    </Link>
-                    <div className="text-center md:text-left">
-                      <p className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] px-4 py-1.5 rounded-full mb-5" style={{ backgroundColor: 'rgba(217,120,70,0.18)', color: '#E89B77', border: '1px solid rgba(217,120,70,0.4)' }}>
-                        <Star size={13} className="fill-yellow-400 text-yellow-400" />
-                        Featured Book
-                      </p>
-                      <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold mb-3 leading-tight" style={{ color: '#FFFCF5' }}>
-                        {featured.title}
-                      </h2>
-                      <p className="text-sm mb-4" style={{ color: '#E89B77' }}>
-                        by {featured.author?.user?.name || 'Unknown Author'}
-                      </p>
-                      {featured.description && (
-                        <p className="text-base leading-relaxed mb-6 max-w-xl mx-auto md:mx-0 line-clamp-3" style={{ color: '#E4D9C4' }}>
-                          {featured.description}
-                        </p>
-                      )}
-                      <div className="flex flex-col sm:flex-row items-center justify-center md:justify-start gap-3">
-                        {featured.isFreeReading && (
-                          <Link
-                            href={`/book/viewer/${featured.id}`}
-                            className="inline-flex items-center gap-2 px-7 py-3 rounded-full font-bold transition-all hover:-translate-y-0.5 shadow-lg"
-                            style={{ backgroundColor: '#D97846', color: '#FFFFFF' }}
-                          >
-                            <BookOpen size={17} />
-                            Read Free
-                          </Link>
-                        )}
-                        <Link
-                          href={`/books/${featured.id}`}
-                          className="inline-flex items-center gap-2 px-7 py-3 rounded-full font-bold transition-all hover:-translate-y-0.5"
-                          style={{ backgroundColor: 'rgba(255,252,245,0.08)', color: '#FFFCF5', border: '2px solid rgba(217,120,70,0.6)' }}
+                <section className="editorial-section">
+                  <div
+                    className="relative overflow-hidden rounded-3xl"
+                    style={{ backgroundColor: '#2C2416' }}
+                  >
+                    <div
+                      className="absolute inset-0 opacity-15"
+                      style={{
+                        backgroundImage:
+                          'radial-gradient(circle at 12% 18%, #B4502A 0%, transparent 42%), radial-gradient(circle at 88% 82%, #A8762B 0%, transparent 40%)',
+                      }}
+                      aria-hidden="true"
+                    />
+                    <div className="relative grid md:grid-cols-[minmax(0,260px)_minmax(0,1fr)] gap-10 md:gap-14 items-center p-8 md:p-14">
+                      <Link
+                        href={`/books/${featured.id}`}
+                        className="group block w-52 mx-auto md:w-full shrink-0"
+                      >
+                        <div
+                          className="relative aspect-[2/3] rounded-lg overflow-hidden transition-transform duration-500 group-hover:-translate-y-1.5"
+                          style={{ boxShadow: '0 24px 60px rgba(0,0,0,0.5)' }}
                         >
-                          View Details
-                        </Link>
+                          {featured.coverImage ? (
+                            <img
+                              src={featured.coverImage}
+                              alt={featured.title}
+                              loading="lazy"
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            <div
+                              className="w-full h-full flex items-center justify-center"
+                              style={{ backgroundColor: '#3A2E22' }}
+                            >
+                              <BookOpen size={48} style={{ color: 'rgba(228,217,196,0.4)' }} />
+                            </div>
+                          )}
+                        </div>
+                      </Link>
+
+                      <div>
+                        <p
+                          className="font-mono text-[11px] uppercase tracking-[0.24em] mb-5"
+                          style={{ color: '#E8A87C' }}
+                        >
+                          This Month&rsquo;s Selection
+                        </p>
+                        <h2
+                          className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold mb-4 leading-[1.12]"
+                          style={{ color: '#FFFCF5' }}
+                        >
+                          {featured.title}
+                        </h2>
+                        <p
+                          className="text-sm mb-6"
+                          style={{ color: '#E8A87C' }}
+                        >
+                          {featured.author?.user?.name || 'Unknown Author'}
+                        </p>
+                        {featured.description && (
+                          <p
+                            className="text-base leading-relaxed mb-8 max-w-xl line-clamp-3"
+                            style={{ color: '#E4D9C4' }}
+                          >
+                            {featured.description}
+                          </p>
+                        )}
+
+                        <div className="flex flex-wrap items-center gap-3">
+                          {featured.isFreeReading && (
+                            <Link
+                              href={`/book/viewer/${featured.id}`}
+                              className="inline-flex items-center gap-2 px-7 py-3 rounded-full font-bold transition-transform hover:-translate-y-0.5"
+                              style={{
+                                backgroundColor: '#B4502A',
+                                color: '#FFFFFF',
+                              }}
+                            >
+                              <BookOpen size={17} />
+                              Read Free
+                            </Link>
+                          )}
+                          <Link
+                            href={`/books/${featured.id}`}
+                            className="inline-flex items-center gap-2 px-7 py-3 rounded-full font-bold transition-colors"
+                            style={{
+                              color: '#FFFCF5',
+                              border: '1px solid rgba(232, 168, 124, 0.55)',
+                            }}
+                          >
+                            View Details
+                            <ArrowRight size={16} />
+                          </Link>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -296,238 +429,396 @@ export default function HomePage() {
             })()}
 
             {/* Latest Books Section */}
-            <section style={{ backgroundColor: '#F5F1E8', margin: '0 -1.5rem', padding: '4rem 1.5rem', borderRadius: '1.5rem' }}>
-              <div className="text-center mb-12">
-                <h2 className="font-heading text-3xl md:text-4xl font-bold mb-4" style={{ color: '#2C2416' }}>
-                  Latest Books
-                </h2>
-                <p className="text-base md:text-lg max-w-2xl mx-auto" style={{ color: '#5B4F42' }}>
-                  Fresh releases from our talented authors
+            {/* 03 — Latest books: real grid, no negative-margin band */}
+            <section className="editorial-section">
+              <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end mb-14">
+                <div>
+                  <p className="editorial-eyebrow editorial-eyebrow-rule mb-5">New &amp; Noteworthy</p>
+                  <h2
+                    className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mb-5"
+                    style={{ color: '#2C2416' }}
+                  >
+                    From the press
+                  </h2>
+                  <p className="text-base md:text-lg max-w-xl leading-relaxed" style={{ color: '#5B4F42' }}>
+                    Fresh releases and long-tail backlist titles, side by side.
+                  </p>
+                </div>
+                <p className="editorial-numeral hidden lg:block" aria-hidden="true">
+                  02
                 </p>
               </div>
 
-              <div className="flex flex-wrap justify-center gap-6">
+              <div className="grid grid-cols-2 gap-x-5 gap-y-9 sm:gap-x-6 md:grid-cols-3 lg:grid-cols-4">
                 {shelfBooks.map((book) => (
                   <Link
                     key={book.id}
                     href={`/books/${book.id}`}
-                    className="group w-full max-w-[220px]"
+                    className="group block"
                   >
-                    <div className="relative aspect-[3/4] rounded-lg overflow-hidden mb-3 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-                      <div className="absolute inset-0 bg-gradient-to-br" style={{ backgroundColor: '#E4D9C4' }}>
-                        {book.coverImage ? (
-                          <img
-                            src={book.coverImage}
-                            alt={book.title}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                          />
+                    <div className="relative aspect-[3/4] rounded-md overflow-hidden mb-4">
+                      {book.coverImage ? (
+                        <img
+                          src={book.coverImage}
+                          alt={book.title}
+                          loading="lazy"
+                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        />
+                      ) : (
+                        <div
+                          className="w-full h-full flex items-center justify-center"
+                          style={{ backgroundColor: '#E4D9C4' }}
+                        >
+                          <BookOpen size={32} className="text-white/60" />
+                        </div>
+                      )}
+
+                      {/* Price badge sits on the cover permanently rather than
+                          only on hover, so it is readable without a pointer. */}
+                      <div className="absolute top-3 left-3">
+                        {book.isFreeReading ? (
+                          <span
+                            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold"
+                            style={{ backgroundColor: '#2C2416', color: '#B6D3B2' }}
+                          >
+                            <BookOpen size={11} />
+                            Free
+                          </span>
                         ) : (
-                          <div className="w-full h-full flex items-center justify-center">
-                            <BookOpen size={32} className="text-white/30" />
-                          </div>
+                          <span
+                            className="inline-block px-2.5 py-1 rounded-full text-[11px] font-bold"
+                            style={{ backgroundColor: '#FFFCF5', color: '#2C2416' }}
+                          >
+                            KES {book.price.toLocaleString()}
+                          </span>
                         )}
                       </div>
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
-                        <div className="flex items-center justify-between text-white text-sm">
-                          {book.isFreeReading ? (
-                            <span className="inline-flex items-center gap-1.5 font-bold" style={{ color: '#A3C8A0' }}>
-                              <BookOpen size={14} />
-                              Free to Read
-                            </span>
-                          ) : (
-                            <span className="font-bold" style={{ color: '#F5C88F' }}>
-                              KES {book.price.toLocaleString()}
-                            </span>
-                          )}
-                          {book.rating > 0 && (
-                            <div className="flex items-center gap-1">
-                              <Star size={12} className="fill-yellow-400 text-yellow-400" />
-                              <span className="text-xs">{book.rating.toFixed(1)}</span>
-                            </div>
-                          )}
+
+                      {book.rating > 0 && (
+                        <div
+                          className="absolute top-3 right-3 inline-flex items-center gap-1 px-2 py-1 rounded-full text-[11px] font-semibold"
+                          style={{ backgroundColor: 'rgba(44,36,22,0.82)', color: '#FFFCF5' }}
+                        >
+                          <Star size={11} className="fill-star text-star" />
+                          {book.rating.toFixed(1)}
                         </div>
-                      </div>
+                      )}
                     </div>
-                    <h3 className="font-semibold text-sm md:text-base line-clamp-2 group-hover:text-primary transition-colors mb-1" style={{ color: '#2C2416' }}>
+
+                    <h3
+                      className="font-heading text-sm md:text-base font-semibold leading-snug line-clamp-2 mb-1.5 group-hover:text-primary transition-colors"
+                      style={{ color: '#2C2416' }}
+                    >
                       {book.title}
                     </h3>
-                    <p className="text-xs md:text-sm" style={{ color: '#5B4F42' }}>
+                    <p className="text-xs" style={{ color: '#6B5D52' }}>
                       {book.author?.user?.name || 'Unknown Author'}
                     </p>
                   </Link>
                 ))}
               </div>
 
-              {books.length > 8 && (
-                <div className="text-center mt-8">
+              {books.length > shelfBooks.length && (
+                <div className="mt-14">
                   <Link
                     href="/books"
-                    className="inline-flex items-center gap-2 px-8 py-3.5 rounded-lg font-semibold transition-all hover:-translate-y-0.5 shadow-lg"
-                    style={{ backgroundColor: '#D97846', color: '#FFFCF5' }}
+                    className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full font-semibold transition-transform hover:-translate-y-0.5"
+                    style={{
+                      backgroundColor: '#B4502A',
+                      color: '#FFFCF5',
+                      boxShadow: '0 8px 24px rgba(180,80,42,0.28)',
+                    }}
                   >
-                    View All Books
+                    View all {books.length} books
+                    <ArrowRight size={18} />
                   </Link>
                 </div>
               )}
             </section>
 
-            {/* Blog Posts Section */}
-            {blogPosts.length > 0 && (
-              <section>
-                <div className="text-center mb-12">
-                  <h2 className="font-heading text-3xl md:text-4xl font-bold mb-4" style={{ color: '#2C2416' }}>
-                    Stories & Insights
-                  </h2>
-                  <p className="text-base md:text-lg max-w-2xl mx-auto" style={{ color: '#5B4F42' }}>
-                    Dive into engaging posts about African culture, literature, and life
-                  </p>
-                </div>
+            <hr className="editorial-rule" />
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {blogPosts.slice(0, 6).map((post, index) => (
-                    <Link
-                      key={post.id}
-                      href={`/blogs/${post.id}`}
-                      className="group rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
-                      style={{ backgroundColor: '#FFFCF5' }}
-                    >
-                      <div className={`relative aspect-[16/10] bg-gradient-to-br ${colorSchemes[index % colorSchemes.length]} overflow-hidden`}>
-                        {post.coverImage ? (
+            {/* 04 — Stories: one lead feature + the rest as an editorial index */}
+            {blogPosts.length > 0 && (() => {
+              const [lead, ...rest] = blogPosts;
+              const tone = editorialTones[0];
+              return (
+                <section className="editorial-section">
+                  <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end mb-14">
+                    <div>
+                      <p className="editorial-eyebrow editorial-eyebrow-rule mb-5">The Journal</p>
+                      <h2
+                        className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mb-5"
+                        style={{ color: '#2C2416' }}
+                      >
+                        Stories &amp; insights
+                      </h2>
+                      <p className="text-base md:text-lg max-w-xl leading-relaxed" style={{ color: '#5B4F42' }}>
+                        Essays, lectures and field notes on African culture and
+                        literature.
+                      </p>
+                    </div>
+                    <p className="editorial-numeral hidden lg:block" aria-hidden="true">
+                      03
+                    </p>
+                  </div>
+
+                  <div className="grid gap-12 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)] lg:gap-16">
+                    {/* Lead story — image left, headline right */}
+                    <Link href={`/blogs/${lead.id}`} className="group block">
+                      <div
+                        className="relative aspect-[16/10] rounded-lg overflow-hidden mb-6"
+                        style={{
+                          background: `linear-gradient(140deg, ${tone.from} 0%, ${tone.to} 100%)`,
+                        }}
+                      >
+                        {lead.coverImage ? (
                           <img
-                            src={post.coverImage}
-                            alt={post.title}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            src={lead.coverImage}
+                            alt={lead.title}
+                            loading="lazy"
+                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                           />
-                        ) : post.coverType === 'video' && post.coverVideoUrl ? (
-                          <VideoThumbnail videoUrl={post.coverVideoUrl} title={post.title} />
+                        ) : lead.coverType === 'video' && lead.coverVideoUrl ? (
+                          <VideoThumbnail videoUrl={lead.coverVideoUrl} title={lead.title} />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center">
-                            <BookOpen size={32} className="text-white/30" />
+                            <BookOpen size={40} className="text-white/40" />
                           </div>
                         )}
-                        {post.category && (
-                          <div className="absolute top-3 left-3">
-                            <span className="px-3 py-1 rounded text-xs font-semibold uppercase" style={{ backgroundColor: 'rgba(217, 120, 70, 0.95)', color: '#FFFCF5' }}>
-                              {post.category}
+                        {lead.category && (
+                          <div className="absolute top-4 left-4">
+                            <span
+                              className="px-3 py-1 rounded text-[11px] font-bold uppercase tracking-wider"
+                              style={{ backgroundColor: '#B4502A', color: '#FFFCF5' }}
+                            >
+                              {lead.category}
                             </span>
                           </div>
                         )}
                       </div>
-                      <div className="p-5">
-                        <h3 className="font-heading text-lg font-bold mb-2 line-clamp-2 group-hover:text-primary transition-colors" style={{ color: '#2C2416' }}>
-                          {post.title}
-                        </h3>
-                        {post.excerpt && (
-                          <p className="text-sm line-clamp-2 mb-4" style={{ color: '#5B4F42' }}>
-                            {post.excerpt}
-                          </p>
-                        )}
-                        <div className="flex items-center justify-between text-xs" style={{ color: '#A89888' }}>
-                          <span>{post.author?.user?.name || 'Mama Africa Library'}</span>
-                          <div className="flex items-center gap-3">
-                            <span className="flex items-center gap-1">
-                              <Clock size={11} />
-                              {calculateReadTime(post.content).text}
-                            </span>
-                            <span className="flex items-center gap-1">
-                              <Eye size={11} />
-                              {post.viewCount}
-                            </span>
-                          </div>
-                        </div>
+
+                      {lead.excerpt && (
+                        <p
+                          className="text-base leading-relaxed mb-4 line-clamp-2"
+                          style={{ color: '#5B4F42' }}
+                        >
+                          {lead.excerpt}
+                        </p>
+                      )}
+
+                      <h3
+                        className="font-heading text-2xl md:text-3xl font-bold leading-tight group-hover:text-primary transition-colors"
+                        style={{ color: '#2C2416' }}
+                      >
+                        {lead.title}
+                      </h3>
+
+                      <div
+                        className="mt-5 pt-4 border-t flex items-center gap-4 text-xs"
+                        style={{ borderColor: '#E4D9C4', color: '#6B5D52' }}
+                      >
+                        <span>{lead.author?.user?.name || 'Mama Africa Library'}</span>
+                        <span aria-hidden="true" style={{ color: '#E4D9C4' }}>
+                          /
+                        </span>
+                        <span className="inline-flex items-center gap-1">
+                          <Clock size={12} />
+                          {calculateReadTime(lead.content).text}
+                        </span>
+                        <span className="inline-flex items-center gap-1">
+                          <Eye size={12} />
+                          {lead.viewCount}
+                        </span>
                       </div>
                     </Link>
-                  ))}
-                </div>
 
-                {blogPosts.length > 6 && (
-                  <div className="text-center mt-8">
-                    <Link
-                      href="/blogs"
-                      className="inline-flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all"
-                      style={{ color: '#D97846' }}
+                    {/* Remaining stories as an index, the way a magazine sets a
+                        contents list rather than a grid of equal cards. */}
+                    <div className="divide-y" style={{ borderColor: '#E4D9C4' }}>
+                      {rest.slice(0, 5).map((post) => (
+                        <Link
+                          key={post.id}
+                          href={`/blogs/${post.id}`}
+                          className="group flex gap-5 py-5 first:pt-0"
+                        >
+                          <div
+                            className="relative w-28 h-20 shrink-0 rounded overflow-hidden"
+                            style={{ backgroundColor: '#E4D9C4' }}
+                          >
+                            {post.coverImage ? (
+                              <img
+                                src={post.coverImage}
+                                alt={post.title}
+                                loading="lazy"
+                                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                              />
+                            ) : post.coverType === 'video' && post.coverVideoUrl ? (
+                              <VideoThumbnail
+                                videoUrl={post.coverVideoUrl}
+                                title={post.title}
+                              />
+                            ) : (
+                              <div className="w-full h-full flex items-center justify-center">
+                                <BookOpen size={20} className="text-white/60" />
+                              </div>
+                            )}
+                          </div>
+
+                          <div className="min-w-0 flex-1">
+                            {post.category && (
+                              <p
+                                className="font-mono text-[10px] uppercase tracking-[0.18em] mb-1.5"
+                                style={{ color: '#B4502A' }}
+                              >
+                                {post.category}
+                              </p>
+                            )}
+                            <h4
+                              className="font-heading text-base font-semibold leading-snug line-clamp-2 mb-2 group-hover:text-primary transition-colors"
+                              style={{ color: '#2C2416' }}
+                            >
+                              {post.title}
+                            </h4>
+                            <div
+                              className="flex items-center gap-3 text-[11px]"
+                              style={{ color: '#6B5D52' }}
+                            >
+                              <span className="truncate">
+                                {post.author?.user?.name || 'Mama Africa Library'}
+                              </span>
+                              <span className="inline-flex items-center gap-1 shrink-0">
+                                <Clock size={11} />
+                                {calculateReadTime(post.content).text}
+                              </span>
+                            </div>
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+
+                  {blogPosts.length > 6 && (
+                    <div className="mt-14">
+                      <Link
+                        href="/blogs"
+                        className="inline-flex items-center gap-2 font-semibold transition-colors group"
+                        style={{ color: '#B4502A' }}
+                      >
+                        <span
+                          className="border-b-2 pb-0.5 group-hover:border-current"
+                          style={{ borderColor: 'transparent' }}
+                        >
+                          Read all {blogPosts.length} stories
+                        </span>
+                        <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
+                      </Link>
+                    </div>
+                  )}
+                </section>
+              );
+            })()}
+
+            {/* 05 — Library at a glance. Every figure is a real count from the
+                API; the previous "98% Reader Satisfaction" was invented. */}
+            <section className="editorial-section pt-0">
+              <div
+                className="rounded-2xl p-8 md:p-12"
+                style={{
+                  background:
+                    'linear-gradient(135deg, #F5F1E8 0%, #FFFCF5 100%)',
+                  border: '1px solid #E4D9C4',
+                }}
+              >
+                <div className="grid gap-10 md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] md:gap-16 items-center">
+                  <div>
+                    <p className="editorial-eyebrow editorial-eyebrow-rule mb-4">By the numbers</p>
+                    <h2
+                      className="font-heading text-2xl md:text-3xl font-bold leading-tight"
+                      style={{ color: '#2C2416' }}
                     >
-                      Read All Stories →
-                    </Link>
+                      A young, growing library
+                    </h2>
                   </div>
-                )}
-              </section>
-            )}
 
-            {/* Stats Section */}
-            <section 
-              className="rounded-2xl p-8 md:p-12 text-center"
-              style={{ background: 'linear-gradient(135deg, #F5F1E8 0%, #FFFCF5 100%)' }}
-            >
-              <h2 className="font-heading text-2xl md:text-3xl font-bold mb-8" style={{ color: '#2C2416' }}>
-                Growing Community
-              </h2>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-                <div>
-                  <div className="font-heading text-4xl md:text-5xl font-bold mb-2" style={{ color: '#D97846' }}>
-                    {books.length}+
-                  </div>
-                  <div className="text-sm md:text-base font-medium" style={{ color: '#5B4F42' }}>
-                    Books Available
-                  </div>
-                </div>
-                <div>
-                  <div className="font-heading text-4xl md:text-5xl font-bold mb-2" style={{ color: '#D97846' }}>
-                    {authors.length}+
-                  </div>
-                  <div className="text-sm md:text-base font-medium" style={{ color: '#5B4F42' }}>
-                    Active Authors
-                  </div>
-                </div>
-                <div>
-                  <div className="font-heading text-4xl md:text-5xl font-bold mb-2" style={{ color: '#D97846' }}>
-                    {blogPosts.length}+
-                  </div>
-                  <div className="text-sm md:text-base font-medium" style={{ color: '#5B4F42' }}>
-                    Stories Published
-                  </div>
-                </div>
-                <div>
-                  <div className="font-heading text-4xl md:text-5xl font-bold mb-2" style={{ color: '#D97846' }}>
-                    98%
-                  </div>
-                  <div className="text-sm md:text-base font-medium" style={{ color: '#5B4F42' }}>
-                    Reader Satisfaction
-                  </div>
+                  <dl className="grid grid-cols-2 sm:grid-cols-3 gap-8">
+                    {[
+                      { label: 'Books published', value: books.length },
+                      { label: 'Authors', value: authors.length },
+                      { label: 'Stories', value: blogPosts.length },
+                    ].map((stat) => (
+                      <div key={stat.label}>
+                        <dd
+                          className="font-heading text-4xl md:text-5xl font-bold mb-1.5"
+                          style={{ color: '#B4502A' }}
+                        >
+                          {stat.value}
+                        </dd>
+                        <dt className="text-sm" style={{ color: '#5B4F42' }}>
+                          {stat.label}
+                        </dt>
+                      </div>
+                    ))}
+                  </dl>
                 </div>
               </div>
             </section>
 
-            {/* CTA Section */}
-            <section 
-              className="rounded-2xl p-8 md:p-16 text-center"
-              style={{ backgroundColor: '#2C2416' }}
-            >
-              <h2 className="font-heading text-3xl md:text-4xl font-bold mb-4" style={{ color: '#FFFCF5' }}>
-                Start Your Reading Journey
-              </h2>
-              <p className="text-base md:text-lg mb-8 max-w-2xl mx-auto" style={{ color: 'rgba(255, 252, 245, 0.85)' }}>
-                Join our community of readers and authors preserving African heritage through literature — welcome to Mama Africa Library
-              </p>
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <Link
-                  href="/books"
-                  className="inline-flex items-center justify-center px-8 py-3.5 rounded-lg font-semibold text-base transition-all hover:-translate-y-0.5 shadow-lg"
-                  style={{ backgroundColor: '#D97846', color: '#FFFCF5' }}
-                >
-                  Browse Books
-                </Link>
-                <Link
-                  href="/dashboard/author/register"
-                  className="inline-flex items-center justify-center px-8 py-3.5 rounded-lg font-semibold text-base transition-all hover:-translate-y-0.5 border-2"
-                  style={{ 
-                    backgroundColor: 'transparent',
-                    color: '#FFFCF5',
-                    borderColor: 'rgba(255, 252, 245, 0.3)',
+            {/* 06 — Closing call to action */}
+            <section className="pb-8 md:pb-12">
+              <div
+                className="relative overflow-hidden rounded-3xl px-8 py-16 md:py-24 text-center"
+                style={{ backgroundColor: '#2C2416' }}
+              >
+                <div
+                  className="absolute inset-0 opacity-20"
+                  style={{
+                    backgroundImage:
+                      'radial-gradient(circle at 20% 25%, #B4502A 0%, transparent 45%), radial-gradient(circle at 80% 75%, #A8762B 0%, transparent 45%)',
                   }}
-                >
-                  Become an Author
-                </Link>
+                  aria-hidden="true"
+                />
+                <div className="relative max-w-2xl mx-auto">
+                  <p
+                    className="font-mono text-[11px] uppercase tracking-[0.28em] mb-6"
+                    style={{ color: '#E8A87C' }}
+                  >
+                    Read · Write · Preserve
+                  </p>
+                  <h2
+                    className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mb-5"
+                    style={{ color: '#FFFCF5' }}
+                  >
+                    Help keep the record alive
+                  </h2>
+                  <p
+                    className="text-base md:text-lg mb-10 leading-relaxed"
+                    style={{ color: 'rgba(255, 252, 245, 0.82)' }}
+                  >
+                    Read what our authors have preserved, or publish the history
+                    only you can tell.
+                  </p>
+                  <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <Link
+                      href="/books"
+                      className="inline-flex items-center gap-2.5 px-8 py-3.5 rounded-full font-semibold transition-transform hover:-translate-y-0.5"
+                      style={{ backgroundColor: '#B4502A', color: '#FFFCF5' }}
+                    >
+                      Browse Books
+                      <ArrowRight size={18} />
+                    </Link>
+                    <Link
+                      href="/dashboard/author/register"
+                      className="inline-flex items-center gap-2.5 px-8 py-3.5 rounded-full font-semibold transition-colors"
+                      style={{
+                        color: '#FFFCF5',
+                        border: '1px solid rgba(255, 252, 245, 0.35)',
+                      }}
+                    >
+                      Become an Author
+                    </Link>
+                  </div>
+                </div>
               </div>
             </section>
           </div>

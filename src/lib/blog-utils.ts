@@ -101,33 +101,61 @@ export function generateUniqueSlug(title: string, existingSlugs: string[]): stri
 }
 
 /**
- * Convert a YouTube URL to an embeddable format
- * Supports youtube.com/watch?v=, youtu.be/, shorts/, embed/
+ * Convert a YouTube URL to an embeddable format.
+ * Returns an empty string when the URL is not a recognisable YouTube video,
+ * so callers can fall back to a normal link instead of putting a foreign URL
+ * into an <iframe> (which renders a permanently blank frame).
  */
 export function getYouTubeEmbedUrl(url: string): string {
     const id = getYouTubeId(url);
     if (id) {
-        return `https://www.youtube.com/embed/${id}`;
+        return `https://www.youtube-nocookie.com/embed/${id}`;
     }
-    return url;
+    return '';
 }
 
 /**
- * Extract the YouTube video ID from various URL formats
- * Supports youtube.com/watch?v=, youtu.be/, shorts/, embed/
+ * True when the URL points at a YouTube video we can embed.
+ */
+export function isYouTubeUrl(url: string): boolean {
+    return getYouTubeId(url) !== null;
+}
+
+/**
+ * Extract the YouTube video ID from various URL formats.
+ * Handles watch?v=, youtu.be/, shorts/, embed/, live/, mobile hosts, extra
+ * query params before or after v=, timestamp suffixes, and bare 11-char IDs.
  */
 export function getYouTubeId(url: string): string | null {
-    const patterns = [
-        /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/shorts\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/,
-        /^([a-zA-Z0-9_-]{11})$/,
-    ];
-    for (const pattern of patterns) {
-        const match = url.match(pattern);
-        if (match) {
-            return match[1];
+    if (!url) return null;
+    const trimmed = url.trim();
+
+    // Bare 11-character ID
+    if (/^[a-zA-Z0-9_-]{11}$/.test(trimmed)) return trimmed;
+
+    // youtu.be/<id>
+    const short = trimmed.match(/youtu\.be\/([a-zA-Z0-9_-]{11})/);
+    if (short) return short[1];
+
+    // Path-style embeds: /embed/<id>, /shorts/<id>, /live/<id>, /v/<id>
+    const path = trimmed.match(/youtube(?:-nocookie)?\.com\/(?:embed|shorts|live|v)\/([a-zA-Z0-9_-]{11})/);
+    if (path) return path[1];
+
+    // watch?v=<id> — read the query string so extra params (e.g. ?app=desktop&v=)
+    // and trailing values (e.g. &t=30s) are handled in any order.
+    try {
+        const parsed = new URL(trimmed);
+        if (/(^|\.)youtube(-nocookie)?\.com$/.test(parsed.hostname)) {
+            const v = parsed.searchParams.get('v');
+            if (v && /^[a-zA-Z0-9_-]{11}$/.test(v)) return v;
         }
+    } catch {
+        // Not a parseable absolute URL; fall through to the loose pattern below.
     }
-    return null;
+
+    // Last resort: find v=<id> anywhere in the string.
+    const loose = trimmed.match(/[?&]v=([a-zA-Z0-9_-]{11})/);
+    return loose ? loose[1] : null;
 }
 
 /**

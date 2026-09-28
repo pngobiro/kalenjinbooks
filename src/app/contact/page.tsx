@@ -44,7 +44,7 @@ export default function ContactPage() {
           className="absolute inset-0"
           style={{ background: 'linear-gradient(135deg, rgba(44,36,22,0.88) 0%, rgba(44,36,22,0.62) 55%, rgba(44,36,22,0.45) 100%)' }}
         />
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 text-center">
+        <div className="relative page-container py-16 sm:py-20 text-center">
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight" style={{ fontFamily: 'Playfair Display, serif' }}>
             Get in Touch
           </h1>
@@ -55,7 +55,7 @@ export default function ContactPage() {
       </section>
 
       {/* Content */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <section className="page-container py-16">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Contact Info */}
           <div className="space-y-6">
@@ -67,7 +67,7 @@ export default function ContactPage() {
               <div className="space-y-6">
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 rounded-lg flex items-center justify-center shrink-0" style={{ backgroundColor: '#FEF3E7' }}>
-                    <Mail size={24} style={{ color: '#D97846' }} />
+                    <Mail size={24} style={{ color: '#B4502A' }} />
                   </div>
                   <div>
                     <h3 className="font-bold mb-1" style={{ color: '#2C2416' }}>Email</h3>
@@ -80,7 +80,7 @@ export default function ContactPage() {
 
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 rounded-lg flex items-center justify-center shrink-0" style={{ backgroundColor: '#E8F5E9' }}>
-                    <MapPin size={24} style={{ color: '#7A9B76' }} />
+                    <MapPin size={24} style={{ color: '#4F6D4C' }} />
                   </div>
                   <div>
                     <h3 className="font-bold mb-1" style={{ color: '#2C2416' }}>Location</h3>
@@ -113,7 +113,7 @@ export default function ContactPage() {
                 <Link 
                   href="/books" 
                   className="inline-flex items-center justify-center px-6 py-3 rounded-lg font-bold transition-all hover:shadow-lg"
-                  style={{ backgroundColor: '#D97846', color: '#FFFFFF' }}
+                  style={{ backgroundColor: '#B4502A', color: '#FFFFFF' }}
                 >
                   Browse Books
                 </Link>
@@ -136,7 +136,7 @@ export default function ContactPage() {
             
             {formState === 'success' ? (
               <div className="text-center py-12">
-                <CheckCircle size={64} className="mx-auto mb-6" style={{ color: '#7A9B76' }} />
+                <CheckCircle size={64} className="mx-auto mb-6" style={{ color: '#4F6D4C' }} />
                 <h3 className="text-2xl font-bold mb-3" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>
                   Message Sent!
                 </h3>
@@ -149,7 +149,7 @@ export default function ContactPage() {
                     setFormData({ firstName: '', lastName: '', email: '', subject: '', message: '' }); 
                   }}
                   className="px-6 py-3 rounded-lg font-bold transition-all hover:shadow-md"
-                  style={{ backgroundColor: '#D97846', color: '#FFFFFF' }}
+                  style={{ backgroundColor: '#B4502A', color: '#FFFFFF' }}
                 >
                   Send Another Message
                 </button>
@@ -251,7 +251,7 @@ export default function ContactPage() {
                   type="submit"
                   disabled={formState === 'submitting'}
                   className="w-full py-4 rounded-xl font-bold flex items-center justify-center gap-2 transition-all hover:shadow-lg disabled:opacity-70"
-                  style={{ backgroundColor: '#D97846', color: '#FFFFFF' }}
+                  style={{ backgroundColor: '#B4502A', color: '#FFFFFF' }}
                 >
                   {formState === 'submitting' ? (
                     <>

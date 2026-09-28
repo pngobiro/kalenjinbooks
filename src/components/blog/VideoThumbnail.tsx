@@ -13,8 +13,31 @@ interface VideoThumbnailProps {
 
 export default function VideoThumbnail({ videoUrl, title, className = '', showLabel = false }: VideoThumbnailProps) {
     const [isOpen, setIsOpen] = useState(false);
-    const thumbnail = getYouTubeThumbnail(videoUrl);
     const embedUrl = getYouTubeEmbedUrl(videoUrl);
+    const canEmbed = embedUrl !== '';
+    // Only a real YouTube thumbnail is useful; otherwise fall back to a neutral panel.
+    const thumbnail = canEmbed ? getYouTubeThumbnail(videoUrl) : '';
+
+    // Not an embeddable YouTube URL (e.g. a direct file or Vimeo link): send the
+    // reader straight to the source instead of opening a modal with a blank frame.
+    if (!canEmbed) {
+        return (
+            <a
+                href={videoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group relative w-full h-full block cursor-pointer bg-neutral-brown-900/90"
+                aria-label={`Open video: ${title || 'video'}`}
+            >
+                <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 p-4 text-center">
+                    <PlayCircle size={56} className="text-white/90 group-hover:scale-110 transition-transform" />
+                    <span className="text-white/80 text-xs font-medium">
+                        Watch on the original site
+                    </span>
+                </div>
+            </a>
+        );
+    }
 
     return (
         <>

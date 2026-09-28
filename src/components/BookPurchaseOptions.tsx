@@ -62,7 +62,7 @@ export default function BookPurchaseOptions({ book }: BookPurchaseOptionsProps) 
 
                 <Link
                     href={`/payment?bookId=${book.id}&author=${encodeURIComponent(book.author.user.name || '')}&type=${purchaseType}&price=${currentPrice}&title=${encodeURIComponent(book.title)}`}
-                    className={`w-full font-bold py-4 rounded-full shadow-lg flex items-center justify-center gap-2 text-white ${purchaseType === 'permanent' ? 'bg-primary hover:bg-primary-dark' : 'bg-accent-green hover:bg-[#7A8C74]'
+                    className={`w-full font-bold py-4 rounded-full shadow-lg flex items-center justify-center gap-2 text-white ${purchaseType === 'permanent' ? 'bg-primary hover:bg-primary-dark' : 'bg-accent-green hover:bg-accent-green-dark'
                         } transition-all`}
                 >
                     <ShoppingCart size={20} />

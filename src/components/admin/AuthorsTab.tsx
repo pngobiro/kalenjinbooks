@@ -485,7 +485,7 @@ function EditAuthorModal({
                           e.target.checked ? [...prev, pm.key] : prev.filter((m) => m !== pm.key)
                         )
                       }
-                      className="mt-0.5 accent-[#D97846]"
+                      className="mt-0.5 accent-[#B4502A]"
                     />
                     <span>
                       <span className="block text-sm font-medium text-neutral-brown-900">{pm.label}</span>

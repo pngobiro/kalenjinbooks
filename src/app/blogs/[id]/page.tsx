@@ -5,7 +5,7 @@ export const runtime = 'edge';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import { Clock, Eye, ArrowLeft, User } from 'lucide-react';
+import { Clock, Eye, ArrowLeft, User, PlayCircle } from 'lucide-react';
 import ShareButtons from '@/components/ShareButtons';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
@@ -90,6 +90,9 @@ export default function BlogDetailPage() {
     }
 
     const isVideo = post.coverType === 'video' && post.coverVideoUrl;
+    // Empty string when the URL is not a recognisable YouTube video; the hero
+    // then renders a link out instead of a permanently blank iframe.
+    const embedUrl = isVideo ? getYouTubeEmbedUrl(post.coverVideoUrl!) : '';
     const readTime = calculateReadTime(post.content);
     const authorName = post.author?.user?.name || 'Mama Africa Library Author';
     const authorImage = post.author?.user?.image || post.author?.profileImage;
@@ -103,13 +106,13 @@ export default function BlogDetailPage() {
                 <div className="absolute inset-0 opacity-10" style={{
                     backgroundImage: 'radial-gradient(circle at 15% 50%, #D97846 0%, transparent 45%), radial-gradient(circle at 85% 50%, #C9A354 0%, transparent 40%)',
                 }}></div>
-                <div className="relative max-w-7xl mx-auto px-6 py-5 flex items-center justify-between gap-4">
+                <div className="relative page-container py-5 flex items-center justify-between gap-4">
                     <Link
                         href="/blogs"
                         className="group inline-flex items-center gap-2 pl-2 pr-4 py-2 rounded-full text-sm font-semibold transition-all hover:-translate-x-0.5"
                         style={{ backgroundColor: 'rgba(255,252,245,0.08)', border: '1px solid rgba(228,217,196,0.2)', color: '#E4D9C4' }}
                     >
-                        <span className="w-7 h-7 rounded-full flex items-center justify-center transition-colors group-hover:bg-primary" style={{ backgroundColor: '#D97846' }}>
+                        <span className="w-7 h-7 rounded-full flex items-center justify-center transition-colors group-hover:bg-primary" style={{ backgroundColor: '#B4502A' }}>
                             <ArrowLeft size={14} className="text-white" />
                         </span>
                         All Blog Posts
@@ -122,20 +125,50 @@ export default function BlogDetailPage() {
                 </div>
             </div>
 
-            <main className="max-w-7xl mx-auto px-6 py-12">
+            <main id="main-content" className="page-container py-12">
                 <div className="lg:grid lg:grid-cols-[1fr_320px] lg:gap-12">
                     <article className="max-w-3xl">
                         {/* Hero Media */}
                         {isVideo && (
-                            <div className="relative overflow-hidden rounded-xl mb-8 shadow-sm">
-                                <iframe
-                                    src={getYouTubeEmbedUrl(post.coverVideoUrl!)}
-                                    title={post.title}
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                    allowFullScreen
-                                    className="w-full aspect-video"
-                                />
-                            </div>
+                            embedUrl ? (
+                                <div className="relative overflow-hidden rounded-xl mb-8 shadow-sm bg-ink">
+                                    <iframe
+                                        src={`${embedUrl}?rel=0`}
+                                        title={post.title}
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                        referrerPolicy="strict-origin-when-cross-origin"
+                                        allowFullScreen
+                                        className="w-full aspect-video"
+                                    />
+                                    {/* Shown when the owner has disabled embedding for this
+                                        video. YouTube renders a blank frame in that case, so
+                                        this gives the reader a working way to watch instead. */}
+                                    <noscript>
+                                        <a
+                                            href={post.coverVideoUrl!}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="absolute inset-0 flex items-center justify-center text-warm-white text-sm font-semibold hover:underline"
+                                        >
+                                            Watch this video on YouTube
+                                        </a>
+                                    </noscript>
+                                </div>
+                            ) : (
+                                <a
+                                    href={post.coverVideoUrl!}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="block relative overflow-hidden rounded-xl mb-8 shadow-sm bg-ink group"
+                                >
+                                    <div className="aspect-video flex flex-col items-center justify-center gap-2 text-center px-6">
+                                        <PlayCircle size={48} className="text-warm-white/80 group-hover:scale-110 transition-transform" />
+                                        <span className="text-warm-white/80 text-sm font-semibold">
+                                            Watch this video on the original site
+                                        </span>
+                                    </div>
+                                </a>
+                            )
                         )}
                         {!isVideo && post.coverImage && (
                             <img

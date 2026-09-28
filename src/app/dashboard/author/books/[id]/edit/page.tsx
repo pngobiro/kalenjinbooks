@@ -703,7 +703,7 @@ export default function EditBookPage({ params }: { params: Promise<{ id: string 
               </h2>
 
               {existingFileKey && !bookFile && (
-                <div className="mb-4 p-3 rounded-lg flex items-center gap-2.5" style={{ backgroundColor: '#E8F5E9', border: '1px solid #7A9B76' }}>
+                <div className="mb-4 p-3 rounded-lg flex items-center gap-2.5" style={{ backgroundColor: '#E8F5E9', border: '1px solid #4F6D4C' }}>
                   <FileText size={18} style={{ color: '#5a7a56' }} />
                   <span className="text-sm font-medium flex-1 truncate" style={{ color: '#5a7a56' }}>
                     {existingFileKey.split('/').pop()}
@@ -713,8 +713,8 @@ export default function EditBookPage({ params }: { params: Promise<{ id: string 
               )}
 
               {bookFile ? (
-                <div className="flex items-center justify-between p-3 rounded-lg" style={{ backgroundColor: '#FEF3E7', border: '1px solid #D97846' }}>
-                  <span className="text-sm font-medium truncate" style={{ color: '#D97846' }}>
+                <div className="flex items-center justify-between p-3 rounded-lg" style={{ backgroundColor: '#FEF3E7', border: '1px solid #B4502A' }}>
+                  <span className="text-sm font-medium truncate" style={{ color: '#B4502A' }}>
                     {bookFile.name} ({(bookFile.size / 1024 / 1024).toFixed(2)} MB)
                   </span>
                   <button
@@ -736,7 +736,7 @@ export default function EditBookPage({ params }: { params: Promise<{ id: string 
                   <label
                     htmlFor="bookfile-upload"
                     className="w-full flex items-center justify-center gap-2 px-4 py-3 border-2 border-dashed rounded-lg cursor-pointer transition-colors hover:border-primary hover:bg-orange-50"
-                    style={{ borderColor: existingFileKey ? '#E4D9C4' : '#D97846', color: '#D97846' }}
+                    style={{ borderColor: existingFileKey ? '#E4D9C4' : '#B4502A', color: '#B4502A' }}
                   >
                     <Upload size={18} />
                     {existingFileKey ? 'Replace PDF' : 'Upload PDF'}
