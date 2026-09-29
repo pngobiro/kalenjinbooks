@@ -2,10 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Search, MapPin, BookOpen, Star, Feather, ArrowRight, X, FileText } from 'lucide-react';
+import { Search, BookOpen, Feather, X, FileText } from 'lucide-react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import { fetchAuthors, Author } from '@/lib/api/authors';
+import { EDITORIAL_TONES } from '@/lib/editorial';
 
 export default function AuthorsPage() {
   const [authors, setAuthors] = useState<Author[]>([]);
@@ -57,27 +58,42 @@ export default function AuthorsPage() {
           className="absolute inset-0"
           style={{ background: 'linear-gradient(180deg, rgba(44,36,22,0.82) 0%, rgba(44,36,22,0.6) 60%, rgba(44,36,22,0.78) 100%)' }}
         />
-        <div className="relative page-container py-16 sm:py-20 text-center">
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] mb-4" style={{ color: '#D97846' }}>
+        <div className="relative page-container py-16 sm:py-20">
+          <p className="font-mono text-[11px] uppercase tracking-[0.28em] mb-5" style={{ color: '#E8A87C' }}>
             The Storytellers
           </p>
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-tight" style={{ fontFamily: 'Playfair Display, serif', color: '#FFFCF5' }}>
+          <h1
+            className="font-heading text-4xl sm:text-5xl lg:text-6xl font-bold mb-5 leading-tight max-w-3xl"
+            style={{ color: '#FFFCF5' }}
+          >
             Meet Our Authors
           </h1>
-          <p className="text-lg max-w-2xl mx-auto mb-8" style={{ color: '#E4D9C4' }}>
-            Discover the voices preserving African heritage through their words — the storytellers of Mama Africa Library
+          <p className="text-lg max-w-2xl mb-8 leading-relaxed" style={{ color: '#E4D9C4' }}>
+            The voices preserving African heritage through their words.
           </p>
 
           {/* Search Bar */}
-          <form onSubmit={(e) => e.preventDefault()} className="relative max-w-xl mx-auto">
-            <Search size={20} className="absolute left-4 top-1/2 -translate-y-1/2" style={{ color: '#5B4F42' }} />
+          <form onSubmit={(e) => e.preventDefault()} className="relative max-w-xl">
+            <label htmlFor="author-search" className="sr-only">
+              Search authors by name or biography
+            </label>
+            <Search
+              size={20}
+              className="absolute left-5 top-1/2 -translate-y-1/2 pointer-events-none"
+              style={{ color: '#6B5D52' }}
+            />
             <input
-              type="text"
-              placeholder="Search by name, genre, or location..."
+              id="author-search"
+              type="search"
+              placeholder="Search authors by name..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-12 py-4 rounded-full shadow-lg focus:ring-2 focus:ring-orange-400 outline-none"
-              style={{ backgroundColor: '#FFFCF5', color: '#2C2416' }}
+              className="w-full pl-14 pr-12 py-4 rounded-full"
+              style={{
+                backgroundColor: '#FFFCF5',
+                color: '#2C2416',
+                border: '1px solid #E4D9C4',
+              }}
             />
             {searchQuery && (
               <button
@@ -85,6 +101,7 @@ export default function AuthorsPage() {
                 onClick={() => setSearchQuery('')}
                 className="absolute right-4 top-1/2 -translate-y-1/2 transition-colors"
                 style={{ color: '#5B4F42' }}
+                aria-label="Clear author search"
               >
                 <X size={20} />
               </button>
@@ -93,14 +110,24 @@ export default function AuthorsPage() {
         </div>
       </section>
 
-      <main id="main-content" className="page-container py-12">
-        {/* Results Count */}
+      <main id="main-content" className="page-container editorial-section pt-0">
+        {/* Section header — left-aligned with a right-rail numeral, matching
+            the homepage rhythm instead of a centred pill. */}
         {!loading && !error && filteredAuthors.length > 0 && (
-          <div className="mb-10 text-center">
-            <span className="inline-block px-5 py-2 rounded-full text-sm font-semibold" style={{ backgroundColor: '#FEF3E7', color: '#B4502A' }}>
-              {filteredAuthors.length} {filteredAuthors.length === 1 ? 'Author' : 'Authors'}
-              {searchQuery ? ` matching "${searchQuery}"` : ''}
-            </span>
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end mb-12">
+            <div>
+              <p className="editorial-eyebrow editorial-eyebrow-rule mb-4">
+                {searchQuery ? 'Search results' : 'The roster'}
+              </p>
+              <h2 className="font-heading text-2xl md:text-3xl font-bold" style={{ color: '#2C2416' }}>
+                {filteredAuthors.length}{' '}
+                {filteredAuthors.length === 1 ? 'Author' : 'Authors'}
+                {searchQuery ? ` matching “${searchQuery}”` : ''}
+              </h2>
+            </div>
+            <p className="editorial-numeral hidden lg:block" aria-hidden="true">
+              01
+            </p>
           </div>
         )}
 
@@ -129,111 +156,100 @@ export default function AuthorsPage() {
           </div>
         )}
 
-        {/* Authors Grid — centered, wraps as more authors are added */}
+        {/* Author grid — real CSS grid, editorial portrait cards.
+            The previous version used flex-wrap + max-w-xs, which left a ragged
+            last row and wasted the 7xl measure. */}
         {!loading && !error && (
-          <div className="flex flex-wrap justify-center gap-8">
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {filteredAuthors.length > 0 ? (
-              filteredAuthors.map((author) => {
+              filteredAuthors.map((author, i) => {
                 const initials = (author.name || 'A')
                   .split(' ')
                   .map((w) => w[0])
                   .slice(0, 2)
                   .join('')
                   .toUpperCase();
+                const tone = EDITORIAL_TONES[i % EDITORIAL_TONES.length];
                 return (
-                  <Link key={author.id} href={`/authors/${author.id}`} className="group w-full max-w-xs">
+                  <article key={author.id} className="editorial-card group flex flex-col overflow-hidden">
+                    {/* Portrait panel */}
                     <div
-                      className="h-full rounded-2xl p-8 text-center transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
-                      style={{ backgroundColor: '#FFFCF5', border: '1px solid #E4D9C4' }}
+                      className="relative h-56 overflow-hidden"
+                      style={{ background: `linear-gradient(140deg, ${tone.from} 0%, ${tone.to} 100%)` }}
                     >
-                      {/* Rounded Avatar */}
-                      <div className="relative w-36 h-36 mx-auto mb-5">
-                        <div
-                          className="absolute inset-0 rounded-full overflow-hidden ring-4 transition-transform duration-300 group-hover:scale-105"
-                          style={{ boxShadow: '0 0 0 4px #FFFCF5, 0 8px 24px rgba(217,120,70,0.25)', ['--tw-ring-color' as string]: '#B4502A' }}
-                        >
-                          {author.profileImage ? (
-                            <img src={author.profileImage} alt={author.name || 'Author'} className="w-full h-full object-cover rounded-full" />
-                          ) : (
-                            <div className="w-full h-full flex items-center justify-center" style={{ backgroundColor: '#B4502A' }}>
-                              <span className="text-5xl font-bold text-white" style={{ fontFamily: 'Playfair Display, serif' }}>{initials}</span>
-                            </div>
-                          )}
+                      {author.profileImage ? (
+                        <img
+                          src={author.profileImage}
+                          alt={author.name || 'Author'}
+                          loading="lazy"
+                          className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.04]"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center">
+                          <span className="font-heading text-5xl font-bold text-white/90">
+                            {initials}
+                          </span>
                         </div>
-                      </div>
+                      )}
+                    </div>
 
-                      {/* Name */}
-                      <h3 className="text-2xl font-bold mb-1.5 leading-tight group-hover:text-primary transition-colors" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>
-                        {author.name || 'Unknown Author'}
+                    <div className="p-6 flex flex-col flex-1">
+                      <h3
+                        className="font-heading text-xl font-bold leading-tight mb-3 group-hover:text-primary transition-colors"
+                        style={{ color: '#2C2416' }}
+                      >
+                        {/* Title only — the whole panel is not a link, so the
+                            nested <a> inside <a> bug cannot recur here. */}
+                        <Link href={`/authors/${author.id}`} className="after:absolute after:inset-0">
+                          {author.name || 'Unknown Author'}
+                        </Link>
                       </h3>
 
-                      {/* Location */}
-                      {(author.location || author.nationality) && (
-                        <p className="inline-flex items-center gap-1.5 text-sm mb-4 px-3 py-1 rounded-full" style={{ color: '#4F6D4C', backgroundColor: '#F5F1E8' }}>
-                          <MapPin size={14} />
-                          {author.location || author.nationality}
+                      {author.bio && (
+                        <p
+                          className="text-sm leading-relaxed line-clamp-3 mb-5"
+                          style={{ color: '#5B4F42' }}
+                        >
+                          {author.bio}
                         </p>
                       )}
 
-                      {/* Bio */}
-                      <p className="text-sm leading-relaxed line-clamp-3 mb-5" style={{ color: '#5B4F42' }}>
-                        {author.bio || 'A talented storyteller on Mama Africa Library, sharing their unique voice and perspective.'}
-                      </p>
-
-                      {/* Genres */}
-                      {author.genres && (
-                        <div className="flex flex-wrap items-center justify-center gap-2 mb-5">
-                          {author.genres.split(',').slice(0, 3).map((genre) => (
-                            <span key={genre.trim()} className="px-3 py-1 rounded-full text-xs font-semibold" style={{ backgroundColor: '#FEF3E7', color: '#B4502A' }}>
-                              {genre.trim()}
-                            </span>
-                          ))}
+                      {/* Stats set as a data line rather than centred pills */}
+                      <dl
+                        className="mt-auto pt-4 border-t flex items-center gap-4 text-xs"
+                        style={{ borderColor: '#E4D9C4', color: '#6B5D52' }}
+                      >
+                        <div className="inline-flex items-center gap-1.5">
+                          <BookOpen size={14} style={{ color: '#4F6D4C' }} />
+                          <dt className="sr-only">Books</dt>
+                          <dd>
+                            {author.booksCount || 0}{' '}
+                            {author.booksCount === 1 ? 'book' : 'books'}
+                          </dd>
                         </div>
-                      )}
-
-                      {/* Stats */}
-                      <div className="w-full pt-4 border-t flex items-center justify-around" style={{ borderColor: '#E4D9C4' }}>
-                        <div className="flex items-center gap-1.5 text-sm">
-                          <BookOpen size={16} style={{ color: '#B4502A' }} />
-                          <span className="font-semibold" style={{ color: '#2C2416' }}>{author.booksCount || 0}</span>
-                          <span style={{ color: '#5B4F42' }}>books</span>
-                        </div>
-                        {(author.blogsCount ?? 0) > 0 ? (
-                          <Link
-                            href={`/blogs?author=${author.id}`}
-                            onClick={(e) => e.stopPropagation()}
-                            className="flex items-center gap-1.5 text-sm px-3 py-1 rounded-full font-medium transition-all hover:shadow-md"
-                            style={{ color: '#B4502A', backgroundColor: '#FEF3E7' }}
-                          >
-                            <FileText size={15} />
-                            <span className="font-semibold">{author.blogsCount}</span>
-                            <span>{author.blogsCount === 1 ? 'blog' : 'blogs'}</span>
-                          </Link>
-                        ) : (
-                          <div className="flex items-center gap-1.5 text-sm">
-                            <Star size={16} className="fill-star text-star" />
-                            <span className="font-semibold" style={{ color: '#2C2416' }}>{author.rating?.toFixed(1) || '0.0'}</span>
-                          </div>
-                        )}
                         {(author.blogsCount ?? 0) > 0 && (
-                          <div className="flex items-center gap-1.5 text-sm">
-                            <Star size={16} className="fill-star text-star" />
-                            <span className="font-semibold" style={{ color: '#2C2416' }}>{author.rating?.toFixed(1) || '0.0'}</span>
-                          </div>
+                          <>
+                            <span aria-hidden="true" style={{ color: '#E4D9C4' }}>
+                              /
+                            </span>
+                            <div className="inline-flex items-center gap-1.5">
+                              <FileText size={14} style={{ color: '#B4502A' }} />
+                              <dt className="sr-only">Stories</dt>
+                              <dd>
+                                {author.blogsCount}{' '}
+                                {author.blogsCount === 1 ? 'story' : 'stories'}
+                              </dd>
+                            </div>
+                          </>
                         )}
-                      </div>
-
-                      {/* CTA */}
-                      <div className="mt-5 inline-flex items-center gap-2 text-sm font-bold transition-all group-hover:gap-3" style={{ color: '#B4502A' }}>
-                        View Profile <ArrowRight size={16} />
-                      </div>
+                      </dl>
                     </div>
-                  </Link>
+                  </article>
                 );
               })
             ) : (
               <div className="w-full text-center py-20">
-                <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6" style={{ backgroundColor: '#FEF3E7' }}>
+                <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6" style={{ backgroundColor: '#F7E4D8' }}>
                   <Feather size={36} style={{ color: '#B4502A' }} />
                 </div>
                 <h3 className="text-3xl font-bold mb-3" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>

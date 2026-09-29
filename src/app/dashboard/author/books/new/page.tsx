@@ -160,7 +160,7 @@ export default function NewBookPage() {
   }
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#FFFCF5' }}>
+    <div className="min-h-screen" style={{ backgroundColor: '#F5F1E8' }}>
       {/* Navigation */}
       <nav className="bg-white/95 backdrop-blur-sm sticky top-0 z-50 border-b" style={{ borderColor: '#E5D5C3' }}>
         <div className="max-w-6xl mx-auto px-4 sm:px-6">

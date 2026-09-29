@@ -517,7 +517,7 @@ export default function AuthorDashboardPage() {
               <p className="text-xl font-bold text-neutral-brown-900">{totalBlogViews.toLocaleString()}</p>
             </div>
           </div>
-          <div className="col-span-2 lg:col-span-1 bg-gradient-to-br from-accent-green to-emerald-700 rounded-xl p-4 shadow-sm flex items-center gap-3">
+          <div className="col-span-2 lg:col-span-1 rounded-xl p-4 shadow-sm flex items-center gap-3" style={{ background: 'linear-gradient(140deg, #4F6D4C 0%, #2F452D 100%)' }}>
             <div className="w-11 h-11 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0">
               <DollarSign className="text-white" size={22} />
             </div>

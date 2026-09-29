@@ -3,9 +3,10 @@
 import { useState, useEffect, useCallback, Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { Clock, Eye, ArrowRight, FileText, Users, BookOpen, Search, X } from 'lucide-react';
+import { Clock, Eye, ArrowRight, FileText, Users, BookOpen, Search, X, SlidersHorizontal, ChevronDown } from 'lucide-react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
+import { toneBackground } from '@/lib/editorial';
 import { fetchBlogPosts, type BlogPost } from '@/lib/api/blogs';
 import { fetchAuthors, type Author } from '@/lib/api/authors';
 import { calculateReadTime, formatBlogDate } from '@/lib/blog-utils';
@@ -17,38 +18,10 @@ const sortOptions = [
   { id: 'most-viewed', label: 'Most Viewed' },
 ];
 
-function colorSchemeFor(index: number): string {
-  const schemes = [
-    'from-emerald-500 to-teal-600',
-    'from-rose-500 to-pink-600',
-    'from-amber-500 to-orange-600',
-    'from-violet-500 to-purple-600',
-    'from-blue-500 to-indigo-600',
-    'from-red-500 to-rose-600',
-    'from-cyan-500 to-blue-600',
-    'from-fuchsia-500 to-purple-600',
-  ];
-  return schemes[index % schemes.length];
-}
-
-function getGradientForIndex(index: number): string {
-  const gradients = [
-    'from-emerald-400 via-teal-400 to-cyan-500',
-    'from-rose-400 via-pink-400 to-fuchsia-500',
-    'from-amber-400 via-orange-400 to-red-500',
-    'from-violet-400 via-purple-400 to-indigo-500',
-    'from-blue-400 via-indigo-400 to-purple-500',
-    'from-cyan-400 via-blue-400 to-indigo-500',
-    'from-pink-400 via-rose-400 to-red-500',
-    'from-lime-400 via-green-400 to-emerald-500',
-  ];
-  return gradients[index % gradients.length];
-}
-
 export default function BlogsPage() {
     return (
         <Suspense fallback={
-            <div className="min-h-screen" style={{ backgroundColor: '#FFFCF5' }}>
+            <div className="min-h-screen" style={{ backgroundColor: '#F5F1E8' }}>
                 <Navbar />
                 <div className="flex justify-center py-32">
                     <div className="relative w-12 h-12">
@@ -128,11 +101,16 @@ function BlogsContent() {
 
     const hasActiveFilters = selectedCategory !== 'all' || selectedAuthor !== 'all' || searchQuery !== '' || sortBy !== 'latest';
 
-    const [featured, ...rest] = posts;
+    /* The lead post was purely positional, so switching sort to "Most
+       Viewed" silently changed who was featured. Honour the editor's
+       isFeatured flag first, and only then fall back to the first post. */
+    const leadIndex = posts.findIndex((p) => p.isFeatured);
+    const featured = leadIndex >= 0 ? posts[leadIndex] : posts[0];
+    const rest = posts.filter((p) => p.id !== featured?.id);
     const topByViews = [...posts].sort((a, b) => b.viewCount - a.viewCount).slice(0, 5);
 
     return (
-        <div className="min-h-screen" style={{ backgroundColor: '#FFFCF5' }}>
+        <div className="min-h-screen" style={{ backgroundColor: '#F5F1E8' }}>
             <Navbar />
 
             {/* Hero Section */}
@@ -149,29 +127,53 @@ function BlogsContent() {
                 />
                 <div className="relative page-container py-16 sm:py-20">
                     <div className="max-w-3xl">
-                        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight" style={{ fontFamily: 'Playfair Display, serif' }}>
-                            Stories & Insights
-                        </h1>
-                        <p className="text-lg sm:text-xl text-white/95 leading-relaxed mb-8">
-                            Explore thoughts, stories, and perspectives from our community of African writers
+                        <p className="font-mono text-[11px] uppercase tracking-[0.28em] mb-5" style={{ color: '#E8A87C' }}>
+                            The Journal
                         </p>
-                        
+                        <h1
+                            className="font-heading text-4xl sm:text-5xl lg:text-6xl font-bold mb-5 leading-tight"
+                            style={{ color: '#FFFCF5' }}
+                        >
+                            Stories &amp; Insights
+                        </h1>
+                        <p
+                            className="text-lg leading-relaxed mb-8 max-w-2xl"
+                            style={{ color: 'rgba(255, 252, 245, 0.9)' }}
+                        >
+                            Thoughts, stories and perspectives from our community
+                            of African writers.
+                        </p>
+
                         {/* Search Bar */}
                         <form onSubmit={handleSearch} className="relative max-w-2xl">
-                            <Search size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+                            <label htmlFor="blog-search" className="sr-only">
+                                Search blog posts
+                            </label>
+                            <Search
+                                size={20}
+                                className="absolute left-5 top-1/2 -translate-y-1/2 pointer-events-none"
+                                style={{ color: '#6B5D52' }}
+                            />
                             <input
-                                type="text"
+                                id="blog-search"
+                                type="search"
                                 placeholder="Search blog posts..."
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                className="w-full pl-12 pr-12 py-4 rounded-xl border-0 shadow-lg focus:ring-2 focus:ring-white/50 text-gray-900 placeholder-gray-500"
-                                style={{ backgroundColor: '#FFFCF5' }}
+                                className="w-full pl-14 pr-12 py-4 rounded-xl"
+                                style={{
+                                    backgroundColor: '#FFFCF5',
+                                    color: '#2C2416',
+                                    border: '1px solid #E4D9C4',
+                                }}
                             />
                             {searchQuery && (
                                 <button
                                     type="button"
                                     onClick={() => setSearchQuery('')}
-                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                                    className="absolute right-4 top-1/2 -translate-y-1/2 transition-colors"
+                                    style={{ color: '#5B4F42' }}
+                                    aria-label="Clear blog search"
                                 >
                                     <X size={20} />
                                 </button>
@@ -181,51 +183,76 @@ function BlogsContent() {
                 </div>
             </section>
 
-            <main id="main-content" className="page-container py-12">
+            <main id="main-content" className="page-container editorial-section pt-0">
                 {/* Category Filter Pills */}
-                <div className="flex items-center gap-3 mb-8 overflow-x-auto pb-2" style={{ scrollbarWidth: 'thin' }}>
-                    {BLOG_CATEGORIES.map((cat) => (
-                        <button
-                            key={cat.id}
-                            onClick={() => setSelectedCategory(cat.id)}
-                            className="px-5 py-2.5 rounded-full font-medium whitespace-nowrap transition-all shadow-sm hover:shadow-md"
-                            style={{
-                                backgroundColor: selectedCategory === cat.id ? '#B4502A' : '#FFFCF5',
-                                color: selectedCategory === cat.id ? '#FFFFFF' : '#2C2416',
-                                border: selectedCategory === cat.id ? 'none' : '1px solid #E5D5C3'
-                            }}
-                        >
-                            {cat.label}
-                        </button>
-                    ))}
+                <p className="kr-mono text-[10px] tracking-[0.25em] mb-4" style={{ color: '#6B5D52' }}>
+                    BROWSE BY TOPIC
+                </p>
+                <div className="flex flex-wrap gap-2.5 mb-10">
+                    {BLOG_CATEGORIES.map((cat) => {
+                        const active = selectedCategory === cat.id;
+                        return (
+                            <button
+                                key={cat.id}
+                                onClick={() => setSelectedCategory(cat.id)}
+                                aria-pressed={active}
+                                className="px-5 py-2.5 rounded-full text-sm font-medium transition-colors border"
+                                style={
+                                    active
+                                        ? { backgroundColor: '#2C2416', color: '#FFFCF5', borderColor: '#2C2416' }
+                                        : { backgroundColor: '#FFFCF5', color: '#5B4F42', borderColor: '#E4D9C4' }
+                                }
+                            >
+                                {cat.label}
+                            </button>
+                        );
+                    })}
                 </div>
 
                 {/* Filters Bar */}
-                <div className="flex flex-col sm:flex-row gap-4 mb-10 p-4 rounded-xl" style={{ backgroundColor: '#FFFCF5', border: '1px solid #E5D5C3' }}>
-                    <select
-                        value={selectedAuthor}
-                        onChange={(e) => setSelectedAuthor(e.target.value)}
-                        className="px-4 py-2.5 rounded-lg border focus:ring-2 focus:ring-orange-400/50 focus:border-orange-400 transition-all"
-                        style={{ backgroundColor: '#FFFFFF', borderColor: '#E5D5C3', color: '#2C2416' }}
-                    >
-                        <option value="all">All Authors</option>
-                        {authors.map((author) => (
-                            <option key={author.id} value={author.id}>
-                                {author.name || 'Unknown'}
-                            </option>
-                        ))}
-                    </select>
+                <div className="flex flex-col sm:flex-row items-start gap-4 mb-12 p-5 rounded-xl" style={{ backgroundColor: '#FFFCF5', border: '1px solid #E4D9C4' }}>
+                    <div className="flex items-center gap-2 sm:mr-1" style={{ color: '#5B4F42' }}>
+                        <SlidersHorizontal size={16} />
+                        <span className="text-sm font-semibold">Refine</span>
+                    </div>
+                    <div className="relative">
+                        <label htmlFor="blog-filter-author" className="sr-only">
+                            Filter by author
+                        </label>
+                        <select
+                            id="blog-filter-author"
+                            value={selectedAuthor}
+                            onChange={(e) => setSelectedAuthor(e.target.value)}
+                            className="appearance-none pl-4 pr-10 py-2.5 rounded-lg border text-sm font-medium cursor-pointer"
+                            style={{ backgroundColor: '#F5F1E8', borderColor: '#E4D9C4', color: '#2C2416' }}
+                        >
+                            <option value="all">All Authors</option>
+                            {authors.map((author) => (
+                                <option key={author.id} value={author.id}>
+                                    {author.name || 'Unknown'}
+                                </option>
+                            ))}
+                        </select>
+                        <ChevronDown size={16} className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2" style={{ color: '#6B5D52' }} />
+                    </div>
 
-                    <select
-                        value={sortBy}
-                        onChange={(e) => setSortBy(e.target.value)}
-                        className="px-4 py-2.5 rounded-lg border focus:ring-2 focus:ring-orange-400/50 focus:border-orange-400 transition-all"
-                        style={{ backgroundColor: '#FFFFFF', borderColor: '#E5D5C3', color: '#2C2416' }}
-                    >
-                        {sortOptions.map((opt) => (
-                            <option key={opt.id} value={opt.id}>{opt.label}</option>
-                        ))}
-                    </select>
+                    <div className="relative">
+                        <label htmlFor="blog-filter-sort" className="sr-only">
+                            Sort posts
+                        </label>
+                        <select
+                            id="blog-filter-sort"
+                            value={sortBy}
+                            onChange={(e) => setSortBy(e.target.value)}
+                            className="appearance-none pl-4 pr-10 py-2.5 rounded-lg border text-sm font-medium cursor-pointer"
+                            style={{ backgroundColor: '#F5F1E8', borderColor: '#E4D9C4', color: '#2C2416' }}
+                        >
+                            {sortOptions.map((opt) => (
+                                <option key={opt.id} value={opt.id}>{opt.label}</option>
+                            ))}
+                        </select>
+                        <ChevronDown size={16} className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2" style={{ color: '#6B5D52' }} />
+                    </div>
 
                     {hasActiveFilters && (
                         <button
@@ -257,7 +284,7 @@ function BlogsContent() {
                 {loading && !error && (
                     <div className="flex flex-col items-center justify-center py-24">
                         <div className="relative">
-                            <div className="w-16 h-16 border-4 rounded-full" style={{ borderColor: '#F5E6D3' }}></div>
+                            <div className="w-16 h-16 border-4 rounded-full" style={{ borderColor: '#E4D9C4' }}></div>
                             <div className="absolute top-0 left-0 w-16 h-16 border-4 border-t-transparent rounded-full animate-spin" style={{ borderColor: '#B4502A' }}></div>
                         </div>
                         <p className="mt-6 text-gray-600 font-medium">Loading blog posts...</p>
@@ -268,6 +295,25 @@ function BlogsContent() {
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                         {/* Main content column */}
                         <div className="lg:col-span-2 space-y-6">
+                            {/* Section header — matches the editorial rhythm
+                                used on the homepage and the other pages. */}
+                            <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
+                                <div>
+                                    <p className="editorial-eyebrow editorial-eyebrow-rule mb-4">
+                                        Latest
+                                    </p>
+                                    <h2
+                                        className="font-heading text-2xl md:text-3xl font-bold"
+                                        style={{ color: '#2C2416' }}
+                                    >
+                                        {posts.length} {posts.length === 1 ? 'Story' : 'Stories'}
+                                    </h2>
+                                </div>
+                                <p className="editorial-numeral hidden lg:block" aria-hidden="true">
+                                    01
+                                </p>
+                            </div>
+
                             {/* Featured Post */}
                             {featured && (
                                 <article className="mb-8">
@@ -299,7 +345,7 @@ function BlogsContent() {
                                             </div>
                                             <div className="md:col-span-3 p-8 flex flex-col justify-center">
                                                 {featured.category && (
-                                                    <span className="inline-block w-fit px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wide mb-4" style={{ backgroundColor: '#FEF3E7', color: '#B4502A' }}>
+                                                    <span className="inline-block w-fit px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wide mb-4" style={{ backgroundColor: '#F7E4D8', color: '#B4502A' }}>
                                                         {featured.category}
                                                     </span>
                                                 )}
@@ -311,7 +357,7 @@ function BlogsContent() {
                                                 </p>
                                                 <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-6">
                                                     <span className="font-semibold flex items-center gap-2" style={{ color: '#2C2416' }}>
-                                                        <span className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold" style={{ backgroundColor: '#FEF3E7', color: '#B4502A' }}>
+                                                        <span className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold" style={{ backgroundColor: '#F7E4D8', color: '#B4502A' }}>
                                                             {featured.author?.user?.name?.charAt(0) || 'K'}
                                                         </span>
                                                         {featured.author?.user?.name || 'Mama Africa Library'}
@@ -326,7 +372,7 @@ function BlogsContent() {
                                                         {featured.viewCount}
                                                     </span>
                                                 </div>
-                                                <span className="inline-flex items-center gap-2 font-bold text-orange-600 group-hover:gap-3 transition-all">
+                                                <span className="inline-flex items-center gap-2 font-bold text-[#B4502A] group-hover:gap-3 transition-all">
                                                     Read More <ArrowRight size={20} />
                                                 </span>
                                             </div>
@@ -345,7 +391,7 @@ function BlogsContent() {
                                                 className="group block rounded-xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 h-full"
                                                 style={{ backgroundColor: '#FFFCF5' }}
                                             >
-                                                <div className={`relative aspect-[16/9] bg-gradient-to-br ${getGradientForIndex(index)} overflow-hidden`}>
+                                                <div className="relative aspect-[16/9] overflow-hidden" style={{ background: toneBackground(index) }}>
                                                     {post.coverType === 'video' && post.coverVideoUrl ? (
                                                         <VideoThumbnail
                                                             videoUrl={post.coverVideoUrl}
@@ -367,7 +413,7 @@ function BlogsContent() {
                                                 <div className="p-6">
                                                     <div className="flex items-center gap-3 text-xs text-gray-600 mb-3">
                                                         <span className="font-semibold flex items-center gap-2" style={{ color: '#2C2416' }}>
-                                                            <span className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold" style={{ backgroundColor: '#FEF3E7', color: '#B4502A' }}>
+                                                            <span className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold" style={{ backgroundColor: '#F7E4D8', color: '#B4502A' }}>
                                                                 {post.author?.user?.name?.charAt(0) || 'K'}
                                                             </span>
                                                             {post.author?.user?.name || 'Mama Africa Library'}
@@ -375,7 +421,7 @@ function BlogsContent() {
                                                         <span>{formatBlogDate(post.publishedAt || post.createdAt)}</span>
                                                     </div>
                                                     {post.category && (
-                                                        <span className="inline-block px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wide mb-3" style={{ backgroundColor: '#FEF3E7', color: '#B4502A' }}>
+                                                        <span className="inline-block px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wide mb-3" style={{ backgroundColor: '#F7E4D8', color: '#B4502A' }}>
                                                             {post.category}
                                                         </span>
                                                     )}
@@ -395,7 +441,7 @@ function BlogsContent() {
                                                             {post.viewCount}
                                                         </span>
                                                     </div>
-                                                    <span className="inline-flex items-center gap-2 text-sm font-bold text-orange-600 group-hover:gap-3 transition-all">
+                                                    <span className="inline-flex items-center gap-2 text-sm font-bold text-[#B4502A] group-hover:gap-3 transition-all">
                                                         Read More <ArrowRight size={16} />
                                                     </span>
                                                 </div>
@@ -408,7 +454,7 @@ function BlogsContent() {
                             {/* Empty State */}
                             {posts.length === 0 && (
                                 <div className="rounded-xl p-16 text-center shadow-md" style={{ backgroundColor: '#FFFCF5' }}>
-                                    <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6" style={{ backgroundColor: '#F5E6D3' }}>
+                                    <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6" style={{ backgroundColor: '#E4D9C4' }}>
                                         <FileText size={36} className="text-gray-400" />
                                     </div>
                                     <h3 className="text-2xl font-bold mb-3" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>
@@ -444,20 +490,26 @@ function BlogsContent() {
                         <aside className="lg:col-span-1 space-y-6">
                             {/* Most Read */}
                             <div className="rounded-xl overflow-hidden shadow-lg" style={{ backgroundColor: '#FFFCF5' }}>
-                                <div className="px-6 py-4" style={{ backgroundColor: '#2C2416' }}>
-                                    <h3 className="text-white font-bold text-lg flex items-center gap-2" style={{ fontFamily: 'Playfair Display, serif' }}>
-                                        <Eye size={18} style={{ color: '#C9A354' }} />
+                                <div className="px-6 py-4 flex items-center gap-2" style={{ backgroundColor: '#2C2416' }}>
+                                    <Eye size={18} style={{ color: '#A8762B' }} />
+                                    <h3
+                                        className="font-heading font-bold text-lg"
+                                        style={{ color: '#FFFCF5' }}
+                                    >
                                         Most Read
                                     </h3>
                                 </div>
-                                <div className="divide-y" style={{ borderColor: '#E5D5C3' }}>
+                                {/* divide-y takes its colour from currentColor, so a
+                                    borderColor on the wrapper never reached the pixels. */}
+                                <div className="divide-y" style={{ borderColor: '#E4D9C4', color: '#E4D9C4' }}>
                                     {topByViews.length > 0 ? topByViews.map((post, i) => (
-                                        <Link 
-                                            key={post.id} 
-                                            href={`/blogs/${post.slug || post.id}`} 
-                                            className="flex items-start gap-3 p-4 hover:bg-orange-50 transition-colors group"
+                                        <Link
+                                            key={post.id}
+                                            href={`/blogs/${post.slug || post.id}`}
+                                            className="flex items-start gap-3 p-4 transition-colors group"
+                                            style={{ backgroundColor: 'transparent' }}
                                         >
-                                            <div className="w-24 h-16 rounded-lg overflow-hidden shrink-0" style={{ backgroundColor: '#F5E6D3' }}>
+                                            <div className="w-24 h-16 rounded-lg overflow-hidden shrink-0" style={{ backgroundColor: '#E4D9C4' }}>
                                                 {post.coverType === 'video' && post.coverVideoUrl ? (
                                                     <VideoThumbnail videoUrl={post.coverVideoUrl} title={post.title} />
                                                 ) : post.coverImage ? (
@@ -474,7 +526,7 @@ function BlogsContent() {
                                             </div>
                                             <div className="min-w-0 flex-1">
                                                 <div className="flex items-start gap-2 mb-2">
-                                                    <span className="w-6 h-6 shrink-0 rounded-md flex items-center justify-center text-xs font-bold" style={{ backgroundColor: '#FEF3E7', color: '#B4502A' }}>
+                                                    <span className="w-6 h-6 shrink-0 rounded-md flex items-center justify-center text-xs font-bold" style={{ backgroundColor: '#F7E4D8', color: '#B4502A' }}>
                                                         {i + 1}
                                                     </span>
                                                     <h4 className="text-sm font-bold line-clamp-2 leading-tight group-hover:text-primary transition-colors" style={{ color: '#2C2416' }}>
@@ -508,9 +560,9 @@ function BlogsContent() {
                                         <Link 
                                             key={author.id} 
                                             href={`/authors/${author.id}`} 
-                                            className="flex items-center gap-3 p-3 rounded-lg hover:bg-orange-50 transition-colors group"
+                                            className="flex items-center gap-3 p-3 rounded-lg hover:bg-[#F5F1E8] transition-colors group"
                                         >
-                                            <div className={`w-12 h-12 rounded-full overflow-hidden bg-gradient-to-br ${colorSchemeFor(i)} flex items-center justify-center shrink-0 shadow-md`}>
+                                            <div className="w-12 h-12 rounded-full overflow-hidden flex items-center justify-center shrink-0 shadow-md" style={{ background: toneBackground(i) }}>
                                                 {author.profileImage ? (
                                                     <img src={author.profileImage} alt={author.name || 'Author'} className="w-full h-full object-cover" />
                                                 ) : (

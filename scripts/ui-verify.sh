@@ -114,6 +114,165 @@ PY
 [ $? -ne 0 ] && FAIL=1
 
 echo
+echo "== /books: filters are data-driven, not hardcoded dead ends =="
+python3 - <<'PY'
+import re,sys
+src=open('src/app/books/page.tsx').read()
+code=re.sub(r'/\*.*?\*/','',src,flags=re.S); code=re.sub(r'//.*','',code)
+bad=[]
+# a hardcoded category list reintroduces tabs that return zero books
+if re.search(r"const\s+categories\s*=\s*\[", code):
+    bad.append('hardcoded `categories` array is back')
+# the language/rating/access selects must be gated
+for gate,label in [('showLanguageFilter','language filter'),
+                   ('showRatingFilter','rating filter'),
+                   ('showAccessFilter','access filter')]:
+    if gate not in code: bad.append(f'{label} is not gated on real data')
+if 'availableCategories' not in code: bad.append('categories are not derived from loaded books')
+if bad:
+    for b in bad: print(f"  \033[31mFAIL\033[0m  {b}")
+    sys.exit(1)
+print("  \033[32mPASS\033[0m  shelves + language/rating/access filters are data-driven")
+PY
+[ $? -ne 0 ] && FAIL=1
+
+echo
+echo "== no page sets its background to the card colour =="
+python3 - <<'PY'
+import re,glob,sys
+bad=[]
+CARD='#FFFCF5'
+for f in glob.glob('src/app/**/page.tsx',recursive=True):
+    src=open(f).read()
+    # the page root wrapper
+    m=re.search(r'min-h-screen"?\s*style=\{\{\s*backgroundColor:\s*\'(#[0-9A-Fa-f]{6})\'',src)
+    if m and m.group(1).upper()==CARD.upper():
+        # only a failure if the same page also paints cards in the card colour
+        if len(re.findall(r"backgroundColor:\s*'"+CARD+r"'",src))>0:
+            bad.append(f"{f}: page bg == card bg (both {m.group(1)})")
+if bad:
+    for b in bad: print(f"  \033[31mFAIL\033[0m  {b}")
+    sys.exit(1)
+print("  \033[32mPASS\033[0m  no page background collides with its cards")
+PY
+[ $? -ne 0 ] && FAIL=1
+
+echo
+echo "== no stock Tailwind gradients on public pages =="
+python3 - <<'PY'
+import re,glob,sys,os
+bad=[]
+stock=re.compile(r'(?:from|via|to)-(?:emerald|rose|violet|fuchsia|cyan|indigo|pink|amber|lime|teal|blue|purple|red|orange)-\d{2,3}')
+files=glob.glob('src/app/**/page.tsx',recursive=True)+glob.glob('src/components/**/*.tsx',recursive=True)
+# skip files nothing imports (dead code slated for deletion)
+def is_dead(f):
+    if '/page.tsx' in f or '/layout.tsx' in f: return False
+    name=os.path.basename(f)[:-4]
+    importers=[g for g in glob.glob('src/**/*.tsx',recursive=True) if g!=f and f"components/{os.path.dirname(f).split('/')[-1]}/{name}" in open(g).read()]
+    return len(importers)==0
+for f in files:
+    if is_dead(f): continue
+    hits=stock.findall(open(f).read())
+    if hits: bad.append(f"{f}: {sorted(set(hits))[:4]}")
+if bad:
+    for b in bad: print(f"  \033[31mFAIL\033[0m  {b}")
+    sys.exit(1)
+print("  \033[32mPASS\033[0m  no stock Tailwind gradients in live code")
+PY
+[ $? -ne 0 ] && FAIL=1
+
+echo
+echo "== no card grids built from flex-wrap =="
+python3 - <<'PY'
+import re,glob,sys
+# A wrap row of fixed-max-width cards leaves a ragged last row. Chip and
+# contact rows legitimately wrap, so only flag ones that also fix a card width.
+bad=[]
+card=re.compile(r'max-w-\[(?:2|3)\d\dpx\]|max-w-xs')
+for f in glob.glob('src/app/**/page.tsx',recursive=True):
+    for m in re.finditer(r'className="([^"]*flex flex-wrap[^"]*)"',open(f).read()):
+        if card.search(m.group(1)): bad.append(f"{f}: {m.group(1)[:60]}")
+if bad:
+    for b in bad: print(f"  \033[31mFAIL\033[0m  {b}")
+    sys.exit(1)
+print("  \033[32mPASS\033[0m  card layouts use CSS grid")
+PY
+[ $? -ne 0 ] && FAIL=1
+
+echo
+echo "== no nested interactive elements (a > a) =="
+python3 - <<'PY'
+import re,glob,sys
+bad=[]
+for f in glob.glob('src/app/**/page.tsx',recursive=True):
+    src=open(f).read()
+    # a <Link> opened while another <Link> is still open
+    depth=0
+    for m in re.finditer(r'<Link\b|</Link>',src):
+        depth += 1 if m.group(0)=='<Link' else -1
+        if depth>1:
+            line=src[:m.start()].count('\n')+1
+            bad.append(f"{f}:{line} nested <Link>")
+            break
+if bad:
+    for b in bad: print(f"  \033[31mFAIL\033[0m  {b}")
+    sys.exit(1)
+print("  \033[32mPASS\033[0m  no nested links")
+PY
+[ $? -ne 0 ] && FAIL=1
+
+echo
+echo "== editorial utilities adopted on the public pages =="
+python3 - <<'PY'
+import glob,sys
+pages=['src/app/about/page.tsx','src/app/authors/page.tsx','src/app/blogs/page.tsx',
+       'src/app/contact/page.tsx','src/app/authors/[id]/page.tsx']
+missing=[]
+for f in pages:
+    src=open(f).read()
+    if 'editorial-eyebrow' not in src: missing.append(f"{f}: editorial-eyebrow")
+if missing:
+    for m in missing: print(f"  \033[31mFAIL\033[0m  {m}")
+    sys.exit(1)
+print("  \033[32mPASS\033[0m  all five pages use the editorial header")
+PY
+[ $? -ne 0 ] && FAIL=1
+
+echo
+echo "== no superseded brand values in source =="
+python3 - <<'PY'
+import glob,sys
+# Values that were reconciled into tokens. Their presence means a page still
+# uses the pre-token palette and will drift from the rest of the site.
+banned={
+ '#D97846':'superseded by #B4502A (or --color-primary-on-dark on ink bands)',
+ '#E07856':'the never-used old @theme primary',
+ '#A8451F':'a fourth orange from the old category tab',
+ '#7A9B76':'superseded by #4F6D4C',
+ '#A89888':'superseded by #6B5D52',
+ '#E5D5C3':'duplicate border, reconciled into #E4D9C4',
+ '#E3F2FD':'off-palette blue tint',
+ '#FCE4EC':'off-palette pink tint',
+ '#B45A30':'not in the token set',
+ '#FEF3E7':'superseded by the #F7E4D8 primary tint',
+}
+pages=['src/app/about/page.tsx','src/app/authors/page.tsx','src/app/blogs/page.tsx',
+       'src/app/contact/page.tsx','src/app/authors/[id]/page.tsx','src/app/books/page.tsx',
+       'src/app/page.tsx']
+bad=[]
+for f in pages:
+    s=open(f).read()
+    for c,why in banned.items():
+        n=s.count(c)
+        if n: bad.append(f"{f}: {n}x {c} ({why})")
+if bad:
+    for b in bad: print(f"  \033[31mFAIL\033[0m  {b}")
+    sys.exit(1)
+print("  \033[32mPASS\033[0m  no superseded brand values")
+PY
+[ $? -ne 0 ] && FAIL=1
+
+echo
 echo "== no CSS nesting leaks (Tailwind emits &::after literally) =="
 python3 - <<'PY'
 import re,sys

@@ -102,7 +102,7 @@ function RequestHardCopyContent() {
   }
 
   return (
-    <main id="main-content" className="min-h-screen" style={{ backgroundColor: '#FFFCF5' }}>
+    <main id="main-content" className="min-h-screen" style={{ backgroundColor: '#F5F1E8' }}>
       <Navbar />
 
       {/* Hero Section */}

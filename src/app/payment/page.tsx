@@ -64,7 +64,7 @@ function PaymentContent() {
   };
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#FFFCF5' }}>
+    <div className="min-h-screen" style={{ backgroundColor: '#F5F1E8' }}>
       {/* Navigation */}
       <Navbar />
 

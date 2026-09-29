@@ -129,7 +129,7 @@ export default function AuthorDetailPage() {
       {/* Hero Section — portrait left, info right */}
       <section className="relative overflow-hidden" style={{ backgroundColor: '#2C2416' }}>
         <div className="absolute inset-0 opacity-10" style={{
-          backgroundImage: 'radial-gradient(circle at 15% 20%, #D97846 0%, transparent 40%), radial-gradient(circle at 85% 80%, #7A9B76 0%, transparent 40%)',
+          backgroundImage: 'radial-gradient(circle at 15% 20%, #B4502A 0%, transparent 40%), radial-gradient(circle at 85% 80%, #4F6D4C 0%, transparent 40%)',
         }}></div>
 
         <div className="relative page-container py-12 sm:py-16">
@@ -157,7 +157,7 @@ export default function AuthorDetailPage() {
                       className="w-full h-full object-cover"
                     />
                   ) : (
-                    <div className="w-full h-full flex flex-col items-center justify-center gap-3" style={{ background: 'linear-gradient(135deg, #D97846 0%, #B45A30 100%)' }}>
+                    <div className="w-full h-full flex flex-col items-center justify-center gap-3" style={{ background: 'linear-gradient(140deg, #9C5A3C 0%, #5F3320 100%)' }}>
                       <span className="text-7xl font-bold text-white/90" style={{ fontFamily: 'Playfair Display, serif' }}>{initials}</span>
                       <span className="text-xs uppercase tracking-[0.25em] text-white/60">Mama Africa Library Author</span>
                     </div>
@@ -177,11 +177,19 @@ export default function AuthorDetailPage() {
             {/* Info */}
             <div className="text-center lg:text-left lg:col-span-8">
               {/* eyebrow */}
-              <p className="hidden lg:block text-xs font-semibold uppercase tracking-[0.25em] mb-3" style={{ color: '#B4502A' }}>
+              <p
+                className="hidden lg:block font-mono text-[11px] uppercase tracking-[0.25em] mb-4"
+                style={{ color: '#E8A87C' }}
+              >
                 Mama Africa Library Author
               </p>
 
-              <h1 className="hidden lg:block text-4xl md:text-5xl xl:text-6xl font-bold mb-4 leading-tight" style={{ fontFamily: 'Playfair Display, serif', color: '#FFFCF5' }}>
+              {/* One h1 for every breakpoint. It used to be hidden below lg,
+                  leaving mobile with no page-level heading at all. */}
+              <h1
+                className="font-heading text-3xl md:text-4xl xl:text-5xl font-bold mb-4 leading-tight"
+                style={{ color: '#FFFCF5' }}
+              >
                 {author.name || 'Unknown Author'}
               </h1>
 
@@ -202,39 +210,45 @@ export default function AuthorDetailPage() {
               {genresList.length > 0 && (
                 <div className="flex flex-wrap justify-center lg:justify-start gap-2 mb-7">
                   {genresList.slice(0, 5).map((g) => (
-                    <span key={g} className="px-3 py-1 rounded-full text-xs font-semibold" style={{ backgroundColor: 'rgba(217,120,70,0.15)', color: '#E89B77', border: '1px solid rgba(217,120,70,0.35)' }}>
+                    <span key={g} className="px-3 py-1 rounded-full text-xs font-semibold" style={{ backgroundColor: 'rgba(217,120,70,0.15)', color: '#E8A87C', border: '1px solid rgba(217,120,70,0.35)' }}>
                       {g}
                     </span>
                   ))}
                 </div>
               )}
 
-              {/* Quick stats strip */}
-              <div className="flex items-stretch justify-center lg:justify-start divide-x mb-7" style={{ borderColor: 'rgba(228,217,196,0.2)' }}>
+              {/* Quick stats strip. `divide-x` resolves its colour from
+                  currentColor on this ink band, so the wrapper's borderColor
+                  never reached the pixels — each cell now draws its own rule. */}
+              <div className="flex items-stretch justify-center lg:justify-start mb-7">
                 <button
                   onClick={() => document.getElementById('author-books')?.scrollIntoView({ behavior: 'smooth' })}
                   className="px-6 first:pl-0 text-center hover:opacity-80 transition-opacity"
                 >
-                  <div className="flex items-center justify-center lg:justify-start gap-2 font-bold text-2xl" style={{ color: '#FFFCF5' }}>
-                    <BookOpen size={17} style={{ color: '#B4502A' }} />{allBooks.length}
+                  <div className="flex items-center justify-center lg:justify-start gap-2 font-heading text-2xl font-bold" style={{ color: '#FFFCF5' }}>
+                    <BookOpen size={17} style={{ color: '#E8A87C' }} />{allBooks.length}
                   </div>
-                  <div className="text-[11px] uppercase tracking-widest mt-1" style={{ color: '#6B5D52' }}>Books ↓</div>
+                  <div className="label-on-dark mt-1.5">Books ↓</div>
                 </button>
                 <button
                   onClick={() => document.getElementById('author-blogs')?.scrollIntoView({ behavior: 'smooth' })}
-                  className="px-6 text-center hover:opacity-80 transition-opacity"
+                  className="rule-vertical px-6 text-center hover:opacity-80 transition-opacity"
                 >
-                  <div className="flex items-center justify-center lg:justify-start gap-2 font-bold text-2xl" style={{ color: '#FFFCF5' }}>
-                    <Newspaper size={17} style={{ color: '#B4502A' }} />{blogPosts.length}
+                  <div className="flex items-center justify-center lg:justify-start gap-2 font-heading text-2xl font-bold" style={{ color: '#FFFCF5' }}>
+                    <Newspaper size={17} style={{ color: '#E8A87C' }} />{blogPosts.length}
                   </div>
-                  <div className="text-[11px] uppercase tracking-widest mt-1" style={{ color: '#6B5D52' }}>Articles ↓</div>
+                  <div className="label-on-dark mt-1.5">Articles ↓</div>
                 </button>
-                <div className="px-6 text-center">
-                  <div className="flex items-center justify-center lg:justify-start gap-2 font-bold text-2xl" style={{ color: '#FFFCF5' }}>
-                    <Star size={17} className="fill-star text-star" />{author.rating?.toFixed(1) || '0.0'}
+                {/* Rating is the mean of the author's book ratings, not an
+                    author rating, so it is only shown when a book is rated. */}
+                {(author.rating ?? 0) > 0 && (
+                  <div className="rule-vertical px-6 text-center">
+                    <div className="flex items-center justify-center lg:justify-start gap-2 font-heading text-2xl font-bold" style={{ color: '#FFFCF5' }}>
+                      <Star size={17} className="fill-star text-star" />{author.rating!.toFixed(1)}
+                    </div>
+                    <div className="label-on-dark mt-1.5">Avg. rating</div>
                   </div>
-                  <div className="text-[11px] uppercase tracking-widest mt-1" style={{ color: '#6B5D52' }}>Rating</div>
-                </div>
+                )}
               </div>
 
               {/* Social + Share */}
@@ -262,23 +276,30 @@ export default function AuthorDetailPage() {
 
         {/* ── Books ─────────────────────────────────────────── */}
         <section id="author-books" className="scroll-mt-24">
-          <div className="flex items-end justify-between mb-8">
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end mb-10">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.25em] mb-2" style={{ color: '#B4502A' }}>The Library</p>
-              <h2 className="text-3xl md:text-4xl font-bold" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>
+              <p className="editorial-eyebrow editorial-eyebrow-rule mb-4">
+                The Library
+              </p>
+              <h2
+                className="font-heading text-3xl md:text-4xl font-bold"
+                style={{ color: '#2C2416' }}
+              >
                 Books by {author.name?.split(' ').slice(-1)[0]}
               </h2>
             </div>
-            <span className="px-4 py-1.5 rounded-full text-sm font-bold" style={{ backgroundColor: '#FEF3E7', color: '#B4502A' }}>
-              {allBooks.length}
-            </span>
+            <p className="editorial-numeral hidden lg:block" aria-hidden="true">
+              01
+            </p>
           </div>
 
           {allBooks.length > 0 ? (
-            <div className="flex flex-wrap justify-center lg:justify-start gap-8">
+            /* Real grid — the previous flex-wrap + max-w-[280px] left a ragged
+               last row and wasted the 7xl measure. */
+            <div className="grid grid-cols-2 gap-x-5 gap-y-8 sm:gap-x-6 lg:grid-cols-3">
               {allBooks.map((book) => (
-                <Link key={book.id} href={`/books/${book.id}`} className="group w-full max-w-[280px]">
-                  <div className="h-full rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 flex flex-col" style={{ backgroundColor: '#FFFCF5', border: '1px solid #E4D9C4' }}>
+                <Link key={book.id} href={`/books/${book.id}`} className="group block">
+                  <div className="editorial-card overflow-hidden flex flex-col h-full">
                     <div className="relative aspect-[3/4] overflow-hidden" style={{ backgroundColor: '#E4D9C4' }}>
                       {book.coverImage ? (
                         <img src={book.coverImage} alt={book.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
@@ -299,7 +320,7 @@ export default function AuthorDetailPage() {
                       )}
                       {book.category && (
                         <div className="absolute top-3 left-3">
-                          <span className="px-3 py-1 rounded text-xs font-semibold uppercase" style={{ backgroundColor: 'rgba(217,120,70,0.95)', color: '#FFFCF5' }}>
+                          <span className="px-3 py-1 rounded text-xs font-semibold uppercase" style={{ backgroundColor: '#B4502A', color: '#FFFCF5' }}>
                             {book.category}
                           </span>
                         </div>
@@ -314,7 +335,7 @@ export default function AuthorDetailPage() {
                       )}
                       <div className="mt-auto pt-3 border-t flex items-center justify-between" style={{ borderColor: '#E4D9C4' }}>
                         <span className="text-xs font-semibold" style={{ color: '#6B5D52' }}>Hard copy available</span>
-                        <span className="inline-flex items-center gap-1 text-sm font-bold transition-all group-hover:gap-2" style={{ color: '#D97846' }}>
+                        <span className="inline-flex items-center gap-1 text-sm font-bold transition-all group-hover:gap-2" style={{ color: '#B4502A' }}>
                           Open <ArrowRight size={14} />
                         </span>
                       </div>
@@ -334,16 +355,21 @@ export default function AuthorDetailPage() {
 
         {/* ── Articles / Lectures ───────────────────────────── */}
         <section id="author-blogs" className="scroll-mt-24">
-          <div className="flex items-end justify-between mb-8">
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end mb-10">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.25em] mb-2" style={{ color: '#B4502A' }}>Insights & Lectures</p>
-              <h2 className="text-3xl md:text-4xl font-bold" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>
+              <p className="editorial-eyebrow editorial-eyebrow-rule mb-4">
+                Insights &amp; Lectures
+              </p>
+              <h2
+                className="font-heading text-3xl md:text-4xl font-bold"
+                style={{ color: '#2C2416' }}
+              >
                 Articles by {author.name?.split(' ')[0]}
               </h2>
             </div>
-            <span className="px-4 py-1.5 rounded-full text-sm font-bold" style={{ backgroundColor: '#FEF3E7', color: '#B4502A' }}>
-              {blogPosts.length}
-            </span>
+            <p className="editorial-numeral hidden lg:block" aria-hidden="true">
+              02
+            </p>
           </div>
 
           {blogPosts.length > 0 ? (
@@ -355,8 +381,8 @@ export default function AuthorDetailPage() {
                 ))}
               </div>
             ) : (
-              /* Many posts: centered grid */
-              <div className="flex flex-wrap justify-center gap-7">
+              /* Many posts: real grid rather than a centred wrap row */
+              <div className="grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
                 {blogPosts.map((post) => (
                   <BlogCard key={post.id} post={post} />
                 ))}
@@ -404,7 +430,7 @@ export default function AuthorDetailPage() {
                     className="group inline-flex items-center gap-3 px-5 py-3.5 rounded-2xl transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5"
                     style={{ backgroundColor: '#FFFCF5', border: '1px solid #E4D9C4' }}
                   >
-                    <span className="w-10 h-10 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: '#FEF3E7' }}>
+                    <span className="w-10 h-10 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: '#F7E4D8' }}>
                       <c.icon size={18} style={{ color: '#B4502A' }} />
                     </span>
                     <span>
@@ -454,7 +480,7 @@ function ArticleRow({ post }: { post: BlogPost }) {
         <div className="p-5 sm:p-6 flex-1 min-w-0">
           <div className="flex items-center gap-3 mb-2">
             {post.category && (
-              <span className="px-2.5 py-0.5 rounded text-[11px] font-bold uppercase tracking-wide" style={{ backgroundColor: '#FEF3E7', color: '#B4502A' }}>
+              <span className="px-2.5 py-0.5 rounded text-[11px] font-bold uppercase tracking-wide" style={{ backgroundColor: '#F7E4D8', color: '#B4502A' }}>
                 {post.category}
               </span>
             )}
@@ -494,7 +520,7 @@ function BlogCard({ post }: { post: BlogPost }) {
           )}
           {post.category && (
             <div className="absolute top-3 left-3 pointer-events-none">
-              <span className="px-3 py-1 rounded text-xs font-semibold uppercase" style={{ backgroundColor: 'rgba(217,120,70,0.95)', color: '#FFFCF5' }}>
+              <span className="px-3 py-1 rounded text-xs font-semibold uppercase" style={{ backgroundColor: '#B4502A', color: '#FFFCF5' }}>
                 {post.category}
               </span>
             </div>

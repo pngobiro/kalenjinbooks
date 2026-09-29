@@ -337,6 +337,44 @@
   }
 }
 
+/* Tinted icon-tile backgrounds. Replaces ad-hoc off-palette fills
+   (#E3F2FD blue-50, #FCE4EC pink-50) that made the brand read as a rainbow
+   on About and Contact. Each pairs with its `on-*` foreground at 4.5:1. */
+@utility tile-primary {
+  background-color: #f7e4d8;
+  color: var(--color-primary);
+}
+@utility tile-green {
+  background-color: #e6ede2;
+  color: var(--color-accent-green);
+}
+@utility tile-gold {
+  background-color: #f3e8d2;
+  color: #8a6420;
+}
+@utility tile-ink {
+  background-color: #efe8dc;
+  color: var(--color-ink);
+}
+
+/* Hairline divider for stat strips. Tailwind's `divide-x`/`divide-y` resolves
+   its colour from currentColor, so declaring border-color on the wrapper does
+   nothing — this sets the colour explicitly. */
+@utility rule-vertical {
+  border-left: 1px solid var(--color-border);
+}
+@utility rule-vertical-light {
+  border-left: 1px solid rgb(255 252 245 / 0.22);
+}
+
+/* Muted label on the dark ink bands. #6B5D52 scored 2.42:1 there. */
+@utility label-on-dark {
+  color: #c5b8a8;
+  font-size: 0.6875rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
 /* Single page gutter. Navbar, Footer and every <main> must share this or the
    logo/footer edges drift out of alignment with the page content. Previously
    three variants existed (px-4 sm:px-6, px-6, px-4 sm:px-6 lg:px-8). */
