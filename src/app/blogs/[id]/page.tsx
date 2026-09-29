@@ -13,6 +13,7 @@ import BlogPostRenderer from '@/components/blog/BlogPostRenderer';
 import VideoThumbnail from '@/components/blog/VideoThumbnail';
 import { fetchBlogPost, fetchBlogPosts, type BlogPost } from '@/lib/api/blogs';
 import { calculateReadTime, formatBlogDate, getYouTubeEmbedUrl } from '@/lib/blog-utils';
+import { toneBackground } from '@/lib/editorial';
 
 export default function BlogDetailPage() {
     const params = useParams<{ id: string }>();
@@ -68,12 +69,15 @@ export default function BlogDetailPage() {
         return (
             <div className="min-h-screen bg-neutral-cream">
                 <Navbar />
-                <div className="max-w-3xl mx-auto px-6 py-24 text-center">
-                    <div className="bg-white rounded-2xl p-12 shadow-sm">
-                        <h1 className="text-2xl font-heading font-bold text-neutral-brown-900 mb-3">
+                <div className="page-container py-24 max-w-3xl">
+                    <div className="editorial-card p-12 text-center">
+                        <h1
+                            className="font-heading text-2xl font-bold mb-3"
+                            style={{ color: '#2C2416' }}
+                        >
                             Post not found
                         </h1>
-                        <p className="text-neutral-brown-600 mb-8">
+                        <p className="mb-8" style={{ color: '#5B4F42' }}>
                             {error || 'This blog post may have been removed or unpublished.'}
                         </p>
                         <Link
@@ -96,38 +100,82 @@ export default function BlogDetailPage() {
     const readTime = calculateReadTime(post.content);
     const authorName = post.author?.user?.name || 'Mama Africa Library Author';
     const authorImage = post.author?.user?.image || post.author?.profileImage;
+    const authorId = post.author?.id;
+    // A post only gets a separate title block when it has no cover art; with
+    // imagery or a player, the media is the anchor and the title sits under it.
+    const hasHeroMedia = isVideo || !!post.coverImage;
 
     return (
         <div className="min-h-screen bg-neutral-cream">
             <Navbar />
 
-            {/* Breadcrumb band */}
+            {/* Running head */}
             <div className="relative overflow-hidden" style={{ backgroundColor: '#2C2416' }}>
-                <div className="absolute inset-0 opacity-10" style={{
-                    backgroundImage: 'radial-gradient(circle at 15% 50%, #D97846 0%, transparent 45%), radial-gradient(circle at 85% 50%, #C9A354 0%, transparent 40%)',
-                }}></div>
-                <div className="relative page-container py-5 flex items-center justify-between gap-4">
+                <div
+                    className="absolute inset-0 opacity-15"
+                    style={{
+                        backgroundImage:
+                            'radial-gradient(circle at 15% 50%, #B4502A 0%, transparent 45%), radial-gradient(circle at 85% 50%, #A8762B 0%, transparent 40%)',
+                    }}
+                    aria-hidden="true"
+                />
+                <div className="relative page-container py-4 flex items-center justify-between gap-4">
                     <Link
                         href="/blogs"
-                        className="group inline-flex items-center gap-2 pl-2 pr-4 py-2 rounded-full text-sm font-semibold transition-all hover:-translate-x-0.5"
-                        style={{ backgroundColor: 'rgba(255,252,245,0.08)', border: '1px solid rgba(228,217,196,0.2)', color: '#E4D9C4' }}
+                        className="group inline-flex items-center gap-2.5 text-sm font-semibold transition-colors"
+                        style={{ color: '#E4D9C4' }}
                     >
-                        <span className="w-7 h-7 rounded-full flex items-center justify-center transition-colors group-hover:bg-primary" style={{ backgroundColor: '#B4502A' }}>
-                            <ArrowLeft size={14} className="text-white" />
+                        <span
+                            className="w-8 h-8 rounded-full flex items-center justify-center transition-colors"
+                            style={{ backgroundColor: '#B4502A' }}
+                        >
+                            <ArrowLeft size={15} className="text-white" />
                         </span>
                         All Blog Posts
                     </Link>
                     {post.category && (
-                        <span className="hidden sm:inline-block px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider" style={{ backgroundColor: 'rgba(217,120,70,0.18)', color: '#E89B77', border: '1px solid rgba(217,120,70,0.4)' }}>
+                        <Link
+                            href={`/blogs?category=${encodeURIComponent(post.category)}`}
+                            className="hidden sm:inline-block px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider transition-colors"
+                            style={{
+                                backgroundColor: 'rgba(217,120,70,0.18)',
+                                color: '#E8A87C',
+                                border: '1px solid rgba(217,120,70,0.4)',
+                            }}
+                        >
                             {post.category}
-                        </span>
+                        </Link>
                     )}
                 </div>
             </div>
 
             <main id="main-content" className="page-container py-12">
-                <div className="lg:grid lg:grid-cols-[1fr_320px] lg:gap-12">
+                <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_320px] lg:gap-14">
                     <article className="max-w-3xl">
+                        {/* Hero. Posts without cover art get a typographic hero
+                            so the page still has a strong top instead of opening
+                            straight into a wall of body text. */}
+                        {hasHeroMedia ? null : (
+                            <header className="mb-10">
+                                <p className="editorial-eyebrow editorial-eyebrow-rule mb-5">
+                                    {post.category || 'Essay'}
+                                </p>
+                                <h1
+                                    className="font-heading font-bold text-3xl md:text-4xl lg:text-5xl leading-[1.12] mb-6"
+                                    style={{ color: '#2C2416' }}
+                                >
+                                    {post.title}
+                                </h1>
+                                {post.excerpt && (
+                                    <p
+                                        className="text-lg md:text-xl leading-relaxed mb-8"
+                                        style={{ color: '#5B4F42' }}
+                                    >
+                                        {post.excerpt}
+                                    </p>
+                                )}
+                            </header>
+                        )}
                         {/* Hero Media */}
                         {isVideo && (
                             embedUrl ? (
@@ -174,39 +222,80 @@ export default function BlogDetailPage() {
                             <img
                                 src={post.coverImage}
                                 alt={post.title}
-                                className="w-full rounded-xl mb-8 shadow-sm aspect-[16/9] object-cover"
+                                className="w-full rounded-lg mb-8 aspect-[16/9] object-cover"
                             />
                         )}
 
-                        {/* Title */}
-                        <h1 className="font-heading font-bold text-3xl md:text-5xl text-neutral-brown-900 leading-tight mb-6">
-                            {post.title}
-                        </h1>
+                        {/* Title — only rendered here when there is hero media;
+                            otherwise the typographic header above owns it. */}
+                        {hasHeroMedia && (
+                            <header className="mb-8">
+                                <h1
+                                    className="font-heading font-bold text-3xl md:text-4xl lg:text-5xl leading-[1.12] mb-5"
+                                    style={{ color: '#2C2416' }}
+                                >
+                                    {post.title}
+                                </h1>
+                                {post.excerpt && (
+                                    <p
+                                        className="text-lg leading-relaxed"
+                                        style={{ color: '#5B4F42' }}
+                                    >
+                                        {post.excerpt}
+                                    </p>
+                                )}
+                            </header>
+                        )}
 
-                        {/* Author Meta */}
-                        <div className="flex items-center justify-between pb-8 mb-10 border-b border-neutral-brown-200">
+                        {/* Byline */}
+                        <div
+                            className="flex flex-wrap items-center justify-between gap-4 pb-6 mb-10 border-b"
+                            style={{ borderColor: '#E4D9C4' }}
+                        >
                             <div className="flex items-center gap-4">
                                 {authorImage ? (
                                     <img
                                         src={authorImage}
-                                        alt={authorName}
+                                        alt=""
+                                        loading="lazy"
                                         className="w-12 h-12 rounded-full object-cover"
                                     />
                                 ) : (
-                                    <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center">
-                                        <User size={24} className="text-primary" />
+                                    <div className="tile-primary w-12 h-12 rounded-full flex items-center justify-center">
+                                        <User size={22} />
                                     </div>
                                 )}
                                 <div>
-                                    <p className="font-semibold text-neutral-brown-900">{authorName}</p>
-                                    <div className="flex items-center gap-3 text-sm text-neutral-brown-600 mt-0.5">
+                                    {authorId ? (
+                                        <Link
+                                            href={`/authors/${authorId}`}
+                                            className="font-semibold hover:text-primary transition-colors"
+                                            style={{ color: '#2C2416' }}
+                                        >
+                                            {authorName}
+                                        </Link>
+                                    ) : (
+                                        <p className="font-semibold" style={{ color: '#2C2416' }}>
+                                            {authorName}
+                                        </p>
+                                    )}
+                                    <div
+                                        className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm mt-0.5"
+                                        style={{ color: '#6B5D52' }}
+                                    >
                                         <span>{formatBlogDate(post.publishedAt || post.createdAt)}</span>
-                                        <span className="flex items-center gap-1">
-                                            <Clock size={14} />
+                                        <span aria-hidden="true" style={{ color: '#E4D9C4' }}>
+                                            /
+                                        </span>
+                                        <span className="inline-flex items-center gap-1">
+                                            <Clock size={13} />
                                             {readTime.text}
                                         </span>
-                                        <span className="flex items-center gap-1">
-                                            <Eye size={14} />
+                                        <span aria-hidden="true" style={{ color: '#E4D9C4' }}>
+                                            /
+                                        </span>
+                                        <span className="inline-flex items-center gap-1">
+                                            <Eye size={13} />
                                             {post.viewCount} views
                                         </span>
                                     </div>
@@ -221,41 +310,68 @@ export default function BlogDetailPage() {
 
                     {/* Right sidebar — more from this author */}
                     <aside className="mt-12 lg:mt-0">
-                        <div className="bg-white rounded-2xl p-5 md:p-6 shadow-sm lg:sticky lg:top-6">
-                            <h3 className="font-heading font-bold text-neutral-brown-900 flex items-center gap-2">
-                                More from {authorName.split(' ')[0]}
+                        <div
+                            className="editorial-card p-6 lg:sticky lg:top-24"
+                            style={{ backgroundColor: '#FFFCF5' }}
+                        >
+                            <p className="editorial-eyebrow editorial-eyebrow-rule mb-3">
+                                More from
+                            </p>
+                            <h3
+                                className="font-heading font-bold text-lg mb-1"
+                                style={{ color: '#2C2416' }}
+                            >
+                                {authorName}
                             </h3>
-                            <p className="text-xs text-neutral-brown-600 mt-0.5 mb-4">
-                                {authorPosts.length > 0 ? 'Other dispatches by this author' : 'No other blogs by this author yet.'}
+                            <p className="text-xs mb-5" style={{ color: '#6B5D52' }}>
+                                {authorPosts.length > 0
+                                    ? `${authorPosts.length} other ${authorPosts.length === 1 ? 'story' : 'stories'}`
+                                    : 'No other blogs by this author yet.'}
                             </p>
                             <div className="space-y-4">
-                                {authorPosts.map((p) => (
+                                {authorPosts.map((p, i) => (
                                     <Link
                                         key={p.id}
                                         href={`/blogs/${p.slug || p.id}`}
                                         className="group flex gap-3"
                                     >
-                                        <div className="w-24 h-[64px] rounded-lg overflow-hidden bg-primary/10 shrink-0">
+                                        <div
+                                            className="w-24 h-16 rounded-lg overflow-hidden shrink-0"
+                                            style={{ backgroundColor: '#E4D9C4' }}
+                                        >
                                             {p.coverType === 'video' && p.coverVideoUrl ? (
                                                 <VideoThumbnail videoUrl={p.coverVideoUrl} title={p.title} />
                                             ) : p.coverImage ? (
                                                 <img
                                                     src={p.coverImage}
-                                                    alt={p.title}
+                                                    alt=""
+                                                    loading="lazy"
                                                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                                                 />
                                             ) : (
-                                                <div className={`w-full h-full bg-gradient-to-br from-primary/25 to-accent-green/25 flex items-center justify-center font-heading font-bold text-primary/40 text-xl`}>
-                                                    {p.title.charAt(0)}
+                                                <div
+                                                    className="w-full h-full flex items-center justify-center font-heading font-bold text-xl"
+                                                    style={{ background: toneBackground(i) }}
+                                                    aria-hidden="true"
+                                                >
+                                                    <span className="text-white/90">
+                                                        {p.title.charAt(0)}
+                                                    </span>
                                                 </div>
                                             )}
                                         </div>
                                         <div className="min-w-0">
-                                            <h4 className="font-semibold text-sm text-neutral-brown-900 line-clamp-2 group-hover:text-primary transition-colors leading-snug">
+                                            <h4
+                                                className="font-heading font-semibold text-sm line-clamp-2 group-hover:text-primary transition-colors leading-snug"
+                                                style={{ color: '#2C2416' }}
+                                            >
                                                 {p.title}
                                             </h4>
-                                            <div className="flex items-center gap-3 text-xs text-neutral-brown-600 mt-1">
-                                                <span className="flex items-center gap-1">
+                                            <div
+                                                className="flex items-center gap-3 text-xs mt-1"
+                                                style={{ color: '#6B5D52' }}
+                                            >
+                                                <span className="inline-flex items-center gap-1">
                                                     <Clock size={11} />
                                                     {calculateReadTime(p.content).text}
                                                 </span>

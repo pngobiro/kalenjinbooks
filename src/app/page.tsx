@@ -141,7 +141,7 @@ export default function HomePage() {
               className="text-base md:text-lg mb-10 max-w-xl leading-relaxed"
               style={{ color: 'rgba(255, 252, 245, 0.88)' }}
             >
-              Books, oral histories and cultural writing from Kenyan authors —
+              Books, oral histories and cultural writing from African authors —
               preserved, published and read on your own terms.
             </p>
 

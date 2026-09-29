@@ -50,17 +50,51 @@ export function extractExcerpt(content: string, maxLength: number = 200): string
 }
 
 /**
+ * Convert legacy video placeholders into real, playable iframes.
+ *
+ * Older posts store embeds as `<div class="video-embed" data-url="...">`.
+ * `data-url` is not in the sanitizer's allow-list, so the attribute was
+ * stripped and the div rendered empty — the video silently disappeared.
+ * Rewriting to a proper iframe also means every player gets the
+ * youtube-nocookie domain and the referrer policy the rest of the site uses.
+ */
+function normalizeVideoEmbeds(html: string): string {
+    return html.replace(
+        /<div[^>]*class=["'][^"']*video-embed[^"']*["'][^>]*data-url=["']([^"']+)["'][^>]*>\s*<\/div>/gi,
+        (_match, url: string) => {
+            const embedUrl = getYouTubeEmbedUrl(url);
+            // Non-YouTube sources get a link-out rather than a blank frame.
+            if (!embedUrl) {
+                return `<p><a href="${escapeAttr(url)}" target="_blank" rel="noopener noreferrer nofollow">Watch this video</a></p>`;
+            }
+            return (
+                `<div class="video-embed" style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;margin:1.5rem 0">` +
+                `<iframe src="${escapeAttr(embedUrl)}" title="Embedded video" ` +
+                `style="position:absolute;inset:0;width:100%;height:100%;border:0" ` +
+                `allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" ` +
+                `referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>`
+            );
+        }
+    );
+}
+
+function escapeAttr(value: string): string {
+    return value.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+/**
  * Sanitize HTML content to prevent XSS attacks
  */
 export function sanitizeHtml(html: string): string {
-    return DOMPurify.sanitize(html, {
+    return DOMPurify.sanitize(normalizeVideoEmbeds(html), {
         ALLOWED_TAGS: [
             'p', 'br', 'strong', 'em', 'u', 's', 'a', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
             'ul', 'ol', 'li', 'blockquote', 'code', 'pre', 'img', 'iframe', 'div', 'span'
         ],
         ALLOWED_ATTR: [
             'href', 'target', 'rel', 'src', 'alt', 'title', 'width', 'height',
-            'class', 'id', 'frameborder', 'allowfullscreen', 'allow'
+            'class', 'id', 'style', 'frameborder', 'allowfullscreen', 'allow',
+            'referrerpolicy', 'loading', 'data-youtube-video'
         ],
         ALLOWED_URI_REGEXP: /^(?:(?:(?:f|ht)tps?|mailto|tel|callto|sms|cid|xmpp|data):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i,
     });

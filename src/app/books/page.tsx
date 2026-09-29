@@ -250,8 +250,8 @@ export default function BooksPage() {
               className="text-sm md:text-base mb-8 max-w-2xl"
               style={{ color: 'rgba(255, 252, 245, 0.9)', lineHeight: '1.6' }}
             >
-              The history, culture and theology of Kenya&rsquo;s peoples, written
-              and preserved by local authors.
+              The history, culture and theology of African peoples, written and
+              preserved by African authors.
             </p>
 
             {/* Search Bar */}

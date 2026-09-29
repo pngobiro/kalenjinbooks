@@ -273,6 +273,30 @@ PY
 [ $? -ne 0 ] && FAIL=1
 
 echo
+echo "== blog detail: hero/title not double-rendered, embeds survive =="
+python3 - <<'PY'
+import re,sys
+src=open('src/app/blogs/[id]/page.tsx').read()
+bad=[]
+# the typographic header must be conditional, and the media title likewise,
+# or a post with no cover art gets two <h1>s
+if 'hasHeroMedia' not in src: bad.append('hasHeroMedia gate is missing')
+h1s=len(re.findall(r'<h1',src))
+if h1s<2: bad.append(f'expected a hero <h1> and a media <h1>, found {h1s}')
+# sanitizeHtml must normalise legacy video-embed markup, otherwise the
+# sanitizer strips data-url and the video renders as an empty div
+utils=open('src/lib/blog-utils.ts').read()
+if 'normalizeVideoEmbeds' not in utils: bad.append('video-embed markup is not normalised before sanitising')
+if "'style'" not in utils: bad.append("'style' missing from the sanitizer allow-list (responsive embeds need it)")
+if 'referrerpolicy' not in utils: bad.append("'referrerpolicy' missing from the sanitizer allow-list")
+if bad:
+    for b in bad: print(f"  \033[31mFAIL\033[0m  {b}")
+    sys.exit(1)
+print("  \033[32mPASS\033[0m  blog detail hero is gated and embeds survive sanitising")
+PY
+[ $? -ne 0 ] && FAIL=1
+
+echo
 echo "== no CSS nesting leaks (Tailwind emits &::after literally) =="
 python3 - <<'PY'
 import re,sys
