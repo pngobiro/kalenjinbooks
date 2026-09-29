@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback, Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { Clock, Eye, ArrowRight, FileText, Users, BookOpen, Search, X, SlidersHorizontal, ChevronDown } from 'lucide-react';
+import { Clock, Eye, ArrowRight, FileText, Users, BookOpen, X, SlidersHorizontal, ChevronDown } from 'lucide-react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import { toneBackground } from '@/lib/editorial';
@@ -44,7 +44,6 @@ function BlogsContent() {
     const [error, setError] = useState<string | null>(null);
     const [selectedCategory, setSelectedCategory] = useState('all');
     const [selectedAuthor, setSelectedAuthor] = useState('all');
-    const [searchQuery, setSearchQuery] = useState('');
     const searchParams = useSearchParams();
 
     useEffect(() => {
@@ -65,9 +64,6 @@ function BlogsContent() {
             if (selectedAuthor !== 'all') {
                 params.authorId = selectedAuthor;
             }
-            if (searchQuery.trim()) {
-                params.search = searchQuery.trim();
-            }
             const [blogRes, authorRes] = await Promise.all([
                 fetchBlogPosts(params).catch(() => null),
                 fetchAuthors({ limit: 50 }).catch(() => null),
@@ -81,25 +77,19 @@ function BlogsContent() {
         } finally {
             setLoading(false);
         }
-    }, [selectedCategory, selectedAuthor, searchQuery, sortBy]);
+    }, [selectedCategory, selectedAuthor, sortBy]);
 
     useEffect(() => {
         loadPosts();
     }, [loadPosts]);
 
-    const handleSearch = (e: React.FormEvent) => {
-        e.preventDefault();
-        loadPosts();
-    };
-
     const clearFilters = () => {
         setSelectedCategory('all');
         setSelectedAuthor('all');
-        setSearchQuery('');
         setSortBy('latest');
     };
 
-    const hasActiveFilters = selectedCategory !== 'all' || selectedAuthor !== 'all' || searchQuery !== '' || sortBy !== 'latest';
+    const hasActiveFilters = selectedCategory !== 'all' || selectedAuthor !== 'all' || sortBy !== 'latest';
 
     /* The lead post was purely positional, so switching sort to "Most
        Viewed" silently changed who was featured. Honour the editor's
@@ -137,48 +127,12 @@ function BlogsContent() {
                             Stories &amp; Insights
                         </h1>
                         <p
-                            className="text-lg leading-relaxed mb-8 max-w-2xl"
+                            className="text-lg leading-relaxed max-w-2xl"
                             style={{ color: 'rgba(255, 252, 245, 0.9)' }}
                         >
                             Thoughts, stories and perspectives from our community
                             of African writers.
                         </p>
-
-                        {/* Search Bar */}
-                        <form onSubmit={handleSearch} className="relative max-w-2xl">
-                            <label htmlFor="blog-search" className="sr-only">
-                                Search blog posts
-                            </label>
-                            <Search
-                                size={20}
-                                className="absolute left-5 top-1/2 -translate-y-1/2 pointer-events-none"
-                                style={{ color: '#6B5D52' }}
-                            />
-                            <input
-                                id="blog-search"
-                                type="search"
-                                placeholder="Search blog posts..."
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                                className="w-full pl-14 pr-12 py-4 rounded-xl"
-                                style={{
-                                    backgroundColor: '#FFFCF5',
-                                    color: '#2C2416',
-                                    border: '1px solid #E4D9C4',
-                                }}
-                            />
-                            {searchQuery && (
-                                <button
-                                    type="button"
-                                    onClick={() => setSearchQuery('')}
-                                    className="absolute right-4 top-1/2 -translate-y-1/2 transition-colors"
-                                    style={{ color: '#5B4F42' }}
-                                    aria-label="Clear blog search"
-                                >
-                                    <X size={20} />
-                                </button>
-                            )}
-                        </form>
                     </div>
                 </div>
             </section>

@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
-import { Search, BookOpen, Star, ArrowRight, Package, SlidersHorizontal, ChevronDown, ExternalLink } from 'lucide-react';
+import { BookOpen, Star, ArrowRight, Package, SlidersHorizontal, ChevronDown, ExternalLink } from 'lucide-react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import { fetchBooks, type Book as BookType } from '@/lib/api/books';
@@ -45,7 +45,6 @@ const CATEGORY_ORDER = [
 ];
 
 export default function BooksPage() {
-  const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [sortBy, setSortBy] = useState<SortKey>('newest');
   const [selectedLanguage, setSelectedLanguage] = useState('All');
@@ -68,7 +67,6 @@ export default function BooksPage() {
         setLoading(true);
         const params: any = { limit: 100 };
 
-        if (searchQuery) params.search = searchQuery;
         if (selectedCategory !== 'All') params.category = selectedCategory;
 
         const response = await fetchBooks(params);
@@ -84,7 +82,7 @@ export default function BooksPage() {
 
     const debounce = setTimeout(loadBooks, 300);
     return () => clearTimeout(debounce);
-  }, [searchQuery, selectedCategory]);
+  }, [selectedCategory]);
 
   const languages = useMemo(() => {
     const set = new Set<string>();
@@ -247,37 +245,12 @@ export default function BooksPage() {
               Explore Our Book Collection
             </h1>
             <p
-              className="text-sm md:text-base mb-8 max-w-2xl"
+              className="text-sm md:text-base max-w-2xl"
               style={{ color: 'rgba(255, 252, 245, 0.9)', lineHeight: '1.6' }}
             >
               The history, culture and theology of African peoples, written and
               preserved by African authors.
             </p>
-
-            {/* Search Bar */}
-            <div className="relative max-w-2xl">
-              <label htmlFor="book-search" className="sr-only">
-                Search books by title, author or genre
-              </label>
-              <Search
-                size={20}
-                className="absolute left-5 top-1/2 -translate-y-1/2 pointer-events-none"
-                style={{ color: '#6B5D52' }}
-              />
-              <input
-                id="book-search"
-                type="search"
-                placeholder="Search by title, author, or genre..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-14 pr-5 py-4 rounded-xl text-base"
-                style={{
-                  backgroundColor: '#FFFCF5',
-                  color: '#2C2416',
-                  border: '1px solid #E4D9C4',
-                }}
-              />
-            </div>
           </div>
         </div>
       </section>
@@ -335,13 +308,10 @@ export default function BooksPage() {
                 {selectedCategory !== 'All' && (
                   <span className="ml-1">· {selectedCategory.toUpperCase()}</span>
                 )}
-                {searchQuery && (
-                  <span className="ml-1">· MATCHING “{searchQuery.toUpperCase()}”</span>
-                )}
               </p>
-            {(searchQuery || hasClientFilters) && (
+            {hasClientFilters && (
               <button
-                onClick={() => { setSearchQuery(''); resetClientFilters(); }}
+                onClick={resetClientFilters}
                 className="text-sm font-semibold transition-colors"
                 style={{ color: '#B4502A' }}
               >
@@ -687,7 +657,7 @@ export default function BooksPage() {
             </p>
             <div className="flex items-center justify-center gap-4">
               <button
-                onClick={() => { setSelectedCategory('All'); setSearchQuery(''); resetClientFilters(); }}
+                onClick={() => { setSelectedCategory('All'); resetClientFilters(); }}
                 className="px-8 py-3 rounded-lg font-semibold transition-all hover:shadow-lg"
                 style={{ backgroundColor: '#B4502A', color: '#FFFCF5' }}
               >

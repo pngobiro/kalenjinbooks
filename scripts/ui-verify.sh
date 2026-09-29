@@ -297,6 +297,27 @@ PY
 [ $? -ne 0 ] && FAIL=1
 
 echo
+echo "== no search UI on the catalogue pages =="
+python3 - <<'PY'
+import re,sys
+pages=['src/app/books/page.tsx','src/app/blogs/page.tsx','src/app/authors/page.tsx']
+bad=[]
+for f in pages:
+    s=open(f).read()
+    for pat,label in [(r'type="search"','a search input'),
+                      (r'placeholder="Search','a search placeholder'),
+                      (r'searchQuery','searchQuery state'),
+                      (r'params\.search','a search API param'),
+                      (r'params\.set\(.search.','a search query param')]:
+        if re.search(pat,s): bad.append(f"{f}: {label}")
+if bad:
+    for b in bad: print(f"  \033[31mFAIL\033[0m  {b}")
+    sys.exit(1)
+print("  \033[32mPASS\033[0m  no search UI on /books, /blogs or /authors")
+PY
+[ $? -ne 0 ] && FAIL=1
+
+echo
 echo "== no CSS nesting leaks (Tailwind emits &::after literally) =="
 python3 - <<'PY'
 import re,sys

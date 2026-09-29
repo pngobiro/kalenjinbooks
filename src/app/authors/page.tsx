@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Search, BookOpen, Feather, X, FileText } from 'lucide-react';
+import { BookOpen, Feather, FileText } from 'lucide-react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import { fetchAuthors, Author } from '@/lib/api/authors';
@@ -12,7 +12,6 @@ export default function AuthorsPage() {
   const [authors, setAuthors] = useState<Author[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     async function loadAuthors() {
@@ -32,15 +31,7 @@ export default function AuthorsPage() {
     loadAuthors();
   }, []);
 
-  const filteredAuthors = authors.filter((author) => {
-    const q = searchQuery.toLowerCase();
-    return (
-      author.name?.toLowerCase().includes(q) ||
-      author.bio?.toLowerCase().includes(q) ||
-      author.location?.toLowerCase().includes(q) ||
-      author.genres?.toLowerCase().includes(q)
-    );
-  });
+  const filteredAuthors = authors;
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#F5F1E8' }}>
@@ -72,41 +63,6 @@ export default function AuthorsPage() {
             The voices preserving African heritage through their words.
           </p>
 
-          {/* Search Bar */}
-          <form onSubmit={(e) => e.preventDefault()} className="relative max-w-xl">
-            <label htmlFor="author-search" className="sr-only">
-              Search authors by name or biography
-            </label>
-            <Search
-              size={20}
-              className="absolute left-5 top-1/2 -translate-y-1/2 pointer-events-none"
-              style={{ color: '#6B5D52' }}
-            />
-            <input
-              id="author-search"
-              type="search"
-              placeholder="Search authors by name..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-14 pr-12 py-4 rounded-full"
-              style={{
-                backgroundColor: '#FFFCF5',
-                color: '#2C2416',
-                border: '1px solid #E4D9C4',
-              }}
-            />
-            {searchQuery && (
-              <button
-                type="button"
-                onClick={() => setSearchQuery('')}
-                className="absolute right-4 top-1/2 -translate-y-1/2 transition-colors"
-                style={{ color: '#5B4F42' }}
-                aria-label="Clear author search"
-              >
-                <X size={20} />
-              </button>
-            )}
-          </form>
         </div>
       </section>
 
@@ -117,12 +73,11 @@ export default function AuthorsPage() {
           <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end mb-12">
             <div>
               <p className="editorial-eyebrow editorial-eyebrow-rule mb-4">
-                {searchQuery ? 'Search results' : 'The roster'}
+                The roster
               </p>
               <h2 className="font-heading text-2xl md:text-3xl font-bold" style={{ color: '#2C2416' }}>
                 {filteredAuthors.length}{' '}
                 {filteredAuthors.length === 1 ? 'Author' : 'Authors'}
-                {searchQuery ? ` matching “${searchQuery}”` : ''}
               </h2>
             </div>
             <p className="editorial-numeral hidden lg:block" aria-hidden="true">
@@ -252,31 +207,22 @@ export default function AuthorsPage() {
                 <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6" style={{ backgroundColor: '#F7E4D8' }}>
                   <Feather size={36} style={{ color: '#B4502A' }} />
                 </div>
-                <h3 className="text-3xl font-bold mb-3" style={{ fontFamily: 'Playfair Display, serif', color: '#2C2416' }}>
-                  {searchQuery ? 'No Authors Found' : 'No Authors Yet'}
+                <h3
+                  className="font-heading text-3xl font-bold mb-3"
+                  style={{ color: '#2C2416' }}
+                >
+                  No Authors Yet
                 </h3>
                 <p className="mb-8 max-w-md mx-auto" style={{ color: '#5B4F42' }}>
-                  {searchQuery
-                    ? 'Try adjusting your search query or browse all authors.'
-                    : 'No authors have joined yet. Check back soon for new voices!'}
+                  No authors have joined yet. Check back soon for new voices!
                 </p>
-                {searchQuery ? (
-                  <button
-                    onClick={() => setSearchQuery('')}
-                    className="px-8 py-3 rounded-full font-bold transition-all hover:shadow-lg"
-                    style={{ backgroundColor: '#B4502A', color: '#FFFFFF' }}
-                  >
-                    Clear Search
-                  </button>
-                ) : (
-                  <Link
-                    href="/books"
-                    className="inline-block px-8 py-3 rounded-full font-bold transition-all hover:shadow-lg"
-                    style={{ backgroundColor: '#B4502A', color: '#FFFFFF' }}
-                  >
-                    Browse Books
-                  </Link>
-                )}
+                <Link
+                  href="/books"
+                  className="inline-block px-8 py-3 rounded-full font-bold transition-all hover:shadow-lg"
+                  style={{ backgroundColor: '#B4502A', color: '#FFFFFF' }}
+                >
+                  Browse Books
+                </Link>
               </div>
             )}
           </div>
